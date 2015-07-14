@@ -1,5 +1,35 @@
+.DS_Store
+
+*.out
+*.out.js
+*.out.js.mem
+*.dSYM/
+*.app/
+*.xcarchive/
+*.ipa
+
+# Android
+bin/
+gen/
+libs/
+obj/
+build.xml
+local.properties
+project.properties
+proguard.cfg
+proguard-project.txt
+
+# CMake
 CMakeCache.txt
 CMakeFiles
 Makefile
 cmake_install.cmake
 install_manifest.txt
+
+# Xcode
+*.xcworkspace
+xcuserdata/
+build/
+
+# JetBrains
+.idea/
