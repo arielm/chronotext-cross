@@ -1,12 +1,12 @@
 cmake_minimum_required (VERSION 3.2.2)
 
 list(APPEND INCLUDE_DIRS
-  "${CHR_PATH}/src"
+  "${CROSS_ROOT}/src"
 )
 
 list(APPEND SRC_FILES
-  "${CHR_PATH}/src/Log.cpp"
-  "${CHR_PATH}/src/Platform.cpp"
+  "${CROSS_ROOT}/src/Log.cpp"
+  "${CROSS_ROOT}/src/Platform.cpp"
 )
 
 file(GLOB_RECURSE RESOURCES_FILES
@@ -29,8 +29,8 @@ if (PLATFORM MATCHES mxe)
     math(EXPR counter "${counter} + 1")
   endforeach()
 
-  configure_file("${CHR_PATH}/cmake/mxe/resources.rc.in" resources.rc)
-  configure_file("${CHR_PATH}/cmake/mxe/resources.cpp.in" resources.cpp)
+  configure_file("${CROSS_ROOT}/cmake/mxe/resources.rc.in" resources.rc)
+  configure_file("${CROSS_ROOT}/cmake/mxe/resources.cpp.in" resources.cpp)
 
   add_executable(${PROJECT_NAME}
     ${SRC_FILES}
@@ -41,22 +41,22 @@ if (PLATFORM MATCHES mxe)
 elseif (PLATFORM MATCHES android)
   add_definitions(-DCHR_FS_APK)
 
-  configure_file("${CHR_PATH}/cmake/android/AndroidManifest.xml.in" AndroidManifest.xml)
-  configure_file("${CHR_PATH}/cmake/android/ant.properties.in" ant.properties)
-  configure_file("${CHR_PATH}/cmake/android/MainActivity.java.in" "src/org/chronotext/${PROJECT_NAME}/MainActivity.java")
+  configure_file("${CROSS_ROOT}/cmake/android/AndroidManifest.xml.in" AndroidManifest.xml)
+  configure_file("${CROSS_ROOT}/cmake/android/ant.properties.in" ant.properties)
+  configure_file("${CROSS_ROOT}/cmake/android/MainActivity.java.in" "src/org/chronotext/${PROJECT_NAME}/MainActivity.java")
 
-  configure_file("${CHR_PATH}/cmake/android/tests/AndroidManifest.xml.in" tests/AndroidManifest.xml)
-  configure_file("${CHR_PATH}/cmake/android/tests/ant.properties.in" tests/ant.properties)
-  configure_file("${CHR_PATH}/cmake/android/tests/MainActivityTests.java.in" "tests/src/org/chronotext/${PROJECT_NAME}/MainActivityTests.java")
+  configure_file("${CROSS_ROOT}/cmake/android/tests/AndroidManifest.xml.in" tests/AndroidManifest.xml)
+  configure_file("${CROSS_ROOT}/cmake/android/tests/ant.properties.in" tests/ant.properties)
+  configure_file("${CROSS_ROOT}/cmake/android/tests/MainActivityTests.java.in" "tests/src/org/chronotext/${PROJECT_NAME}/MainActivityTests.java")
 
-  configure_file("${CHR_PATH}/cmake/android/install.instrument.sh.in" install.sh)
-  configure_file("${CHR_PATH}/cmake/android/run.instrument.sh.in" run.sh)
+  configure_file("${CROSS_ROOT}/cmake/android/install.instrument.sh.in" install.sh)
+  configure_file("${CROSS_ROOT}/cmake/android/run.instrument.sh.in" run.sh)
 
   set(LIBRARY_OUTPUT_PATH "libs/armeabi-v7a")
 
   add_library(${PROJECT_NAME} SHARED
     ${SRC_FILES}
-    "${CHR_PATH}/src/Bridge.cpp"
+    "${CROSS_ROOT}/src/Bridge.cpp"
   )
 
 elseif (PLATFORM MATCHES emscripten)
@@ -88,7 +88,7 @@ else()
 endif()
 
 if (PLATFORM MATCHES osx)
-  configure_file("${CHR_PATH}/cmake/install.symlink.sh.in" install.sh)
+  configure_file("${CROSS_ROOT}/cmake/install.symlink.sh.in" install.sh)
 endif()
 
 # ---

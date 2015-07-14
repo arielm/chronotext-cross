@@ -1,12 +1,12 @@
 cmake_minimum_required (VERSION 3.2.2)
 
 list(APPEND INCLUDE_DIRS
-  "${CHR_PATH}/src"
+  "${CROSS_ROOT}/src"
 )
 
 list(APPEND SRC_FILES
-  "${CHR_PATH}/src/Log.cpp"
-  "${CHR_PATH}/src/Platform.cpp"
+  "${CROSS_ROOT}/src/Log.cpp"
+  "${CROSS_ROOT}/src/Platform.cpp"
 )
 
 file(GLOB_RECURSE RESOURCES_FILES
@@ -23,7 +23,7 @@ if (PLATFORM MATCHES emscripten)
     ${SRC_FILES}
   )
 
-  em_link_pre_js(${PROJECT_NAME} "${CHR_PATH}/cmake/emscripten/pre.js")
+  em_link_pre_js(${PROJECT_NAME} "${CROSS_ROOT}/cmake/emscripten/pre.js")
 
 elseif (PLATFORM MATCHES ios)
   add_definitions(-DCHR_FS_BUNDLE)
@@ -46,10 +46,10 @@ else()
 endif()
 
 if (PLATFORM MATCHES android)
-  configure_file("${CHR_PATH}/cmake/android/install.push.sh.in" install.sh)
+  configure_file("${CROSS_ROOT}/cmake/android/install.exe.sh.in" install.sh)
 
 elseif (PLATFORM MATCHES osx|mxe)
-  configure_file("${CHR_PATH}/cmake/install.symlink.sh.in" install.sh)
+  configure_file("${CROSS_ROOT}/cmake/install.symlink.sh.in" install.sh)
 endif()
 
 # ---

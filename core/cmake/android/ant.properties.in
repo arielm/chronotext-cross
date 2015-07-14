@@ -1,2 +1,2 @@
-source.dir = ${CHR_PATH}/android/src;src
+source.dir = ${CROSS_ROOT}/android/src;src
 asset.dir = ../../res
