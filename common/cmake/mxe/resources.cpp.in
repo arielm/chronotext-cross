@@ -1,0 +1,15 @@
+#include <map>
+#include <string>
+
+using namespace std;
+
+namespace chr
+{
+  namespace mingw
+  {
+    map<string, int> RESOURCES = 
+    {
+      ${DATA_CPP}
+    };
+  }
+}

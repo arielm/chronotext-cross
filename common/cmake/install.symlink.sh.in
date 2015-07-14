@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm -rf res &&
+ln -s "${CMAKE_SOURCE_DIR}/res"

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+COMPONENT=org.chronotext.${PROJECT_NAME}.tests/org.chronotext.TestRunner
+
+cd tests
+
+if [ $# -eq 0 ];
+  then adb shell am instrument -w $COMPONENT
+  else adb shell am instrument -w -e args "$@" $COMPONENT
+fi
+
+if [ $? != 0 ]; then
+  exit 1 # FIXME: NOT WORKING AS INTENDED (adb shell ALWAYS RETURNS 0)
+fi

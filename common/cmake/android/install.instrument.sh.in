@@ -1,0 +1,12 @@
+#!/bin/sh
+
+android update project --path . --name ${PROJECT_NAME} --target ${ANDROID_API}
+
+cd tests
+android update project --path . --name ${PROJECT_NAME}TestRunner --target ${ANDROID_API}
+
+ant instrument install
+
+if [ $? != 0 ]; then
+  exit 1
+fi
