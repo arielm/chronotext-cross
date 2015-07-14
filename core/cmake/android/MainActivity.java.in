@@ -20,7 +20,7 @@ public class MainActivity extends Activity
   public void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
-    Log.i("MainActivity", "onCreate");
+    Log.d("MainActivity", "onCreate");
 
     bridge = new Bridge(this);
   }
@@ -29,7 +29,7 @@ public class MainActivity extends Activity
   public void onDestroy()
   {
     super.onDestroy();
-    Log.i("MainActivity", "onDestroy");
+    Log.d("MainActivity", "onDestroy");
   }
 
   public int testCPP(String[] args)

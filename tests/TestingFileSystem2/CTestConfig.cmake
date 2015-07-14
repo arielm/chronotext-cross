@@ -13,24 +13,24 @@ set(CTEST_PROJECT_NAME "TestingFileSystem2")
 
 set(CTEST_CONFIGURATION_TYPE Release)
 
-if (PLATFORM STREQUAL osx)
+if (PLATFORM MATCHES osx)
   set(CTEST_CMAKE_GENERATOR "Ninja")
   set(TOOLCHAIN_FILE osx.cmake)
 
-elseif (PLATFORM STREQUAL ios)
+elseif (PLATFORM MATCHES ios)
   set(CTEST_CMAKE_GENERATOR "Xcode")
   set(TOOLCHAIN_FILE ios.xcode.cmake)
 # set(CONFIGURE_ARGS "-DIOS_DEPLOYMENT_TARGET=5.1.1 -DIOS_ARCHS=armv7")
 
-elseif (PLATFORM STREQUAL android)
+elseif (PLATFORM MATCHES android)
   set(CTEST_CMAKE_GENERATOR "Ninja")
   set(TOOLCHAIN_FILE android.cmake)
 
-elseif (PLATFORM STREQUAL emscripten)
+elseif (PLATFORM MATCHES emscripten)
   set(CTEST_CMAKE_GENERATOR "Ninja")
   set(TOOLCHAIN_FILE emscripten.cmake)
 
-elseif (PLATFORM STREQUAL mxe)
+elseif (PLATFORM MATCHES mxe)
   set(CTEST_CMAKE_GENERATOR "Ninja")
   set(TOOLCHAIN_FILE mxe.cmake)
 

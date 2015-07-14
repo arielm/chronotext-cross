@@ -1,0 +1,8 @@
+#!/bin/sh
+
+APP=${CMAKE_BUILD_TYPE}-${CMAKE_OSX_SYSROOT}/${PROJECT_NAME}.app
+
+if [ $# -eq 0 ];
+  then ios-deploy --noinstall --noninteractive --bundle $APP
+  else ios-deploy --noinstall --noninteractive --bundle $APP --args "$@"
+fi

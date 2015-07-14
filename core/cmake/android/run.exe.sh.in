@@ -1,0 +1,3 @@
+#!/bin/sh
+
+adb shell /data/local/tmp/${PROJECT_NAME} "$@"

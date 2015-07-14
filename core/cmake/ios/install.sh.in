@@ -1,0 +1,5 @@
+#!/bin/sh
+
+APP=${CMAKE_BUILD_TYPE}-${CMAKE_OSX_SYSROOT}/${PROJECT_NAME}.app
+
+ios-deploy --bundle $APP
