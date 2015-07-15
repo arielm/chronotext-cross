@@ -9,12 +9,12 @@ Target platforms:
 - Android
 - Emscripten
 
-Developement environment:
+Development environment:
 - OSX
 - CMake
 - Terminal or CLION
 
-Under active development, slowly-but-surely integrating previous work from the following repositories:
+Under active development, slowly-but-surely integrating previous work from the following repos:
 - [new-chronotext-toolkit](https://github.com/arielm/new-chronotext-toolkit)
 - [jsp](https://github.com/arielm/jsp)
 - [chronototext-gtest](https://github.com/arielm/chronotext-gtest)
