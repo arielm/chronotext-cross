@@ -23,7 +23,9 @@ if (PLATFORM MATCHES emscripten)
     ${SRC_FILES}
   )
 
-  em_link_pre_js(${PROJECT_NAME} "${CROSS_ROOT}/cmake/emscripten/pre.js")
+  if (RESOURCE_FILES)
+    em_link_pre_js(${PROJECT_NAME} "${CROSS_ROOT}/cmake/emscripten/pre.js")
+  endif()
 
 elseif (PLATFORM MATCHES ios)
   add_definitions(-DCHR_FS_BUNDLE)
@@ -46,7 +48,11 @@ else()
 endif()
 
 if (PLATFORM MATCHES android)
-  configure_file("${CROSS_ROOT}/cmake/android/install.exe.sh.in" install.sh)
+  if (RESOURCE_FILES)
+    configure_file("${CROSS_ROOT}/cmake/android/install.res+exe.sh.in" install.sh)
+  else()
+    configure_file("${CROSS_ROOT}/cmake/android/install.exe.sh.in" install.sh)
+  endif()
 
 elseif (PLATFORM MATCHES osx|mxe)
   configure_file("${CROSS_ROOT}/cmake/install.symlink.sh.in" install.sh)

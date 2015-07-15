@@ -1,0 +1,8 @@
+#
+# REFERENCE: http://libcinder.org/docs/dev/_cinder_boost.html
+#
+
+using clang : iphonesimulator
+:
+xcrun clang -arch i386 -arch x86_64 -stdlib=libc++ -std=c++11 -miphoneos-version-min=6.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk
+;

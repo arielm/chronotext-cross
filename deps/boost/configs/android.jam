@@ -1,0 +1,31 @@
+#
+# REFERENCES:
+#
+# 1) https://github.com/MysticTreeGames/Boost-for-Android
+# 2) https://github.com/crystax/android-platform-ndk/blob/master/build/tools/build-boost.sh
+# 3) Android NDK: Beginner's Guide - Second Edition | By Sylvain Ratabouil | Page 409
+#
+
+import os ;
+
+local NDK_PATH = [ os.environ NDK_PATH ] ;
+local GCC_VERSION = [ os.environ GCC_VERSION ] ;
+local ANDROID_API = [ os.environ ANDROID_API ] ;
+
+using gcc : android
+:
+arm-linux-androideabi-g++ --sysroot="$(NDK_PATH)/platforms/$(ANDROID_API)/arch-arm"
+:
+<compileflags>-I"$(NDK_PATH)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/include"
+<compileflags>-I"$(NDK_PATH)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/libs/armeabi/include"
+
+<compileflags>-fvisibility=hidden
+<compileflags>-fvisibility-inlines-hidden
+<compileflags>-fexceptions
+<compileflags>-frtti
+
+<compileflags>-march=armv7-a
+<compileflags>-mfpu=vfpv3-d16
+<compileflags>-mfloat-abi=softfp
+<compileflags>-Wl,--fix-cortex-a8
+;

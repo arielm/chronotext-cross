@@ -29,13 +29,16 @@ if (PLATFORM MATCHES mxe)
     math(EXPR counter "${counter} + 1")
   endforeach()
 
-  configure_file("${CROSS_ROOT}/cmake/mxe/resources.rc.in" resources.rc)
   configure_file("${CROSS_ROOT}/cmake/mxe/resources.cpp.in" resources.cpp)
+  list(APPEND SRC_FILES "${CMAKE_CURRENT_BINARY_DIR}/resources.cpp")
+
+  if (RESOURCE_FILES)
+    configure_file("${CROSS_ROOT}/cmake/mxe/resources.rc.in" resources.rc)
+    list(APPEND SRC_FILES "${CMAKE_CURRENT_BINARY_DIR}/resources.rc")
+  endif()
 
   add_executable(${PROJECT_NAME}
     ${SRC_FILES}
-    "${CMAKE_CURRENT_BINARY_DIR}/resources.rc"
-    "${CMAKE_CURRENT_BINARY_DIR}/resources.cpp"
   )
 
 elseif (PLATFORM MATCHES android)
@@ -62,7 +65,9 @@ elseif (PLATFORM MATCHES android)
 elseif (PLATFORM MATCHES emscripten)
   add_definitions(-DCHR_FS_JS_EMBED)
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --exclude-file *.DS_Store --embed-file ../../res")
+  if (RESOURCE_FILES)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --exclude-file *.DS_Store --embed-file ../../res")
+  endif()
   
   add_executable(${PROJECT_NAME}
     ${SRC_FILES}

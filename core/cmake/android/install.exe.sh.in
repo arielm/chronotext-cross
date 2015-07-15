@@ -1,4 +1,3 @@
 #!/bin/sh
 
-adb push "${CMAKE_SOURCE_DIR}/res/." /data/local/tmp/ &&
 adb push ${PROJECT_NAME} /data/local/tmp/

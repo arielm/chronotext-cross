@@ -1,0 +1,8 @@
+#
+# REFERENCE: http://libcinder.org/docs/dev/_cinder_boost.html
+#
+
+using clang : macosx
+:
+xcrun clang -arch i386 -arch x86_64 -stdlib=libc++ -std=c++11 -mmacosx-version-min=10.7
+;
