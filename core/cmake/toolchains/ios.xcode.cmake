@@ -52,16 +52,7 @@ endif()
 
 # ---
 
-if (DEFINED RUN)
-  if (NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
-    configure_file("${CROSS_ROOT}/cmake/ios/run.sh.in" run.sh)
-    configure_file("${CROSS_ROOT}/cmake/ios/install.sh.in" install.sh)
-
-    install(CODE "
-      execute_process(COMMAND ./install.sh RESULT_VARIABLE result)
-      if (result)
-        message(FATAL_ERROR)
-      endif()
-    ")
-  endif()
+if (DEFINED RUN AND NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
+  set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/ios/install.sh.in")
+  set(CONFIG_RUN "${CROSS_ROOT}/cmake/ios/run.sh.in")
 endif()

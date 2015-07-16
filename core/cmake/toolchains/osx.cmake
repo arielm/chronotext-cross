@@ -23,16 +23,7 @@ set(CMAKE_CXX_FLAGS "-mmacosx-version-min=${OSX_DEPLOYMENT_TARGET} -stdlib=libc+
 
 # ---
 
-if (DEFINED RUN)
-  if (NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
-    configure_file("${CROSS_ROOT}/cmake/osx/run.sh.in" run.sh)
-    configure_file("${CROSS_ROOT}/cmake/install.nop.sh.in" install.sh)
-
-    install(CODE "
-      execute_process(COMMAND ./install.sh RESULT_VARIABLE result)
-      if (result)
-        message(FATAL_ERROR)
-      endif()
-    ")
-  endif()
+if (DEFINED RUN AND NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
+  set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
+  set(CONFIG_RUN "${CROSS_ROOT}/cmake/osx/run.sh.in")
 endif()

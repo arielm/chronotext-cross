@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.2.2)
 
+include("${CROSS_ROOT}/cmake/test.common.cmake")
+
 list(APPEND INCLUDE_DIRS
   "${CROSS_ROOT}/src"
 )
@@ -9,10 +11,12 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/Platform.cpp"
 )
 
-file(GLOB_RECURSE RESOURCES_FILES
+file(GLOB_RECURSE RESOURCE_FILES
   RELATIVE ${CMAKE_SOURCE_DIR}
   res/[^.]*
 )
+
+list(LENGTH RESOURCE_FILES RESOURCE_COUNT)
 
 # ---
 
@@ -23,7 +27,7 @@ if (PLATFORM MATCHES emscripten)
     ${SRC_FILES}
   )
 
-  if (RESOURCE_FILES)
+  if (RESOURCE_COUNT)
     em_link_pre_js(${PROJECT_NAME} "${CROSS_ROOT}/cmake/emscripten/pre.js")
   endif()
 
@@ -32,10 +36,10 @@ elseif (PLATFORM MATCHES ios)
 
   add_executable(${PROJECT_NAME}
     ${SRC_FILES}
-    ${RESOURCES_FILES}
+    ${RESOURCE_FILES}
   )
 
-  foreach (resource_file ${RESOURCES_FILES})
+  foreach (resource_file ${RESOURCE_FILES})
     get_filename_component(parent_dir ${resource_file} DIRECTORY)
     set_source_files_properties(${resource_file} PROPERTIES MACOSX_PACKAGE_LOCATION ${PROJECT_NAME}.app/${parent_dir})
   endforeach()
@@ -48,14 +52,16 @@ else()
 endif()
 
 if (PLATFORM MATCHES android)
-  if (RESOURCE_FILES)
-    configure_file("${CROSS_ROOT}/cmake/android/install.res+exe.sh.in" install.sh)
+  if (RESOURCE_COUNT)
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.res+exe.sh.in")
   else()
-    configure_file("${CROSS_ROOT}/cmake/android/install.exe.sh.in" install.sh)
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.exe.sh.in")
   endif()
 
 elseif (PLATFORM MATCHES osx|mxe)
-  configure_file("${CROSS_ROOT}/cmake/install.symlink.sh.in" install.sh)
+  if (RESOURCE_COUNT)
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
+  endif()
 endif()
 
 # ---
@@ -77,4 +83,4 @@ endif()
 
 # ---
 
-enable_testing()
+setupTesting()
