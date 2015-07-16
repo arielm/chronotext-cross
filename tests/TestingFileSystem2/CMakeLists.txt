@@ -19,5 +19,3 @@ set(SRC_FILES
 include("${CROSS_ROOT}/cmake/test.complex.cmake")
 
 add_test(NAME AllTests COMMAND ./run.sh)
-#add_test(NAME MessageTest  COMMAND ./run.sh --gtest_filter=MessageTest.*)
-#add_test(NAME PrintersTest COMMAND ./run.sh --gtest_filter=Print*Test.*)

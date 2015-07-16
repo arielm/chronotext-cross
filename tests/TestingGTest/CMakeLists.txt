@@ -15,11 +15,15 @@ set(LIBRARIES
   ${GTEST_BOTH_LIBRARIES}
 )
 
+set(GTEST_SRC "$ENV{CROSS_PATH}/deps/gtest/build/src")
+
 set(SRC_FILES
-  src/gtest-message_test.cc
-  src/gtest-printers_test.cc
+  "${GTEST_SRC}/test/gtest-message_test.cc"
+  "${GTEST_SRC}/test/gtest-printers_test.cc"
 )
 
 include("${CROSS_ROOT}/cmake/test.simple.cmake")
 
 add_test(NAME AllTests COMMAND ./run.sh)
+#add_test(NAME MessageTest  COMMAND ./run.sh "--gtest_filter=MessageTest.*")
+#add_test(NAME PrintersTest COMMAND ./run.sh "--gtest_filter=Print*Test.*")
