@@ -33,3 +33,5 @@ endif()
 list(APPEND ARGS
   "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
 )
+
+include("${CROSS_ROOT}/cmake/platforms.cmake")
