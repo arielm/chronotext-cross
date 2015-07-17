@@ -1,0 +1,32 @@
+
+#
+# FOR "PACKAGES" TO BE FOUND WHEN CROSS-COMPILING (ANDROID, EMSCRIPTEN, MXE...)
+# REQUIRED: ALL THE "PACKAGES" MUST BE LOCATED UNDER THE "HOME" PATH
+#
+set(STAGING_PREFIX "$ENV{HOME}")
+
+# ---
+
+if (PLATFORM MATCHES osx)
+  set(CTEST_CMAKE_GENERATOR "Ninja")
+  set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/osx.cmake")
+
+elseif (PLATFORM MATCHES ios)
+  set(CTEST_CMAKE_GENERATOR "Xcode")
+  set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/ios.xcode.cmake")
+
+elseif (PLATFORM MATCHES android)
+  set(CTEST_CMAKE_GENERATOR "Ninja")
+  set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/android.cmake")
+
+elseif (PLATFORM MATCHES emscripten)
+  set(CTEST_CMAKE_GENERATOR "Ninja")
+  set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/emscripten.cmake")
+
+elseif (PLATFORM MATCHES mxe)
+  set(CTEST_CMAKE_GENERATOR "Ninja")
+  set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/mxe.cmake")
+
+else()
+  message(FATAL_ERROR "UNSUPPORTED PLATFORM!")
+endif()

@@ -1,38 +1,28 @@
 
-if (NOT DEFINED ENV{CROSS_PATH})
-  message(FATAL_ERROR "CROSS_PATH MUST BE DEFINED!")
-endif()
-
-# ---
-
 set(CTEST_PROJECT_NAME "TestingBoost")
 set(CTEST_CONFIGURATION_TYPE Release)
 
 if (PLATFORM MATCHES osx)
-  set(CTEST_CMAKE_GENERATOR "Ninja")
-  set(TOOLCHAIN_FILE osx.cmake)
+  set(RUN "EXE")
 
 elseif (PLATFORM MATCHES ios)
-  set(CTEST_CMAKE_GENERATOR "Xcode")
-  set(TOOLCHAIN_FILE ios.xcode.cmake)
-# set(CONFIGURE_ARGS "-DIOS_DEPLOYMENT_TARGET=5.1.1 -DIOS_ARCHS=armv7")
+  set(RUN "APP")
+# set(ARGS
+#   "-DIOS_DEPLOYMENT_TARGET=5.1.1"
+#   "-DIOS_ARCHS=armv7"
+# )
 
 elseif (PLATFORM MATCHES android)
-  set(CTEST_CMAKE_GENERATOR "Ninja")
-  set(TOOLCHAIN_FILE android.cmake)
+  set(RUN "EXE")
 
 elseif (PLATFORM MATCHES emscripten)
-  set(CTEST_CMAKE_GENERATOR "Ninja")
-  set(TOOLCHAIN_FILE emscripten.cmake)
+  set(RUN "NODE")
 
 elseif (PLATFORM MATCHES mxe)
-  set(CTEST_CMAKE_GENERATOR "Ninja")
-  set(TOOLCHAIN_FILE mxe.cmake)
-
-else()
-  message(FATAL_ERROR "UNSUPPORTED PLATFORM!")
+  set(RUN "EXE")
 endif()
 
-set(CONFIGURE_ARGS "${CONFIGURE_ARGS} -DCROSS_ROOT=$ENV{CROSS_PATH}/core")
-set(CONFIGURE_ARGS "${CONFIGURE_ARGS} -DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}")
-set(CONFIGURE_ARGS "${CONFIGURE_ARGS} -DGTEST_ROOT=$ENV{CROSS_PATH}/deps/gtest/dist/${PLATFORM}")
+list(APPEND ARGS
+  "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
+  "-DGTEST_ROOT=$ENV{CROSS_PATH}/deps/gtest/dist/${PLATFORM}"
+)
