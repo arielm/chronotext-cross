@@ -1,4 +1,3 @@
-cmake_minimum_required (VERSION 3.2.2)
 
 include("${CROSS_ROOT}/cmake/test.common.cmake")
 
@@ -54,8 +53,6 @@ endif()
 if (PLATFORM MATCHES android)
   if (RESOURCE_COUNT)
     set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.res+exe.sh.in")
-  else()
-    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.exe.sh.in")
   endif()
 
 elseif (PLATFORM MATCHES osx|mxe)

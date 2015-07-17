@@ -1,0 +1,3 @@
+#!/bin/sh
+
+js ${PROJECT_NAME}.js "$@"

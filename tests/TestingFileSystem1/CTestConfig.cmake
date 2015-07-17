@@ -1,25 +1,33 @@
 
-set(CTEST_PROJECT_NAME "TestingFileSystem1")
+set(CTEST_PROJECT_NAME TestingFileSystem1)
 set(CTEST_CONFIGURATION_TYPE Release)
 
 if (PLATFORM MATCHES osx)
-  set(RUN "EXE")
+  set(ARGS
+    -DRUN=EXE
+  )
 
 elseif (PLATFORM MATCHES ios)
-  set(RUN "APP")
-# set(ARGS
-#   "-DIOS_DEPLOYMENT_TARGET=5.1.1"
-#   "-DIOS_ARCHS=armv7"
-# )
+  set(ARGS
+    -DRUN=APP
+#   -DIOS_DEPLOYMENT_TARGET=5.1.1
+#   -DIOS_ARCHS=armv7
+  )
 
 elseif (PLATFORM MATCHES android)
-  set(RUN "EXE")
+  set(ARGS
+    -DRUN=EXE
+  )
 
 elseif (PLATFORM MATCHES emscripten)
-  set(RUN "NODE")
+  set(ARGS
+    -DRUN=NODE
+  )
 
 elseif (PLATFORM MATCHES mxe)
-  set(RUN "EXE")
+  set(ARGS
+    -DRUN=EXE
+  )
 endif()
 
 list(APPEND ARGS

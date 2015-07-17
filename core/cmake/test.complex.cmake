@@ -1,4 +1,3 @@
-cmake_minimum_required (VERSION 3.2.2)
 
 include("${CROSS_ROOT}/cmake/test.common.cmake")
 
@@ -56,10 +55,7 @@ elseif (PLATFORM MATCHES android)
   configure_file("${CROSS_ROOT}/cmake/android/tests/ant.properties.in" tests/ant.properties)
   configure_file("${CROSS_ROOT}/cmake/android/tests/MainActivityTests.java.in" "tests/src/org/chronotext/${PROJECT_NAME}/MainActivityTests.java")
 
-  set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.instrument.sh.in")
-  set(CONFIG_RUN "${CROSS_ROOT}/cmake/android/run.instrument.sh.in")
-
-  set(LIBRARY_OUTPUT_PATH "libs/armeabi-v7a")
+  set(LIBRARY_OUTPUT_PATH "libs/${ANDROID_ABI}")
 
   add_library(${PROJECT_NAME} SHARED
     ${SRC_FILES}
