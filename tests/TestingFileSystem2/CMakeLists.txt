@@ -16,6 +16,6 @@ set(SRC_FILES
   src/main.cpp
 )
 
-include("${CROSS_ROOT}/cmake/test.complex.cmake")
+include("${CROSS_ROOT}/cmake/test.cmake")
 
 add_test(NAME AllTests COMMAND ./run.sh)

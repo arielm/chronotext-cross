@@ -22,7 +22,7 @@ set(SRC_FILES
   "${GTEST_SRC}/test/gtest-printers_test.cc"
 )
 
-include("${CROSS_ROOT}/cmake/test.simple.cmake")
+include("${CROSS_ROOT}/cmake/test.cmake")
 
 add_test(NAME AllTests COMMAND ./run.sh)
 #add_test(NAME MessageTest  COMMAND ./run.sh "--gtest_filter=MessageTest.*")
