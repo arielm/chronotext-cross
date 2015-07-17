@@ -83,7 +83,22 @@ elseif (PLATFORM MATCHES emscripten)
     add_definitions(-DCHR_FS_JS_EMBED)
 
     if (RESOURCE_COUNT)
-      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --exclude-file *.DS_Store --embed-file ../../res")
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --embed-file ../../res")
+    endif()
+  
+    add_executable(${PROJECT_NAME}
+      ${SRC_FILES}
+    )
+
+  elseif (FS MATCHES JS_PRELOAD)
+    add_definitions(-DCHR_FS_JS_PRELOAD)
+
+    configure_file("${CROSS_ROOT}/cmake/emscripten/template.html.in" template.html)
+    set(CMAKE_EXECUTABLE_SUFFIX .html)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --emrun --shell-file template.html")
+
+    if (RESOURCE_COUNT)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file ../../res")
     endif()
   
     add_executable(${PROJECT_NAME}

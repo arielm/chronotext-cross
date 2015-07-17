@@ -1,0 +1,3 @@
+#!/bin/sh
+
+emrun --browser safari ${PROJECT_NAME}.html "$@"

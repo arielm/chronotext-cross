@@ -21,8 +21,10 @@ elseif (PLATFORM MATCHES android)
 
 elseif (PLATFORM MATCHES emscripten)
   set(ARGS
-    -DRUN=SPIDERMONKEY
-    -DFS=JS_EMBED
+#   -DRUN=SPIDERMONKEY
+#   -DFS=JS_EMBED
+    -DRUN=BROWSER
+    -DFS=JS_PRELOAD
   )
 
 elseif (PLATFORM MATCHES mxe)
