@@ -32,7 +32,7 @@ TEST(TestCPP14, TestStringView)
   char array[3] = {'f', 'o', 'o'};
   string_view array_v(array, sizeof array);
 
-  EXPECT_EQ(true, cppstr_v == array_v);
+  EXPECT_TRUE(cppstr_v == array_v);
 }
 
 TEST(TestCPP14, TestMakeUnique)

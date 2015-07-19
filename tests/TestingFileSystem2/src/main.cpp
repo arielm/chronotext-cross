@@ -2,6 +2,7 @@
 #include "Platform.h"
 #include "MemoryBuffer.h"
 
+#include <gtest/gtest.h>
 #include <experimental/string_view>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -13,92 +14,99 @@
 using namespace std;
 using string_view = experimental::string_view;
 
-int main(int argc, const char *argv[])
+TEST(TestFileSystem2, TextResource)
 {
-  for (int i = 0; i < argc; i++)
-  {
-    LOGI << "{" << argv[i] << "}" << endl;
-  }
-
-  // ---
-
-  fs::path path1 = "sub/credits.txt";
-  fs::path path2 = "2008.547.1crop_4.jpg";
+  fs::path path = "sub/credits.txt";
+  string expectedText = "https://commons.wikimedia.org/wiki/File:G%C3%A9r%C3%B4me-Black_Bashi-Bazouk-c._1869.jpg";
 
   if (chr::hasMemoryResources())
   {
-    auto memoryBuffer1 = chr::getResourceBuffer(path1);
+    auto memoryBuffer = chr::getResourceBuffer(path);
 
-    if (memoryBuffer1)
+    if (memoryBuffer)
     {
-      LOGI << "[" << string_view(reinterpret_cast<const char*>(memoryBuffer1->data()), memoryBuffer1->size()) << "]" << endl;
+      string_view text(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
+      EXPECT_EQ(expectedText, text);
     }
     else
     {
-      LOGE << "ERROR WITH" << path1 << endl;
-    }
-
-    // ---
-
-    auto memoryBuffer2 = chr::getResourceBuffer(path2);
-
-    if (memoryBuffer2)
-    {
-      int x, y, comp;
-      stbi_uc *data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memoryBuffer2->data()), memoryBuffer2->size(), &x, &y, &comp, 0);
-
-      if (data)
-      {
-        LOGI << x << "x" << y << " (" << comp << ")" << endl;
-        stbi_image_free(data);
-      }
-      else
-      {
-        LOGE << "stbi ERROR WITH " << path2 << endl;
-      }
-    }
-    else
-    {
-      LOGE << "ERROR WITH " << path2 << endl;
+      ADD_FAILURE() << "chr::getResourceBuffer";
     }
   }
   else if (chr::hasFileResources())
   {
-    auto resPath1 = chr::getResourcePath("sub/credits.txt");
-    fs::ifstream in(resPath1, ios::in | ios::binary | ios::ate);
+    auto resPath = chr::getResourcePath(path);
+    fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
     
     if (in)
     {
       auto fileSize = in.tellg();
       in.seekg(0, ios::beg);
 
-      string result(fileSize, 0);
-      in.read(&result[0], fileSize);
+      string text(fileSize, 0);
+      in.read(&text[0], fileSize);
 
-      LOGI << "[" << result << "]" << endl;
+      EXPECT_EQ(expectedText, text);
     }
     else
     {
-      LOGE << "ERROR WITH " << path1 << endl;
+      ADD_FAILURE() << "fs::ifstream";
     }
+  }
+}
 
-    // ---
+TEST(TestFileSystem2, ImageResource)
+{
+  fs::path path = "2008.547.1crop_4.jpg";
+  int expectedX = 850;
+  int expectedY = 850;
+  int expectedComp = 3;
 
-    auto resPath2 = chr::getResourcePath("2008.547.1crop_4.jpg");
+  if (chr::hasMemoryResources())
+  {
+    auto memoryBuffer = chr::getResourceBuffer(path);
+
+    if (memoryBuffer)
+    {
+      int x, y, comp;
+      stbi_uc *data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memoryBuffer->data()), memoryBuffer->size(), &x, &y, &comp, 0);
+
+      if (data)
+      {
+        EXPECT_EQ(expectedX, x);
+        EXPECT_EQ(expectedY, y);
+        EXPECT_EQ(expectedComp, comp);
+
+        stbi_image_free(data);
+      }
+      else
+      {
+        ADD_FAILURE() << "stbi_load_from_memory";
+      }
+    }
+    else
+    {
+      ADD_FAILURE() << "chr::getResourceBuffer";
+    }
+  }
+  else if (chr::hasFileResources())
+  {
+    auto resPath = chr::getResourcePath(path);
 
     int x, y, comp;
-    stbi_uc *data = stbi_load(resPath2.string().data(), &x, &y, &comp, 0);
+    stbi_uc *data = stbi_load(resPath.string().data(), &x, &y, &comp, 0);
 
     if (data)
     {
-      LOGI << x << "x" << y << " (" << comp << ")" << endl;
+      EXPECT_EQ(expectedX, x);
+      EXPECT_EQ(expectedY, y);
+      EXPECT_EQ(expectedComp, comp);
+
       stbi_image_free(data);
     }
     else
     {
-      LOGE << "stbi ERROR WITH " << path2 << endl;
+      ADD_FAILURE() << "stbi_load";
     }
   }
-
-  return 0;
 }
