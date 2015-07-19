@@ -1,4 +1,5 @@
 #include "Platform.h"
+#include "MemoryBuffer.h"
 
 #if defined(CHR_FS_APK)
   #include "Bridge.h"
@@ -52,6 +53,15 @@ namespace chr
     #endif
   }
 
+  bool hasMemoryResources()
+  {
+    #if defined(CHR_FS_APK) || defined(CHR_FS_RC) || defined(FS_JS_EMBED) || defined(FS_JS_PRELOAD)
+      return true;
+    #else
+      return false;
+    #endif
+  }
+
   fs::path getResourcePath(const fs::path &relativePath)
   {
     fs::path basePath;
@@ -87,6 +97,18 @@ namespace chr
     return basePath / relativePath;
   }
 
+  shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath)
+  {
+    #if !defined(CHR_FS_APK) && !defined(CHR_FS_RC) && !defined(FS_JS_EMBED) && !defined(FS_JS_PRELOAD)
+      return nullptr;
+    #endif
+
+    auto buffer = make_shared<MemoryBuffer>();
+    buffer->lock(relativePath);
+
+    return buffer;
+  }
+
 #if defined(CHR_FS_RC)
   int checkResource(int resId)
   {
@@ -97,7 +119,7 @@ namespace chr
       return ::SizeofResource(NULL, infoHandle);
     }
 
-   return ::GetLastError();
+   return ::GetLastError(); // XXX
   }
 
   int checkResource(const fs::path &relativePath)

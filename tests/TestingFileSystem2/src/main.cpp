@@ -1,5 +1,6 @@
 #include "Log.h"
 #include "Platform.h"
+#include "MemoryBuffer.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_JPEG
@@ -42,32 +43,74 @@ int main(int argc, const char *argv[])
     LOGI << "{" << argv[i] << "}" << endl;
   }
 
-  if (chr::hasFileResources())
+  // ---
+
+  fs::path path1 = "sub/credits.txt";
+  fs::path path2 = "2008.547.1crop_4.jpg";
+
+  if (chr::hasMemoryResources())
   {
-    auto filePath1 = chr::getResourcePath("sub/credits.txt");
-    fs::ifstream in1(filePath1, ios::in | ios::binary | ios::ate);
-    
-    if (in1)
+    auto memoryBuffer1 = chr::getResourceBuffer(path1);
+
+    if (memoryBuffer1)
     {
-      auto fileSize = in1.tellg();
-      in1.seekg(0, ios::beg);
+      LOGI << "[" << string(reinterpret_cast<const char*>(memoryBuffer1->data()), memoryBuffer1->size()) << "]" << endl;
+    }
+    else
+    {
+      LOGE << "ERROR WITH" << path1 << endl;
+    }
+
+    // ---
+
+    auto memoryBuffer2 = chr::getResourceBuffer(path2);
+
+    if (memoryBuffer2)
+    {
+      int x, y, comp;
+      stbi_uc *data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memoryBuffer2->data()), memoryBuffer2->size(), &x, &y, &comp, 0);
+
+      if (data)
+      {
+        LOGI << x << "x" << y << " (" << comp << ")" << endl;
+        stbi_image_free(data);
+      }
+      else
+      {
+        LOGE << "stbi ERROR WITH " << path2 << endl;
+      }
+    }
+    else
+    {
+      LOGE << "ERROR WITH " << path2 << endl;
+    }
+  }
+  else if (chr::hasFileResources())
+  {
+    auto resPath1 = chr::getResourcePath("sub/credits.txt");
+    fs::ifstream in(resPath1, ios::in | ios::binary | ios::ate);
+    
+    if (in)
+    {
+      auto fileSize = in.tellg();
+      in.seekg(0, ios::beg);
 
       string result(fileSize, 0);
-      in1.read(&result[0], fileSize);
+      in.read(&result[0], fileSize);
 
       LOGI << "[" << result << "]" << endl;
     }
     else
     {
-      LOGE << "FILE-NOT-FOUND: " << filePath1 << endl;
+      LOGE << "ERROR WITH " << path1 << endl;
     }
 
     // ---
 
-    string fileName2 = chr::getResourcePath("2008.547.1crop_4.jpg").string();
-    int x, y, comp;
+    auto resPath2 = chr::getResourcePath("2008.547.1crop_4.jpg");
 
-    stbi_uc *data = stbi_load(fileName2.data(), &x, &y, &comp, 0);
+    int x, y, comp;
+    stbi_uc *data = stbi_load(resPath2.string().data(), &x, &y, &comp, 0);
 
     if (data)
     {
@@ -76,15 +119,8 @@ int main(int argc, const char *argv[])
     }
     else
     {
-      LOGI << "ERROR WITH: " << fileName2 << endl;
+      LOGE << "stbi ERROR WITH " << path2 << endl;
     }
-  }
-  else
-  {
-#if defined(CHR_FS_RC) || defined(CHR_FS_APK)
-    LOGI << chr::checkResource("sub/credits.txt") << endl;
-    LOGI << chr::checkResource("2008.547.1crop_4.jpg") << endl;
-#endif
   }
 
   return 0;

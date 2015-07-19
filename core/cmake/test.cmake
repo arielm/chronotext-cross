@@ -6,6 +6,7 @@ list(APPEND INCLUDE_DIRS
 list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/Log.cpp"
   "${CROSS_ROOT}/src/Platform.cpp"
+  "${CROSS_ROOT}/src/MemoryBuffer.cpp"
 )
 
 file(GLOB_RECURSE RESOURCE_FILES

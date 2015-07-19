@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <map>
+#include <memory>
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
@@ -10,6 +11,8 @@ namespace fs = boost::filesystem;
 
 namespace chr
 {
+  class MemoryBuffer;
+
   enum
   {
     PLATFORM_OSX,
@@ -70,7 +73,10 @@ namespace chr
   #endif
 
   bool hasFileResources();
+  bool hasMemoryResources();
+
   fs::path getResourcePath(const fs::path &relativePath);
+  std::shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath);
 
   #if defined(CHR_FS_RC)
     int checkResource(int resId);
