@@ -14,7 +14,6 @@ namespace chr
   {
     PLATFORM_OSX,
     PLATFORM_IOS,
-    PLATFORM_IOS_SIM,
     PLATFORM_ANDROID,
     PLATFORM_EMSCRIPTEN,
     PLATFORM_MINGW,
@@ -25,13 +24,8 @@ namespace chr
   #include <TargetConditionals.h>
   #define CHR_PLATFORM_COCOA
   #if TARGET_OS_IPHONE
-    #if TARGET_IPHONE_SIMULATOR
-      #define CHR_PLATFORM chr::PLATFORM_IOS_SIM
-      #define CHR_PLATFORM_IOS_SIM 1
-    #else
-      #define CHR_PLATFORM chr::PLATFORM_IOS
-      #define CHR_PLATFORM_IOS 1
-    #endif // TARGET_IPHONE_SIMULATOR
+    #define CHR_PLATFORM chr::PLATFORM_IOS
+    #define CHR_PLATFORM_IOS 1
   #else
     #define CHR_PLATFORM chr::PLATFORM_OSX
     #define CHR_PLATFORM_OSX 1
@@ -70,18 +64,18 @@ namespace chr
 
 namespace chr
 {
+  #if defined(CHR_RUN_APK)
+    std::string toString(JNIEnv *env, jstring s);
+    std::vector<std::string> toStrings(JNIEnv *env, jobjectArray a);
+  #endif
+
   bool hasFileResources();
   fs::path getResourcePath(const fs::path &relativePath);
 
-#if defined(CHR_RUN_APK)
-  std::string toString(JNIEnv *env, jstring s);
-  std::vector<std::string> toStrings(JNIEnv *env, jobjectArray a);
-#endif
-
-#if defined(CHR_FS_RC)
-  int checkResource(int resId);
-  int checkResource(const fs::path &relativePath);
-#elif defined(CHR_FS_APK)
-  int checkResource(const fs::path &relativePath);
-#endif
+  #if defined(CHR_FS_RC)
+    int checkResource(int resId);
+    int checkResource(const fs::path &relativePath);
+  #elif defined(CHR_FS_APK)
+    int checkResource(const fs::path &relativePath);
+  #endif
 }

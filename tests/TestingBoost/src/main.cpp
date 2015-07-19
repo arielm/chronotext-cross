@@ -26,15 +26,12 @@ TEST(TestBoost, TestLexicalCast)
   EXPECT_EQ(33.33, boost::lexical_cast<double>("33.33"));
 }
 
-/*
- * TODO: ADAPT FOR WINDOWS
- */
 TEST(TestBoost, TestFileSystem)
 {
   fs::path documents("/Users/arielm/Documents");
   fs::path filePath = documents / "bar.jpg";
 
-  EXPECT_EQ("/Users/arielm/Documents/bar.jpg", filePath.generic_string());
+  EXPECT_EQ("/Users/arielm/Documents/bar.jpg", filePath.generic_string()); // WITHOUT generic_string(): WOULD FAIL ON WINDOWS
 }
 
 TEST(TestBoost, TestFilteringStream)
