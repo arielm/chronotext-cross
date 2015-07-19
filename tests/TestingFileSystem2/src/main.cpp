@@ -6,35 +6,9 @@
 #define STBI_ONLY_JPEG
 #define STBI_ONLY_PNG
 
-void* _malloc(size_t size);
-void* _realloc(void *ptr, size_t size);
-void _free(void *ptr);
-
-#define STBI_MALLOC(sz)    _malloc(sz)
-#define STBI_REALLOC(p,sz) _realloc(p,sz)
-#define STBI_FREE(p)       _free(p)
-
 #include "stb_image.h"
 
 using namespace std;
-
-void* _malloc(size_t size)
-{
-  LOGI << "malloc " << size << endl;
-  return malloc(size);
-}
-
-void* _realloc(void *ptr, size_t size)
-{
-  LOGI << "realloc " << size << endl;
-  return realloc(ptr, size);
-}
-
-void _free(void *ptr)
-{
-  LOGI << "free" << endl;
-  free(ptr);
-}
 
 int main(int argc, const char *argv[])
 {
@@ -54,7 +28,7 @@ int main(int argc, const char *argv[])
 
     if (memoryBuffer1)
     {
-      LOGI << "[" << string(reinterpret_cast<const char*>(memoryBuffer1->data()), memoryBuffer1->size()) << "]" << endl;
+      LOGI << "[" << string(reinterpret_cast<const char*>(memoryBuffer1->data()), memoryBuffer1->size()) << "]" << endl; // TODO: TRY WITH string_view
     }
     else
     {
