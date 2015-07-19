@@ -8,7 +8,7 @@ endif()
 #
 # TODO: AVOID DOUBLE-INCLUSION OF FLAGS
 #
-set(CMAKE_CXX_FLAGS "-Wno-warn-absolute-paths -std=c++11"
+set(CMAKE_CXX_FLAGS "-Wno-warn-absolute-paths -std=c++14"
   CACHE STRING "cmake_cxx_flags/emscripten"
 )
 
@@ -35,7 +35,7 @@ if (DEFINED RUN AND NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
 
   elseif (RUN MATCHES BROWSER)
     set(CONFIG_RUN "${CROSS_ROOT}/cmake/emscripten/run.browser.sh.in")
-    
+
     if (NOT DEFINED FS)
       set(FS JS_PRELOAD)
     endif()

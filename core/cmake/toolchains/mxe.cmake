@@ -12,7 +12,7 @@ set(MXE_TARGET i686-w64-mingw32.static
 #
 # TODO: AVOID DOUBLE-INCLUSION OF FLAGS
 #
-set(CMAKE_CXX_FLAGS "-Wno-deprecated-declarations -std=c++11"
+set(CMAKE_CXX_FLAGS "-Wno-deprecated-declarations -std=c++1y"
   CACHE STRING "cmake_cxx_flags/mxe"
 )
 
