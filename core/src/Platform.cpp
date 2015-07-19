@@ -1,7 +1,7 @@
 #include "Platform.h"
 
 #if defined(CHR_FS_APK)
-# include "Bridge.h"
+  #include "Bridge.h"
 #endif
 
 using namespace std;
@@ -52,7 +52,7 @@ namespace chr
    return basePath / relativePath;
   }
 
-#if defined(CHR_FS_APK)
+#if defined(CHR_RUN_APK)
   string toString(JNIEnv *env, jstring s)
   {
     string result;
@@ -90,12 +90,12 @@ namespace chr
 #if defined(CHR_FS_RC)
   int checkResource(int resId)
   {
-	  HRSRC infoHandle = ::FindResource(NULL, MAKEINTRESOURCE(resId), RT_RCDATA);
+    HRSRC infoHandle = ::FindResource(NULL, MAKEINTRESOURCE(resId), RT_RCDATA);
 
-	  if (infoHandle)
-	  {
+    if (infoHandle)
+    {
       return ::SizeofResource(NULL, infoHandle);
-	  }
+    }
 
    return ::GetLastError();
   }

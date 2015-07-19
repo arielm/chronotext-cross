@@ -34,9 +34,11 @@ if (DEFINED RUN AND NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
   if (RUN MATCHES EXE)
     set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.exe.sh.in")
     set(CONFIG_RUN "${CROSS_ROOT}/cmake/android/run.exe.sh.in")
+
   elseif (RUN MATCHES APK)
     set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.instrument.sh.in")
     set(CONFIG_RUN "${CROSS_ROOT}/cmake/android/run.instrument.sh.in")
+    
   else()
     message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
   endif()

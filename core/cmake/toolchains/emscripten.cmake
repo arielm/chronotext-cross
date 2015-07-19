@@ -21,10 +21,25 @@ if (DEFINED RUN AND NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
 
   if (RUN MATCHES NODE)
     set(CONFIG_RUN "${CROSS_ROOT}/cmake/emscripten/run.node.sh.in")
+
+    if (NOT DEFINED FS)
+      set(FS JS_NODE)
+    endif()
+
   elseif (RUN MATCHES SPIDERMONKEY)
     set(CONFIG_RUN "${CROSS_ROOT}/cmake/emscripten/run.js.sh.in")
+
+    if (NOT DEFINED FS)
+      set(FS JS_EMBED)
+    endif()
+
   elseif (RUN MATCHES BROWSER)
     set(CONFIG_RUN "${CROSS_ROOT}/cmake/emscripten/run.browser.sh.in")
+    
+    if (NOT DEFINED FS)
+      set(FS JS_PRELOAD)
+    endif()
+
   else()
     message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
   endif()

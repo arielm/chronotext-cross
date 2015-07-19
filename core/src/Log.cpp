@@ -1,7 +1,7 @@
 #include "Log.h"
 #include "Platform.h"
 
-#if defined(CHR_FS_APK)
+#if defined(CHR_RUN_APK)
 #  include <android/log.h>
 #endif
 
@@ -16,7 +16,7 @@ namespace chr
 
   Log::~Log()
   {
-#if defined(CHR_FS_APK)
+#if defined(CHR_RUN_APK)
     int androidPriority;
 
     switch (level)

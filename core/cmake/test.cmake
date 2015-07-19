@@ -18,6 +18,8 @@ list(LENGTH RESOURCE_FILES RESOURCE_COUNT)
 # ---
 
 if (PLATFORM MATCHES mxe)
+  add_definitions(-DCHR_RUN_EXE)
+
   if (FS MATCHES RC)
     add_definitions(-DCHR_FS_RC)
 
@@ -40,6 +42,8 @@ if (PLATFORM MATCHES mxe)
     endif()
 
   else()
+    add_definitions(-DCHR_FS_PURE)
+
     if (RESOURCE_COUNT)
       set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
     endif()
@@ -50,16 +54,8 @@ if (PLATFORM MATCHES mxe)
   )
 
 elseif (PLATFORM MATCHES android)
-  if (RUN MATCHES EXE)
-    add_executable(${PROJECT_NAME}
-      ${SRC_FILES}
-    )
-
-    if (RESOURCE_COUNT)
-      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.res+exe.sh.in")
-    endif()
-
-  elseif (RUN MATCHES APK)
+  if (RUN MATCHES APK)
+    add_definitions(-DCHR_RUN_APK)
     add_definitions(-DCHR_FS_APK)
 
     configure_file("${CROSS_ROOT}/cmake/android/AndroidManifest.xml.in" AndroidManifest.xml)
@@ -76,10 +72,30 @@ elseif (PLATFORM MATCHES android)
       ${SRC_FILES}
       "${CROSS_ROOT}/src/Bridge.cpp"
     )
+
+  else()
+    add_definitions(-DCHR_RUN_EXE)
+    add_definitions(-DCHR_FS_PURE)
+
+    add_executable(${PROJECT_NAME}
+      ${SRC_FILES}
+    )
+
+    if (RESOURCE_COUNT)
+      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.res+exe.sh.in")
+    endif()
   endif()
 
 elseif (PLATFORM MATCHES emscripten)
   if (FS MATCHES JS_EMBED)
+    if (RUN MATCHES SPIDERMONKEY)
+      add_definitions(-DCHR_RUN_SPIDERMONKEY)
+    elseif (RUN MATCHES NODE)
+      add_definitions(-DCHR_RUN_NODE)
+    else()
+      message(FATAL_ERROR "UNSUPPORTED RUN-MODE + FILE-SYSTEM!")
+    endif()
+        
     add_definitions(-DCHR_FS_JS_EMBED)
 
     if (RESOURCE_COUNT)
@@ -90,7 +106,8 @@ elseif (PLATFORM MATCHES emscripten)
       ${SRC_FILES}
     )
 
-  elseif (FS MATCHES JS_PRELOAD)
+  elseif (FS MATCHES JS_PRELOAD AND RUN MATCHES BROWSER)
+    add_definitions(-DCHR_RUN_BROWSER)
     add_definitions(-DCHR_FS_JS_PRELOAD)
 
     configure_file("${CROSS_ROOT}/cmake/emscripten/template.html.in" template.html)
@@ -105,7 +122,8 @@ elseif (PLATFORM MATCHES emscripten)
       ${SRC_FILES}
     )
 
-  else()
+  elseif (FS MATCHES JS_NODE AND RUN MATCHES NODE)
+    add_definitions(-DCHR_RUN_NODE)
     add_definitions(-DCHR_FS_JS_NODE)
 
     add_executable(${PROJECT_NAME}
@@ -115,9 +133,13 @@ elseif (PLATFORM MATCHES emscripten)
     if (RESOURCE_COUNT)
       em_link_pre_js(${PROJECT_NAME} "${CROSS_ROOT}/cmake/emscripten/pre.js")
     endif()
+
+  else()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE + FILE-SYSTEM!")
   endif()
 
 elseif (PLATFORM MATCHES ios)
+  add_definitions(-DCHR_RUN_APP)
   add_definitions(-DCHR_FS_BUNDLE)
 
   add_executable(${PROJECT_NAME}
@@ -131,6 +153,9 @@ elseif (PLATFORM MATCHES ios)
   endforeach()
 
 elseif (PLATFORM MATCHES osx)
+  add_definitions(-DCHR_RUN_EXE)
+  add_definitions(-DCHR_FS_PURE)
+
   if (RESOURCE_COUNT)
     set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
   endif()

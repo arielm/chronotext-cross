@@ -21,6 +21,11 @@ include("$ENV{MXE_PATH}/usr/${MXE_TARGET}/share/cmake/mxe-conf.cmake")
 # ---
 
 if (DEFINED RUN AND NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
-  set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
-  set(CONFIG_RUN "${CROSS_ROOT}/cmake/mxe/run.sh.in")
+  if (RUN MATCHES EXE)
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/mxe/run.sh.in")
+    
+  else()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
+  endif()
 endif()
