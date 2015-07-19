@@ -2,6 +2,8 @@
 #include "Platform.h"
 #include "MemoryBuffer.h"
 
+#include <experimental/string_view>
+
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_JPEG
 #define STBI_ONLY_PNG
@@ -9,6 +11,7 @@
 #include "stb_image.h"
 
 using namespace std;
+using string_view = experimental::string_view;
 
 int main(int argc, const char *argv[])
 {
@@ -28,7 +31,7 @@ int main(int argc, const char *argv[])
 
     if (memoryBuffer1)
     {
-      LOGI << "[" << string(reinterpret_cast<const char*>(memoryBuffer1->data()), memoryBuffer1->size()) << "]" << endl; // TODO: TRY WITH string_view
+      LOGI << "[" << string_view(reinterpret_cast<const char*>(memoryBuffer1->data()), memoryBuffer1->size()) << "]" << endl;
     }
     else
     {
