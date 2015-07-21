@@ -14,25 +14,14 @@ if [ ! -d "$SRC_PATH" ]; then
   exit 1
 fi
 
-if [ -z "$NDK_PATH" ]; then
-  echo "NDK_PATH MUST BE DEFINED!"
-  exit -1  
-fi
-
 # ---
 
-ANDROID_ABI="armeabi-v7a"
-ANDROID_API=android-16
-
-TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/android.toolchain.cmake"
+TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/android.cmake"
 
 cmake -H"$SRC_DIR" -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
-  -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
-  -DANDROID_NDK="$NDK_PATH" \
-  -DANDROID_ABI="$ANDROID_ABI" \
-  -DANDROID_NATIVE_API_LEVEL=$ANDROID_API
+  -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib"
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"
