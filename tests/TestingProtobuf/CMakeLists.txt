@@ -29,7 +29,7 @@ set(SRC_FILES
   "${PROTOBUF_SRC}/src/google/protobuf/io/coded_stream_unittest.cc"
   "${PROTOBUF_SRC}/src/google/protobuf/io/printer_unittest.cc"
   "${PROTOBUF_SRC}/src/google/protobuf/io/tokenizer_unittest.cc"
-  "${PROTOBUF_SRC}/src/google/protobuf/io/tokenizer_unittest.cc"
+  "${PROTOBUF_SRC}/src/google/protobuf/io/zero_copy_stream_unittest.cc"
 )
 
 include("${CROSS_ROOT}/cmake/test.cmake")
