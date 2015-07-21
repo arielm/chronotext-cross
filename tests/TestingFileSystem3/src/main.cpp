@@ -53,22 +53,26 @@ TEST(TestFileSystem3, ZeroCopyInputStream)
   if (codedInput)
   {
     string version;
+    EXPECT_TRUE(codedInput->ReadString(&version, 9));
+    EXPECT_EQ("XFONT.004", version);
+    EXPECT_TRUE(codedInput->Skip(1)); // XXX
 
-    if (codedInput->ReadString(&version, 9))
+    uint32 glyphCount;
+    EXPECT_TRUE(codedInput->ReadLittleEndian32(&glyphCount));
+    EXPECT_EQ(191, glyphCount);
+
+    float baseSize;
+    EXPECT_TRUE(codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&baseSize)));
+    EXPECT_EQ(64, baseSize);
+
+    // ---
+
+    delete codedInput;
+
+    if (rawInput)
     {
-      LOGI << "{" << version << "}" << endl;
-
-      delete codedInput;
-
-      if (rawInput)
-      {
-        delete rawInput;
-        close(fd);  
-      }
-    }
-    else
-    {
-      ADD_FAILURE() << "CodedInputStream::ReadString";
+      delete rawInput;
+      close(fd);  
     }
   }
 }
