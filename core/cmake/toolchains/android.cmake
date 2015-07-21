@@ -26,7 +26,7 @@ set(CMAKE_CXX_FLAGS "-std=c++1y"
   CACHE STRING "cmake_cxx_flags/android"
 )
 
-include("${CROSS_ROOT}/cmake/toolchains/android.toolchain.cmake")
+include("$ENV{CROSS_PATH}/core/cmake/toolchains/android.toolchain.cmake")
 
 # ---
 

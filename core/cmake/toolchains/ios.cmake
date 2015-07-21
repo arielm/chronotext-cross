@@ -26,6 +26,6 @@ set(CMAKE_OSX_ARCHITECTURES ${IOS_ARCHS}
 #
 # TODO: AVOID DOUBLE-INCLUSION OF FLAGS
 #
-set(CMAKE_CXX_FLAGS "-miphoneos-version-min=${IOS_DEPLOYMENT_TARGET} -stdlib=libc++ -std=c++11"
+set(CMAKE_CXX_FLAGS "-miphoneos-version-min=${IOS_DEPLOYMENT_TARGET} -stdlib=libc++ -std=c++14"
   CACHE STRING "cmake_cxx_flags/ios"
 )
