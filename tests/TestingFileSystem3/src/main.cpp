@@ -65,6 +65,11 @@ TEST(TestFileSystem3, ZeroCopyInputStream)
     EXPECT_TRUE(codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&baseSize)));
     EXPECT_EQ(64, baseSize);
 
+    /*
+     * TODO: CHECK GetDirectBufferPointer()
+     * https://github.com/google/protobuf/blob/master/src/google/protobuf/io/coded_stream.h#L183-190
+     */
+
     // ---
 
     delete codedInput;
