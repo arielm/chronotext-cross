@@ -153,6 +153,12 @@ elseif (PLATFORM MATCHES ios)
     set_source_files_properties(${resource_file} PROPERTIES MACOSX_PACKAGE_LOCATION ${PROJECT_NAME}.app/${parent_dir})
   endforeach()
 
+  set_target_properties(${PROJECT_NAME} PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER org.chronotext.${PROJECT_NAME}
+    MACOSX_BUNDLE_INFO_PLIST "${CROSS_ROOT}/cmake/ios/Info.plist.in"
+    XCODE_ATTRIBUTE_INFOPLIST_PREPROCESS YES
+  )
+
 elseif (PLATFORM MATCHES osx)
   add_definitions(-DCHR_RUN_EXE)
   add_definitions(-DCHR_FS_PURE)
