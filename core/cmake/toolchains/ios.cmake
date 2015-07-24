@@ -1,8 +1,4 @@
 
-if (DEFINED RUN)
-  message(FATAL_ERROR "RUN-MODE IS NOT SUPPORTED!")
-endif()
-
 set(IOS_ARCHS
   armv7
   arm64

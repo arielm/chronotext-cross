@@ -83,7 +83,7 @@ namespace chr
       CFRelease(url);
       CFRelease(tmp);
       free(buffer);
-    #elif defined(CHR_PLATFORM_ANDROID)
+    #elif defined(CHR_PLATFORM_ANDROID) // TODO: CONSIDER "GENERALIZING" TO LINUX
       static char buf[PATH_MAX];
       auto len = readlink("/proc/self/exe", buf, PATH_MAX - 1);
       assert(len > 0);
@@ -108,47 +108,4 @@ namespace chr
 
     return buffer;
   }
-
-#if defined(CHR_FS_RC)
-  int checkResource(int resId)
-  {
-    HRSRC infoHandle = ::FindResource(NULL, MAKEINTRESOURCE(resId), RT_RCDATA);
-
-    if (infoHandle)
-    {
-      return ::SizeofResource(NULL, infoHandle);
-    }
-
-   return ::GetLastError(); // XXX
-  }
-
-  int checkResource(const fs::path &relativePath)
-  {
-    auto basePath = fs::path("res") / relativePath;
-    auto found = mingw::RESOURCES.find(basePath.generic_string());
-
-    if (found != mingw::RESOURCES.end())
-    {
-      int resId = found->second;
-      return checkResource(resId);
-    }
-
-    return -1;
-  }
-#elif defined(CHR_FS_APK)
-  int checkResource(const fs::path &relativePath)
-  {
-    AAsset *asset = AAssetManager_open(android::assetManager, relativePath.c_str(), AASSET_MODE_UNKNOWN);
-
-    if (asset)
-    {
-      auto size = AAsset_getLength(asset);
-      AAsset_close(asset);
-
-      return size;
-    }
-
-    return -1;
-  }
-#endif
 }

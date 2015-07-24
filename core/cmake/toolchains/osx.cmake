@@ -20,15 +20,3 @@ set(CMAKE_OSX_ARCHITECTURES ${OSX_ARCHS}
 set(CMAKE_CXX_FLAGS "-mmacosx-version-min=${OSX_DEPLOYMENT_TARGET} -stdlib=libc++ -std=c++14"
   CACHE STRING "cmake_cxx_flags/osx"
 )
-
-# ---
-
-if (DEFINED RUN AND NOT PROJECT_NAME STREQUAL CMAKE_TRY_COMPILE)
-  if (RUN MATCHES EXE)
-    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
-    set(CONFIG_RUN "${CROSS_ROOT}/cmake/osx/run.sh.in")
-
-  else()
-    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
-  endif()
-endif()

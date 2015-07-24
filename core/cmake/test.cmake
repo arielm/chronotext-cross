@@ -19,45 +19,56 @@ list(LENGTH RESOURCE_FILES RESOURCE_COUNT)
 # ---
 
 if (PLATFORM MATCHES mxe)
-  add_definitions(-DCHR_RUN_EXE)
+  if (RUN MATCHES EXE)
+    add_definitions(-DCHR_RUN_EXE)
 
-  if (FS MATCHES RC)
-    add_definitions(-DCHR_FS_RC)
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/mxe/run.sh.in")
 
-    set(DATA_RC "")
-    set(DATA_CPP "")
-    set(counter 128)
+    if (FS MATCHES RC)
+      add_definitions(-DCHR_FS_RC)
 
-    foreach (resource_file ${RESOURCE_FILES})
-      set(DATA_RC "${DATA_RC}${counter} RCDATA \"../../${resource_file}\"\r\n")
-      set(DATA_CPP "{\"${resource_file}\", ${counter}}, ${DATA_CPP}")
-      math(EXPR counter "${counter} + 1")
-    endforeach()
+      set(DATA_RC "")
+      set(DATA_CPP "")
+      set(counter 128)
 
-    configure_file("${CROSS_ROOT}/cmake/mxe/resources.cpp.in" resources.cpp)
-    list(APPEND SRC_FILES "${CMAKE_CURRENT_BINARY_DIR}/resources.cpp")
+      foreach (resource_file ${RESOURCE_FILES})
+        set(DATA_RC "${DATA_RC}${counter} RCDATA \"../../${resource_file}\"\r\n")
+        set(DATA_CPP "{\"${resource_file}\", ${counter}}, ${DATA_CPP}")
+        math(EXPR counter "${counter} + 1")
+      endforeach()
 
-    if (RESOURCE_COUNT)
-      configure_file("${CROSS_ROOT}/cmake/mxe/resources.rc.in" resources.rc)
-      list(APPEND SRC_FILES "${CMAKE_CURRENT_BINARY_DIR}/resources.rc")
+      configure_file("${CROSS_ROOT}/cmake/mxe/resources.cpp.in" resources.cpp)
+      list(APPEND SRC_FILES "${CMAKE_CURRENT_BINARY_DIR}/resources.cpp")
+
+      if (RESOURCE_COUNT)
+        configure_file("${CROSS_ROOT}/cmake/mxe/resources.rc.in" resources.rc)
+        list(APPEND SRC_FILES "${CMAKE_CURRENT_BINARY_DIR}/resources.rc")
+      endif()
+
+    else()
+      add_definitions(-DCHR_FS_PURE)
+
+      if (RESOURCE_COUNT)
+        set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
+      endif()
     endif()
+
+    add_executable(${PROJECT_NAME}
+      ${SRC_FILES}
+    )
 
   else()
-    add_definitions(-DCHR_FS_PURE)
-
-    if (RESOURCE_COUNT)
-      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
-    endif()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
   endif()
-
-  add_executable(${PROJECT_NAME}
-    ${SRC_FILES}
-  )
 
 elseif (PLATFORM MATCHES android)
   if (RUN MATCHES APK)
     add_definitions(-DCHR_RUN_APK)
     add_definitions(-DCHR_FS_APK)
+
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.instrument.sh.in")
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/android/run.instrument.sh.in")
 
     configure_file("${CROSS_ROOT}/cmake/android/AndroidManifest.xml.in" AndroidManifest.xml)
     configure_file("${CROSS_ROOT}/cmake/android/ant.properties.in" ant.properties)
@@ -74,20 +85,54 @@ elseif (PLATFORM MATCHES android)
       "${CROSS_ROOT}/src/Bridge.cpp"
     )
 
-  else()
+  elseif (RUN MATCHES EXE)
     add_definitions(-DCHR_RUN_EXE)
     add_definitions(-DCHR_FS_PURE)
+
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/android/run.exe.sh.in")
+
+    if (RESOURCE_COUNT)
+      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.res+exe.sh.in")
+    else()
+      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.exe.sh.in")
+    endif()
 
     add_executable(${PROJECT_NAME}
       ${SRC_FILES}
     )
 
-    if (RESOURCE_COUNT)
-      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.res+exe.sh.in")
-    endif()
+  else()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
   endif()
 
 elseif (PLATFORM MATCHES emscripten)
+  set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
+
+  if (RUN MATCHES NODE)
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/emscripten/run.node.sh.in")
+
+    if (NOT DEFINED FS)
+      set(FS JS_NODE)
+    endif()
+
+  elseif (RUN MATCHES SPIDERMONKEY)
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/emscripten/run.js.sh.in")
+
+    if (NOT DEFINED FS)
+      set(FS JS_EMBED)
+    endif()
+
+  elseif (RUN MATCHES BROWSER)
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/emscripten/run.browser.sh.in")
+
+    if (NOT DEFINED FS)
+      set(FS JS_PRELOAD)
+    endif()
+
+  else()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
+  endif()
+
   if (FS MATCHES JS_EMBED)
     if (RUN MATCHES SPIDERMONKEY)
       add_definitions(-DCHR_RUN_SPIDERMONKEY)
@@ -136,40 +181,57 @@ elseif (PLATFORM MATCHES emscripten)
     endif()
 
   else()
-    message(FATAL_ERROR "UNSUPPORTED RUN-MODE + FILE-SYSTEM!")
+    message(FATAL_ERROR "UNSUPPORTED FILE-SYSTEM!")
   endif()
 
 elseif (PLATFORM MATCHES ios)
-  add_definitions(-DCHR_RUN_APP)
-  add_definitions(-DCHR_FS_BUNDLE)
+  if (RUN MATCHES APP)
+    add_definitions(-DCHR_RUN_APP)
+    add_definitions(-DCHR_FS_BUNDLE)
 
-  add_executable(${PROJECT_NAME}
-    ${SRC_FILES}
-    ${RESOURCE_FILES}
-  )
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/ios/install.sh.in")
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/ios/run.sh.in")
 
-  foreach (resource_file ${RESOURCE_FILES})
-    get_filename_component(parent_dir ${resource_file} DIRECTORY)
-    set_source_files_properties(${resource_file} PROPERTIES MACOSX_PACKAGE_LOCATION ${PROJECT_NAME}.app/${parent_dir})
-  endforeach()
+    add_executable(${PROJECT_NAME}
+      ${SRC_FILES}
+      ${RESOURCE_FILES}
+    )
 
-  set_target_properties(${PROJECT_NAME} PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER org.chronotext.${PROJECT_NAME}
-    MACOSX_BUNDLE_INFO_PLIST "${CROSS_ROOT}/cmake/ios/Info.plist.in"
-    XCODE_ATTRIBUTE_INFOPLIST_PREPROCESS YES
-  )
+    foreach (resource_file ${RESOURCE_FILES})
+      get_filename_component(parent_dir ${resource_file} DIRECTORY)
+      set_source_files_properties(${resource_file} PROPERTIES MACOSX_PACKAGE_LOCATION ${PROJECT_NAME}.app/${parent_dir})
+    endforeach()
 
-elseif (PLATFORM MATCHES osx)
-  add_definitions(-DCHR_RUN_EXE)
-  add_definitions(-DCHR_FS_PURE)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+      MACOSX_BUNDLE_GUI_IDENTIFIER org.chronotext.${PROJECT_NAME}
+      MACOSX_BUNDLE_INFO_PLIST "${CROSS_ROOT}/cmake/ios/Info.plist.in"
+      XCODE_ATTRIBUTE_INFOPLIST_PREPROCESS YES
+    )
 
-  if (RESOURCE_COUNT)
-    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
+  else()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
   endif()
 
-  add_executable(${PROJECT_NAME}
-    ${SRC_FILES}
-  )
+elseif (PLATFORM MATCHES osx)
+  if (RUN MATCHES EXE)
+    add_definitions(-DCHR_RUN_EXE)
+    add_definitions(-DCHR_FS_PURE)
+
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/osx/run.sh.in")
+
+    if (RESOURCE_COUNT)
+      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
+    else()
+      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
+    endif()
+
+    add_executable(${PROJECT_NAME}
+      ${SRC_FILES}
+    )
+
+  else()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
+  endif()
 endif()
 
 # ---

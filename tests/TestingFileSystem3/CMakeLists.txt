@@ -29,4 +29,10 @@ set(SRC_FILES
 
 include("${CROSS_ROOT}/cmake/test.cmake")
 
+#
+# XXX: CLION HACK
+# https://devnet.jetbrains.com/thread/465755?tstart=0
+#
+add_custom_target(run_install COMMAND ${CMAKE_MAKE_PROGRAM} install)
+
 add_test(NAME AllTests COMMAND ./run.sh)

@@ -51,10 +51,12 @@ namespace chr
   #undef ERROR // SEE https://google-glog.googlecode.com/svn/trunk/doc/glog.html#windows
 #elif defined(CHR_PLATFORM_COCOA)
   #include <CoreFoundation/CoreFoundation.h>
+#elif defined(CHR_PLATFORM_ANDROID)
+  #include <jni.h>
 #endif
 
 #if defined(CHR_FS_APK)
-  #include <android/asset_manager_jni.h>
+  #include <android/asset_manager.h>
 #elif defined(CHR_FS_RC)
   namespace chr
   {
@@ -77,11 +79,4 @@ namespace chr
 
   fs::path getResourcePath(const fs::path &relativePath);
   std::shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath);
-
-  #if defined(CHR_FS_RC)
-    int checkResource(int resId);
-    int checkResource(const fs::path &relativePath);
-  #elif defined(CHR_FS_APK)
-    int checkResource(const fs::path &relativePath);
-  #endif
 }
