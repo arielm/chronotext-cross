@@ -258,16 +258,21 @@ target_link_libraries(${PROJECT_NAME}
 
 # ---
 
-enable_testing()
-
 if (CONFIG_RUN AND CONFIG_INSTALL)
   configure_file(${CONFIG_RUN} run.sh)
   configure_file(${CONFIG_INSTALL} install.sh)
 
-  install(CODE "
-    execute_process(COMMAND ./install.sh RESULT_VARIABLE result)
-    if (result)
-      message(FATAL_ERROR)
-    endif()
-  ")
+  if (DEFINED CLION)
+    add_custom_target(CLION_BUILD COMMAND ./install.sh)
+  else()
+    install(CODE "
+      execute_process(COMMAND ./install.sh RESULT_VARIABLE result)
+      if (result)
+        message(FATAL_ERROR)
+      endif()
+    ")
+
+    enable_testing()
+    add_test(NAME TEST_ALL COMMAND ./run.sh)
+  endif()
 endif()

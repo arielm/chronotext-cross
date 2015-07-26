@@ -39,5 +39,3 @@ set(SRC_FILES
 )
 
 include("${CROSS_ROOT}/cmake/test.cmake")
-
-add_test(NAME AllTests COMMAND ./run.sh)
