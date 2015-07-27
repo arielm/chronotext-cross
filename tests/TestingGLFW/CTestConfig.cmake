@@ -1,0 +1,23 @@
+
+set(CTEST_PROJECT_NAME TestingGLFW)
+set(CTEST_CONFIGURATION_TYPE Release)
+
+if (PLATFORM MATCHES osx)
+  set(ARGS
+    -DRUN=EXE
+  )
+
+elseif (PLATFORM MATCHES mxe)
+  set(ARGS
+    -DRUN=EXE
+    -DFS=RC
+  )
+endif()
+
+list(APPEND ARGS
+  "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
+  "-DPROTOBUF_ROOT=$ENV{CROSS_PATH}/deps/protobuf/dist/${PLATFORM}"
+  "-DGLFW_ROOT=$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}"
+)
+
+include("${CROSS_ROOT}/cmake/platforms.cmake")

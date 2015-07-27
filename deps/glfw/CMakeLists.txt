@@ -1,3 +1,13 @@
+#
+# USAGE:
+#
+# cd deps/glfw
+# rm -rf build && mkdir build && cd build
+# cmake ..
+#
+# cmake --build . --target osx
+# cmake --build . --target mxe
+#
 cmake_minimum_required (VERSION 3.2.2)
 
 include(ExternalProject)
