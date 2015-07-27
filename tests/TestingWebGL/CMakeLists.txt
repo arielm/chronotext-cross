@@ -13,7 +13,8 @@ set(LIBRARIES
 )
 
 set(SRC_FILES
-  src/hello_world_gles.c
+  src/esUtil.c
+  src/Hello_Triangle.c
 )
 
 include("${CROSS_ROOT}/cmake/test.cmake")
