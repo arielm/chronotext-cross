@@ -16,7 +16,6 @@ endif()
 
 list(APPEND ARGS
   "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
-  "-DPROTOBUF_ROOT=$ENV{CROSS_PATH}/deps/protobuf/dist/${PLATFORM}"
   "-DGLFW_ROOT=$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}"
 )
 

@@ -5,12 +5,6 @@ project(TestingGLFW)
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
 
 #
-# BECAUSE find_package(Protobuf REQUIRED) IS NOT WORKING AS INTENDED
-#
-set(PROTOBUF_INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
-set(PROTOBUF_LIBRARY "${PROTOBUF_ROOT}/lib/libprotobuf.a")
-
-#
 # XXX
 #
 set(GLFW_INCLUDE_DIR "${GLFW_ROOT}/include")
@@ -18,13 +12,11 @@ set(GLFW_LIBRARY "${GLFW_ROOT}/lib/libglfw3.a")
 
 set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}
-  ${PROTOBUF_INCLUDE_DIRS}
   ${GLFW_INCLUDE_DIR}
 )
 
 set(LIBRARIES
   ${Boost_LIBRARIES}
-  ${PROTOBUF_LIBRARY}
   ${GLFW_LIBRARY}
 )
 

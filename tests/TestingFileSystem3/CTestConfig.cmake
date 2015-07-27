@@ -22,8 +22,8 @@ elseif (PLATFORM MATCHES android)
 
 elseif (PLATFORM MATCHES emscripten)
   set(ARGS
-    -DRUN=SPIDERMONKEY
-#   -DRUN=BROWSER
+#   -DRUN=SPIDERMONKEY
+    -DRUN=BROWSER
   )
 
 elseif (PLATFORM MATCHES mxe)
