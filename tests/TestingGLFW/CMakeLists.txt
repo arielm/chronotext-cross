@@ -40,8 +40,13 @@ endif()
 
 set(GLFW_SRC "$ENV{CROSS_PATH}/deps/glfw/build/src")
 
+list(APPEND INCLUDE_DIRS
+  "${GLFW_SRC}/deps"
+)
+
 set(SRC_FILES
-  "${GLFW_SRC}/examples/simple.c"
+  "${GLFW_SRC}/deps/glad.c"
+  "src/main.cpp"
 )
 
 # ---
