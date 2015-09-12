@@ -26,6 +26,33 @@ GLuint program;
 #define CLAMP(c) ((c) < 0.f ? 0.f : ((c) > 1.f ? 1.f : (c)))
 #define PIX(x, y) CLAMP(PIX_C(x, y))
 
+static const char *vss = R"(
+attribute vec4 vPosition;
+uniform mat4 mat; 
+varying vec2 texCoord; 
+
+void main()
+{
+  gl_Position = vPosition;
+  texCoord = (vPosition.xy + vec2(1.0)) * vec2(0.5);
+}
+)";
+
+static const char *pss = R"(
+#ifdef GL_ES
+precision lowp float;
+#endif
+
+varying vec2 texCoord;
+uniform vec3 colors[3];
+uniform sampler2D tex;
+
+void main()
+{
+  gl_FragColor = texture2D(tex, texCoord);
+}
+)";
+
 void draw()
 {
   int w, h, fs;
@@ -64,8 +91,8 @@ int main()
   attr.minorVersion = 0;
   EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
   emscripten_webgl_make_context_current(ctx);
+
   GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-  const char *vss = "attribute vec4 vPosition; uniform mat4 mat; varying vec2 texCoord; void main() { gl_Position = vPosition; texCoord = (vPosition.xy + vec2(1.0)) * vec2(0.5); }";
   glShaderSource(vs, 1, &vss, 0);
   glCompileShader(vs);
   GLint isCompiled = 0;
@@ -81,7 +108,6 @@ int main()
   }
 
   GLuint ps = glCreateShader(GL_FRAGMENT_SHADER);
-  const char *pss = "precision lowp float; varying vec2 texCoord; uniform vec3 colors[3]; uniform sampler2D tex; void main() { gl_FragColor = texture2D(tex, texCoord); }";
   glShaderSource(ps, 1, &pss, 0);
   glCompileShader(ps);
   glGetShaderiv(ps, GL_COMPILE_STATUS, &isCompiled);
@@ -98,7 +124,6 @@ int main()
   program = glCreateProgram();
   glAttachShader(program, vs);
   glAttachShader(program, ps);
-  glBindAttribLocation(program, 0, "vPosition");
   glLinkProgram(program);
   glGetProgramiv(program, GL_LINK_STATUS, &isCompiled);
   if (!isCompiled)
@@ -112,6 +137,7 @@ int main()
   }
 
   glUseProgram(program);
+  glBindAttribLocation(program, 0, "vPosition");
 
   GLuint vbo;
   glGenBuffers(1, &vbo);
