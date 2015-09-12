@@ -1,10 +1,10 @@
+
+#include "Log.h"
+#include "Platform.h"
+
 #include <emscripten.h>
 #include <emscripten/html5.h>
 #include <GLES2/gl2.h>
-
-#include <assert.h>
-#include <string>
-#include <iostream>
 
 using namespace std;
 
@@ -20,13 +20,13 @@ void report_result(int result)
 #endif
 }
 
-GLuint shader_program;
-
 #define PIX_C(x, y) ((x)/256.0f + (y)/256.0f)
 #define CLAMP(c) ((c) < 0.f ? 0.f : ((c) > 1.f ? 1.f : (c)))
 #define PIX(x, y) CLAMP(PIX_C(x, y))
 
 // ---
+
+GLuint shader_program;
 
 static const char *vss = R"(
 attribute vec4 vPosition;
@@ -75,8 +75,8 @@ static GLuint make_shader(GLenum type, const char* text)
             string buf(maxLength, 0);
             glGetShaderInfoLog(shader, maxLength, &maxLength, &buf[0]);
 
-            cerr << "ERROR: Failed to compile " << ((type == GL_FRAGMENT_SHADER) ? "fragment" : "vertex") << " shader" << endl;
-            cerr << buf << endl;
+            LOGE << "ERROR: Failed to compile " << ((type == GL_FRAGMENT_SHADER) ? "fragment" : "vertex") << " shader" << endl;
+            LOGE << buf << endl;
 
             glDeleteShader(shader);
             shader = 0u;
@@ -116,8 +116,8 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
                     string buf(maxLength, 0);
                     glGetShaderInfoLog(program, maxLength, &maxLength, &buf[0]);
 
-                    cerr << "ERROR: Failed to link shader program" << endl;
-                    cerr << buf << endl;
+                    LOGE << "ERROR: Failed to link shader program" << endl;
+                    LOGE << buf << endl;
 
                     glDeleteProgram(program);
                     glDeleteShader(fragment_shader);
@@ -128,13 +128,13 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
         }
         else
         {
-            cerr << "ERROR: Unable to load fragment shader" << endl;
+            LOGE << "ERROR: Unable to load fragment shader" << endl;
             glDeleteShader(vertex_shader);
         }
     }
     else
     {
-        cerr << "ERROR: Unable to load vertex shader" << endl;
+        LOGE << "ERROR: Unable to load vertex shader" << endl;
     }
 
     return program;
