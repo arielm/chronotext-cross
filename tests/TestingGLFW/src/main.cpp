@@ -38,8 +38,6 @@ static GLuint make_shader(GLenum type, const char* text)
 {
     GLuint shader;
     GLint shader_ok;
-    GLsizei log_length;
-    char info_log[8192];
 
     shader = glCreateShader(type);
     if (shader != 0)
@@ -49,9 +47,13 @@ static GLuint make_shader(GLenum type, const char* text)
         glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
         if (shader_ok != GL_TRUE)
         {
-            glGetShaderInfoLog(shader, 8192, &log_length,info_log);
+            GLint maxLength = 0;
+            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+            string buf(maxLength, 0);
+            glGetShaderInfoLog(shader, maxLength, &maxLength, &buf[0]);
+
             LOGE << "ERROR: Failed to compile " << ((type == GL_FRAGMENT_SHADER) ? "fragment" : "vertex") << " shader" << endl;
-            LOGE << info_log << endl;
+            LOGE << buf << endl;
 
             glDeleteShader(shader);
             shader = 0;
@@ -66,8 +68,6 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
     GLint program_ok;
     GLuint vertex_shader = 0u;
     GLuint fragment_shader = 0u;
-    GLsizei log_length;
-    char info_log[8192];
 
     vertex_shader = make_shader(GL_VERTEX_SHADER, vs_text);
     if (vertex_shader != 0u)
@@ -87,9 +87,13 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
 
                 if (program_ok != GL_TRUE)
                 {
-                    glGetProgramInfoLog(program, 8192, &log_length, info_log);
+                    GLint maxLength = 0;
+                    glGetShaderiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+                    string buf(maxLength, 0);
+                    glGetShaderInfoLog(program, maxLength, &maxLength, &buf[0]);
+
                     LOGE << "ERROR: Failed to link shader program" << endl;
-                    LOGE << info_log << endl;
+                    LOGE << buf << endl;
 
                     glDeleteProgram(program);
                     glDeleteShader(fragment_shader);

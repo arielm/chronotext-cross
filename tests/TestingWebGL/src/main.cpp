@@ -2,9 +2,11 @@
 #include <emscripten/html5.h>
 #include <GLES2/gl2.h>
 
-#include <string.h>
-#include <math.h>
 #include <assert.h>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 void report_result(int result)
 {
@@ -72,9 +74,9 @@ int main()
   {
     GLint maxLength = 0;
     glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
-    char *buf = new char[maxLength];
-    glGetShaderInfoLog(vs, maxLength, &maxLength, buf);
-    printf("%s\n", buf);
+    string buf(maxLength, 0);
+    glGetShaderInfoLog(vs, maxLength, &maxLength, &buf[0]);
+    cerr << buf << endl;
     return 0;
   }
 
@@ -86,10 +88,10 @@ int main()
   if (!isCompiled)
   {
     GLint maxLength = 0;
-    glGetShaderiv(ps, GL_INFO_LOG_LENGTH, &maxLength);
-    char *buf = new char[maxLength];
-    glGetShaderInfoLog(ps, maxLength, &maxLength, buf);
-    printf("%s\n", buf);
+    glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
+    string buf(maxLength, 0);
+    glGetShaderInfoLog(vs, maxLength, &maxLength, &buf[0]);
+    cerr << buf << endl;
     return 0;
   }
 
@@ -102,10 +104,10 @@ int main()
   if (!isCompiled)
   {
     GLint maxLength = 0;
-    glGetShaderiv(program, GL_INFO_LOG_LENGTH, &maxLength);
-    char *buf = new char[maxLength];
-    glGetProgramInfoLog(program, maxLength, &maxLength, buf);
-    printf("%s\n", buf);
+    glGetShaderiv(vs, GL_INFO_LOG_LENGTH, &maxLength);
+    string buf(maxLength, 0);
+    glGetShaderInfoLog(vs, maxLength, &maxLength, &buf[0]);
+    cerr << buf << endl;
     return 0;
   }
 
