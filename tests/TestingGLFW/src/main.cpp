@@ -36,11 +36,11 @@ void main()
 
 static GLuint make_shader(GLenum type, const char* text)
 {
-    GLuint shader;
+    GLuint shader = 0u;
     GLint shader_ok;
 
     shader = glCreateShader(type);
-    if (shader != 0)
+    if (shader != 0u)
     {
         glShaderSource(shader, 1, reinterpret_cast<const GLchar**>(&text), NULL);
         glCompileShader(shader);
@@ -56,9 +56,10 @@ static GLuint make_shader(GLenum type, const char* text)
             LOGE << buf << endl;
 
             glDeleteShader(shader);
-            shader = 0;
+            shader = 0u;
         }
     }
+
     return shader;
 }
 
@@ -112,6 +113,7 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
     {
         LOGE << "ERROR: Unable to load vertex shader" << endl;
     }
+
     return program;
 }
 
