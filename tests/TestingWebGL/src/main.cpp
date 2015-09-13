@@ -5,6 +5,7 @@
 #include <emscripten.h>
 #include <emscripten/html5.h>
 #include <GLES2/gl2.h>
+#include <math.h>
 
 using namespace std;
 
@@ -20,23 +21,17 @@ void report_result(int result)
 #endif
 }
 
-#define PIX_C(x, y) ((x)/256.0f + (y)/256.0f)
-#define CLAMP(c) ((c) < 0.f ? 0.f : ((c) > 1.f ? 1.f : (c)))
-#define PIX(x, y) CLAMP(PIX_C(x, y))
-
 // ---
 
 GLuint shader_program;
 
 static const char *vss = R"(
 attribute vec4 vPosition;
-uniform mat4 mat; 
-varying vec2 texCoord; 
+uniform mat4 mat;
 
 void main()
 {
-  gl_Position = vPosition;
-  texCoord = (vPosition.xy + vec2(1.0)) * vec2(0.5);
+  gl_Position = mat * vPosition;
 }
 )";
 
@@ -45,13 +40,11 @@ static const char *pss = R"(
 precision lowp float;
 #endif
 
-varying vec2 texCoord;
 uniform vec3 colors[3];
-uniform sampler2D tex;
 
 void main()
 {
-  gl_FragColor = texture2D(tex, texCoord);
+  gl_FragColor = vec4(1,0,0,1);
 }
 )";
 
@@ -146,26 +139,14 @@ void draw()
 {
   int w, h, fs;
   emscripten_get_canvas_size(&w, &h, &fs);
+  float t = emscripten_get_now() / 1000.0f;
   float xs = (float)h / w;
   float ys = 1.0f;
-  float mat[] = { xs, 0, 0, 0, 0, ys, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+  float mat[] = { cosf(t) * xs, sinf(t) * ys, 0, 0, -sinf(t) * xs, cosf(t) * ys, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
   glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, 0, mat);
   glClearColor(0,0,1,1);
   glClear(GL_COLOR_BUFFER_BIT);
-  glDrawArrays(GL_TRIANGLES, 0, 6);
-
-  unsigned char imageData[256*256*4];
-  glReadPixels(0, 0, 256, 256, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-  for(int y = 0; y < 256; ++y)
-    for(int x = 0; x < 256; ++x)
-    {
-      unsigned char red = imageData[(y*256+x)*4];
-      float expectedRed = PIX(x, y);
-      unsigned char eRed = (unsigned char)(expectedRed * 255.0f);
-      assert(fabs((int)eRed - red) <= 2);
-    }
-  emscripten_cancel_main_loop();
-  report_result(0);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 int main()
@@ -198,22 +179,12 @@ int main()
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-  float verts[] = { -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1 };
+  float verts[] = { 0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0 };
   glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 2, GL_FLOAT, 0, sizeof(float)*2, 0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
   glEnableVertexAttribArray(0);
-  GLuint tex;
-  glGenTextures(1, &tex);
-  glBindTexture(GL_TEXTURE_2D, tex);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  float texData[256*256];
-  for(int y = 0; y < 256; ++y)
-    for(int x = 0; x < 256; ++x)
-    {
-      texData[y*256+x] = PIX(x, y);
-    }
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE, 256, 256, 0, GL_LUMINANCE, GL_FLOAT, texData);
+
   emscripten_set_main_loop(draw, 0, 0);
+
   return 0;
 }
