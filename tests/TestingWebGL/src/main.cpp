@@ -135,8 +135,9 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
 
 void draw()
 {
-  int w, h;
+  int w, h, fs;
   emscripten_get_canvas_size(&w, &h, &fs);
+  
   float t = emscripten_get_now() / 1000.0f;
   float xs = (float)h / w;
   float ys = 1.0f;

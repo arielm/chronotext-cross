@@ -182,11 +182,12 @@ int main(int argc, char** argv)
     glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(0);
 
-    int w = 800, h = 600;
-    glViewport(0, 0, w, h);
-
     while (!glfwWindowShouldClose(window))
     {
+        int w, h;
+        glfwGetFramebufferSize(window, &w, &h);
+        glViewport(0, 0, w, h);
+
         float t = (float)glfwGetTime();
         float xs = (float)h / w;
         float ys = 1.0f;
