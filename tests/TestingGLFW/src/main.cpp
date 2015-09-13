@@ -7,28 +7,28 @@
 
 using namespace std;
 
-static const char *vertex_shader_text = R"(
-attribute vec4 a_position;
-attribute vec4 a_color;
-varying vec4 v_color;
+// ---
+
+GLuint shader_program;
+
+static const char *vss = R"(
+attribute vec4 vPosition;
+uniform mat4 mat;
 
 void main()
 {
-  v_color = a_color;
-  gl_Position = a_position;
+  gl_Position = mat * vPosition;
 }
 )";
 
-static const char *fragment_shader_text = R"(
+static const char *pss = R"(
 #ifdef GL_ES
-precision mediump float;
+precision lowp float;
 #endif
-
-varying vec4 v_color;
 
 void main()
 {
-  gl_FragColor = v_color;
+  gl_FragColor = vec4(1,0,0,1);
 }
 )";
 
@@ -161,37 +161,7 @@ int main(int argc, char** argv)
 
     // ---
 
-    glViewport(0, 0, 800, 600);
-    glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-
-    const GLfloat vertices[] =
-    {
-        -0.5f, +0.5f, // A
-        -0.5f, -0.5f, // B
-        +0.5f, -0.5f, // C
-        +0.5f, +0.5f, // D
-    };
-
-    const GLushort indices[] =
-    {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
-
-    GLuint vboIds[2];
-    glGenBuffers(2, vboIds);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
-
-    //
-
-    GLuint shader_program = make_shader_program(vertex_shader_text, fragment_shader_text);
+    shader_program = make_shader_program(vss, pss);
     if (shader_program == 0u)
     {
         glfwTerminate();
@@ -199,20 +169,32 @@ int main(int argc, char** argv)
     }
 
     glUseProgram(shader_program);
-    GLint positionLocation = glGetAttribLocation(shader_program, "a_position");
-    GLint colorLocation = glGetAttribLocation(shader_program, "a_color");
+    glBindAttribLocation(shader_program, 0, "vPosition");
 
-    glEnableVertexAttribArray(positionLocation);
+    //
+
+    GLuint vbo;
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+    float verts[] = { 0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0 };
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
+    glEnableVertexAttribArray(0);
+
+    int w = 800, h = 600;
+    glViewport(0, 0, w, h);
 
     while (!glfwWindowShouldClose(window))
     {
+        float t = (float)glfwGetTime();
+        float xs = (float)h / w;
+        float ys = 1.0f;
+        float mat[] = { cosf(t) * xs, sinf(t) * ys, 0, 0, -sinf(t) * xs, cosf(t) * ys, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+        glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, 0, mat);
+        glClearColor(0,0,1,1);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        //
-
-        glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        glVertexAttrib4fv(colorLocation, color);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         //
 
@@ -220,10 +202,8 @@ int main(int argc, char** argv)
         glfwPollEvents();
     }
 
-    glDisableVertexAttribArray(positionLocation);
-    glDeleteBuffers(2, vboIds);
-
-    glUseProgram(0); // XXX
+    glDeleteBuffers(1, &vbo);
+    glUseProgram(0);
 
     glfwTerminate();
     exit(EXIT_SUCCESS);

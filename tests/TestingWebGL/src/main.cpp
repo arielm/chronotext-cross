@@ -40,8 +40,6 @@ static const char *pss = R"(
 precision lowp float;
 #endif
 
-uniform vec3 colors[3];
-
 void main()
 {
   gl_FragColor = vec4(1,0,0,1);
@@ -137,7 +135,7 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
 
 void draw()
 {
-  int w, h, fs;
+  int w, h;
   emscripten_get_canvas_size(&w, &h, &fs);
   float t = emscripten_get_now() / 1000.0f;
   float xs = (float)h / w;
@@ -167,7 +165,7 @@ int main()
   shader_program = make_shader_program(vss, pss);
   if (shader_program == 0u)
   {
-    return 0;
+    return -1;
   }
 
   glUseProgram(shader_program);
