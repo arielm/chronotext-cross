@@ -124,7 +124,7 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
 
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    switch(key)
+    switch (key)
     {
         case GLFW_KEY_ESCAPE:
             glfwSetWindowShouldClose(window, GL_TRUE);
@@ -150,7 +150,7 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-    GLFWwindow *window = glfwCreateWindow(800, 600, "***", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "***", NULL, NULL); // XXX
     if (!window )
     {
         glfwTerminate();
@@ -187,7 +187,7 @@ int main(int argc, char** argv)
 
     while (!glfwWindowShouldClose(window))
     {
-        float t = (float)glfwGetTime();
+        float t = (float)glfwGetTime(); // XXX
         glm::mat4 mat;
         mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, GL_FALSE, &mat[0][0]);

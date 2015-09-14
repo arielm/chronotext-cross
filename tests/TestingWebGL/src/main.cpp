@@ -137,7 +137,7 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
 
 void draw()
 {
-  float t = emscripten_get_now() / 1000.0f;
+  float t = emscripten_get_now() / 1000.0f; // XXX
   glm::mat4 mat;
   mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
   glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, GL_FALSE, &mat[0][0]);
@@ -149,7 +149,7 @@ void draw()
 
 int main()
 {
-  emscripten_set_canvas_size(256, 256);
+  emscripten_set_canvas_size(800, 600); // XXX
   EmscriptenWebGLContextAttributes attr;
   emscripten_webgl_init_context_attributes(&attr);
   attr.alpha = attr.depth = attr.stencil = attr.antialias = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
@@ -177,7 +177,7 @@ int main()
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-  float verts[] = { 0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0 };
+  float verts[] = { 0.0, 0.5, 0.0, -0.5f, -0.5f, 0.0, 0.5, -0.5f, 0.0 };
   glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
   glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
   glEnableVertexAttribArray(0);
