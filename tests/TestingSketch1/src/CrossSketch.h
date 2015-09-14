@@ -9,27 +9,6 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-static const char *vss = R"(
-attribute vec4 vPosition;
-uniform mat4 mat;
-
-void main()
-{
-  gl_Position = mat * vPosition;
-}
-)";
-
-static const char *pss = R"(
-#ifdef GL_ES
-precision lowp float;
-#endif
-
-void main()
-{
-  gl_FragColor = vec4(1,1,0,1);
-}
-)";
-
 namespace chr
 {
   class CrossSketch
@@ -41,15 +20,12 @@ namespace chr
 
     void init(int width, int height);
 
-    virtual void setup();
-    virtual void shutdown();
-    virtual void draw();
+    virtual void setup() {}
+    virtual void shutdown() {}
+    virtual void draw() {}
 
   protected:
     bool initialized = false;
     GLFWwindow* window = nullptr;
-
-    GLuint shaderProgram;
-    GLuint vbo;
   };
 }

@@ -147,46 +147,4 @@ namespace chr
       initialized = true;
     }
   }
-
-
-  void CrossSketch::setup()
-  {
-    shaderProgram = CrossSketch::makeShaderProgram(vss, pss);
-    if (shaderProgram == 0u)
-    {
-      glfwTerminate();
-      exit(EXIT_FAILURE);
-    }
-
-    glUseProgram(shaderProgram);
-    glBindAttribLocation(shaderProgram, 0, "vPosition");
-
-    //
-
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-    float verts[] = { 0.0, 0.5, 0.0, -0.5f, -0.5f, 0.0, 0.5, -0.5f, 0.0 };
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
-    glEnableVertexAttribArray(0);
-  }
-
-  void CrossSketch::shutdown()
-  {
-    glDeleteBuffers(1, &vbo);
-    glUseProgram(0);
-  }
-
-  void CrossSketch::draw()
-  {
-    float t = (float)glfwGetTime(); // XXX
-    glm::mat4 mat;
-    mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "mat"), 1, GL_FALSE, &mat[0][0]);
-
-    glClearColor(0,1,0,1);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-  }
 }
