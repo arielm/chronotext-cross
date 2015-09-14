@@ -3,8 +3,10 @@
 #include "Log.h"
 #include "Platform.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#if defined(CHR_PLATFORM_DESKTOP)
+  #include <glad/glad.h>
+  #include <GLFW/glfw3.h>
+#endif
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -17,7 +19,9 @@ namespace chr
     static GLuint makeShader(GLenum type, const char *text);
     static GLuint makeShaderProgram(const char *vs_text, const char *fs_text);
 
+  #if defined(CHR_PLATFORM_DESKTOP)
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+  #endif
 
     void init(int width, int height);
     double getTime();
@@ -28,6 +32,9 @@ namespace chr
 
   protected:
     bool initialized = false;
+
+  #if defined(CHR_PLATFORM_DESKTOP)
     GLFWwindow* window = nullptr;
+  #endif
   };
 }

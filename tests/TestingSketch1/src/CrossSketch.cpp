@@ -88,6 +88,7 @@ namespace chr
     return program;
   }
 
+#if defined(CHR_PLATFORM_DESKTOP)
   void CrossSketch::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
   {
     switch (key)
@@ -152,4 +153,5 @@ namespace chr
   {
     return glfwGetTime();
   }
+#endif
 }

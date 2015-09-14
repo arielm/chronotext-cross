@@ -32,6 +32,7 @@ namespace chr
   #else
     #define CHR_PLATFORM chr::PLATFORM_OSX
     #define CHR_PLATFORM_OSX 1
+    #define CHR_PLATFORM_DESKTOP 1
   #endif // TARGET_OS_IPHONE
 #elif defined(__ANDROID__)
   #define CHR_PLATFORM chr::PLATFORM_ANDROID
@@ -42,6 +43,7 @@ namespace chr
 #elif defined(__MINGW32__)
   #define CHR_PLATFORM chr::PLATFORM_MINGW
   #define CHR_PLATFORM_MINGW 1
+  #define CHR_PLATFORM_DESKTOP 1
 #else
   #error UNSUPPORTED PLATFORM
 #endif // __APPLE__
