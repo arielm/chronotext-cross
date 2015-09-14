@@ -153,5 +153,43 @@ namespace chr
   {
     return glfwGetTime();
   }
+#elif defined(CHR_PLATFORM_EMSCRIPTEN)
+  void CrossSketch::performDraw(void *data)
+  {
+    reinterpret_cast<CrossSketch*>(data)->draw();
+  }
+
+  void CrossSketch::init(int width, int height)
+  {
+    if (!initialized)
+    {
+      emscripten_set_canvas_size(width, height);
+
+      EmscriptenWebGLContextAttributes attr;
+      emscripten_webgl_init_context_attributes(&attr);
+      attr.alpha = attr.depth = attr.stencil = attr.antialias = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
+      attr.enableExtensionsByDefault = 1;
+      attr.premultipliedAlpha = 0;
+      attr.majorVersion = 1;
+      attr.minorVersion = 0;
+      EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
+      emscripten_webgl_make_context_current(ctx);
+
+      // ---
+
+      setup();
+
+      emscripten_set_main_loop_arg(performDraw, this, 0, 0);
+
+      // ---
+
+      initialized = true;
+    }
+  }
+
+  double CrossSketch::getTime()
+  {
+    return emscripten_get_now() / 1000.0;
+  }
 #endif
 }

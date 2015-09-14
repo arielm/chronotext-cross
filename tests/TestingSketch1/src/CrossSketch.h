@@ -6,6 +6,10 @@
 #if defined(CHR_PLATFORM_DESKTOP)
   #include <glad/glad.h>
   #include <GLFW/glfw3.h>
+#elif defined(CHR_PLATFORM_EMSCRIPTEN)
+  #include <emscripten.h>
+  #include <emscripten/html5.h>
+  #include <GLES2/gl2.h>
 #endif
 
 #include <glm/mat4x4.hpp>
@@ -21,6 +25,8 @@ namespace chr
 
   #if defined(CHR_PLATFORM_DESKTOP)
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+  #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+    static void performDraw(void *data);
   #endif
 
     void init(int width, int height);

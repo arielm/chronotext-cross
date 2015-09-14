@@ -12,6 +12,11 @@ elseif (PLATFORM MATCHES mxe)
     -DRUN=EXE
     -DFS=RC
   )
+
+elseif (PLATFORM MATCHES emscripten)
+    set(ARGS
+      -DRUN=BROWSER
+    )
 endif()
 
 list(APPEND ARGS
