@@ -49,6 +49,7 @@ list(APPEND INCLUDE_DIRS
 set(SRC_FILES
   "${GLFW_SRC}/deps/glad.c"
   "src/main.cpp"
+  "src/CrossSketch.cpp"
 )
 
 # ---
