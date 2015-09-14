@@ -23,22 +23,6 @@ set(SRC_FILES
   "src/CrossSketch.cpp"
 )
 
-if (PLATFORM MATCHES osx)
-  list(APPEND LIBRARIES
-    "-framework CoreFoundation"
-    "-framework Cocoa"
-    "-framework OpenGL"
-    "-framework IOKit"
-    "-framework CoreVideo"
-  )
-
-elseif (PLATFORM MATCHES mxe)
-  list(APPEND LIBRARIES
-    gdi32
-    opengl32
-  )
-endif()
-
 # ---
 
 if (PLATFORM MATCHES osx|mxe)
@@ -60,6 +44,24 @@ if (PLATFORM MATCHES osx|mxe)
   )
 endif()
 
+
+if (PLATFORM MATCHES osx)
+  list(APPEND LIBRARIES
+    "-framework CoreFoundation"
+    "-framework Cocoa"
+    "-framework OpenGL"
+    "-framework IOKit"
+    "-framework CoreVideo"
+  )
+
+elseif (PLATFORM MATCHES mxe)
+  list(APPEND LIBRARIES
+    gdi32
+    opengl32
+  )
+endif()
+
 # ---
+
 
 include("${CROSS_ROOT}/cmake/test.cmake")

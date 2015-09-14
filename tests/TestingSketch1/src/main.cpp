@@ -4,6 +4,18 @@
 using namespace std;
 using namespace chr;
 
+void report_result(int result)
+{
+    if (result == 0) {
+        printf("Test successful!\n");
+    } else {
+        printf("Test failed!\n");
+    }
+#ifdef REPORT_RESULT
+  REPORT_RESULT();
+#endif
+}
+
 // ---
 
 static const char *vss = R"(
