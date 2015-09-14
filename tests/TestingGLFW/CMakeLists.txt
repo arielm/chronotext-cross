@@ -9,10 +9,12 @@ find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
 #
 set(GLFW_INCLUDE_DIR "${GLFW_ROOT}/include")
 set(GLFW_LIBRARY "${GLFW_ROOT}/lib/libglfw3.a")
+set(GLM_INCLUDE_DIR "${GLM_ROOT}/include")
 
 set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}
   ${GLFW_INCLUDE_DIR}
+  ${GLM_INCLUDE_DIR}
 )
 
 set(LIBRARIES

@@ -5,6 +5,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <glm/mat4x4.hpp>
+
 using namespace std;
 
 // ---
@@ -188,11 +190,13 @@ int main(int argc, char** argv)
         glfwGetFramebufferSize(window, &w, &h);
         glViewport(0, 0, w, h);
 
+        /*
+         * TODO: BRING BACK ROTATION
+         */
         float t = (float)glfwGetTime();
-        float xs = (float)h / w;
-        float ys = 1.0f;
-        float mat[] = { cosf(t) * xs, sinf(t) * ys, 0, 0, -sinf(t) * xs, cosf(t) * ys, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-        glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, 0, mat);
+        glm::mat4 mat;
+        glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, GL_FALSE, &mat[0][0]);
+
         glClearColor(0,0,1,1);
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, 3);

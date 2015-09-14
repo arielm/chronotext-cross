@@ -5,10 +5,15 @@ project(TestingGLM)
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
 find_package(GTest REQUIRED)
 
+#
+# XXX
+#
+set(GLM_INCLUDE_DIR "${GLM_ROOT}/include")
+
 set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}
   ${GTEST_INCLUDE_DIRS}
-  $ENV{CROSS_PATH}/deps/glm/dist/include
+  ${GLM_INCLUDE_DIR}
 )
 
 set(LIBRARIES
