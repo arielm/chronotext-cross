@@ -187,10 +187,6 @@ int main(int argc, char** argv)
 
     while (!glfwWindowShouldClose(window))
     {
-        int w, h;
-        glfwGetFramebufferSize(window, &w, &h);
-        glViewport(0, 0, w, h);
-
         float t = (float)glfwGetTime();
         glm::mat4 mat;
         mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));

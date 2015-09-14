@@ -5,7 +5,9 @@
 #include <emscripten.h>
 #include <emscripten/html5.h>
 #include <GLES2/gl2.h>
-#include <math.h>
+
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
 
@@ -135,14 +137,11 @@ static GLuint make_shader_program(const char* vs_text, const char* fs_text)
 
 void draw()
 {
-  int w, h, fs;
-  emscripten_get_canvas_size(&w, &h, &fs);
-  
   float t = emscripten_get_now() / 1000.0f;
-  float xs = (float)h / w;
-  float ys = 1.0f;
-  float mat[] = { cosf(t) * xs, sinf(t) * ys, 0, 0, -sinf(t) * xs, cosf(t) * ys, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-  glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, 0, mat);
+  glm::mat4 mat;
+  mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
+  glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, GL_FALSE, &mat[0][0]);
+
   glClearColor(0,0,1,1);
   glClear(GL_COLOR_BUFFER_BIT);
   glDrawArrays(GL_TRIANGLES, 0, 3);
