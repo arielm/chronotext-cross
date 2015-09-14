@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using namespace std;
 
@@ -179,7 +180,7 @@ int main(int argc, char** argv)
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    float verts[] = { 0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0 };
+    float verts[] = { 0.0, 0.5, 0.0, -0.5f, -0.5f, 0.0, 0.5, -0.5f, 0.0 };
     glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
     glEnableVertexAttribArray(0);
@@ -190,11 +191,9 @@ int main(int argc, char** argv)
         glfwGetFramebufferSize(window, &w, &h);
         glViewport(0, 0, w, h);
 
-        /*
-         * TODO: BRING BACK ROTATION
-         */
         float t = (float)glfwGetTime();
         glm::mat4 mat;
+        mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(glGetUniformLocation(shader_program, "mat"), 1, GL_FALSE, &mat[0][0]);
 
         glClearColor(0,0,1,1);
