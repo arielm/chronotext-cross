@@ -44,16 +44,11 @@ protected:
 void Sketch::setup()
 {
     shaderProgram = makeShaderProgram(vss, pss);
-    if (shaderProgram == 0u)
-    {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-    }
-
     glUseProgram(shaderProgram);
+
     glBindAttribLocation(shaderProgram, 0, "vPosition");
 
-    //
+    // ---
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -72,7 +67,7 @@ void Sketch::shutdown()
 
 void Sketch::draw()
 {
-    float t = (float)glfwGetTime(); // TODO: PER PLATFORM
+    float t = (float)getTime();
     glm::mat4 mat;
     mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "mat"), 1, GL_FALSE, &mat[0][0]);

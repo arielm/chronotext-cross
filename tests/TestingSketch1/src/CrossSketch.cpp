@@ -147,4 +147,9 @@ namespace chr
       initialized = true;
     }
   }
+
+  double CrossSketch::getTime()
+  {
+    return glfwGetTime();
+  }
 }
