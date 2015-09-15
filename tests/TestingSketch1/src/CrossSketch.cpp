@@ -128,6 +128,8 @@ namespace chr
 
       // ---
 
+      screenSize.x = width;
+      screenSize.y = height;
       setup();
 
       while (!glfwWindowShouldClose(window))
@@ -177,6 +179,8 @@ namespace chr
 
       // ---
 
+      screenSize.x = width;
+      screenSize.y = height;
       setup();
 
       emscripten_set_main_loop_arg(performDraw, this, 0, 1);

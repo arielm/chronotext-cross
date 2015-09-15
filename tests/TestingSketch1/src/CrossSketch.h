@@ -47,6 +47,7 @@ namespace chr
 
   protected:
     bool initialized = false;
+    glm::vec2 screenSize;
 
   #if defined(CHR_PLATFORM_DESKTOP)
     GLFWwindow* window = nullptr;

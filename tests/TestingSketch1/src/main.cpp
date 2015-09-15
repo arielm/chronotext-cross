@@ -70,7 +70,7 @@ void Sketch::shutdown()
 
 void Sketch::draw()
 {
-    glm::mat4 projectionMatrix = glm::perspective(glm::pi<float>() / 3.0f, 800.0f / 600.0f, 0.1f, 100.0f); // TODO: USE GIVEN WIDTH AND HEIGHT
+    glm::mat4 projectionMatrix = glm::perspective(glm::pi<float>() / 3.0f, screenSize.x / screenSize.y, 0.1f, 100.0f);
 
     glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
     modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -30)); // DISTANCE
