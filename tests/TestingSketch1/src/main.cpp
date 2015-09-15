@@ -38,6 +38,7 @@ public:
 
 protected:
     GLuint shaderProgram;
+    GLint positionLocation;
     GLint matrixLocation;
     GLuint vbo;
 };
@@ -47,7 +48,7 @@ void Sketch::setup()
     shaderProgram = makeShaderProgram(vss, pss);
     glUseProgram(shaderProgram);
 
-    glBindAttribLocation(shaderProgram, 0, "vPosition");
+    positionLocation = glGetAttribLocation(shaderProgram, "vPosition");
     matrixLocation = glGetUniformLocation(shaderProgram, "mat");
 
     // ---
@@ -57,14 +58,14 @@ void Sketch::setup()
 
     float verts[] = { 0.0, 5.0f, 0.0, -5.0f, -5.0f, 0.0, 5.0f, -5.0f, 0.0 };
     glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionLocation);
 }
 
 void Sketch::shutdown()
 {
     glUseProgram(0);
-    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(positionLocation);
     glDeleteBuffers(1, &vbo);
 }
 
@@ -81,7 +82,7 @@ void Sketch::draw()
     glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mvp[0][0]);
 
     // ---
-    
+
     glClearColor(0, 1, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, 3);
