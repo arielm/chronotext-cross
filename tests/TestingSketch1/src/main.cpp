@@ -7,23 +7,29 @@ using namespace chr;
 // ---
 
 static const char *vss = R"(
-attribute vec4 vPosition;
-uniform mat4 mat;
+attribute vec2 a_position;
+attribute vec4 a_color;
+
+uniform mat4 u_mvp_matrix;
+varying vec4 v_color;
 
 void main()
 {
-  gl_Position = mat * vPosition;
+  v_color = a_color;
+  gl_Position = u_mvp_matrix * vec4(a_position, 0, 1);
 }
 )";
 
 static const char *pss = R"(
 #ifdef GL_ES
-precision mediump float;
+  precision mediump float;
 #endif
+
+varying vec4 v_color;
 
 void main()
 {
-  gl_FragColor = vec4(1, 1, 0, 1);
+  gl_FragColor = v_color;
 }
 )";
 
@@ -39,6 +45,7 @@ public:
 protected:
     GLuint shaderProgram;
     GLint positionLocation;
+    GLint colorLocation;
     GLint matrixLocation;
     GLuint vboIds[2];
 };
@@ -48,8 +55,9 @@ void Sketch::setup()
     shaderProgram = makeShaderProgram(vss, pss);
     glUseProgram(shaderProgram);
 
-    positionLocation = glGetAttribLocation(shaderProgram, "vPosition");
-    matrixLocation = glGetUniformLocation(shaderProgram, "mat");
+    positionLocation = glGetAttribLocation(shaderProgram, "a_position");
+    colorLocation = glGetAttribLocation(shaderProgram, "a_color");
+    matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
 
     // ---
 
@@ -77,6 +85,9 @@ void Sketch::setup()
 
     glEnableVertexAttribArray(positionLocation);
     glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
+    glVertexAttrib4fv(colorLocation, color);
 }
 
 void Sketch::shutdown()
