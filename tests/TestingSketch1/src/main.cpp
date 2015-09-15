@@ -55,10 +55,10 @@ void Sketch::setup()
 
     const GLfloat vertices[] =
     {
-         -7, +5, // A
-         -7, -5, // B
-         +7, -5, // C
-         +7, +5, // D
+         -10, +5, // A
+         -10, -5, // B
+         +10, -5, // C
+         +10, +5, // D
     };
 
     const GLushort indices[] =
