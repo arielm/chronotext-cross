@@ -39,6 +39,7 @@ public:
 protected:
     GLuint shaderProgram;
     GLuint vbo;
+    GLint matrixLocation;
 };
 
 void Sketch::setup()
@@ -47,22 +48,24 @@ void Sketch::setup()
     glUseProgram(shaderProgram);
 
     glBindAttribLocation(shaderProgram, 0, "vPosition");
+    matrixLocation = glGetUniformLocation(shaderProgram, "mat");
 
     // ---
 
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-    float verts[] = { 0.0, 0.5, 0.0, -0.5f, -0.5f, 0.0, 0.5, -0.5f, 0.0 };
+    float verts[] = { 0.0, 0.5f, 0.0, -0.5f, -0.5f, 0.0, 0.5f, -0.5f, 0.0 };
     glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, 0, 0, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(0);
 }
 
 void Sketch::shutdown()
 {
-    glDeleteBuffers(1, &vbo);
     glUseProgram(0);
+    glDisableVertexAttribArray(0);
+    glDeleteBuffers(1, &vbo);
 }
 
 void Sketch::draw()
@@ -70,7 +73,7 @@ void Sketch::draw()
     float t = (float)getTime();
     glm::mat4 mat;
     mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "mat"), 1, GL_FALSE, &mat[0][0]);
+    glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mat[0][0]);
 
     glClearColor(0, 1, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
