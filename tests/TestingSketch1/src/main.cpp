@@ -42,6 +42,9 @@ public:
     void shutdown() final;
     void draw() final;
 
+    void initShaders();
+    void createBuffers();
+
 protected:
     GLuint shaderProgram;
     GLint positionLocation;
@@ -52,42 +55,8 @@ protected:
 
 void Sketch::setup()
 {
-    shaderProgram = makeShaderProgram(vss, pss);
-    glUseProgram(shaderProgram);
-
-    positionLocation = glGetAttribLocation(shaderProgram, "a_position");
-    colorLocation = glGetAttribLocation(shaderProgram, "a_color");
-    matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
-
-    // ---
-
-    const GLfloat vertices[] =
-    {
-         -10, +5, // A
-         -10, -5, // B
-         +10, -5, // C
-         +10, +5, // D
-    };
-
-    const GLushort indices[] =
-    {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    glGenBuffers(2, vboIds);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(positionLocation);
-    glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-    GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
-    glVertexAttrib4fv(colorLocation, color);
+    createBuffers();
+    initShaders();
 }
 
 void Sketch::shutdown()
@@ -111,9 +80,50 @@ void Sketch::draw()
 
     // ---
 
-    glClearColor(0, 1, 0, 1);
+    glClearColor(0, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+}
+
+void Sketch::initShaders()
+{
+    shaderProgram = makeShaderProgram(vss, pss);
+    glUseProgram(shaderProgram);
+
+    positionLocation = glGetAttribLocation(shaderProgram, "a_position");
+    colorLocation = glGetAttribLocation(shaderProgram, "a_color");
+    matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
+
+    glEnableVertexAttribArray(positionLocation);
+    glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
+    glVertexAttrib4fv(colorLocation, color);
+}
+
+void Sketch::createBuffers()
+{
+    const GLfloat vertices[] =
+    {
+        -10, +5, // A
+        -10, -5, // B
+        +10, -5, // C
+        +10, +5, // D
+    };
+
+    const GLushort indices[] =
+    {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    glGenBuffers(2, vboIds);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
 }
 
 // ---
