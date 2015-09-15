@@ -18,7 +18,7 @@ void main()
 
 static const char *pss = R"(
 #ifdef GL_ES
-precision lowp float;
+precision mediump float;
 #endif
 
 void main()
@@ -40,7 +40,7 @@ protected:
     GLuint shaderProgram;
     GLint positionLocation;
     GLint matrixLocation;
-    GLuint vbo;
+    GLuint vboIds[2];
 };
 
 void Sketch::setup()
@@ -53,20 +53,37 @@ void Sketch::setup()
 
     // ---
 
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    const GLfloat vertices[] =
+    {
+         -7, +5, // A
+         -7, -5, // B
+         +7, -5, // C
+         +7, +5, // D
+    };
 
-    float verts[] = { 0.0, 5.0f, 0.0, -5.0f, -5.0f, 0.0, 5.0f, -5.0f, 0.0 };
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    const GLushort indices[] =
+    {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    glGenBuffers(2, vboIds);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
+
     glEnableVertexAttribArray(positionLocation);
+    glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
 void Sketch::shutdown()
 {
     glUseProgram(0);
     glDisableVertexAttribArray(positionLocation);
-    glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(2, vboIds);
 }
 
 void Sketch::draw()
@@ -85,7 +102,7 @@ void Sketch::draw()
 
     glClearColor(0, 1, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 }
 
 // ---
