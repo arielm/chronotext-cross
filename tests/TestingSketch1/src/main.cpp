@@ -4,18 +4,6 @@
 using namespace std;
 using namespace chr;
 
-void report_result(int result)
-{
-    if (result == 0) {
-        printf("Test successful!\n");
-    } else {
-        printf("Test failed!\n");
-    }
-#ifdef REPORT_RESULT
-  REPORT_RESULT();
-#endif
-}
-
 // ---
 
 static const char *vss = R"(
@@ -35,7 +23,7 @@ precision lowp float;
 
 void main()
 {
-  gl_FragColor = vec4(1,1,0,1);
+  gl_FragColor = vec4(1, 1, 0, 1);
 }
 )";
 
@@ -84,7 +72,7 @@ void Sketch::draw()
     mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "mat"), 1, GL_FALSE, &mat[0][0]);
 
-    glClearColor(0,1,0,1);
+    glClearColor(0, 1, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 }
