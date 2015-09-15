@@ -81,7 +81,7 @@ void Sketch::draw()
 {
     float t = (float)getTime();
     glm::mat4 mat;
-    mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f)); // FIXME: EMSCRIPTEN CRASH!?
+    mat = glm::rotate(mat, t, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "mat"), 1, GL_FALSE, &mat[0][0]);
 
     glClearColor(0,1,0,1);

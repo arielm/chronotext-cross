@@ -179,7 +179,7 @@ namespace chr
 
       setup();
 
-      emscripten_set_main_loop_arg(performDraw, this, 0, 0);
+      emscripten_set_main_loop_arg(performDraw, this, 0, 1);
 
       // ---
 
