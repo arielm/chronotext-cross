@@ -201,12 +201,20 @@ void Sketch::initTextures()
         glGenTextures(1, textureIds);
         glBindTexture(GL_TEXTURE_2D, textureIds[0]);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-        #if !defined(CHR_PLATFORM_DESKTOP)
-          glGenerateMipmap(GL_TEXTURE_2D); // FIXME: CRASHES ON DESKTOP
+        #if defined(CHR_PLATFORM_DESKTOP)
+            glHint(0x8192, GL_NICEST); // GL_GENERATE_MIPMAP_HINT
+            glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_TRUE); // GL_GENERATE_MIPMAP
+        #endif
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+        #if defined(CHR_PLATFORM_DESKTOP)
+            glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_FALSE); // GL_GENERATE_MIPMAP
+        #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+            glGenerateMipmap(GL_TEXTURE_2D);
         #endif
 
         stbi_image_free(data);
@@ -224,7 +232,7 @@ void Sketch::initTextures()
      * - EMSCRIPTEN: RETURNS 0
      */
     glGetIntegerv(0x84FF, &maxAnisotropy);
-    glTexParameteri( GL_TEXTURE_2D, 0x84FF, 4/*maxAnisotropy*/);
+    glTexParameteri( GL_TEXTURE_2D, 0x84FF, maxAnisotropy);
 
     LOGI << "max-anisotropy: " << maxAnisotropy << endl;
 }
