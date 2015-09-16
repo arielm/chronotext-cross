@@ -69,6 +69,8 @@ protected:
 
     GLuint vboIds[3];
     GLuint textureIds[1];
+
+    GLint maxAnisotropy;
 };
 
 void Sketch::setup()
@@ -213,6 +215,18 @@ void Sketch::initTextures()
     {
         LOGE << "ERROR WHILE LOADING IMAGE" << endl;
     }
+
+    // ---
+
+    /*
+     * PROBLEMS:
+     * - DESKTOP AND EMSCRIPTEN: GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT IS NOT RECOGNIZED
+     * - EMSCRIPTEN: RETURNS 0
+     */
+    glGetIntegerv(0x84FF, &maxAnisotropy);
+    glTexParameteri( GL_TEXTURE_2D, 0x84FF, 4/*maxAnisotropy*/);
+
+    LOGI << "max-anisotropy: " << maxAnisotropy << endl;
 }
 
 void Sketch::initShaders()
