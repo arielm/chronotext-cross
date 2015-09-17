@@ -3,6 +3,12 @@
 
 using namespace std;
 
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_ONLY_JPEG
+#define STBI_ONLY_PNG
+
+#include "stb_image.h"
+
 namespace chr
 {
   GLuint CrossSketch::makeShader(GLenum type, const char *text)
@@ -86,6 +92,59 @@ namespace chr
     }
 
     return program;
+  }
+
+  GLuint CrossSketch::loadTexture(const fs::path &relativePath)
+  {
+    GLuint texture = 0u;
+
+    stbi_uc *data = nullptr;
+    int x, y, comp;
+
+    if (chr::hasMemoryResources())
+    {
+      auto memoryBuffer = chr::getResourceBuffer(relativePath);
+
+      if (memoryBuffer)
+      {
+        data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memoryBuffer->data()), memoryBuffer->size(), &x, &y, &comp, 0);
+      }
+    }
+    else if (chr::hasFileResources())
+    {
+      auto resPath = chr::getResourcePath(relativePath);
+      data = stbi_load(resPath.string().data(), &x, &y, &comp, 0);
+    }
+
+    if (data)
+    {
+      glGenTextures(1, &texture);
+      glBindTexture(GL_TEXTURE_2D, texture);
+
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+      #if defined(CHR_PLATFORM_DESKTOP)
+        glHint(0x8192, GL_NICEST); // GL_GENERATE_MIPMAP_HINT
+        glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_TRUE); // GL_GENERATE_MIPMAP
+      #endif
+
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
+      #if defined(CHR_PLATFORM_DESKTOP)
+        glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_FALSE); // GL_GENERATE_MIPMAP
+      #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+        glGenerateMipmap(GL_TEXTURE_2D);
+      #endif
+
+      stbi_image_free(data);
+    }
+    else
+    {
+      LOGE << "ERROR WHILE LOADING IMAGE" << endl;
+    }
+
+    return texture;
   }
 
 #if defined(CHR_PLATFORM_DESKTOP)

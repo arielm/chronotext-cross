@@ -36,6 +36,7 @@ namespace chr
   public:
     static GLuint makeShader(GLenum type, const char *text);
     static GLuint makeShaderProgram(const char *vs_text, const char *fs_text);
+    static GLuint loadTexture(const fs::path &relativePath);
 
   #if defined(CHR_PLATFORM_DESKTOP)
     static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

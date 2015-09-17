@@ -4,12 +4,6 @@
 using namespace std;
 using namespace chr;
 
-#define STB_IMAGE_IMPLEMENTATION
-#define STBI_ONLY_JPEG
-#define STBI_ONLY_PNG
-
-#include "stb_image.h"
-
 // ---
 
 static const char *vss = R"(
@@ -174,57 +168,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-    fs::path path = "expo67.png";
-
-    stbi_uc *data = nullptr;
-    int x, y, comp;
-
-    if (chr::hasMemoryResources())
-    {
-        auto memoryBuffer = chr::getResourceBuffer(path);
-
-        if (memoryBuffer)
-        {
-            data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memoryBuffer->data()), memoryBuffer->size(), &x, &y, &comp, 0);
-        }
-    }
-    else if (chr::hasFileResources())
-    {
-        auto resPath = chr::getResourcePath(path);
-        data = stbi_load(resPath.string().data(), &x, &y, &comp, 0);
-    }
-
-    if (data)
-    {
-        LOGI << "width: " << x << ", height: " << y << ", comp: " << comp << endl;
-
-        glGenTextures(1, textureIds);
-        glBindTexture(GL_TEXTURE_2D, textureIds[0]);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-        #if defined(CHR_PLATFORM_DESKTOP)
-            glHint(0x8192, GL_NICEST); // GL_GENERATE_MIPMAP_HINT
-            glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_TRUE); // GL_GENERATE_MIPMAP
-        #endif
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
-        #if defined(CHR_PLATFORM_DESKTOP)
-            glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_FALSE); // GL_GENERATE_MIPMAP
-        #elif defined(CHR_PLATFORM_EMSCRIPTEN)
-            glGenerateMipmap(GL_TEXTURE_2D);
-        #endif
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        LOGE << "ERROR WHILE LOADING IMAGE" << endl;
-    }
-
-    // ---
+    textureIds[0] = loadTexture("expo67.png");
 
     /*
      * PROBLEMS:
@@ -232,9 +176,9 @@ void Sketch::initTextures()
      * - EMSCRIPTEN: RETURNS 0
      */
     glGetIntegerv(0x84FF, &maxAnisotropy);
-    glTexParameteri( GL_TEXTURE_2D, 0x84FF, maxAnisotropy);
-
     LOGI << "max-anisotropy: " << maxAnisotropy << endl;
+
+    glTexParameteri( GL_TEXTURE_2D, 0x84FF, maxAnisotropy);
 }
 
 void Sketch::initShaders()
