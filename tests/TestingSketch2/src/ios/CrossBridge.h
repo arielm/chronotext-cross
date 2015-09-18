@@ -11,9 +11,9 @@
  * https://github.com/cinder/Cinder/blob/v0.8.5/include/cinder/app/CinderViewCocoaTouch.h
  */
 
-#import "cocoa/utils/NSString+JSON.h"
-#import "ios/BridgeListener.h"
-#import "ios/GLViewController.h"
+#import "NSString+JSON.h"
+#import "BridgeListener.h"
+#import "GLViewController.h"
 
 enum
 {
@@ -54,10 +54,10 @@ enum
 - (void) startWithReason:(int)reason;
 - (void) stopWithReason:(int)reason;
 
-- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
-- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
-- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
-- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
+//- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
+//- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
+//- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
+//- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
 
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;

@@ -6,9 +6,9 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import "ios/GLViewController.h"
-#import "ios/CrossBridge.h"
-#import "cocoa/utils/Utils.h"
+#import "GLViewController.h"
+#import "CrossBridge.h"
+#import "Utils.h"
 
 NSString* GLViewControllerRenderingAPIKey = @"GLViewControllerRenderingAPIKey";
 NSString* GLViewControllerPreferredFramesPerSecondKey = @"GLViewControllerPreferredFramesPerSecondKey";
@@ -301,22 +301,22 @@ NSString* GLViewControllerMultisampleKey = @"GLViewControllerMultisampleKey";
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [crossBridge touchesBegan:touches withEvent:event];
+//    [crossBridge touchesBegan:touches withEvent:event];
 }
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [crossBridge touchesMoved:touches withEvent:event];
+//    [crossBridge touchesMoved:touches withEvent:event];
 }
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [crossBridge touchesEnded:touches withEvent:event];
+//    [crossBridge touchesEnded:touches withEvent:event];
 }
 
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-    [crossBridge touchesCancelled:touches withEvent:event];
+//    [crossBridge touchesCancelled:touches withEvent:event];
 }
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------

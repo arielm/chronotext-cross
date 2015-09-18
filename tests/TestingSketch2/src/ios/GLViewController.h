@@ -17,7 +17,7 @@ OBJC_EXPORT NSString* GLViewControllerDepthFormatKey;
 OBJC_EXPORT NSString* GLViewControllerStencilFormatKey;
 OBJC_EXPORT NSString* GLViewControllerMultisampleKey;
 
-@class CinderBridge;
+@class CrossBridge;
 
 enum
 {
@@ -33,7 +33,7 @@ enum
     GLKView *glView;
 }
 
-@property (nonatomic, readonly) CrossBridge *cinderBridge;
+@property (nonatomic, readonly) CrossBridge *crossBridge;
 @property (nonatomic, readonly) GLKView *glView;
 @property (nonatomic, readonly) BOOL appeared;
 

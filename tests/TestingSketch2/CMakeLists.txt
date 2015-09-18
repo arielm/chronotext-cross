@@ -64,15 +64,18 @@ elseif (PLATFORM MATCHES ios)
   list(APPEND LIBRARIES
     "-framework GLKit"
     "-framework UIKit"
+    "-framework OpenGLES"
     "-framework CoreGraphics"
     "-framework CoreVideo"
   )
 
   list(APPEND SRC_FILES
     "src/ios/Application.mm"
-    "src/cocoa/utils/NSDictionary+DefautValues.m"
-    "src/cocoa/utils/NSMutableDictionary+Merge.m"
-    "src/cocoa/utils/NSString+JSON.m"
+    "src/ios/GLViewController.mm"
+    "src/ios/CrossBridge.mm"
+    "src/ios/NSDictionary+DefautValues.m"
+    "src/ios/NSMutableDictionary+Merge.m"
+    "src/ios/NSString+JSON.m"
   )
 
   set_source_files_properties(

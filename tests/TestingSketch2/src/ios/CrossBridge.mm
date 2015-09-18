@@ -11,16 +11,14 @@
  * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/app/CinderViewCocoaTouch.mm
  */
 
-#import "ios/CrossBridge.h"
-#import "cocoa/utils/Utils.h"
+#import "CrossBridge.h"
+#import "Utils.h"
 
 //#include "cross/Context.h"
 
 #include <boost/asio.hpp>
 
 using namespace std;
-using namespace ci;
-using namespace ci::app;
 using namespace chr;
 
 namespace chr
@@ -36,7 +34,7 @@ namespace chr
     BOOL initialized;
     BOOL setup;
 
-    CrossDelegate *crossDelegate;
+//    CrossDelegate *crossDelegate;
     
     map<UITouch*, uint32_t> touchIdMap;
 }
@@ -44,7 +42,7 @@ namespace chr
 - (BOOL) performInit;
 - (void) performUninit;
 
-- (Vec2i) windowSize;
+//- (Vec2i) windowSize;
 - (int) aaLevel;
 
 - (uint32_t) addTouchToMap:(UITouch*)touch;
@@ -89,8 +87,8 @@ namespace chr
     {
         DLOG(@"CrossBridge.performInit");
 
-        system::bridge = self;
-        crossDelegate = new CrossDelegate();
+//        system::bridge = self;
+//        crossDelegate = new CrossDelegate();
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(applicationWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
@@ -99,7 +97,7 @@ namespace chr
         [center addObserver:self selector:@selector(applicationDidReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 
         [self dispatchEvent:SKETCH_WILL_INIT];
-        crossDelegate->performInit();
+//        crossDelegate->performInit();
         [self dispatchEvent:SKETCH_DID_INIT];
         
         // ---
@@ -119,7 +117,7 @@ namespace chr
         if (setup)
         {
             [self dispatchEvent:SKETCH_WILL_SHUTDOWN];
-            crossDelegate->performShutdown();
+//            crossDelegate->performShutdown();
             [self dispatchEvent:SKETCH_DID_SHUTDOWN];
             
             setup = NO;
@@ -136,11 +134,11 @@ namespace chr
         system::bridge = nil;
         
         [self dispatchEvent:SKETCH_WILL_UNINIT];
-        crossDelegate->performUninit();
+//        crossDelegate->performUninit();
         [self dispatchEvent:SKETCH_DID_UNINIT];
         
-        delete crossDelegate;
-        crossDelegate = nullptr;
+//        delete crossDelegate;
+//        crossDelegate = nullptr;
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         
@@ -157,7 +155,7 @@ namespace chr
         DLOG(@"CrossBridge.performSetup");
 
         [self dispatchEvent:SKETCH_WILL_SETUP];
-        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaLevel]));
+//        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaLevel]));
         [self dispatchEvent:SKETCH_DID_SETUP];
         
         setup = YES;
@@ -166,20 +164,20 @@ namespace chr
 
 - (void) performResize
 {
-    auto size = [self windowSize];
+//    auto size = [self windowSize];
     DLOG(@"CrossBridge:performResize - %dx%d", size.x, size.y);
     
-    crossDelegate->performResize(size);
+//    crossDelegate->performResize(size);
 }
 
 - (void) performUpdate
 {
-    crossDelegate->performUpdate();
+//    crossDelegate->performUpdate();
 }
 
 - (void) performDraw
 {
-    crossDelegate->performDraw();
+//    crossDelegate->performDraw();
 }
 
 - (GLViewController*) viewController
@@ -201,7 +199,7 @@ namespace chr
             DLOG(@"CrossBridge:startWithReason - SHOWN");
             
             [self dispatchEvent:VIEW_WILL_APPEAR];
-            crossDelegate->handleEvent(CrossSketch::EVENT_SHOWN);
+//            crossDelegate->handleEvent(CrossSketch::EVENT_SHOWN);
             
             break;
         }
@@ -211,7 +209,7 @@ namespace chr
             DLOG(@"CrossBridge:startWithReason - RESUMED");
             
             [self dispatchEvent:APP_DID_RESUME];
-            crossDelegate->handleEvent(CrossSketch::EVENT_RESUMED);
+//            crossDelegate->handleEvent(CrossSketch::EVENT_RESUMED);
             break;
         }
     }
@@ -226,7 +224,7 @@ namespace chr
             DLOG(@"CrossBridge:stopWithReason - HIDDEN");
             
             [self dispatchEvent:VIEW_WILL_DISAPPEAR];
-            crossDelegate->handleEvent(CrossSketch::EVENT_HIDDEN);
+//            crossDelegate->handleEvent(CrossSketch::EVENT_HIDDEN);
             
             break;
         }
@@ -236,7 +234,7 @@ namespace chr
             DLOG(@"CrossBridge:stopWithReason - PAUSED");
             
             [self dispatchEvent:APP_WILL_PAUSE];
-            crossDelegate->handleEvent(CrossSketch::EVENT_PAUSED);
+//            crossDelegate->handleEvent(CrossSketch::EVENT_PAUSED);
             
             break;
         }
@@ -271,37 +269,37 @@ namespace chr
 
 #pragma mark ---------------------------------------- WINDOW-INFO ----------------------------------------
 
-- (Vec2i) windowSize;
-{
-    Vec2i size;
-    auto view = viewController.view;
-    
-    if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
-    {
-        size.x = view.frame.size.width;
-        size.y = view.frame.size.height;
-    }
-    else
-    {
-        switch (viewController.interfaceOrientation)
-        {
-            case UIDeviceOrientationUnknown:
-            case UIInterfaceOrientationPortrait:
-            case UIInterfaceOrientationPortraitUpsideDown:
-                size.x = view.frame.size.width;
-                size.y = view.frame.size.height;
-                break;
-                
-            case UIInterfaceOrientationLandscapeLeft:
-            case UIInterfaceOrientationLandscapeRight:
-                size.x = view.frame.size.height;
-                size.y = view.frame.size.width;
-                break;
-        }
-    }
-    
-    return size * view.contentScaleFactor;
-}
+//- (Vec2i) windowSize;
+//{
+//    Vec2i size;
+//    auto view = viewController.view;
+//
+//    if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
+//    {
+//        size.x = view.frame.size.width;
+//        size.y = view.frame.size.height;
+//    }
+//    else
+//    {
+//        switch (viewController.interfaceOrientation)
+//        {
+//            case UIDeviceOrientationUnknown:
+//            case UIInterfaceOrientationPortrait:
+//            case UIInterfaceOrientationPortraitUpsideDown:
+//                size.x = view.frame.size.width;
+//                size.y = view.frame.size.height;
+//                break;
+//
+//            case UIInterfaceOrientationLandscapeLeft:
+//            case UIInterfaceOrientationLandscapeRight:
+//                size.x = view.frame.size.height;
+//                size.y = view.frame.size.width;
+//                break;
+//        }
+//    }
+//
+//    return size * view.contentScaleFactor;
+//}
 
 - (int) aaLevel
 {
@@ -346,164 +344,164 @@ namespace chr
             break;
     }
     
-    crossDelegate->handleAcceleration(Vec3f(ax, ay, acceleration.z));
+//    crossDelegate->handleAcceleration(Vec3f(ax, ay, acceleration.z));
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
 
-- (uint32_t) addTouchToMap:(UITouch*)touch
-{
-    uint32_t candidateId = 0;
-    bool found = true;
-    
-    while (found)
-    {
-        candidateId++;
-        found = false;
-        
-        for (auto &element : touchIdMap)
-        {
-            if (element.second == candidateId)
-            {
-                found = true;
-                break;
-            }
-        }
-    }
-    
-    touchIdMap.insert(make_pair(touch, candidateId));
-    return candidateId;
-}
-
-- (void) removeTouchFromMap:(UITouch*)touch
-{
-    auto found = touchIdMap.find(touch);
-    
-    if (found != touchIdMap.end())
-    {
-        touchIdMap.erase(found);
-    }
-}
-
-- (uint32_t) findTouchInMap:(UITouch*)touch
-{
-    auto found = touchIdMap.find(touch);
-    
-    if (found != touchIdMap.end())
-    {
-        return found->second;
-    }
-    
-    return 0;
-}
-
-- (void) updateActiveTouches
-{
-    auto view = viewController.view;
-    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-
-    vector<TouchEvent::Touch> activeTouches;
-    
-    for (auto &element : touchIdMap)
-    {
-        auto &touch = element.first;
-        auto &touchId = element.second;
-        
-        CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];
-        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, touchId, [touch timestamp], touch);
-    }
-}
-
-- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    auto view = viewController.view;
-    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-    
-    vector<TouchEvent::Touch> touchList;
-    
-    for (UITouch *touch in touches)
-    {
-        CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch);
-    }
-    
-    [self updateActiveTouches];
-    
-    if (!touchList.empty())
-    {
-        crossDelegate->touchesBegan(TouchEvent(WindowRef(), touchList));
-    }
-}
-
-- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    auto view = viewController.view;
-    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-    
-    vector<TouchEvent::Touch> touchList;
-    
-    for (UITouch *touch in touches)
-    {
-        CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
-    }
-    
-    [self updateActiveTouches];
-    
-    if (!touchList.empty())
-    {
-        crossDelegate->touchesMoved(TouchEvent(WindowRef(), touchList));
-    }
-}
-
-- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    auto view = viewController.view;
-    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-    
-    vector<TouchEvent::Touch> touchList;
-    
-    for (UITouch *touch in touches)
-    {
-        CGPoint pt = [touch locationInView:view];
-        CGPoint prevPt = [touch previousLocationInView:view];
-        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
-        
-        [self removeTouchFromMap:touch];
-    }
-    
-    [self updateActiveTouches];
-    
-    if (!touchList.empty())
-    {
-        crossDelegate->touchesEnded(TouchEvent(WindowRef(), touchList));
-    }
-}
-
-- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
-{
-    [self touchesEnded:touches withEvent:event];
-}
+//- (uint32_t) addTouchToMap:(UITouch*)touch
+//{
+//    uint32_t candidateId = 0;
+//    bool found = true;
+//
+//    while (found)
+//    {
+//        candidateId++;
+//        found = false;
+//
+//        for (auto &element : touchIdMap)
+//        {
+//            if (element.second == candidateId)
+//            {
+//                found = true;
+//                break;
+//            }
+//        }
+//    }
+//
+//    touchIdMap.insert(make_pair(touch, candidateId));
+//    return candidateId;
+//}
+//
+//- (void) removeTouchFromMap:(UITouch*)touch
+//{
+//    auto found = touchIdMap.find(touch);
+//
+//    if (found != touchIdMap.end())
+//    {
+//        touchIdMap.erase(found);
+//    }
+//}
+//
+//- (uint32_t) findTouchInMap:(UITouch*)touch
+//{
+//    auto found = touchIdMap.find(touch);
+//
+//    if (found != touchIdMap.end())
+//    {
+//        return found->second;
+//    }
+//
+//    return 0;
+//}
+//
+//- (void) updateActiveTouches
+//{
+//    auto view = viewController.view;
+//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+//
+//    vector<TouchEvent::Touch> activeTouches;
+//
+//    for (auto &element : touchIdMap)
+//    {
+//        auto &touch = element.first;
+//        auto &touchId = element.second;
+//
+//        CGPoint pt = [touch locationInView:view];
+//        CGPoint prevPt = [touch previousLocationInView:view];
+//        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, touchId, [touch timestamp], touch);
+//    }
+//}
+//
+//- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+//{
+//    auto view = viewController.view;
+//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+//
+//    vector<TouchEvent::Touch> touchList;
+//
+//    for (UITouch *touch in touches)
+//    {
+//        CGPoint pt = [touch locationInView:view];
+//        CGPoint prevPt = [touch previousLocationInView:view];
+//        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch);
+//    }
+//
+//    [self updateActiveTouches];
+//
+//    if (!touchList.empty())
+//    {
+//        crossDelegate->touchesBegan(TouchEvent(WindowRef(), touchList));
+//    }
+//}
+//
+//- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
+//{
+//    auto view = viewController.view;
+//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+//
+//    vector<TouchEvent::Touch> touchList;
+//
+//    for (UITouch *touch in touches)
+//    {
+//        CGPoint pt = [touch locationInView:view];
+//        CGPoint prevPt = [touch previousLocationInView:view];
+//        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
+//    }
+//
+//    [self updateActiveTouches];
+//
+//    if (!touchList.empty())
+//    {
+//        crossDelegate->touchesMoved(TouchEvent(WindowRef(), touchList));
+//    }
+//}
+//
+//- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
+//{
+//    auto view = viewController.view;
+//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+//
+//    vector<TouchEvent::Touch> touchList;
+//
+//    for (UITouch *touch in touches)
+//    {
+//        CGPoint pt = [touch locationInView:view];
+//        CGPoint prevPt = [touch previousLocationInView:view];
+//        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
+//
+//        [self removeTouchFromMap:touch];
+//    }
+//
+//    [self updateActiveTouches];
+//
+//    if (!touchList.empty())
+//    {
+//        crossDelegate->touchesEnded(TouchEvent(WindowRef(), touchList));
+//    }
+//}
+//
+//- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
+//{
+//    [self touchesEnded:touches withEvent:event];
+//}
 
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
 
 - (void) sendMessageToSketch:(int)what
 {
-    crossDelegate->messageFromBridge(what);
+//    crossDelegate->messageFromBridge(what);
 }
 
 - (void) sendMessageToSketch:(int)what json:(id)json
 {
     NSString *body = [NSString stringWithJSONObject:json];
-    crossDelegate->messageFromBridge(what, [body UTF8String]);
+//    crossDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
 {
-    crossDelegate->messageFromBridge(what, [body UTF8String]);
+//    crossDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
 // ---
@@ -531,7 +529,7 @@ namespace chr
     if (initialized)
     {
         DLOG(@"CrossBridge:applicationDidReceiveMemoryWarning");
-        crossDelegate->handleEvent(CrossSketch::EVENT_MEMORY_WARNING);
+//        crossDelegate->handleEvent(CrossSketch::EVENT_MEMORY_WARNING);
     }
 }
 
@@ -540,7 +538,7 @@ namespace chr
     if (setup && !viewController.appeared)
     {
         DLOG(@"CrossBridge:applicationWillResignActive");
-        crossDelegate->handleEvent(CrossSketch::EVENT_BACKGROUND); // TODO: TEST
+//        crossDelegate->handleEvent(CrossSketch::EVENT_BACKGROUND); // TODO: TEST
     }
 }
 
@@ -549,7 +547,7 @@ namespace chr
     if (setup && !viewController.appeared)
     {
         DLOG(@"CrossBridge:applicationDidBecomeActive");
-        crossDelegate->handleEvent(CrossSketch::EVENT_FOREGROUND); // TODO: TEST
+//        crossDelegate->handleEvent(CrossSketch::EVENT_FOREGROUND); // TODO: TEST
     }
 }
 
