@@ -1,6 +1,10 @@
 
 #include "CrossSketch.h"
 
+#if defined(CHR_PLATFORM_IOS)
+    #include "Application.h"
+#endif
+
 using namespace std;
 using namespace chr;
 
@@ -197,8 +201,15 @@ void Sketch::initShaders()
 
 int main(int argc, char** argv)
 {
-    Sketch sketch;
-    sketch.init(800, 600);
+    #if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
+        Sketch sketch;
+        sketch.init(800, 600);
+    #elif defined(CHR_PLATFORM_IOS)
+        @autoreleasepool
+        {
+            return UIApplicationMain(argc, argv, nil, NSStringFromClass([Application class]));
+        }
+    #endif
 
     return 0;
 }

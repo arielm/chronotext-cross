@@ -59,9 +59,25 @@ elseif (PLATFORM MATCHES mxe)
     gdi32
     opengl32
   )
+
+elseif (PLATFORM MATCHES ios)
+  list(APPEND LIBRARIES
+    "-framework GLKit"
+    "-framework UIKit"
+    "-framework CoreGraphics"
+    "-framework CoreVideo"
+  )
+
+  list(APPEND SRC_FILES
+    "src/Application.mm"
+  )
+
+  set_source_files_properties(
+    "src/main.cpp"
+    PROPERTIES COMPILE_FLAGS "-x objective-c++"
+  )
 endif()
 
 # ---
-
 
 include("${CROSS_ROOT}/cmake/test.cmake")
