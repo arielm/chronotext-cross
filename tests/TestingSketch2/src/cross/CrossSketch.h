@@ -37,6 +37,41 @@ namespace chr
   class CrossSketch
   {
   public:
+    enum StartReason
+    {
+      START_REASON_VIEW_SHOWN = 1,
+      START_REASON_APP_RESUMED
+    };
+
+    enum StopReason
+    {
+      STOP_REASON_VIEW_HIDDEN = 1,
+      STOP_REASON_APP_PAUSED
+    };
+
+    enum
+    {
+      EVENT_RESUMED = 1,
+      EVENT_SHOWN,
+      EVENT_PAUSED,
+      EVENT_HIDDEN,
+      EVENT_FOREGROUND,
+      EVENT_BACKGROUND,
+      EVENT_MEMORY_WARNING,
+      EVENT_CONTEXT_LOST,
+      EVENT_CONTEXT_RENEWED,
+      EVENT_TRIGGER_BACK,
+      EVENT_TRIGGER_ESCAPE
+    };
+
+    enum
+    {
+      ACTION_CAPTURE_BACK = 1,
+      ACTION_RELEASE_BACK,
+      ACTION_CAPTURE_ESCAPE,
+      ACTION_RELEASE_ESCAPE,
+    };
+
     static GLuint makeShader(GLenum type, const char *text);
     static GLuint makeShaderProgram(const char *vs_text, const char *fs_text);
     static GLuint loadTexture(const fs::path &relativePath);
@@ -50,9 +85,23 @@ namespace chr
     void init(int width, int height);
     double getTime();
 
+    virtual bool init() { return true; }
+    virtual void uninit() {}
     virtual void setup() {}
     virtual void shutdown() {}
+
+    virtual void event(int eventId) {}
+
+    virtual void resize() {}
+    virtual void start(StartReason reason) {}
+    virtual void stop(StopReason reason) {}
+
+    virtual void update() {}
     virtual void draw() {}
+
+    virtual void addTouch(int index, float x, float y) {}
+    virtual void updateTouch(int index, float x, float y) {}
+    virtual void removeTouch(int index, float x, float y) {}
 
   protected:
     bool initialized = false;

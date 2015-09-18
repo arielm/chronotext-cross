@@ -20,7 +20,7 @@ set(LIBRARIES
 
 set(SRC_FILES
   "src/main.cpp"
-  "src/CrossSketch.cpp"
+  "src/cross/CrossSketch.cpp"
 )
 
 # ---
@@ -69,7 +69,10 @@ elseif (PLATFORM MATCHES ios)
   )
 
   list(APPEND SRC_FILES
-    "src/Application.mm"
+    "src/ios/Application.mm"
+    "src/cocoa/utils/NSDictionary+DefautValues.m"
+    "src/cocoa/utils/NSMutableDictionary+Merge.m"
+    "src/cocoa/utils/NSString+JSON.m"
   )
 
   set_source_files_properties(

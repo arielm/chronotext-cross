@@ -1,8 +1,8 @@
 
-#include "CrossSketch.h"
+#include "cross/CrossSketch.h"
 
 #if defined(CHR_PLATFORM_IOS)
-    #include "Application.h"
+    #include "ios/Application.h"
 #endif
 
 using namespace std;
