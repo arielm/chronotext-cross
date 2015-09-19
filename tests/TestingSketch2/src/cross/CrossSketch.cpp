@@ -262,8 +262,13 @@ namespace chr
   }
 #endif
 
-  void CrossSketch::performSetup(const WindowInfo &windowInfo)
+  void CrossSketch::performSetup(const WindowInfo &windowInfo) // TODO
   {
-    LOGI << windowInfo << endl;
+    LOGI << "SETUP - " << windowInfo << endl;
+  }
+
+  void CrossSketch::performResize(const glm::vec2 &size) // TODO
+  {
+    LOGI << "RESIZE - [" << size.x << ", " << size.y << "]" << endl;
   }
 }

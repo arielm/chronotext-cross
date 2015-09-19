@@ -39,56 +39,56 @@ namespace chr
     
     void CrossDelegate::performUninit()
     {
-//        if (initialized_ && !setup_)
-//        {
-//            _uninit();
-//
-//            initialized_ = false;
-//            intern::instance = nullptr;
-//        }
+        if (initialized_ && !setup_)
+        {
+            _uninit();
+
+            initialized_ = false;
+            intern::instance = nullptr;
+        }
     }
     
     void CrossDelegate::performSetup(const WindowInfo &windowInfo)
     {
-//        if (!setup_ && initialized_)
-//        {
-//            startIOService();
-//
-//            setupInfo.io_service = io.get();
-//            setupInfo.windowInfo = windowInfo;
-//
-//            _setup();
-//
-//            // ---
-//
-//            setup_ = true;
-//        }
+        if (!setup_ && initialized_)
+        {
+            startIOService();
+
+            setupInfo.io_service = io.get();
+            setupInfo.windowInfo = windowInfo;
+
+            _setup();
+
+            // ---
+
+            setup_ = true;
+        }
     }
     
     void CrossDelegate::performShutdown()
     {
-//        if (setup_)
-//        {
-//            /*
-//             * TODO:
-//             *
-//             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-//             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
-//             */
-//            _shutdown();
-//
-//            stopIOService();
-//
-//            // ---
-//
-//            setup_ = false;
-//        }
+        if (setup_)
+        {
+            /*
+             * TODO:
+             *
+             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
+             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
+             */
+            _shutdown();
+
+            stopIOService();
+
+            // ---
+
+            setup_ = false;
+        }
     }
     
     void CrossDelegate::performResize(const glm::vec2 &size)
     {
-//        setupInfo.windowInfo.size = size;
-//        sketch->performResize(size);
+        setupInfo.windowInfo.size = size;
+        sketch->performResize(size);
     }
     
     void CrossDelegate::performUpdate()
