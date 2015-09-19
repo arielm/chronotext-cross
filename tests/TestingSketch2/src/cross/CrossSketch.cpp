@@ -1,13 +1,21 @@
 
 #include "CrossSketch.h"
 
-using namespace std;
+#if defined(CHR_PLATFORM_IOS)
+  #include <chrono>
+#endif
+
+// ---
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_JPEG
 #define STBI_ONLY_PNG
 
 #include "stb_image.h"
+
+// ---
+
+using namespace std;
 
 namespace chr
 {
@@ -255,7 +263,8 @@ namespace chr
 #elif defined(CHR_PLATFORM_IOS)
   double CrossSketch::getTime()
   {
-    return 0; // TODO
+    auto now = chrono::steady_clock::now().time_since_epoch();
+    return chrono::duration_cast<chrono::microseconds>(now).count() / 1000000.0;
   }
 #endif
 
@@ -300,8 +309,6 @@ namespace chr
 
   void CrossSketch::performUpdate()
   {
-//    double now = _clock->getTime();
-
     update();
 
     frameCount++;
