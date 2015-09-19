@@ -7,6 +7,7 @@
  */
 
 #include "ios/CrossDelegate.h"
+#include "cross/Context.h"
 
 #import "ios/CrossBridge.h"
 
@@ -19,10 +20,10 @@ namespace chr
         CrossDelegate *instance = nullptr;
     }
 
-//    CrossDelegate& delegate()
-//    {
-//        return checkedReference(intern::instance);
-//    }
+    CrossDelegate& delegate()
+    {
+        return checkedReference(intern::instance);
+    }
     
     // ---
     
