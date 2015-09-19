@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+#define GLM_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
@@ -39,7 +40,7 @@ namespace chr
         
         void rotate()
         {
-            size = glm::vec2(size.y, size.x); // XXX
+            size = size.yx();
         }
         
         glm::vec4 bounds() const
@@ -61,7 +62,7 @@ namespace chr
         {
             lhs
             << "{"
-            << "size: [" << rhs.size.x << "," << rhs.size.y << "]"
+            << "size: [" << rhs.size.x << ", " << rhs.size.y << "]"
             << ", anti-aliasing-level: " << rhs.aaLevel
             << "}";
             

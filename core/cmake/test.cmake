@@ -1,5 +1,6 @@
 
 list(APPEND INCLUDE_DIRS
+  "src"
   "${CROSS_ROOT}/src"
 )
 

@@ -6,9 +6,9 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#import "GLViewController.h"
-#import "CrossBridge.h"
-#import "Utils.h"
+#import "ios/GLViewController.h"
+#import "ios/CrossBridge.h"
+#import "ios/Utils.h"
 
 NSString* GLViewControllerRenderingAPIKey = @"GLViewControllerRenderingAPIKey";
 NSString* GLViewControllerPreferredFramesPerSecondKey = @"GLViewControllerPreferredFramesPerSecondKey";

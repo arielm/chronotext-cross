@@ -11,9 +11,10 @@
  * https://github.com/cinder/Cinder/blob/v0.8.5/src/cinder/app/CinderViewCocoaTouch.mm
  */
 
-#import "CrossBridge.h"
-#import "Utils.h"
+#import "ios/CrossBridge.h"
+#import "ios/Utils.h"
 
+#include "cross/WindowInfo.h"
 //#include "cross/Context.h"
 
 #include <boost/asio.hpp>
@@ -42,7 +43,7 @@ namespace chr
 - (BOOL) performInit;
 - (void) performUninit;
 
-//- (Vec2i) windowSize;
+- (glm::vec2) windowSize;
 - (int) aaLevel;
 
 - (uint32_t) addTouchToMap:(UITouch*)touch;
@@ -164,7 +165,7 @@ namespace chr
 
 - (void) performResize
 {
-//    auto size = [self windowSize];
+    auto size = [self windowSize];
     DLOG(@"CrossBridge:performResize - %dx%d", size.x, size.y);
     
 //    crossDelegate->performResize(size);
@@ -269,37 +270,37 @@ namespace chr
 
 #pragma mark ---------------------------------------- WINDOW-INFO ----------------------------------------
 
-//- (Vec2i) windowSize;
-//{
-//    Vec2i size;
-//    auto view = viewController.view;
-//
-//    if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
-//    {
-//        size.x = view.frame.size.width;
-//        size.y = view.frame.size.height;
-//    }
-//    else
-//    {
-//        switch (viewController.interfaceOrientation)
-//        {
-//            case UIDeviceOrientationUnknown:
-//            case UIInterfaceOrientationPortrait:
-//            case UIInterfaceOrientationPortraitUpsideDown:
-//                size.x = view.frame.size.width;
-//                size.y = view.frame.size.height;
-//                break;
-//
-//            case UIInterfaceOrientationLandscapeLeft:
-//            case UIInterfaceOrientationLandscapeRight:
-//                size.x = view.frame.size.height;
-//                size.y = view.frame.size.width;
-//                break;
-//        }
-//    }
-//
-//    return size * view.contentScaleFactor;
-//}
+- (glm::vec2) windowSize;
+{
+    glm::vec2 size;
+    auto view = viewController.view;
+
+    if ([UIScreen.mainScreen respondsToSelector:@selector(nativeScale)]) // I.E. IOS 8+
+    {
+        size.x = view.frame.size.width;
+        size.y = view.frame.size.height;
+    }
+    else
+    {
+        switch (viewController.interfaceOrientation)
+        {
+            case UIDeviceOrientationUnknown:
+            case UIInterfaceOrientationPortrait:
+            case UIInterfaceOrientationPortraitUpsideDown:
+                size.x = view.frame.size.width;
+                size.y = view.frame.size.height;
+                break;
+
+            case UIInterfaceOrientationLandscapeLeft:
+            case UIInterfaceOrientationLandscapeRight:
+                size.x = view.frame.size.height;
+                size.y = view.frame.size.width;
+                break;
+        }
+    }
+
+    return size * float(view.contentScaleFactor);
+}
 
 - (int) aaLevel
 {

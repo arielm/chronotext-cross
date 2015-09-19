@@ -3,7 +3,7 @@
 #include "Log.h"
 #include "Platform.h"
 #include "MemoryBuffer.h"
-#include "WindowInfo.h"
+#include "cross/WindowInfo.h"
 
 #if defined(CHR_PLATFORM_DESKTOP)
   #include <glad/glad.h>
@@ -17,7 +17,8 @@
   #include <OpenGLES/ES2/glext.h>
 #endif
 
-#include <glm/mat4x4.hpp>
+#define GLM_SWIZZLE
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/epsilon.hpp>
