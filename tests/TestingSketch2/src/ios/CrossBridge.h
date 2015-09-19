@@ -11,7 +11,7 @@
  * https://github.com/cinder/Cinder/blob/v0.8.5/include/cinder/app/CinderViewCocoaTouch.h
  */
 
-#import "ios/NSString+JSON.h"
+#import "cocoa/NSString+JSON.h"
 #import "ios/BridgeListener.h"
 #import "ios/GLViewController.h"
 

@@ -12,7 +12,7 @@
  */
 
 #import "ios/CrossBridge.h"
-#import "ios/Utils.h"
+#import "cocoa/Utils.h"
 
 #include "cross/WindowInfo.h"
 //#include "cross/Context.h"

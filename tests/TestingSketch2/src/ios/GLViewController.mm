@@ -8,7 +8,7 @@
 
 #import "ios/GLViewController.h"
 #import "ios/CrossBridge.h"
-#import "ios/Utils.h"
+#import "cocoa/Utils.h"
 
 NSString* GLViewControllerRenderingAPIKey = @"GLViewControllerRenderingAPIKey";
 NSString* GLViewControllerPreferredFramesPerSecondKey = @"GLViewControllerPreferredFramesPerSecondKey";

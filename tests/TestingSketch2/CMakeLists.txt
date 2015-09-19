@@ -73,9 +73,9 @@ elseif (PLATFORM MATCHES ios)
     "src/ios/Application.mm"
     "src/ios/GLViewController.mm"
     "src/ios/CrossBridge.mm"
-    "src/ios/NSDictionary+DefautValues.m"
-    "src/ios/NSMutableDictionary+Merge.m"
-    "src/ios/NSString+JSON.m"
+    "src/cocoa/NSDictionary+DefautValues.m"
+    "src/cocoa/NSMutableDictionary+Merge.m"
+    "src/cocoa/NSString+JSON.m"
   )
 
   set_source_files_properties(
