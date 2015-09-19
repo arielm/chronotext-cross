@@ -115,7 +115,7 @@ void Sketch::draw()
 
     // ---
 
-    glm::mat4 projectionMatrix = glm::perspective(60 * D2R, screenSize.x / screenSize.y, 0.1f, 100.0f);
+    glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 100.0f);
 
     glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1)); // SCALE
     modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -30)); // DISTANCE

@@ -113,7 +113,9 @@ namespace chr
 
   protected:
     bool initialized = false;
-    glm::vec2 screenSize;
+    int frameCount = 0;
+    bool forceResize = false;
+    WindowInfo windowInfo;
 
   #if defined(CHR_PLATFORM_DESKTOP)
     GLFWwindow* window = nullptr;

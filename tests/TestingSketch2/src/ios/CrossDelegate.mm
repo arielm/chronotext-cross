@@ -54,7 +54,7 @@ namespace chr
         {
             startIOService();
 
-            setupInfo.io_service = io.get();
+//            setupInfo.io_service = io.get();
             setupInfo.windowInfo = windowInfo;
 
             _setup();
@@ -100,7 +100,7 @@ namespace chr
          */
 //        sketch->clock()->update(true);
 
-        io->poll();
+//        io->poll();
 
         sketch->performUpdate();
         updateCount++;
@@ -113,7 +113,7 @@ namespace chr
             performUpdate(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
         }
 
-//        sketch->draw();
+        sketch->draw();
     }
     
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
@@ -184,22 +184,22 @@ namespace chr
     
     void CrossDelegate::startIOService()
     {
-        if (!io)
-        {
-            io = make_shared<boost::asio::io_service>();
-            ioWork = make_shared<boost::asio::io_service::work>(*io);
-        }
+//        if (!io)
+//        {
+//            io = make_shared<boost::asio::io_service>();
+//            ioWork = make_shared<boost::asio::io_service::work>(*io);
+//        }
     }
     
     void CrossDelegate::stopIOService()
     {
-        if (io)
-        {
-            io->stop();
-
-            ioWork.reset();
-            io.reset();
-        }
+//        if (io)
+//        {
+//            io->stop();
+//
+//            ioWork.reset();
+//            io.reset();
+//        }
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------

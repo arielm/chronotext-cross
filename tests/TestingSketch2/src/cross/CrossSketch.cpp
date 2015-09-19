@@ -187,9 +187,8 @@ namespace chr
 
       // ---
 
-      screenSize.x = width;
-      screenSize.y = height;
-      setup();
+      performSetup(WindowInfo::create(width, height));
+
 
       while (!glfwWindowShouldClose(window))
       {
@@ -239,9 +238,7 @@ namespace chr
 
       // ---
 
-      screenSize.x = width;
-      screenSize.y = height;
-      setup();
+      performSetup(WindowInfo::create(width, height));
 
       emscripten_set_main_loop_arg(performDraw, this, 0, 1);
 
@@ -264,22 +261,49 @@ namespace chr
 
   // ---
 
-  void CrossSketch::performSetup(const WindowInfo &windowInfo) // TODO
+  void CrossSketch::performSetup(const WindowInfo &windowInfo)
   {
-    LOGI << "SETUP - " << windowInfo << endl;
+    this->windowInfo = windowInfo;
+    forceResize = true;
+
+    setup();
   }
 
-  void CrossSketch::performResize(const glm::vec2 &size) // TODO
+  void CrossSketch::performResize(const glm::vec2 &size)
   {
-    LOGI << "RESIZE - [" << size.x << ", " << size.y << "]" << endl;
+    if (forceResize || (size != windowInfo.size))
+    {
+      windowInfo.size = size;
+      forceResize = false;
+
+      resize();
+    }
   }
 
-  void CrossSketch::performStart(StartReason reason) // TODO
-  {}
+  void CrossSketch::performStart(StartReason reason)
+  {
+    frameCount = 0;
 
-  void CrossSketch::performStop(StopReason reason) // TODO
-  {}
+//    timer.start();
+//    _clock->start();
 
-  void CrossSketch::performUpdate() // TODO
-  {}
+    start(reason);
+  }
+
+  void CrossSketch::performStop(StopReason reason)
+  {
+//    timer.stop();
+//    _clock->stop();
+
+    stop(reason);
+  }
+
+  void CrossSketch::performUpdate()
+  {
+//    double now = _clock->getTime();
+
+    update();
+
+    frameCount++;
+  }
 }
