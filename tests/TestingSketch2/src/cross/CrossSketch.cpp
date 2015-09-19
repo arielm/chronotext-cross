@@ -133,7 +133,7 @@ namespace chr
 
       #if defined(CHR_PLATFORM_DESKTOP)
         glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_FALSE); // GL_GENERATE_MIPMAP
-      #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+      #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS)
         glGenerateMipmap(GL_TEXTURE_2D);
       #endif
 
