@@ -9,7 +9,8 @@
 #pragma once
 
 #include "cross/CrossSketch.h"
-//#include "chronotext/system/SystemInfo.h"
+
+#include <boost/asio.hpp>
 
 //#include "cinder/Json.h"
 
@@ -18,6 +19,25 @@
 namespace chr
 {
     CrossSketch* createSketch();
+
+    namespace system
+    {
+      struct SetupInfo
+      {
+          boost::asio::io_service *io_service;
+          WindowInfo windowInfo;
+
+          SetupInfo() = default;
+
+          SetupInfo(boost::asio::io_service &io_service, const WindowInfo &windowInfo)
+          :
+          io_service(&io_service),
+          windowInfo(windowInfo)
+          {}
+      };
+    }
+
+    // ---
 
     class CrossDelegateBase
     {
@@ -56,7 +76,7 @@ namespace chr
         bool setup_ = false;
 
 //        system::InitInfo initInfo;
-//        system::SetupInfo setupInfo;
+        system::SetupInfo setupInfo;
         
 //        AccelEvent::Filter accelFilter;
 

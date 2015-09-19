@@ -261,4 +261,9 @@ namespace chr
     return 0; // TODO
   }
 #endif
+
+  void CrossSketch::performSetup(const WindowInfo &windowInfo)
+  {
+    LOGI << windowInfo << endl;
+  }
 }

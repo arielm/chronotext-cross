@@ -92,9 +92,9 @@ namespace chr
         
         // ---
         
-//        LOGI << "WINDOW INFO: " << setupInfo.windowInfo << endl; // LOG: VERBOSE
+        LOGI << "WINDOW INFO: " << setupInfo.windowInfo << endl; // LOG: VERBOSE
         
-//        sketch->performSetup(setupInfo.windowInfo);
+        sketch->performSetup(setupInfo.windowInfo);
     }
     
     void CrossDelegateBase::_shutdown()

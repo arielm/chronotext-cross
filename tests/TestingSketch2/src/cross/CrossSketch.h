@@ -105,6 +105,12 @@ namespace chr
     virtual void updateTouch(int index, float x, float y) {}
     virtual void removeTouch(int index, float x, float y) {}
 
+    void performSetup(const WindowInfo &windowInfo);
+//    void performResize(const glm::ivec2 &size);
+//    void performStart(StartReason reason);
+//    void performStop(StopReason reason);
+//    void performUpdate();
+
   protected:
     bool initialized = false;
     glm::vec2 screenSize;
