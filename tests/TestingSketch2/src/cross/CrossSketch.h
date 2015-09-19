@@ -3,6 +3,7 @@
 #include "Log.h"
 #include "Platform.h"
 #include "MemoryBuffer.h"
+#include "WindowInfo.h"
 
 #if defined(CHR_PLATFORM_DESKTOP)
   #include <glad/glad.h>
