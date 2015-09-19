@@ -14,8 +14,8 @@
 #import "ios/CrossBridge.h"
 #import "cocoa/Utils.h"
 
+#include "ios/CrossDelegate.h"
 #include "cross/WindowInfo.h"
-//#include "cross/Context.h"
 
 #include <boost/asio.hpp>
 
@@ -35,7 +35,7 @@ namespace chr
     BOOL initialized;
     BOOL setup;
 
-//    CrossDelegate *crossDelegate;
+    CrossDelegate *crossDelegate;
     
     map<UITouch*, uint32_t> touchIdMap;
 }
@@ -88,8 +88,8 @@ namespace chr
     {
         DLOG(@"CrossBridge.performInit");
 
-//        system::bridge = self;
-//        crossDelegate = new CrossDelegate();
+        system::bridge = self;
+        crossDelegate = new CrossDelegate();
         
         NSNotificationCenter* center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(applicationWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
@@ -98,7 +98,7 @@ namespace chr
         [center addObserver:self selector:@selector(applicationDidReceiveMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 
         [self dispatchEvent:SKETCH_WILL_INIT];
-//        crossDelegate->performInit();
+        crossDelegate->performInit();
         [self dispatchEvent:SKETCH_DID_INIT];
         
         // ---
@@ -118,7 +118,7 @@ namespace chr
         if (setup)
         {
             [self dispatchEvent:SKETCH_WILL_SHUTDOWN];
-//            crossDelegate->performShutdown();
+            crossDelegate->performShutdown();
             [self dispatchEvent:SKETCH_DID_SHUTDOWN];
             
             setup = NO;
@@ -135,11 +135,11 @@ namespace chr
         system::bridge = nil;
         
         [self dispatchEvent:SKETCH_WILL_UNINIT];
-//        crossDelegate->performUninit();
+        crossDelegate->performUninit();
         [self dispatchEvent:SKETCH_DID_UNINIT];
         
-//        delete crossDelegate;
-//        crossDelegate = nullptr;
+        delete crossDelegate;
+        crossDelegate = nullptr;
         
         [[NSNotificationCenter defaultCenter] removeObserver:self];
         
@@ -156,7 +156,7 @@ namespace chr
         DLOG(@"CrossBridge.performSetup");
 
         [self dispatchEvent:SKETCH_WILL_SETUP];
-//        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaLevel]));
+        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaLevel]));
         [self dispatchEvent:SKETCH_DID_SETUP];
         
         setup = YES;
@@ -168,17 +168,17 @@ namespace chr
     auto size = [self windowSize];
     DLOG(@"CrossBridge:performResize - %dx%d", size.x, size.y);
     
-//    crossDelegate->performResize(size);
+    crossDelegate->performResize(size);
 }
 
 - (void) performUpdate
 {
-//    crossDelegate->performUpdate();
+    crossDelegate->performUpdate();
 }
 
 - (void) performDraw
 {
-//    crossDelegate->performDraw();
+    crossDelegate->performDraw();
 }
 
 - (GLViewController*) viewController
@@ -200,7 +200,7 @@ namespace chr
             DLOG(@"CrossBridge:startWithReason - SHOWN");
             
             [self dispatchEvent:VIEW_WILL_APPEAR];
-//            crossDelegate->handleEvent(CrossSketch::EVENT_SHOWN);
+            crossDelegate->handleEvent(CrossSketch::EVENT_SHOWN);
             
             break;
         }
@@ -210,7 +210,7 @@ namespace chr
             DLOG(@"CrossBridge:startWithReason - RESUMED");
             
             [self dispatchEvent:APP_DID_RESUME];
-//            crossDelegate->handleEvent(CrossSketch::EVENT_RESUMED);
+            crossDelegate->handleEvent(CrossSketch::EVENT_RESUMED);
             break;
         }
     }
@@ -225,7 +225,7 @@ namespace chr
             DLOG(@"CrossBridge:stopWithReason - HIDDEN");
             
             [self dispatchEvent:VIEW_WILL_DISAPPEAR];
-//            crossDelegate->handleEvent(CrossSketch::EVENT_HIDDEN);
+            crossDelegate->handleEvent(CrossSketch::EVENT_HIDDEN);
             
             break;
         }
@@ -235,7 +235,7 @@ namespace chr
             DLOG(@"CrossBridge:stopWithReason - PAUSED");
             
             [self dispatchEvent:APP_WILL_PAUSE];
-//            crossDelegate->handleEvent(CrossSketch::EVENT_PAUSED);
+            crossDelegate->handleEvent(CrossSketch::EVENT_PAUSED);
             
             break;
         }
@@ -345,7 +345,7 @@ namespace chr
             break;
     }
     
-//    crossDelegate->handleAcceleration(Vec3f(ax, ay, acceleration.z));
+    crossDelegate->handleAcceleration(glm::vec3(ax, ay, acceleration.z));
 }
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
@@ -491,18 +491,18 @@ namespace chr
 
 - (void) sendMessageToSketch:(int)what
 {
-//    crossDelegate->messageFromBridge(what);
+    crossDelegate->messageFromBridge(what);
 }
 
 - (void) sendMessageToSketch:(int)what json:(id)json
 {
     NSString *body = [NSString stringWithJSONObject:json];
-//    crossDelegate->messageFromBridge(what, [body UTF8String]);
+    crossDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
 - (void) sendMessageToSketch:(int)what body:(NSString*)body
 {
-//    crossDelegate->messageFromBridge(what, [body UTF8String]);
+    crossDelegate->messageFromBridge(what, [body UTF8String]);
 }
 
 // ---
@@ -530,7 +530,7 @@ namespace chr
     if (initialized)
     {
         DLOG(@"CrossBridge:applicationDidReceiveMemoryWarning");
-//        crossDelegate->handleEvent(CrossSketch::EVENT_MEMORY_WARNING);
+        crossDelegate->handleEvent(CrossSketch::EVENT_MEMORY_WARNING);
     }
 }
 
@@ -539,7 +539,7 @@ namespace chr
     if (setup && !viewController.appeared)
     {
         DLOG(@"CrossBridge:applicationWillResignActive");
-//        crossDelegate->handleEvent(CrossSketch::EVENT_BACKGROUND); // TODO: TEST
+        crossDelegate->handleEvent(CrossSketch::EVENT_BACKGROUND); // TODO: TEST
     }
 }
 
@@ -548,7 +548,7 @@ namespace chr
     if (setup && !viewController.appeared)
     {
         DLOG(@"CrossBridge:applicationDidBecomeActive");
-//        crossDelegate->handleEvent(CrossSketch::EVENT_FOREGROUND); // TODO: TEST
+        crossDelegate->handleEvent(CrossSketch::EVENT_FOREGROUND); // TODO: TEST
     }
 }
 

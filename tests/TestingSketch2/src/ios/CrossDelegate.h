@@ -8,14 +8,6 @@
 
 #pragma once
 
-//#include "cinder/Cinder.h"
-
-#if !defined(CINDER_COCOA_TOUCH)
-#   error UNSUPPORTED PLATFORM
-#endif
-
-// ---
-
 #include "cross/CrossDelegateBase.h"
 
 //#include "cinder/app/TouchEvent.h"
@@ -24,7 +16,7 @@
 
 namespace chr
 {
-    class CinderDelegate : public CinderDelegateBase
+    class CrossDelegate : public CrossDelegateBase
     {
     public:
         bool performInit();
@@ -32,20 +24,20 @@ namespace chr
         void performSetup(const WindowInfo &windowInfo);
         void performShutdown();
         
-        void performResize(const ci::Vec2i &size);
+        void performResize(const glm::vec2 &size);
         void performUpdate();
         void performDraw();
 
-        void touchesBegan(ci::app::TouchEvent event);
-        void touchesMoved(ci::app::TouchEvent event);
-        void touchesEnded(ci::app::TouchEvent event);
+//        void touchesBegan(ci::app::TouchEvent event);
+//        void touchesMoved(ci::app::TouchEvent event);
+//        void touchesEnded(ci::app::TouchEvent event);
 
         void sendMessageToBridge(int what, const std::string &body = "") final;
         void handleEvent(int eventId) final;
 
         void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) final;
         void disableAccelerometer() final;
-        void handleAcceleration(const ci::Vec3f &acceleration);
+        void handleAcceleration(const glm::vec3 &acceleration);
         
 //      ci::JsonTree jsonQuery(const char *methodName) final;
         

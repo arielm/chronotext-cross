@@ -255,5 +255,10 @@ namespace chr
   {
     return emscripten_get_now() / 1000.0;
   }
+#elif defined(CHR_PLATFORM_IOS)
+  double CrossSketch::getTime()
+  {
+    return 0; // TODO
+  }
 #endif
 }

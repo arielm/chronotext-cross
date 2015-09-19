@@ -199,6 +199,14 @@ void Sketch::initShaders()
 
 // ---
 
+namespace chr
+{
+    CrossSketch* createSketch()
+    {
+        return new Sketch();
+    }
+}
+
 int main(int argc, char** argv)
 {
     #if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)

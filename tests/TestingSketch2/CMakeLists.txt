@@ -70,9 +70,11 @@ elseif (PLATFORM MATCHES ios)
   )
 
   list(APPEND SRC_FILES
+    "src/cross/CrossDelegateBase.cpp"
     "src/ios/Application.mm"
     "src/ios/GLViewController.mm"
     "src/ios/CrossBridge.mm"
+    "src/ios/CrossDelegate.mm"
     "src/cocoa/NSDictionary+DefautValues.m"
     "src/cocoa/NSMutableDictionary+Merge.m"
     "src/cocoa/NSString+JSON.m"
