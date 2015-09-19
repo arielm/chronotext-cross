@@ -75,9 +75,13 @@ elseif (PLATFORM MATCHES ios)
     "src/ios/GLViewController.mm"
     "src/ios/CrossBridge.mm"
     "src/ios/CrossDelegate.mm"
+    "src/ios/system/DisplayHelper.mm"
+    "src/ios/system/SystemManager.mm"
     "src/cocoa/NSDictionary+DefautValues.m"
     "src/cocoa/NSMutableDictionary+Merge.m"
     "src/cocoa/NSString+JSON.m"
+    "src/system/SystemManagerBase.cpp"
+    "src/system/DisplayHelperBase.cpp"
   )
 
   set_source_files_properties(

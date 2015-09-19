@@ -9,6 +9,7 @@
 #pragma once
 
 #include "cross/CrossSketch.h"
+#include "system/SystemManager.h"
 
 #include <boost/asio.hpp>
 
@@ -18,27 +19,6 @@
 
 namespace chr
 {
-    CrossSketch* createSketch();
-
-    namespace system
-    {
-      struct SetupInfo
-      {
-          boost::asio::io_service *io_service;
-          WindowInfo windowInfo;
-
-          SetupInfo() = default;
-
-          SetupInfo(boost::asio::io_service &io_service, const WindowInfo &windowInfo)
-          :
-          io_service(&io_service),
-          windowInfo(windowInfo)
-          {}
-      };
-    }
-
-    // ---
-
     class CrossDelegateBase
     {
     public:
@@ -75,7 +55,7 @@ namespace chr
         bool initialized_ = false;
         bool setup_ = false;
 
-//        system::InitInfo initInfo;
+        system::InitInfo initInfo;
         system::SetupInfo setupInfo;
         
 //        AccelEvent::Filter accelFilter;

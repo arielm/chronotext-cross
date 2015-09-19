@@ -6,7 +6,9 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
-#include "CrossDelegateBase.h"
+#include "cross/CrossDelegateBase.h"
+#include "cross/Context.h"
+#include "system/DisplayHelper.h"
 
 using namespace std;
 
@@ -24,7 +26,7 @@ namespace chr
     
     namespace intern
     {
-//        shared_ptr<SystemManager> systemManager;
+        shared_ptr<SystemManager> systemManager;
 //        shared_ptr<MemoryManager> memoryManager;
 //        shared_ptr<TaskManager> taskManager;
         
@@ -40,14 +42,14 @@ namespace chr
     {
         assert(!initialized_);
                
-//        intern::systemManager = make_shared<SystemManager>();
-//        intern::systemManager->setup(initInfo);
+        intern::systemManager = make_shared<SystemManager>();
+        intern::systemManager->setup(initInfo);
         
 //        intern::memoryManager = make_shared<MemoryManager>();
 //        intern::memoryManager->setup();
         
 //        FileHelper::setup(initInfo);
-//        DisplayHelper::setup(initInfo);
+        DisplayHelper::setup(initInfo);
         
         // ---
         
@@ -67,14 +69,14 @@ namespace chr
         
         // ---
         
-//        DisplayHelper::shutdown();
+        DisplayHelper::shutdown();
 //        FileHelper::shutdown();
         
 //        intern::memoryManager->shutdown();
 //        intern::memoryManager.reset();
         
-//        intern::systemManager->shutdown();
-//        intern::systemManager.reset();
+        intern::systemManager->shutdown();
+        intern::systemManager.reset();
     }
     
     void CrossDelegateBase::_setup()
@@ -116,11 +118,11 @@ namespace chr
     
     // ---
     
-//    SystemManager& systemManager()
-//    {
-//        return checkedReference(intern::systemManager.get());
-//    }
-//
+    SystemManager& systemManager()
+    {
+        return checkedReference(intern::systemManager.get());
+    }
+
 //    MemoryManager& memoryManager()
 //    {
 //        return checkedReference(intern::memoryManager.get());
