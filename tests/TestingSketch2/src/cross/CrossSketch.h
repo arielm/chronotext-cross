@@ -107,9 +107,9 @@ namespace chr
 
     void performSetup(const WindowInfo &windowInfo);
     void performResize(const glm::vec2 &size);
-//    void performStart(StartReason reason);
-//    void performStop(StopReason reason);
-//    void performUpdate();
+    void performStart(StartReason reason);
+    void performStop(StopReason reason);
+    void performUpdate();
 
   protected:
     bool initialized = false;

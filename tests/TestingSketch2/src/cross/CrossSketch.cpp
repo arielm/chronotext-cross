@@ -262,6 +262,8 @@ namespace chr
   }
 #endif
 
+  // ---
+
   void CrossSketch::performSetup(const WindowInfo &windowInfo) // TODO
   {
     LOGI << "SETUP - " << windowInfo << endl;
@@ -271,4 +273,13 @@ namespace chr
   {
     LOGI << "RESIZE - [" << size.x << ", " << size.y << "]" << endl;
   }
+
+  void CrossSketch::performStart(StartReason reason) // TODO
+  {}
+
+  void CrossSketch::performStop(StopReason reason) // TODO
+  {}
+
+  void CrossSketch::performUpdate() // TODO
+  {}
 }

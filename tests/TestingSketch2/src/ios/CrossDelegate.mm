@@ -93,26 +93,26 @@ namespace chr
     
     void CrossDelegate::performUpdate()
     {
-//        /*
-//         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
-//         *
-//         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
-//         */
+        /*
+         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
+         *
+         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
+         */
 //        sketch->clock()->update(true);
-//
-//        io->poll();
-//
-//        sketch->performUpdate();
-//        updateCount++;
+
+        io->poll();
+
+        sketch->performUpdate();
+        updateCount++;
     }
     
     void CrossDelegate::performDraw()
     {
-//        if (updateCount == 0)
-//        {
-//            performUpdate(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
-//        }
-//
+        if (updateCount == 0)
+        {
+            performUpdate(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
+        }
+
 //        sketch->draw();
     }
     
@@ -125,26 +125,26 @@ namespace chr
     
     void CrossDelegate::handleEvent(int eventId)
     {
-//        switch (eventId)
-//        {
-//            case CinderSketch::EVENT_RESUMED:
-//                sketch->performStart(CinderSketch::START_REASON_APP_RESUMED);
-//                return;
-//
-//            case CinderSketch::EVENT_SHOWN:
-//                sketch->performStart(CinderSketch::START_REASON_VIEW_SHOWN);
-//                return;
-//
-//            case CinderSketch::EVENT_PAUSED:
-//                sketch->performStop(CinderSketch::STOP_REASON_APP_PAUSED);
-//                return;
-//
-//            case CinderSketch::EVENT_HIDDEN:
-//                sketch->performStop(CinderSketch::STOP_REASON_VIEW_HIDDEN);
-//                return;
-//        }
-//
-//        sketch->event(eventId);
+        switch (eventId)
+        {
+            case CrossSketch::EVENT_RESUMED:
+                sketch->performStart(CrossSketch::START_REASON_APP_RESUMED);
+                return;
+
+            case CrossSketch::EVENT_SHOWN:
+                sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
+                return;
+
+            case CrossSketch::EVENT_PAUSED:
+                sketch->performStop(CrossSketch::STOP_REASON_APP_PAUSED);
+                return;
+
+            case CrossSketch::EVENT_HIDDEN:
+                sketch->performStop(CrossSketch::STOP_REASON_VIEW_HIDDEN);
+                return;
+        }
+
+        sketch->event(eventId);
     }
     
     // ---
@@ -184,22 +184,22 @@ namespace chr
     
     void CrossDelegate::startIOService()
     {
-//        if (!io)
-//        {
-//            io = make_shared<boost::asio::io_service>();
-//            ioWork = make_shared<boost::asio::io_service::work>(*io);
-//        }
+        if (!io)
+        {
+            io = make_shared<boost::asio::io_service>();
+            ioWork = make_shared<boost::asio::io_service::work>(*io);
+        }
     }
     
     void CrossDelegate::stopIOService()
     {
-//        if (io)
-//        {
-//            io->stop();
-//
-//            ioWork.reset();
-//            io.reset();
-//        }
+        if (io)
+        {
+            io->stop();
+
+            ioWork.reset();
+            io.reset();
+        }
     }
     
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
