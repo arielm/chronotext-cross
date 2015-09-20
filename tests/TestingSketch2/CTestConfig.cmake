@@ -15,6 +15,11 @@ elseif (PLATFORM MATCHES ios)
 #   -DIOS_ARCHS=armv7
   )
 
+elseif (PLATFORM MATCHES android)
+  set(ARGS
+    -DRUN=APK
+  )
+
 elseif (PLATFORM MATCHES mxe)
   set(ARGS
     -DRUN=EXE

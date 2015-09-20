@@ -15,6 +15,9 @@
 #elif defined(CHR_PLATFORM_IOS)
   #include <OpenGLES/ES2/gl.h>
   #include <OpenGLES/ES2/glext.h>
+#elif defined(CHR_PLATFORM_ANDROID)
+  #include <GLES2/gl2.h>
+	#include <GLES2/gl2ext.h>
 #endif
 
 #define GLM_SWIZZLE

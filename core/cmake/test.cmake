@@ -78,7 +78,6 @@ elseif (PLATFORM MATCHES android)
 
     add_library(${PROJECT_NAME} SHARED
       ${SRC_FILES}
-      "${CROSS_ROOT}/src/Bridge.cpp"
     )
 
   elseif (RUN MATCHES EXE)
@@ -241,6 +240,8 @@ elseif (PLATFORM MATCHES android AND RUN MATCHES APK)
   list(APPEND LIBRARIES
     log
     android
+    EGL
+    GLESv2
   )
 endif()
 

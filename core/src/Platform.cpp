@@ -1,49 +1,10 @@
 #include "Platform.h"
 #include "MemoryBuffer.h"
 
-#if defined(CHR_FS_APK)
-  #include "Bridge.h"
-#endif
-
 using namespace std;
 
 namespace chr
 {
-  #if defined(CHR_RUN_APK)
-    string toString(JNIEnv *env, jstring s)
-    {
-      string result;
-
-      if (s)
-      {
-        const char *chars = env->GetStringUTFChars(s, nullptr);
-                  
-        if (chars)
-        {
-          result.assign(chars);
-          env->ReleaseStringUTFChars(s, chars);
-        }
-      }
-
-      return result;
-    }
-
-    vector<string> toStrings(JNIEnv *env, jobjectArray a)
-    {
-      vector<string> result;
-
-      auto size = env->GetArrayLength(a);
-      result.reserve(size);
-
-      for (auto i = 0; i < size; i++)
-      {
-        result.emplace_back(chr::toString(env, (jstring)env->GetObjectArrayElement(a, i)));
-      }
-
-      return result;
-    }
-  #endif
-
   bool hasFileResources()
   {
     #if defined(CHR_FS_APK) || defined(CHR_FS_RC)

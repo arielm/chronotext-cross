@@ -98,6 +98,14 @@ elseif (PLATFORM MATCHES ios)
     "src/main.cpp"
     PROPERTIES COMPILE_FLAGS "-x objective-c++"
   )
+
+elseif (PLATFORM MATCHES android)
+  list(APPEND SRC_FILES
+    "${CROSS_ROOT}/src/android/JNI.cpp"
+    "${CROSS_ROOT}/src/android/CrossDelegate.cpp"
+    "${CROSS_ROOT}/src/android/system/DisplayHelper.cpp"
+    "${CROSS_ROOT}/src/android/system/SystemManager.cpp"
+  )
 endif()
 
 # ---

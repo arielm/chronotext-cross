@@ -1,4 +1,4 @@
-package org.chronotext.TestingFileSystem2;
+package org.chronotext.TestingSketch2;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -10,7 +10,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingFileSystem2");
+    System.loadLibrary("TestingSketch2");
   }
 
   @Override
@@ -20,7 +20,7 @@ public class MainActivity extends Activity
     Log.d("MainActivity", "onCreate");
 
     View view = new View(this);
-    view.setBackgroundColor(Color.RED);
+    view.setBackgroundColor(Color.YELLOW);
     setContentView(view);
   }
 

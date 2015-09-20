@@ -1,7 +1,7 @@
 #include "MemoryBuffer.h"
 
 #if defined(CHR_FS_APK)
-  #include "Bridge.h"
+  #include "android/JNI.h"
 #elif defined(FS_JS_EMBED) || defined(FS_JS_PRELOAD)
   #include <sys/mman.h>
   #include <sys/stat.h>

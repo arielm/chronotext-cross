@@ -71,11 +71,6 @@ namespace chr
 
 namespace chr
 {
-  #if defined(CHR_RUN_APK)
-    std::string toString(JNIEnv *env, jstring s);
-    std::vector<std::string> toStrings(JNIEnv *env, jobjectArray a);
-  #endif
-
   bool hasFileResources();
   bool hasMemoryResources();
 

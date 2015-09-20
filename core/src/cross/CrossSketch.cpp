@@ -1,7 +1,7 @@
 
 #include "CrossSketch.h"
 
-#if defined(CHR_PLATFORM_IOS)
+#if defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
   #include <chrono>
 #endif
 
@@ -265,7 +265,7 @@ namespace chr
   {
     return emscripten_get_now() / 1000.0;
   }
-#elif defined(CHR_PLATFORM_IOS)
+#elif defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
   double CrossSketch::getTime()
   {
     auto now = chrono::steady_clock::now().time_since_epoch();
