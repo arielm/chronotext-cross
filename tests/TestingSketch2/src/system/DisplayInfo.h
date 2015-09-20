@@ -129,11 +129,11 @@ namespace chr
                 
                 if (diagonal == 0)
                 {
-                    diagonal = size.length() / density;
+                    diagonal = glm::length(size) / density;
                 }
                 else if (density == 0)
                 {
-                    density = size.length() / diagonal;
+                    density = glm::length(size) / diagonal;
                 }
                 
                 return true;
