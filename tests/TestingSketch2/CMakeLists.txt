@@ -19,8 +19,11 @@ set(LIBRARIES
 )
 
 set(SRC_FILES
+  "${CROSS_ROOT}/src/cross/CrossSketch.cpp"
+  "${CROSS_ROOT}/src/cross/CrossDelegateBase.cpp"
+  "${CROSS_ROOT}/src/system/SystemManagerBase.cpp"
+  "${CROSS_ROOT}/src/system/DisplayHelperBase.cpp"
   "src/main.cpp"
-  "src/cross/CrossSketch.cpp"
 )
 
 # ---
@@ -41,6 +44,9 @@ if (PLATFORM MATCHES osx|mxe)
 
   list(APPEND SRC_FILES
     "${GLFW_SRC}/deps/glad.c"
+    "${CROSS_ROOT}/src/desktop/CrossDelegate.cpp"
+    "${CROSS_ROOT}/src/desktop/system/DisplayHelper.cpp"
+    "${CROSS_ROOT}/src/desktop/system/SystemManager.cpp"
   )
 endif()
 
@@ -60,6 +66,13 @@ elseif (PLATFORM MATCHES mxe)
     opengl32
   )
 
+elseif (PLATFORM MATCHES emscripten)
+  list(APPEND SRC_FILES
+    "${CROSS_ROOT}/src/emscripten/CrossDelegate.cpp"
+    "${CROSS_ROOT}/src/emscripten/system/DisplayHelper.cpp"
+    "${CROSS_ROOT}/src/emscripten/system/SystemManager.cpp"
+  )
+
 elseif (PLATFORM MATCHES ios)
   list(APPEND LIBRARIES
     "-framework GLKit"
@@ -70,18 +83,15 @@ elseif (PLATFORM MATCHES ios)
   )
 
   list(APPEND SRC_FILES
-    "src/cross/CrossDelegateBase.cpp"
     "src/ios/Application.mm"
-    "src/ios/GLViewController.mm"
-    "src/ios/CrossBridge.mm"
-    "src/ios/CrossDelegate.mm"
-    "src/ios/system/DisplayHelper.mm"
-    "src/ios/system/SystemManager.mm"
-    "src/cocoa/NSDictionary+DefautValues.m"
-    "src/cocoa/NSMutableDictionary+Merge.m"
-    "src/cocoa/NSString+JSON.m"
-    "src/system/SystemManagerBase.cpp"
-    "src/system/DisplayHelperBase.cpp"
+    "${CROSS_ROOT}/src/ios/CrossDelegate.mm"
+    "${CROSS_ROOT}/src/ios/system/DisplayHelper.mm"
+    "${CROSS_ROOT}/src/ios/system/SystemManager.mm"
+    "${CROSS_ROOT}/src/ios/GLViewController.mm"
+    "${CROSS_ROOT}/src/ios/CrossBridge.mm"
+    "${CROSS_ROOT}/src/cocoa/NSDictionary+DefautValues.m"
+    "${CROSS_ROOT}/src/cocoa/NSMutableDictionary+Merge.m"
+    "${CROSS_ROOT}/src/cocoa/NSString+JSON.m"
   )
 
   set_source_files_properties(

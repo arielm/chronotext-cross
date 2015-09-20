@@ -11,8 +11,6 @@
 #include "cross/CrossSketch.h"
 #include "system/SystemManager.h"
 
-#include <boost/asio.hpp>
-
 //#include "cinder/Json.h"
 
 #include <atomic>
@@ -37,17 +35,6 @@ namespace chr
         virtual void disableAccelerometer() {}
         
 //        virtual ci::JsonTree jsonQuery(const char *methodName) { return ci::JsonTree(); }
-        
-        /*
-         * ci::app::KeyEvent IS NOT FULLY FUNCTIONAL ON MOBILE PLATFORMS
-         *
-         * HENCE THE FOLLOWING METHODS ALLOWING "FULL KEYBOARD
-         * INTERACTION" ON THE DESKTOP WITHOUT USING MACROS
-         */
-//        static int getCode(const ci::app::KeyEvent &keyEvent);
-//        static bool isShiftDown(const ci::app::KeyEvent &keyEvent);
-//        static bool isAltDown(const ci::app::KeyEvent &keyEvent);
-//        static bool isAccelDown(const ci::app::KeyEvent &keyEvent);
         
     protected:
         CrossSketch *sketch = nullptr;

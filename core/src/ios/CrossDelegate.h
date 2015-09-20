@@ -12,8 +12,6 @@
 
 //#include "cinder/app/TouchEvent.h"
 
-#include <boost/asio.hpp>
-
 namespace chr
 {
     class CrossDelegate : public CrossDelegateBase
@@ -43,11 +41,5 @@ namespace chr
         
     protected:
         int updateCount = 0;
-
-        std::shared_ptr<boost::asio::io_service> io;
-        std::shared_ptr<boost::asio::io_service::work> ioWork;
-        
-        void startIOService();
-        void stopIOService();
     };
 }

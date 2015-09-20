@@ -17,8 +17,6 @@
 #include "ios/CrossDelegate.h"
 #include "cross/WindowInfo.h"
 
-#include <boost/asio.hpp>
-
 using namespace std;
 using namespace chr;
 

@@ -10,8 +10,6 @@
 
 #include "cross/WindowInfo.h"
 
-#include <boost/asio.hpp>
-
 #include <array>
 
 namespace chr
@@ -20,14 +18,12 @@ namespace chr
     {
         struct SetupInfo
         {
-            boost::asio::io_service *io_service;
             WindowInfo windowInfo;
             
             SetupInfo() = default;
             
-            SetupInfo(boost::asio::io_service &io_service, const WindowInfo &windowInfo)
+            SetupInfo(const WindowInfo &windowInfo)
             :
-            io_service(&io_service),
             windowInfo(windowInfo)
             {}
         };

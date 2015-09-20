@@ -55,7 +55,6 @@ namespace chr
         {
             startIOService();
 
-//            setupInfo.io_service = io.get();
             setupInfo.windowInfo = windowInfo;
 
             _setup();
@@ -100,8 +99,6 @@ namespace chr
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
 //        sketch->clock()->update(true);
-
-//        io->poll();
 
         sketch->performUpdate();
         updateCount++;
@@ -181,28 +178,7 @@ namespace chr
 //        return JsonTree();
 //    }
     
-#pragma mark ---------------------------------------- IO-SERVICE ----------------------------------------
-    
-    void CrossDelegate::startIOService()
-    {
-//        if (!io)
-//        {
-//            io = make_shared<boost::asio::io_service>();
-//            ioWork = make_shared<boost::asio::io_service::work>(*io);
-//        }
-    }
-    
-    void CrossDelegate::stopIOService()
-    {
-//        if (io)
-//        {
-//            io->stop();
-//
-//            ioWork.reset();
-//            io.reset();
-//        }
-    }
-    
+   
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
     
 //    void CrossDelegate::touchesBegan(TouchEvent event)
@@ -227,28 +203,6 @@ namespace chr
 //        {
 //            sketch->removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
 //        }
-//    }
-    
-#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
-    
-//    int CrossDelegateBase::getCode(const KeyEvent &keyEvent)
-//    {
-//        return 0;
-//    }
-//
-//    bool CrossDelegateBase::isShiftDown(const KeyEvent &keyEvent)
-//    {
-//        return false;
-//    }
-//
-//    bool CrossDelegateBase::isAltDown(const KeyEvent &keyEvent)
-//    {
-//        return false;
-//    }
-//
-//    bool CrossDelegateBase::isAccelDown(const KeyEvent &keyEvent)
-//    {
-//        return false;
 //    }
     
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
