@@ -68,16 +68,12 @@ elseif (PLATFORM MATCHES android)
     add_definitions(-DCHR_RUN_APK)
     add_definitions(-DCHR_FS_APK)
 
-    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.instrument.sh.in")
-    set(CONFIG_RUN "${CROSS_ROOT}/cmake/android/run.instrument.sh.in")
+    set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/android/install.apk.sh.in")
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/android/run.apk.sh.in")
 
     configure_file("${CROSS_ROOT}/cmake/android/AndroidManifest.xml.in" AndroidManifest.xml)
     configure_file("${CROSS_ROOT}/cmake/android/ant.properties.in" ant.properties)
     configure_file("${CROSS_ROOT}/cmake/android/MainActivity.java.in" "src/org/chronotext/${PROJECT_NAME}/MainActivity.java")
-
-    configure_file("${CROSS_ROOT}/cmake/android/tests/AndroidManifest.xml.in" tests/AndroidManifest.xml)
-    configure_file("${CROSS_ROOT}/cmake/android/tests/ant.properties.in" tests/ant.properties)
-    configure_file("${CROSS_ROOT}/cmake/android/tests/MainActivityTests.java.in" "tests/src/org/chronotext/${PROJECT_NAME}/MainActivityTests.java")
 
     set(LIBRARY_OUTPUT_PATH "libs/${ANDROID_ABI}")
 

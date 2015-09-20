@@ -2,10 +2,7 @@
 
 android update project --path . --name ${PROJECT_NAME} --target ${ANDROID_API}
 
-cd tests
-android update project --path . --name ${PROJECT_NAME}TestRunner --target ${ANDROID_API}
-
-ant instrument install
+ant debug install
 
 if [ $? != 0 ]; then
   exit 1

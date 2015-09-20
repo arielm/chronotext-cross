@@ -1,11 +1,10 @@
 package org.chronotext.${PROJECT_NAME};
 
 import android.app.Activity;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-
-import org.chronotext.Bridge;
+import android.view.View;
 
 public class MainActivity extends Activity
 {
@@ -14,15 +13,15 @@ public class MainActivity extends Activity
     System.loadLibrary("${PROJECT_NAME}");
   }
 
-  public Bridge bridge;
-
   @Override
   public void onCreate(Bundle savedInstanceState)
   {
     super.onCreate(savedInstanceState);
     Log.d("MainActivity", "onCreate");
 
-    bridge = new Bridge(this);
+    View view = new View(this);
+    view.setBackgroundColor(Color.YELLOW);
+    setContentView(view);
   }
 
   @Override
@@ -30,10 +29,5 @@ public class MainActivity extends Activity
   {
     super.onDestroy();
     Log.d("MainActivity", "onDestroy");
-  }
-
-  public int testCPP(String[] args)
-  {
-    return bridge.invokeMain(args);
   }
 }
