@@ -1,4 +1,4 @@
-package org.chronotext.${PROJECT_NAME};
+package org.chronotext.TestingFileSystem2;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -10,7 +10,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("${PROJECT_NAME}");
+    System.loadLibrary("TestingFileSystem2");
   }
 
   @Override

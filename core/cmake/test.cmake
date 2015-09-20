@@ -73,7 +73,6 @@ elseif (PLATFORM MATCHES android)
 
     configure_file("${CROSS_ROOT}/cmake/android/AndroidManifest.xml.in" AndroidManifest.xml)
     configure_file("${CROSS_ROOT}/cmake/android/ant.properties.in" ant.properties)
-    configure_file("${CROSS_ROOT}/cmake/android/MainActivity.java.in" "src/org/chronotext/${PROJECT_NAME}/MainActivity.java")
 
     set(LIBRARY_OUTPUT_PATH "libs/${ANDROID_ABI}")
 
