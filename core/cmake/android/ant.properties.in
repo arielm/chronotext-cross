@@ -1,2 +1,2 @@
-source.dir = ${CROSS_ROOT}/android/src;${CMAKE_CURRENT_SOURCE_DIR}/src
+source.dir = ${CROSS_ROOT}/android/src;${CMAKE_CURRENT_SOURCE_DIR}/android/src
 asset.dir = ../../res

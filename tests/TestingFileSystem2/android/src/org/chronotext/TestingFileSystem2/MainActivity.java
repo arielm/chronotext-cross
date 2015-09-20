@@ -20,7 +20,7 @@ public class MainActivity extends Activity
     Log.d("MainActivity", "onCreate");
 
     View view = new View(this);
-    view.setBackgroundColor(Color.YELLOW);
+    view.setBackgroundColor(Color.RED);
     setContentView(view);
   }
 
