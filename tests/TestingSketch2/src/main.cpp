@@ -211,7 +211,7 @@ int main(int argc, char** argv)
 {
     #if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
         Sketch sketch;
-        sketch.init(800, 600);
+        sketch.init(800, 600, true);
     #elif defined(CHR_PLATFORM_IOS)
         @autoreleasepool
         {

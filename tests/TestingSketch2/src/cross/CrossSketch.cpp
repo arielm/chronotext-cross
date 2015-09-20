@@ -166,7 +166,7 @@ namespace chr
     }
   }
 
-  void CrossSketch::init(int width, int height)
+  void CrossSketch::init(int width, int height, bool antialias)
   {
     if (!initialized)
     {
@@ -174,6 +174,11 @@ namespace chr
       {
         exit(EXIT_FAILURE);
         return;
+      }
+
+      if (antialias)
+      {
+        glfwWindowHint(GLFW_SAMPLES, 4);
       }
 
       glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
@@ -227,7 +232,7 @@ namespace chr
     reinterpret_cast<CrossSketch*>(data)->draw();
   }
 
-  void CrossSketch::init(int width, int height)
+  void CrossSketch::init(int width, int height, bool antialias)
   {
     if (!initialized)
     {
@@ -237,7 +242,7 @@ namespace chr
       emscripten_webgl_init_context_attributes(&attr);
       attr.alpha = attr.depth = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
       attr.enableExtensionsByDefault = 1;
-      attr.antialias = 1;
+      attr.antialias = antialias ? 1 : 0;
       attr.premultipliedAlpha = 0;
       attr.majorVersion = 1;
       attr.minorVersion = 0;

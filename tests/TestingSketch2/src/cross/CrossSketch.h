@@ -84,7 +84,7 @@ namespace chr
     static void performDraw(void *data);
   #endif
 
-    void init(int width, int height);
+    void init(int width, int height, bool antialias);
     double getTime();
 
     virtual bool init() { return true; }
