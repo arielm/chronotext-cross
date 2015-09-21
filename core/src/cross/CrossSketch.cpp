@@ -3,7 +3,7 @@
 
 #if defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
   #include <chrono>
-#elif defined(CHR_PLATFORM_DESKTOP)
+#elif defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
   #include "cross/CrossDelegate.h"
 #endif
 
@@ -157,47 +157,20 @@ namespace chr
     return texture;
   }
 
-#if defined(CHR_PLATFORM_DESKTOP)
+#if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
   void CrossSketch::run(int width, int height, int aaSamples)
   {
       CrossDelegate delegate;
       delegate.run(width, height, aaSamples);
   }
+#endif
 
+#if defined(CHR_PLATFORM_DESKTOP)
   double CrossSketch::getTime()
   {
     return glfwGetTime();
   }
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
-  void CrossSketch::performDraw(void *data)
-  {
-    reinterpret_cast<CrossSketch*>(data)->draw();
-  }
-
-  void CrossSketch::run(int width, int height, int aaSamples)
-  {
-    emscripten_set_canvas_size(width, height);
-
-    EmscriptenWebGLContextAttributes attr;
-    emscripten_webgl_init_context_attributes(&attr);
-    attr.alpha = attr.depth = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
-    attr.enableExtensionsByDefault = 1;
-    attr.antialias = (aaSamples > 0) ? 1 : 0;
-    attr.premultipliedAlpha = 0;
-    attr.majorVersion = 1;
-    attr.minorVersion = 0;
-    EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
-    emscripten_webgl_make_context_current(ctx);
-
-    // ---
-
-    /*
-     * FIXME: BROKEN UNTIL NEXT COMMIT
-     */
-    performSetup(WindowInfo::create(width, height));
-    emscripten_set_main_loop_arg(this, sketch, 0, 1);
-  }
-
   double CrossSketch::getTime()
   {
     return emscripten_get_now() / 1000.0;

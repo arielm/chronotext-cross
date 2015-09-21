@@ -81,10 +81,6 @@ namespace chr
     static GLuint makeShaderProgram(const char *vs_text, const char *fs_text);
     static GLuint loadTexture(const fs::path &relativePath);
 
-  #if defined(CHR_PLATFORM_EMSCRIPTEN)
-    static void performDraw(void *data);
-  #endif
-
     static void run(int width, int height, int aaSamples = 0);
     static double getTime();
 

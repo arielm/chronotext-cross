@@ -12,12 +12,21 @@
 
 namespace chr
 {
-    namespace system
+  namespace system
+  {
+    struct InitInfo
     {
-        struct InitInfo
-        {};
-        
-        class Info : public InfoBase
-        {};
-    }
+      WindowInfo windowInfo;
+
+      InitInfo() = default;
+
+      InitInfo(const WindowInfo &windowInfo)
+      :
+      windowInfo(windowInfo)
+      {}
+    };
+
+    class Info : public InfoBase
+    {};
+  }
 }

@@ -29,6 +29,23 @@ namespace chr
     {
         if (!initialized_)
         {
+            emscripten_set_canvas_size(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y);
+
+            EmscriptenWebGLContextAttributes attr;
+            emscripten_webgl_init_context_attributes(&attr);
+
+            attr.alpha = attr.depth = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
+            attr.enableExtensionsByDefault = 1;
+            attr.antialias = (initInfo.windowInfo.aaSamples > 0) ? 1 : 0;
+            attr.premultipliedAlpha = 0;
+            attr.majorVersion = 1;
+            attr.minorVersion = 0;
+
+            EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
+            emscripten_webgl_make_context_current(ctx);
+
+            // ---
+
             intern::instance = this;
             initialized_ = _init();
         }
@@ -47,12 +64,10 @@ namespace chr
         }
     }
     
-    void CrossDelegate::performSetup(const WindowInfo &windowInfo)
+    void CrossDelegate::performSetup()
     {
         if (!setup_ && initialized_)
         {
-            setupInfo.windowInfo = windowInfo;
-
             _setup();
 
             // ---
@@ -106,5 +121,28 @@ namespace chr
         }
 
         sketch->draw();
+    }
+
+    void CrossDelegate::run(int width, int height, int aaSamples)
+    {
+        initInfo.windowInfo = setupInfo.windowInfo = WindowInfo(width, height, aaSamples);
+
+        performInit();
+        performSetup();
+        performResize(setupInfo.windowInfo.size);
+
+        sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
+
+        emscripten_set_main_loop_arg(drawCallback, sketch, 0, 1);
+
+        sketch->performStop(CrossSketch::STOP_REASON_VIEW_HIDDEN);
+
+        performShutdown();
+        performUninit();
+    }
+
+    void CrossDelegate::drawCallback(void *data)
+    {
+      reinterpret_cast<CrossSketch*>(data)->draw();
     }
 }
