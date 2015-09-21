@@ -33,16 +33,15 @@ namespace chr
         JNIEnv* getEnv()
         {
             JNIEnv *env = nullptr;
-            
             auto err = vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6);
             
             if (err == JNI_EDETACHED)
             {
-                // CI_LOGE("CURRENT THREAD NOT ATTACHED TO JAVA VM");
+                LOGF << "CURRENT THREAD NOT ATTACHED TO JAVA VM" << endl;
             }
             else if (err == JNI_EVERSION)
             {
-                // CI_LOGE("VM DOESN'T SUPPORT REQUESTED JNI VERSION");
+                LOGF << "VM DOESN'T SUPPORT REQUESTED JNI VERSION" << endl;
             }
             
             if (env)
@@ -50,7 +49,7 @@ namespace chr
                 return env;
             }
             
-            throw runtime_error("INVALID JNI ENV"); // XXX
+            LOGF << "INVALID JNI ENV" << endl;
         }
         
         // ---
@@ -219,8 +218,6 @@ using namespace chr;
  */
 jint JNI_OnLoad(JavaVM *vm, void *reserved)
 {
-    // CI_LOGV("ONLOAD");
-    
     jni::vm = vm; // ...THEREFORE: THIS SHOULD *NOT* BE CLEARED
     
     return JNI_VERSION_1_6;
