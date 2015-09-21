@@ -53,8 +53,6 @@ namespace chr
     {
         if (!setup_ && initialized_)
         {
-            startIOService();
-
             setupInfo.windowInfo = windowInfo;
 
             _setup();
@@ -76,8 +74,6 @@ namespace chr
              * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
              */
             _shutdown();
-
-            stopIOService();
 
             // ---
 
@@ -214,14 +210,14 @@ namespace chr
     void CrossDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
     {
 //        accelFilter = AccelEvent::Filter(filterFactor);
-//
-//        if (updateFrequency <= 0)
-//        {
-//            updateFrequency = 30;
-//        }
-//
-//        UIAccelerometer.sharedAccelerometer.updateInterval = 1 / updateFrequency;
-//        UIAccelerometer.sharedAccelerometer.delegate = system::bridge;
+
+        if (updateFrequency <= 0)
+        {
+            updateFrequency = 30;
+        }
+
+        UIAccelerometer.sharedAccelerometer.updateInterval = 1 / updateFrequency;
+        UIAccelerometer.sharedAccelerometer.delegate = system::bridge;
     }
     
     void CrossDelegate::disableAccelerometer()

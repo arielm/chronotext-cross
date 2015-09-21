@@ -1,7 +1,7 @@
 
 #pragma once
 
-#import "CrossBridge.h"
+#import "ios/CrossBridge.h"
 
 @interface Application : NSObject <UIApplicationDelegate>
 {

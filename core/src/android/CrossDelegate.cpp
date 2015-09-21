@@ -64,7 +64,6 @@ namespace chr
             startIOService();
             createSensorEventQueue();
             
-            // setupInfo.io_service = io.get();
             setupInfo.windowInfo.size = size;
             
             _setup();
@@ -114,11 +113,6 @@ namespace chr
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
         // sketch->clock()->update(true);
-        
-        /*
-         * CAN TRIGGER CrossSketch::EVENT_MEMORY_WARNING
-         */
-        // memoryManager().update();
         
         pollSensorEvents(); // WHERE handleAcceleration IS INVOKED
         io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED
@@ -264,28 +258,6 @@ namespace chr
     {
         sketch->removeTouch(index, x, y);
     }
-    
-#pragma mark ---------------------------------------- KEYBOARD ----------------------------------------
-    
-    // int CrossDelegateBase::getCode(const KeyEvent &keyEvent)
-    // {
-    //     return 0;
-    // }
-    
-    // bool CrossDelegateBase::isShiftDown(const KeyEvent &keyEvent)
-    // {
-    //     return false;
-    // }
-    
-    // bool CrossDelegateBase::isAltDown(const KeyEvent &keyEvent)
-    // {
-    //     return false;
-    // }
-    
-    // bool CrossDelegateBase::isAccelDown(const KeyEvent &keyEvent)
-    // {
-    //     return false;
-    // }
     
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
     

@@ -60,7 +60,7 @@ NSString* GLViewControllerMultisampleKey = @"GLViewControllerMultisampleKey";
         
         NSDictionary *defaults =
         @{
-          GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES1),
+          GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES2),
           GLViewControllerPreferredFramesPerSecondKey: @60,
           GLViewControllerMultipleTouchEnabledKey: @YES,
           GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskPortrait),
