@@ -22,13 +22,12 @@ namespace chr
         
         void performResize(const glm::vec2 &size);
         void performUpdate();
-        void performDraw();
 
         void run(int width, int height, int aaSamples = 0);
 
     protected:
         int updateCount = 0;
         
-        static void drawCallback(void *data);
+        static void performDraw(void *data);
     };
 }

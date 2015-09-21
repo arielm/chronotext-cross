@@ -80,12 +80,6 @@ namespace chr
     {
         if (setup_)
         {
-            /*
-             * TODO:
-             *
-             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
-             */
             _shutdown();
 
             // ---
@@ -103,24 +97,12 @@ namespace chr
     void CrossDelegate::performUpdate()
     {
         /*
-         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
-         *
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
 //        sketch->clock()->update(true);
 
         sketch->performUpdate();
         updateCount++;
-    }
-    
-    void CrossDelegate::performDraw()
-    {
-        if (updateCount == 0)
-        {
-            performUpdate(); // HANDLING CASES WHERE draw() IS INVOKED BEFORE update()
-        }
-
-        sketch->draw();
     }
 
     void CrossDelegate::run(int width, int height, int aaSamples)
@@ -133,7 +115,7 @@ namespace chr
 
         sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
 
-        emscripten_set_main_loop_arg(drawCallback, sketch, 0, 1);
+        emscripten_set_main_loop_arg(performDraw, sketch, 0, 1);
 
         sketch->performStop(CrossSketch::STOP_REASON_VIEW_HIDDEN);
 
@@ -141,7 +123,7 @@ namespace chr
         performUninit();
     }
 
-    void CrossDelegate::drawCallback(void *data)
+    void CrossDelegate::performDraw(void *data)
     {
       reinterpret_cast<CrossSketch*>(data)->draw();
     }
