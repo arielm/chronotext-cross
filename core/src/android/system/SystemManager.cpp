@@ -59,31 +59,29 @@ namespace chr
         
         array<int, 3> Manager::getOsVersion()
         {
-            // auto releaseString = android::getProperty("ro.build.version.release");
-            // auto components = ci::split(releaseString, '.');
+            auto releaseString = android::getProperty("ro.build.version.release");
+            auto components = utils::split(releaseString, '.');
             
-            // int major = (components.size() > 0) ? atoi(components[0].data()) : 0;
-            // int minor = (components.size() > 1) ? atoi(components[1].data()) : 0;
-            // int patch = (components.size() > 2) ? atoi(components[2].data()) : 0;
+            int major = (components.size() > 0) ? atoi(components[0].data()) : 0;
+            int minor = (components.size() > 1) ? atoi(components[1].data()) : 0;
+            int patch = (components.size() > 2) ? atoi(components[2].data()) : 0;
             
-            // return {major, minor, patch};
-            return {0, 0, 0}; // FIXME
+            return {major, minor, patch};
         }
         
         string Manager::getOsVersionString()
         {
-            // auto releaseString = android::getProperty("ro.build.version.release");
-            // auto sdkVersion = getSdkVersion();
+            auto releaseString = android::getProperty("ro.build.version.release");
+            auto sdkVersion = getSdkVersion();
             
-            // if (sdkVersion)
-            // {
-            //     return releaseString + " [" + ci::toString(sdkVersion) + "]";
-            // }
-            // else
-            // {
-            //     releaseString;
-            // }
-            return "0.0.0"; // FIXME
+            if (sdkVersion)
+            {
+                return releaseString + " [" + utils::toString(sdkVersion) + "]";
+            }
+            else
+            {
+                releaseString;
+            }
         }
         
         string Manager::getDeviceString()
