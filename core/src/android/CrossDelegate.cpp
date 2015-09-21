@@ -78,12 +78,6 @@ namespace chr
     {
         if (setup_)
         {
-            /*
-             * TODO:
-             *
-             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-             * - SEE RELATED TODOS IN CrossDelegateBase AND TaskManager
-             */
             _shutdown();
             
             destroySensorEventQueue();
@@ -142,7 +136,7 @@ namespace chr
      */
     void CrossDelegate::messageFromBridge(int what, const string &body)
     {
-        LOGI << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl; // XXX: VERBOSE
+        LOGI << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl; // LOG: VERBOSE
         
         CrossDelegateBase::messageFromBridge(what, body);
     }
@@ -152,7 +146,7 @@ namespace chr
      */
     void CrossDelegate::sendMessageToBridge(int what, const string &body)
     {
-        LOGI << "MESSAGE SENT TO BRIDGE: " << what << " " << body << endl; // XXX: VERBOSE
+        LOGI << "MESSAGE SENT TO BRIDGE: " << what << " " << body << endl; // LOG: VERBOSE
         
         jni::callVoidMethodOnBridge("messageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
     }

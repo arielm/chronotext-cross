@@ -20,9 +20,6 @@ namespace chr
     class CrossDelegateBase
     {
     public:
-        static std::atomic<bool> LOG_VERBOSE;
-        static std::atomic<bool> LOG_WARNING;
-
         virtual ~CrossDelegateBase() {}
         
         virtual void messageFromBridge(int what, const std::string &body = "");
@@ -54,5 +51,7 @@ namespace chr
         void _uninit();
         void _setup();
         void _shutdown();
+
+        friend class CrossSketch;
     };
 }

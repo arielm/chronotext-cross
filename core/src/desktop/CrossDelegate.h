@@ -17,14 +17,17 @@ namespace chr
     public:
         bool performInit();
         void performUninit();
-        void performSetup(const WindowInfo &windowInfo);
+        void performSetup();
         void performShutdown();
         
         void performResize(const glm::vec2 &size);
         void performUpdate();
         void performDraw();
 
+        void run(int width, int height, int aaSamples = 0);
+
     protected:
         int updateCount = 0;
+        GLFWwindow* window = nullptr;
     };
 }

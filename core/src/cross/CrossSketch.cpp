@@ -3,6 +3,8 @@
 
 #if defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
   #include <chrono>
+#elif defined(CHR_PLATFORM_DESKTOP)
+  #include "cross/CrossDelegate.h"
 #endif
 
 // ---
@@ -156,70 +158,10 @@ namespace chr
   }
 
 #if defined(CHR_PLATFORM_DESKTOP)
-  void CrossSketch::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+  void CrossSketch::run(int width, int height, int aaSamples)
   {
-    switch (key)
-    {
-      case GLFW_KEY_ESCAPE:
-        glfwSetWindowShouldClose(window, GL_TRUE);
-        break;
-    }
-  }
-
-  void CrossSketch::init(int width, int height, bool antialias)
-  {
-    if (!initialized)
-    {
-      if (!glfwInit())
-      {
-        exit(EXIT_FAILURE);
-        return;
-      }
-
-      if (antialias)
-      {
-        glfwWindowHint(GLFW_SAMPLES, 4);
-      }
-
-      glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-      glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-      glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-
-      window = glfwCreateWindow(width, height, "", NULL, NULL);
-      if (!window )
-      {
-        glfwTerminate();
-        exit(EXIT_FAILURE);
-        return;
-      }
-
-      glfwSetKeyCallback(window, keyCallback);
-
-      glfwMakeContextCurrent(window);
-      gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-
-      // ---
-
-      performSetup(WindowInfo::create(width, height));
-
-
-      while (!glfwWindowShouldClose(window))
-      {
-        draw();
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-      }
-
-      shutdown();
-
-      glfwTerminate();
-      exit(EXIT_SUCCESS);
-
-      // ---
-
-      initialized = true;
-    }
+      CrossDelegate delegate;
+      delegate.run(width, height, aaSamples);
   }
 
   double CrossSketch::getTime()
@@ -232,33 +174,28 @@ namespace chr
     reinterpret_cast<CrossSketch*>(data)->draw();
   }
 
-  void CrossSketch::init(int width, int height, bool antialias)
+  void CrossSketch::run(int width, int height, int aaSamples)
   {
-    if (!initialized)
-    {
-      emscripten_set_canvas_size(width, height);
+    emscripten_set_canvas_size(width, height);
 
-      EmscriptenWebGLContextAttributes attr;
-      emscripten_webgl_init_context_attributes(&attr);
-      attr.alpha = attr.depth = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
-      attr.enableExtensionsByDefault = 1;
-      attr.antialias = antialias ? 1 : 0;
-      attr.premultipliedAlpha = 0;
-      attr.majorVersion = 1;
-      attr.minorVersion = 0;
-      EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
-      emscripten_webgl_make_context_current(ctx);
+    EmscriptenWebGLContextAttributes attr;
+    emscripten_webgl_init_context_attributes(&attr);
+    attr.alpha = attr.depth = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
+    attr.enableExtensionsByDefault = 1;
+    attr.antialias = (aaSamples > 0) ? 1 : 0;
+    attr.premultipliedAlpha = 0;
+    attr.majorVersion = 1;
+    attr.minorVersion = 0;
+    EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
+    emscripten_webgl_make_context_current(ctx);
 
-      // ---
+    // ---
 
-      performSetup(WindowInfo::create(width, height));
-
-      emscripten_set_main_loop_arg(performDraw, this, 0, 1);
-
-      // ---
-
-      initialized = true;
-    }
+    /*
+     * FIXME: BROKEN UNTIL NEXT COMMIT
+     */
+    performSetup(WindowInfo::create(width, height));
+    emscripten_set_main_loop_arg(this, sketch, 0, 1);
   }
 
   double CrossSketch::getTime()

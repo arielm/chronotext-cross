@@ -29,8 +29,27 @@ namespace chr
     {
         if (!initialized_)
         {
-            intern::instance = this;
-            initialized_ = _init();
+            if (glfwInit())
+            {
+                glfwWindowHint(GLFW_SAMPLES, initInfo.windowInfo.aaSamples);
+                glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+                glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+
+                window = glfwCreateWindow(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, "", NULL, NULL);
+
+                if (window)
+                {
+                    glfwMakeContextCurrent(window);
+                    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+
+                    // ---
+
+                    intern::instance = this;
+                    initialized_ = _init();
+                }
+            }
         }
         
         return initialized_;
@@ -41,18 +60,17 @@ namespace chr
         if (initialized_ && !setup_)
         {
             _uninit();
+            window = nullptr;
 
             initialized_ = false;
             intern::instance = nullptr;
         }
     }
     
-    void CrossDelegate::performSetup(const WindowInfo &windowInfo)
+    void CrossDelegate::performSetup()
     {
         if (!setup_ && initialized_)
         {
-            setupInfo.windowInfo = windowInfo;
-
             _setup();
 
             // ---
@@ -106,5 +124,30 @@ namespace chr
         }
 
         sketch->draw();
+    }
+
+    void CrossDelegate::run(int width, int height, int aaSamples)
+    {
+        initInfo.windowInfo = setupInfo.windowInfo = WindowInfo(width, height, aaSamples);
+
+        performInit();
+        performSetup();
+        performResize(setupInfo.windowInfo.size);
+
+        sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
+
+        while (!glfwWindowShouldClose(window))
+        {
+            performUpdate();
+            performDraw();
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+
+        sketch->performStop(CrossSketch::STOP_REASON_VIEW_HIDDEN);
+
+        performShutdown();
+        performUninit();
     }
 }

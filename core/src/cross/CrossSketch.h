@@ -81,14 +81,12 @@ namespace chr
     static GLuint makeShaderProgram(const char *vs_text, const char *fs_text);
     static GLuint loadTexture(const fs::path &relativePath);
 
-  #if defined(CHR_PLATFORM_DESKTOP)
-    static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-  #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+  #if defined(CHR_PLATFORM_EMSCRIPTEN)
     static void performDraw(void *data);
   #endif
 
-    void init(int width, int height, bool antialias);
-    double getTime();
+    static void run(int width, int height, int aaSamples = 0);
+    static double getTime();
 
     virtual bool init() { return true; }
     virtual void uninit() {}
@@ -115,13 +113,8 @@ namespace chr
     void performUpdate();
 
   protected:
-    bool initialized = false;
     int frameCount = 0;
     bool forceResize = false;
     WindowInfo windowInfo;
-
-  #if defined(CHR_PLATFORM_DESKTOP)
-    GLFWwindow* window = nullptr;
-  #endif
   };
 }

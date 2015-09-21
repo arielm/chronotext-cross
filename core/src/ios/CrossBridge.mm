@@ -42,7 +42,7 @@ namespace chr
 - (void) performUninit;
 
 - (glm::vec2) windowSize;
-- (int) aaLevel;
+- (int) aaSamples;
 
 - (uint32_t) addTouchToMap:(UITouch*)touch;
 - (void) removeTouchFromMap:(UITouch*)touch;
@@ -154,7 +154,7 @@ namespace chr
         DLOG(@"CrossBridge.performSetup");
 
         [self dispatchEvent:SKETCH_WILL_SETUP];
-        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaLevel]));
+        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaSamples]));
         [self dispatchEvent:SKETCH_DID_SETUP];
         
         setup = YES;
@@ -300,7 +300,7 @@ namespace chr
     return size * float(view.contentScaleFactor);
 }
 
-- (int) aaLevel
+- (int) aaSamples
 {
     switch (viewController.glView.drawableMultisample)
     {

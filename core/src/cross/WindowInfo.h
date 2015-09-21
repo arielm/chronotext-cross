@@ -19,23 +19,23 @@ namespace chr
     struct WindowInfo
     {
         glm::vec2 size;
-        int aaLevel;
+        int aaSamples;
 
-        static WindowInfo create(int width, int height, int aaLevel = 0)
+        static WindowInfo create(int width, int height, int aaSamples = 0)
         {
-            return WindowInfo(width, height, aaLevel);
+            return WindowInfo(width, height, aaSamples);
         }
         
-        WindowInfo(const glm::ivec2 &size = glm::zero<glm::ivec2>(), int aaLevel = 0)
+        WindowInfo(const glm::ivec2 &size = glm::zero<glm::ivec2>(), int aaSamples = 0)
         :
         size(size),
-        aaLevel(aaLevel)
+        aaSamples(aaSamples)
         {}
         
-        WindowInfo(int width, int height, int aaLevel = 0)
+        WindowInfo(int width, int height, int aaSamples = 0)
         :
         size(width, height),
-        aaLevel(aaLevel)
+        aaSamples(aaSamples)
         {}
         
         void rotate()
@@ -63,7 +63,7 @@ namespace chr
             lhs
             << "{"
             << "size: [" << rhs.size.x << ", " << rhs.size.y << "]"
-            << ", anti-aliasing-level: " << rhs.aaLevel
+            << ", anti-aliasing samples: " << rhs.aaSamples
             << "}";
             
             return lhs;
