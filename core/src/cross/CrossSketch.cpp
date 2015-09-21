@@ -141,7 +141,7 @@ namespace chr
 
       #if defined(CHR_PLATFORM_DESKTOP)
         glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_FALSE); // GL_GENERATE_MIPMAP
-      #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS)
+      #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
         glGenerateMipmap(GL_TEXTURE_2D);
       #endif
 

@@ -31,7 +31,7 @@ public class GLView extends GLSurfaceView
 {
   public static class Properties
   {
-    int eglContextClientVersion = 1;
+    int eglContextClientVersion = 2;
     int[] eglConfigChooser;
     int pixelFormat = PixelFormat.UNKNOWN;
     boolean preserveEGLContextOnPause = true;
