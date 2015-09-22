@@ -106,7 +106,7 @@ namespace chr
          *
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
-        // sketch->clock()->update(true);
+         sketch->clock()->update(true);
         
         pollSensorEvents(); // WHERE handleAcceleration IS INVOKED
         io->poll(); // WHERE addTouch, updateTouch, removeTouch, ETC. ARE INVOKED

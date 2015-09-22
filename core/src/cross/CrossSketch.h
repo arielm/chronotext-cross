@@ -6,6 +6,7 @@
 #include "MemoryBuffer.h"
 
 #include "cross/WindowInfo.h"
+#include "time/FrameClock.h"
 
 #if defined(CHR_PLATFORM_DESKTOP)
   #include <glad/glad.h>
@@ -106,6 +107,7 @@ namespace chr
     const WindowInfo& getWindowInfo() const;
     double getElapsedSeconds();
     int getElapsedFrames();
+    FrameClock::Ref clock() const;
 
     void performSetup(const WindowInfo &windowInfo);
     void performResize(const glm::vec2 &size);
@@ -118,5 +120,6 @@ namespace chr
     int frameCount = 0;
     bool forceResize = false;
     WindowInfo windowInfo;
+    FrameClock::Ref _clock = FrameClock::create();
   };
 }

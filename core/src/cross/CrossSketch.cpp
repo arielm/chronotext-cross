@@ -178,6 +178,11 @@ namespace chr
     return windowInfo;
   }
 
+  FrameClock::Ref CrossSketch::clock() const
+  {
+    return _clock;
+  }
+
   // ---
 
   void CrossSketch::performSetup(const WindowInfo &windowInfo)
@@ -203,16 +208,16 @@ namespace chr
   {
     frameCount = 0;
 
-//    timer.start();
-//    _clock->start();
+    timer.start();
+    _clock->start();
 
     start(reason);
   }
 
   void CrossSketch::performStop(StopReason reason)
   {
-//    timer.stop();
-//    _clock->stop();
+    timer.stop();
+   _clock->stop();
 
     stop(reason);
   }

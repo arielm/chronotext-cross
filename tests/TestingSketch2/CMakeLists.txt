@@ -24,6 +24,8 @@ set(SRC_FILES
   "${CROSS_ROOT}/src/system/SystemManagerBase.cpp"
   "${CROSS_ROOT}/src/system/DisplayHelperBase.cpp"
   "${CROSS_ROOT}/src/Timer.cpp"
+  "${CROSS_ROOT}/src/time/Clock.cpp"
+  "${CROSS_ROOT}/src/time/FrameClock.cpp"
   "src/main.cpp"
 )
 

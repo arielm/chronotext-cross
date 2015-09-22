@@ -67,12 +67,6 @@ namespace chr
     {
         if (setup_)
         {
-            /*
-             * TODO:
-             *
-             * - HANDLE PROPERLY THE SHUTING-DOWN OF "UNDERGOING" TASKS
-             * - SEE RELATED TODOS IN CinderDelegateBase AND TaskManager
-             */
             _shutdown();
 
             // ---
@@ -90,11 +84,9 @@ namespace chr
     void CrossDelegate::performUpdate()
     {
         /*
-         * SHOULD TAKE PLACE BEFORE IO-SERVICE-POLLING
-         *
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
-//        sketch->clock()->update(true);
+        sketch->clock()->update(true);
 
         sketch->performUpdate();
         updateCount++;

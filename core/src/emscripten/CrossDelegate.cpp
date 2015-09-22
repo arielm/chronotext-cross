@@ -99,7 +99,7 @@ namespace chr
         /*
          * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
          */
-//        sketch->clock()->update(true);
+        sketch->clock()->update(true);
 
         sketch->performUpdate();
         updateCount++;
