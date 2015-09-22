@@ -1,10 +1,6 @@
 
 #include "Sketch.h"
 
-#if defined(CHR_PLATFORM_IOS)
-  #include "ios/Application.h"
-#endif
-
 namespace chr
 {
   CrossSketch* createSketch()
@@ -13,16 +9,24 @@ namespace chr
   }
 }
 
-int main(int argc, char** argv)
-{
-  #if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
+#if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
+
+  int main(int argc, char** argv)
+  {
     chr::CrossSketch::run(800, 600, 4);
-  #elif defined(CHR_PLATFORM_IOS)
+    return 0;
+  }
+
+#elif defined(CHR_PLATFORM_IOS)
+
+  #include "ios/Application.h"
+
+  int main(int argc, char** argv)
+  {
     @autoreleasepool
     {
       return UIApplicationMain(argc, argv, nil, NSStringFromClass([Application class]));
     }
-  #endif
+  }
 
-  return 0;
-}
+#endif

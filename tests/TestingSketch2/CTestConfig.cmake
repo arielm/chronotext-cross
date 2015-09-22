@@ -27,9 +27,9 @@ elseif (PLATFORM MATCHES mxe)
   )
 
 elseif (PLATFORM MATCHES emscripten)
-    set(ARGS
-      -DRUN=BROWSER
-    )
+  set(ARGS
+    -DRUN=BROWSER
+  )
 endif()
 
 list(APPEND ARGS

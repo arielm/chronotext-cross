@@ -4,8 +4,6 @@
 using namespace std;
 using namespace chr;
 
-// ---
-
 static const char *vss = R"(
 attribute vec2 a_position;
 attribute vec2 a_coord;
