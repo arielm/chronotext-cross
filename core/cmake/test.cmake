@@ -78,6 +78,7 @@ elseif (PLATFORM MATCHES android)
 
     add_library(${PROJECT_NAME} SHARED
       ${SRC_FILES}
+      "${CROSS_ROOT}/src/android/JNI.cpp"
     )
 
   elseif (RUN MATCHES EXE)

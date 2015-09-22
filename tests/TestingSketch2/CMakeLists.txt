@@ -104,7 +104,7 @@ elseif (PLATFORM MATCHES ios)
 
 elseif (PLATFORM MATCHES android)
   list(APPEND SRC_FILES
-    "${CROSS_ROOT}/src/android/JNI.cpp"
+    "${CROSS_ROOT}/src/android/CrossBridge.cpp"
     "${CROSS_ROOT}/src/android/CrossDelegate.cpp"
     "${CROSS_ROOT}/src/android/system/DisplayHelper.cpp"
     "${CROSS_ROOT}/src/android/system/SystemManager.cpp"

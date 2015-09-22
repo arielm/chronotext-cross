@@ -9,7 +9,7 @@
 #pragma once
 
 #include "cross/CrossDelegateBase.h"
-#include "android/JNI.h"
+#include "android/CrossBridge.h"
 
 #include <boost/asio.hpp>
 
