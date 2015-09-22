@@ -76,7 +76,7 @@ namespace chr
         string Manager::getOsVersionString()
         {
             auto osVersion = getOsVersion();
-            return std::to_string(osVersion[0]) + "." + std::to_string(osVersion[1]) + "." + std::to_string(osVersion[2]);
+            return utils::toString(osVersion[0]) + "." + utils::toString(osVersion[1]) + "." + utils::toString(osVersion[2]);
         }
         
         string Manager::getDeviceString()
