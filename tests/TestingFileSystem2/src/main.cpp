@@ -1,15 +1,19 @@
-#include "Log.h"
 #include "Platform.h"
+#include "Log.h"
 #include "MemoryBuffer.h"
 
 #include <gtest/gtest.h>
 #include <experimental/string_view>
+
+// ---
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_JPEG
 #define STBI_ONLY_PNG
 
 #include "stb_image.h"
+
+// ---
 
 using namespace std;
 using string_view = experimental::string_view;

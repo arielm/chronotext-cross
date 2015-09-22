@@ -19,4 +19,10 @@ set(SRC_FILES
   src/main.cpp
 )
 
+if (PLATFORM MATCHES android)
+  list(APPEND SRC_FILES
+    "src/android/Bridge.cpp"
+  )
+endif()
+
 include("${CROSS_ROOT}/cmake/test.cmake")
