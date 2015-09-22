@@ -14,6 +14,7 @@ set(LIBRARIES
 
 set(SRC_FILES
   "src/main.cpp"
+  "src/Sketch.cpp"
 )
 
 # ---
