@@ -1,9 +1,7 @@
 
 #include "CrossSketch.h"
 
-#if defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
-  #include <chrono>
-#elif defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
+#if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
   #include "cross/CrossDelegate.h"
 #endif
 
@@ -165,23 +163,20 @@ namespace chr
   }
 #endif
 
-#if defined(CHR_PLATFORM_DESKTOP)
-  double CrossSketch::getTime()
+  double CrossSketch::getElapsedSeconds()
   {
-    return glfwGetTime();
+    return timer.getSeconds(); // OUR FrameClock IS NOT SUITED BECAUSE IT PROVIDES A UNIQUE TIME-SAMPLE PER FRAME
   }
-#elif defined(CHR_PLATFORM_EMSCRIPTEN)
-  double CrossSketch::getTime()
+
+  int CrossSketch::getElapsedFrames()
   {
-    return emscripten_get_now() / 1000.0;
+    return frameCount;
   }
-#elif defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
-  double CrossSketch::getTime()
+
+  const WindowInfo& CrossSketch::getWindowInfo() const
   {
-    auto now = chrono::steady_clock::now().time_since_epoch();
-    return chrono::duration_cast<chrono::microseconds>(now).count() / 1000000.0;
+    return windowInfo;
   }
-#endif
 
   // ---
 

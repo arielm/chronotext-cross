@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Log.h"
 #include "Platform.h"
+#include "Timer.h"
+#include "Log.h"
 #include "MemoryBuffer.h"
+
 #include "cross/WindowInfo.h"
 
 #if defined(CHR_PLATFORM_DESKTOP)
@@ -82,7 +84,6 @@ namespace chr
     static GLuint loadTexture(const fs::path &relativePath);
 
     static void run(int width, int height, int aaSamples = 0);
-    static double getTime();
 
     virtual bool init() { return true; }
     virtual void uninit() {}
@@ -102,6 +103,10 @@ namespace chr
     virtual void updateTouch(int index, float x, float y) {}
     virtual void removeTouch(int index, float x, float y) {}
 
+    const WindowInfo& getWindowInfo() const;
+    double getElapsedSeconds();
+    int getElapsedFrames();
+
     void performSetup(const WindowInfo &windowInfo);
     void performResize(const glm::vec2 &size);
     void performStart(StartReason reason);
@@ -109,6 +114,7 @@ namespace chr
     void performUpdate();
 
   protected:
+    Timer timer;
     int frameCount = 0;
     bool forceResize = false;
     WindowInfo windowInfo;

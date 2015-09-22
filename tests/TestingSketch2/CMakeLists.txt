@@ -23,6 +23,7 @@ set(SRC_FILES
   "${CROSS_ROOT}/src/cross/CrossDelegateBase.cpp"
   "${CROSS_ROOT}/src/system/SystemManagerBase.cpp"
   "${CROSS_ROOT}/src/system/DisplayHelperBase.cpp"
+  "${CROSS_ROOT}/src/Timer.cpp"
   "src/main.cpp"
 )
 
