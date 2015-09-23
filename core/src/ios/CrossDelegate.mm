@@ -165,33 +165,32 @@ namespace chr
 //
 //        return JsonTree();
 //    }
-    
-   
+
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
-    
-//    void CrossDelegate::touchesBegan(TouchEvent event)
-//    {
-//        for (auto &touch : event.getTouches())
-//        {
-//            sketch->addTouch(touch.getId() - 1, touch.getX(), touch.getY());
-//        }
-//    }
-//
-//    void CrossDelegate::touchesMoved(TouchEvent event)
-//    {
-//        for (auto &touch : event.getTouches())
-//        {
-//            sketch->updateTouch(touch.getId() - 1, touch.getX(), touch.getY());
-//        }
-//    }
-//
-//    void CrossDelegate::touchesEnded(TouchEvent event)
-//    {
-//        for (auto &touch : event.getTouches())
-//        {
-//            sketch->removeTouch(touch.getId() - 1, touch.getX(), touch.getY());
-//        }
-//    }
+
+   void CrossDelegate::touchesBegan(const vector<Touch> &touches)
+   {
+       for (auto &touch : touches)
+       {
+           sketch->addTouch(touch.id - 1, touch.pos.x, touch.pos.y);
+       }
+   }
+
+   void CrossDelegate::touchesMoved(const vector<Touch> &touches)
+   {
+       for (auto &touch : touches)
+       {
+           sketch->updateTouch(touch.id - 1, touch.pos.x, touch.pos.y);
+       }
+   }
+
+   void CrossDelegate::touchesEnded(const vector<Touch> &touches)
+   {
+       for (auto &touch : touches)
+       {
+           sketch->removeTouch(touch.id - 1, touch.pos.x, touch.pos.y);
+       }
+   }
     
 #pragma mark ---------------------------------------- ACCELEROMETER ----------------------------------------
     

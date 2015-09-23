@@ -54,10 +54,10 @@ enum
 - (void) startWithReason:(int)reason;
 - (void) stopWithReason:(int)reason;
 
-//- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
-//- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
-//- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
-//- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
+- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event;
 
 - (void) sendMessageToSketch:(int)what;
 - (void) sendMessageToSketch:(int)what json:(id)json;

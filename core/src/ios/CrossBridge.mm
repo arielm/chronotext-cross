@@ -15,6 +15,7 @@
 #import "cocoa/Utils.h"
 
 #include "ios/CrossDelegate.h"
+#include "ios/Touch.h"
 #include "cross/WindowInfo.h"
 
 using namespace std;
@@ -348,142 +349,142 @@ namespace chr
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
 
-//- (uint32_t) addTouchToMap:(UITouch*)touch
-//{
-//    uint32_t candidateId = 0;
-//    bool found = true;
-//
-//    while (found)
-//    {
-//        candidateId++;
-//        found = false;
-//
-//        for (auto &element : touchIdMap)
-//        {
-//            if (element.second == candidateId)
-//            {
-//                found = true;
-//                break;
-//            }
-//        }
-//    }
-//
-//    touchIdMap.insert(make_pair(touch, candidateId));
-//    return candidateId;
-//}
-//
-//- (void) removeTouchFromMap:(UITouch*)touch
-//{
-//    auto found = touchIdMap.find(touch);
-//
-//    if (found != touchIdMap.end())
-//    {
-//        touchIdMap.erase(found);
-//    }
-//}
-//
-//- (uint32_t) findTouchInMap:(UITouch*)touch
-//{
-//    auto found = touchIdMap.find(touch);
-//
-//    if (found != touchIdMap.end())
-//    {
-//        return found->second;
-//    }
-//
-//    return 0;
-//}
-//
-//- (void) updateActiveTouches
-//{
-//    auto view = viewController.view;
-//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-//
-//    vector<TouchEvent::Touch> activeTouches;
-//
-//    for (auto &element : touchIdMap)
-//    {
-//        auto &touch = element.first;
-//        auto &touchId = element.second;
-//
-//        CGPoint pt = [touch locationInView:view];
-//        CGPoint prevPt = [touch previousLocationInView:view];
-//        activeTouches.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, touchId, [touch timestamp], touch);
-//    }
-//}
-//
-//- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
-//{
-//    auto view = viewController.view;
-//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-//
-//    vector<TouchEvent::Touch> touchList;
-//
-//    for (UITouch *touch in touches)
-//    {
-//        CGPoint pt = [touch locationInView:view];
-//        CGPoint prevPt = [touch previousLocationInView:view];
-//        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp], touch);
-//    }
-//
-//    [self updateActiveTouches];
-//
-//    if (!touchList.empty())
-//    {
-//        crossDelegate->touchesBegan(TouchEvent(WindowRef(), touchList));
-//    }
-//}
-//
-//- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
-//{
-//    auto view = viewController.view;
-//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-//
-//    vector<TouchEvent::Touch> touchList;
-//
-//    for (UITouch *touch in touches)
-//    {
-//        CGPoint pt = [touch locationInView:view];
-//        CGPoint prevPt = [touch previousLocationInView:view];
-//        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
-//    }
-//
-//    [self updateActiveTouches];
-//
-//    if (!touchList.empty())
-//    {
-//        crossDelegate->touchesMoved(TouchEvent(WindowRef(), touchList));
-//    }
-//}
-//
-//- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
-//{
-//    auto view = viewController.view;
-//    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
-//
-//    vector<TouchEvent::Touch> touchList;
-//
-//    for (UITouch *touch in touches)
-//    {
-//        CGPoint pt = [touch locationInView:view];
-//        CGPoint prevPt = [touch previousLocationInView:view];
-//        touchList.emplace_back(Vec2f(pt.x, pt.y) * scale, Vec2f(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp], touch);
-//
-//        [self removeTouchFromMap:touch];
-//    }
-//
-//    [self updateActiveTouches];
-//
-//    if (!touchList.empty())
-//    {
-//        crossDelegate->touchesEnded(TouchEvent(WindowRef(), touchList));
-//    }
-//}
-//
-//- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
-//{
-//    [self touchesEnded:touches withEvent:event];
-//}
+- (uint32_t) addTouchToMap:(UITouch*)touch
+{
+   uint32_t candidateId = 0;
+   bool found = true;
+
+   while (found)
+   {
+       candidateId++;
+       found = false;
+
+       for (auto &element : touchIdMap)
+       {
+           if (element.second == candidateId)
+           {
+               found = true;
+               break;
+           }
+       }
+   }
+
+   touchIdMap.insert(make_pair(touch, candidateId));
+   return candidateId;
+}
+
+- (void) removeTouchFromMap:(UITouch*)touch
+{
+   auto found = touchIdMap.find(touch);
+
+   if (found != touchIdMap.end())
+   {
+       touchIdMap.erase(found);
+   }
+}
+
+- (uint32_t) findTouchInMap:(UITouch*)touch
+{
+   auto found = touchIdMap.find(touch);
+
+   if (found != touchIdMap.end())
+   {
+       return found->second;
+   }
+
+   return 0;
+}
+
+- (void) updateActiveTouches
+{
+   auto view = viewController.view;
+   float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+
+   vector<Touch> activeTouches;
+
+   for (auto &element : touchIdMap)
+   {
+       auto &touch = element.first;
+       auto &touchId = element.second;
+
+       CGPoint pt = [touch locationInView:view];
+       CGPoint prevPt = [touch previousLocationInView:view];
+       activeTouches.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, touchId, [touch timestamp]);
+   }
+}
+
+- (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
+{
+   auto view = viewController.view;
+   float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+
+   vector<Touch> touchList;
+
+   for (UITouch *touch in touches)
+   {
+       CGPoint pt = [touch locationInView:view];
+       CGPoint prevPt = [touch previousLocationInView:view];
+       touchList.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp]);
+   }
+
+   [self updateActiveTouches];
+
+   if (!touchList.empty())
+   {
+       crossDelegate->touchesBegan(touchList);
+   }
+}
+
+- (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
+{
+   auto view = viewController.view;
+   float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+
+   vector<Touch> touchList;
+
+   for (UITouch *touch in touches)
+   {
+       CGPoint pt = [touch locationInView:view];
+       CGPoint prevPt = [touch previousLocationInView:view];
+       touchList.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp]);
+   }
+
+   [self updateActiveTouches];
+
+   if (!touchList.empty())
+   {
+       crossDelegate->touchesMoved(touchList);
+   }
+}
+
+- (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
+{
+   auto view = viewController.view;
+   float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
+
+   vector<Touch> touchList;
+
+   for (UITouch *touch in touches)
+   {
+       CGPoint pt = [touch locationInView:view];
+       CGPoint prevPt = [touch previousLocationInView:view];
+       touchList.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp]);
+
+       [self removeTouchFromMap:touch];
+   }
+
+   [self updateActiveTouches];
+
+   if (!touchList.empty())
+   {
+       crossDelegate->touchesEnded(touchList);
+   }
+}
+
+- (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
+{
+   [self touchesEnded:touches withEvent:event];
+}
 
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
 

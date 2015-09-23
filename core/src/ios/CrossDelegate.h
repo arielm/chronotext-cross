@@ -9,8 +9,7 @@
 #pragma once
 
 #include "cross/CrossDelegateBase.h"
-
-//#include "cinder/app/TouchEvent.h"
+#include "ios/Touch.h"
 
 namespace chr
 {
@@ -26,9 +25,9 @@ namespace chr
         void performUpdate();
         void performDraw();
 
-//        void touchesBegan(ci::app::TouchEvent event);
-//        void touchesMoved(ci::app::TouchEvent event);
-//        void touchesEnded(ci::app::TouchEvent event);
+       void touchesBegan(const std::vector<Touch> &touches);
+       void touchesMoved(const std::vector<Touch> &touches);
+       void touchesEnded(const std::vector<Touch> &touches);
 
         void sendMessageToBridge(int what, const std::string &body = "") final;
         void handleEvent(int eventId) final;

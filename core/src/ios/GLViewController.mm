@@ -301,22 +301,22 @@ NSString* GLViewControllerMultisampleKey = @"GLViewControllerMultisampleKey";
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
-//    [crossBridge touchesBegan:touches withEvent:event];
+   [crossBridge touchesBegan:touches withEvent:event];
 }
 
 - (void) touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event
 {
-//    [crossBridge touchesMoved:touches withEvent:event];
+   [crossBridge touchesMoved:touches withEvent:event];
 }
 
 - (void) touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event
 {
-//    [crossBridge touchesEnded:touches withEvent:event];
+   [crossBridge touchesEnded:touches withEvent:event];
 }
 
 - (void) touchesCancelled:(NSSet*)touches withEvent:(UIEvent*)event
 {
-//    [crossBridge touchesCancelled:touches withEvent:event];
+   [crossBridge touchesCancelled:touches withEvent:event];
 }
 
 #pragma mark ---------------------------------------- NOTIFICATIONS ----------------------------------------
