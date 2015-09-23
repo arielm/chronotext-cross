@@ -28,5 +28,7 @@ namespace chr
 
     protected:
         int updateCount = 0;
+
+        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     };
 }

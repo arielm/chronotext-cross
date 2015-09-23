@@ -41,6 +41,8 @@ namespace chr
 
                 if (initInfo.window)
                 {
+                    glfwSetKeyCallback(initInfo.window, keyCallback);
+
                     glfwMakeContextCurrent(initInfo.window);
                     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
@@ -135,5 +137,13 @@ namespace chr
 
         performShutdown();
         performUninit();
+    }
+
+    void CrossDelegate::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    {
+        if ((action == GLFW_PRESS) && (key == GLFW_KEY_ESCAPE))
+        {
+            glfwSetWindowShouldClose(window, true);
+        }
     }
 }
