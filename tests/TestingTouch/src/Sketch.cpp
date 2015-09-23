@@ -41,6 +41,7 @@ void main()
 
 static constexpr float DOT_RADIUS_DP = 22;
 static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
+static constexpr float TEXTURE_RADIUS_PIXELS = 64; // SPECIFIC TO "dot_112.png"
 
 void Sketch::setup()
 {
@@ -96,17 +97,22 @@ void Sketch::draw()
 
   // ---
 
-  drawDot(glm::vec2(windowInfo.size * 0.5f), DOT_RADIUS_DP);
+  for (auto &position : dotPositions)
+  {
+    drawDot(position, DOT_RADIUS_DP);
+  }
+
+  dotPositions.clear();
 }
 
 void Sketch::initBuffers()
 {
   const GLfloat vertices[] =
   {
-    -64, +64, // A
-    -64, -64, // B
-    +64, -64, // C
-    +64, +64, // D
+    -TEXTURE_RADIUS_PIXELS, +TEXTURE_RADIUS_PIXELS, // A
+    -TEXTURE_RADIUS_PIXELS, -TEXTURE_RADIUS_PIXELS, // B
+    +TEXTURE_RADIUS_PIXELS, -TEXTURE_RADIUS_PIXELS, // C
+    +TEXTURE_RADIUS_PIXELS, +TEXTURE_RADIUS_PIXELS, // D
   };
 
   const GLfloat coords[] =
@@ -150,6 +156,16 @@ void Sketch::initShaders()
   colorLocation = glGetAttribLocation(shaderProgram, "a_color");
   samplerLocation = glGetUniformLocation(shaderProgram, "u_sampler");
   matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
+}
+
+void Sketch::addTouch(int index, float x, float y)
+{
+  dotPositions.emplace_back(x, y);
+}
+
+void Sketch::updateTouch(int index, float x, float y)
+{
+  dotPositions.emplace_back(x, y);
 }
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)

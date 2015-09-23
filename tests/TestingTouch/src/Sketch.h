@@ -11,6 +11,9 @@ public:
   void shutdown() final;
   void draw() final;
 
+  void addTouch(int index, float x, float y) final;
+  void updateTouch(int index, float x, float y) final;
+
 protected:
   GLuint shaderProgram;
   GLint positionLocation;
@@ -24,6 +27,8 @@ protected:
 
   float scale;
   glm::mat4 projectionMatrix;
+
+  std::vector<glm::vec2> dotPositions;
 
   void initBuffers();
   void initTextures();
