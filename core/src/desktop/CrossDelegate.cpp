@@ -37,11 +37,11 @@ namespace chr
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-                window = glfwCreateWindow(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, "", NULL, NULL);
+                initInfo.window = glfwCreateWindow(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, "", NULL, NULL);
 
-                if (window)
+                if (initInfo.window)
                 {
-                    glfwMakeContextCurrent(window);
+                    glfwMakeContextCurrent(initInfo.window);
                     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
                     // ---
@@ -60,7 +60,6 @@ namespace chr
         if (initialized_ && !setup_)
         {
             _uninit();
-            window = nullptr;
 
             initialized_ = false;
             intern::instance = nullptr;
@@ -123,12 +122,12 @@ namespace chr
 
         sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
 
-        while (!glfwWindowShouldClose(window))
+        while (!glfwWindowShouldClose(initInfo.window))
         {
             performUpdate();
             performDraw();
 
-            glfwSwapBuffers(window);
+            glfwSwapBuffers(initInfo.window);
             glfwPollEvents();
         }
 

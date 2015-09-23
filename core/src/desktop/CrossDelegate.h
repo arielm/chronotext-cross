@@ -28,6 +28,5 @@ namespace chr
 
     protected:
         int updateCount = 0;
-        GLFWwindow* window = nullptr;
     };
 }
