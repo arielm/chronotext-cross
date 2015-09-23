@@ -27,7 +27,13 @@ namespace chr
         {
             if (!intern::setup)
             {
-                intern::displayInfo = DisplayInfo::create(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, 1);
+                double pixelRatio = emscripten_get_device_pixel_ratio();
+                double screenWidth = EM_ASM_DOUBLE_V("return screen.width");
+                double screenHeight =  EM_ASM_DOUBLE_V("return screen.height");
+
+                int fullscreenWidth = int(pixelRatio * screenWidth + 0.5);
+                int fullscreenHeight = int(pixelRatio * screenHeight + 0.5);
+                intern::displayInfo = DisplayInfo::createWithDensity(fullscreenWidth, fullscreenHeight, 96, 1); // XXX
 
                 // ---
                 
