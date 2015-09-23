@@ -22,15 +22,17 @@ namespace chr
   GLuint CrossSketch::makeShader(GLenum type, const char *text)
   {
     GLuint shader = 0u;
-    GLint shader_ok;
-
     shader = glCreateShader(type);
+
     if (shader != 0u)
     {
       glShaderSource(shader, 1, reinterpret_cast<const GLchar**>(&text), NULL);
       glCompileShader(shader);
-      glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_ok);
-      if (shader_ok != GL_TRUE)
+
+      GLint success;
+      glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+
+      if (success != GL_TRUE)
       {
         GLint maxLength = 0;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
@@ -51,27 +53,28 @@ namespace chr
   GLuint CrossSketch::makeShaderProgram(const char *vs_text, const char *fs_text)
   {
     GLuint program = 0u;
-    GLint program_ok;
     GLuint vertex_shader = 0u;
     GLuint fragment_shader = 0u;
-
     vertex_shader = makeShader(GL_VERTEX_SHADER, vs_text);
+
     if (vertex_shader != 0u)
     {
       fragment_shader = makeShader(GL_FRAGMENT_SHADER, fs_text);
+
       if (fragment_shader != 0u)
       {
-        /* make the program that connect the two shader and link it */
         program = glCreateProgram();
+        
         if (program != 0u)
         {
-          /* attach both shader and link */
           glAttachShader(program, vertex_shader);
           glAttachShader(program, fragment_shader);
           glLinkProgram(program);
-          glGetProgramiv(program, GL_LINK_STATUS, &program_ok);
 
-          if (program_ok != GL_TRUE)
+          GLint success;
+          glGetProgramiv(program, GL_LINK_STATUS, &success);
+
+          if (success != GL_TRUE)
           {
             GLint maxLength = 0;
             glGetShaderiv(program, GL_INFO_LOG_LENGTH, &maxLength);
