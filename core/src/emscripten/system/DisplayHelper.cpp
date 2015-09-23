@@ -33,12 +33,12 @@ namespace chr
 
                 int fullscreenWidth = int(pixelRatio * screenWidth + 0.5);
                 int fullscreenHeight = int(pixelRatio * screenHeight + 0.5);
-                intern::displayInfo = DisplayInfo::createWithDensity(fullscreenWidth, fullscreenHeight, 96, 1); // XXX
+                intern::displayInfo = DisplayInfo::createWithDensity(fullscreenWidth, fullscreenHeight, 96 * pixelRatio);
 
                 // ---
                 
                 LOGI << "DISPLAY INFO: " << intern::displayInfo << endl; // LOG: VERBOSE
-                
+
                 intern::setup = true;
             }
         }
