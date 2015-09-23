@@ -13,6 +13,7 @@ public:
 
   void addTouch(int index, float x, float y) final;
   void updateTouch(int index, float x, float y) final;
+  void removeTouch(int index, float x, float y) final;
 
 protected:
   GLuint shaderProgram;

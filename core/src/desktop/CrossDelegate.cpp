@@ -41,6 +41,8 @@ namespace chr
 
                 if (initInfo.window)
                 {
+                    glfwSetCursorPosCallback(initInfo.window, cursorPosCallback);
+                    glfwSetMouseButtonCallback(initInfo.window, mouseButtonCallback);
                     glfwSetKeyCallback(initInfo.window, keyCallback);
 
                     glfwMakeContextCurrent(initInfo.window);
@@ -126,10 +128,13 @@ namespace chr
 
         while (!glfwWindowShouldClose(initInfo.window))
         {
+            intern::instance->processMouseEvents();
             performUpdate();
             performDraw();
 
             glfwSwapBuffers(initInfo.window);
+
+            intern::instance->clearMouseEvents();
             glfwPollEvents();
         }
 
@@ -137,6 +142,51 @@ namespace chr
 
         performShutdown();
         performUninit();
+    }
+
+    void CrossDelegate::processMouseEvents()
+    {
+        for (auto &event : mouseEvents)
+        {
+            switch (event.kind)
+            {
+                case MouseEvent::KIND_PRESSED:
+                    sketch->addTouch(event.button, event.x, event.y);
+                    break;
+
+                case MouseEvent::KIND_DRAGGED:
+                    sketch->updateTouch(event.button, event.x, event.y);
+                    break;
+
+                case MouseEvent::KIND_RELEASED:
+                    sketch->removeTouch(event.button, event.x, event.y);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    void CrossDelegate::clearMouseEvents()
+    {
+        mouseEvents.clear();
+    }
+
+    void CrossDelegate::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+    {
+        intern::instance->mouseEvents.emplace_back(xpos, ypos, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
+
+        intern::instance->mouseX = xpos;
+        intern::instance->mouseY = ypos;
+    }
+
+    void CrossDelegate::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+    {
+        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, button, (action == GLFW_PRESS) ? MouseEvent::KIND_PRESSED : MouseEvent::KIND_RELEASED);
+
+        intern::instance->mouseButton = button;
+        intern::instance->mousePressed = (action == GLFW_PRESS);
     }
 
     void CrossDelegate::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)

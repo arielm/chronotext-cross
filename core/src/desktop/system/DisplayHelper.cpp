@@ -36,20 +36,11 @@ namespace chr
                 GLFWmonitor* monitor = glfwGetPrimaryMonitor();
                 const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
-                /*
-                 * SCALE-HACK: NECESSARY FOR OSX RETINA MONITORS
-                 */
-                int width1, height1;
-                glfwGetWindowSize(initInfo.window, &width1, &height1);
-                int width2, height2;
-                glfwGetFramebufferSize(initInfo.window, &width2, &height2);
-                float scale = width2 / float(width1);
-
                 int widthMM, heightMM;
                 glfwGetMonitorPhysicalSize(monitor, &widthMM, &heightMM);
                 const double dpi = mode->width / (widthMM / 25.4);
 
-                intern::displayInfo = DisplayInfo::createWithDensity(mode->width * scale, mode->height * scale, dpi * scale);
+                intern::displayInfo = DisplayInfo::createWithDensity(mode->width, mode->height, dpi);
 
                 // ---
                 

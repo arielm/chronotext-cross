@@ -9,6 +9,7 @@
 #pragma once
 
 #include "cross/CrossDelegateBase.h"
+#include "desktop/MouseEvent.h"
 
 namespace chr
 {
@@ -29,6 +30,17 @@ namespace chr
     protected:
         int updateCount = 0;
 
+        std::vector<MouseEvent> mouseEvents;
+        float mouseX;
+        float mouseY;
+        int mouseButton = -1;
+        bool mousePressed = false;
+
+        void processMouseEvents();
+        void clearMouseEvents();
+
+        static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
+        static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
         static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     };
 }

@@ -160,12 +160,19 @@ void Sketch::initShaders()
 
 void Sketch::addTouch(int index, float x, float y)
 {
+  LOGI << "addTouch " << index << " " << x << "," << y << endl;
   dotPositions.emplace_back(x, y);
 }
 
 void Sketch::updateTouch(int index, float x, float y)
 {
+  LOGI << "updateTouch " << index << " " << x << "," << y << endl;
   dotPositions.emplace_back(x, y);
+}
+
+void Sketch::removeTouch(int index, float x, float y)
+{
+  LOGI << "removeTouch " << index << " " << x << "," << y << endl;
 }
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
