@@ -1,6 +1,10 @@
 
 #include "Sketch.h"
 
+#include "stb_image.h"
+
+// ---
+
 using namespace std;
 using namespace chr;
 
@@ -34,7 +38,8 @@ varying vec4 v_color;
 
 void main()
 {
-  gl_FragColor = v_color * texture2D(u_sampler, v_coord);
+  float alpha = texture2D(u_sampler, v_coord).a;
+  gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);
 }
 )";
 
@@ -74,7 +79,7 @@ void Sketch::draw()
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
   glVertexAttribPointer(coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-  GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+  GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
   glVertexAttrib4fv(colorLocation, color);
 
   glActiveTexture(GL_TEXTURE0);
@@ -85,8 +90,7 @@ void Sketch::draw()
   glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
 
   glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
-  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(400, 300, 0));
-  modelViewMatrix = glm::rotate(modelViewMatrix, (float)getElapsedSeconds(), glm::vec3(0, 0, 1));
+  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(windowInfo.size * 0.5f, 0));
 
   glm::mat4 mvp = projectionMatrix * modelViewMatrix;
   glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mvp[0][0]);
@@ -138,7 +142,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureIds[0] = loadTexture("dot_112.png");
+  textureIds[0] = loadTexture("dot_112.png", true);
 }
 
 void Sketch::initShaders()

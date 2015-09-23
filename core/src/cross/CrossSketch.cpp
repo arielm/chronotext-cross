@@ -102,7 +102,7 @@ namespace chr
     return program;
   }
 
-  GLuint CrossSketch::loadTexture(const fs::path &relativePath)
+  GLuint CrossSketch::loadTexture(const fs::path &relativePath, bool forceAlpha)
   {
     GLuint texture = 0u;
 
@@ -126,24 +126,52 @@ namespace chr
 
     if (data)
     {
-      glGenTextures(1, &texture);
-      glBindTexture(GL_TEXTURE_2D, texture);
+      GLenum format = 0;
 
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      switch (comp)
+      {
+        case 1:
+          format = GL_ALPHA;
+          break;
 
-      #if defined(CHR_PLATFORM_DESKTOP)
-        glHint(0x8192, GL_NICEST); // GL_GENERATE_MIPMAP_HINT
-        glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_TRUE); // GL_GENERATE_MIPMAP
-      #endif
+        case 3:
+          format = GL_RGB;
+          break;
 
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, x, y, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        case 4:
+          format = GL_RGBA;
+          break;
+      }
 
-      #if defined(CHR_PLATFORM_DESKTOP)
-        glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_FALSE); // GL_GENERATE_MIPMAP
-      #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
-        glGenerateMipmap(GL_TEXTURE_2D);
-      #endif
+      if (format)
+      {
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        if (forceAlpha && (format != GL_ALPHA))
+        {
+          int size = x * y;
+          int offset = comp - 1;
+
+          auto converted = make_unique<uint8_t[]>(size);
+          auto buffer = converted.get();
+
+          for (auto i = 0; i < size; i++, offset += comp)
+          {
+            *buffer++ = data[offset];
+          }
+
+          uploadTextureData(GL_ALPHA, x, y, converted.get());
+        }
+        else
+        {
+          uploadTextureData(format, x, y, data);
+        }
+      }
+      else
+      {
+        LOGE << "UNSUPPORTED IMAGE FORMAT" << endl;
+      }
 
       stbi_image_free(data);
     }
@@ -153,6 +181,25 @@ namespace chr
     }
 
     return texture;
+  }
+
+  void CrossSketch::uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data)
+  {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+    #if defined(CHR_PLATFORM_DESKTOP)
+      glHint(0x8192, GL_NICEST); // GL_GENERATE_MIPMAP_HINT
+      glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_TRUE); // GL_GENERATE_MIPMAP
+    #endif
+
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+
+    #if defined(CHR_PLATFORM_DESKTOP)
+      glTexParameteri(GL_TEXTURE_2D, 0x8191, GL_FALSE); // GL_GENERATE_MIPMAP
+    #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
+      glGenerateMipmap(GL_TEXTURE_2D);
+    #endif
   }
 
 #if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)

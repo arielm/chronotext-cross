@@ -82,7 +82,9 @@ namespace chr
 
     static GLuint makeShader(GLenum type, const char *text);
     static GLuint makeShaderProgram(const char *vs_text, const char *fs_text);
-    static GLuint loadTexture(const fs::path &relativePath);
+
+    static GLuint loadTexture(const fs::path &relativePath, bool forceAlpha = false);
+    static void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
 
     static void run(int width, int height, int aaSamples = 0);
 
