@@ -11,10 +11,6 @@ public:
   void shutdown() final;
   void draw() final;
 
-  void initBuffers();
-  void initTextures();
-  void initShaders();
-
 protected:
   GLuint shaderProgram;
   GLint positionLocation;
@@ -26,5 +22,12 @@ protected:
   GLuint vboIds[3];
   GLuint textureIds[1];
 
-  GLint maxAnisotropy;
+  float scale;
+  glm::mat4 projectionMatrix;
+
+  void initBuffers();
+  void initTextures();
+  void initShaders();
+
+  void drawDot(const glm::vec2 &position, float radius);
 };

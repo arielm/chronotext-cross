@@ -6,6 +6,7 @@
 #include "MemoryBuffer.h"
 
 #include "cross/WindowInfo.h"
+#include "system/DisplayHelper.h"
 #include "time/FrameClock.h"
 
 #if defined(CHR_PLATFORM_DESKTOP)

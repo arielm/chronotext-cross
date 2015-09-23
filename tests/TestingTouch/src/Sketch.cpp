@@ -1,10 +1,6 @@
 
 #include "Sketch.h"
 
-#include "stb_image.h"
-
-// ---
-
 using namespace std;
 using namespace chr;
 
@@ -43,8 +39,14 @@ void main()
 }
 )";
 
+static constexpr float DOT_RADIUS_DP = 22;
+static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
+
 void Sketch::setup()
 {
+  scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
+  projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
+
   initBuffers();
   initTextures();
   initShaders();
@@ -71,6 +73,11 @@ void Sketch::shutdown()
 
 void Sketch::draw()
 {
+  glClearColor(0, 0, 1, 1);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  // ---
+
   glEnableVertexAttribArray(positionLocation);
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
   glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -85,23 +92,11 @@ void Sketch::draw()
   glActiveTexture(GL_TEXTURE0);
   glUniform1i(samplerLocation, 0);
 
-  // ---
-
-  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
-
-  glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
-  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(windowInfo.size * 0.5f, 0));
-
-  glm::mat4 mvp = projectionMatrix * modelViewMatrix;
-  glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mvp[0][0]);
-
-  // ---
-
-  glClearColor(0, 0, 1, 1);
-  glClear(GL_COLOR_BUFFER_BIT);
-
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+
+  // ---
+
+  drawDot(glm::vec2(windowInfo.size * 0.5f), DOT_RADIUS_DP);
 }
 
 void Sketch::initBuffers()
@@ -155,4 +150,15 @@ void Sketch::initShaders()
   colorLocation = glGetAttribLocation(shaderProgram, "a_color");
   samplerLocation = glGetUniformLocation(shaderProgram, "u_sampler");
   matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
+}
+
+void Sketch::drawDot(const glm::vec2 &position, float radius)
+{
+  glm::mat4 modelViewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0));
+  modelViewMatrix = glm::scale(modelViewMatrix, glm::vec3(scale * radius / DOT_RADIUS_PIXELS));
+
+  glm::mat4 mvp = projectionMatrix * modelViewMatrix;
+  glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mvp[0][0]);
+
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 }

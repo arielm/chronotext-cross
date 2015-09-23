@@ -64,7 +64,7 @@ namespace chr
       if (fragment_shader != 0u)
       {
         program = glCreateProgram();
-        
+
         if (program != 0u)
         {
           glAttachShader(program, vertex_shader);
