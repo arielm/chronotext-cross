@@ -82,12 +82,11 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 100.0f);
+  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
 
-  glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1)); // SCALE
-  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -30)); // DISTANCE
-  modelViewMatrix = glm::rotate(modelViewMatrix, -15 * D2R, glm::vec3(1, 0, 0)); // ELEVATION
-  modelViewMatrix = glm::rotate(modelViewMatrix, (float)getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
+  glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1));
+  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(400, 300, 0));
+  modelViewMatrix = glm::rotate(modelViewMatrix, (float)getElapsedSeconds(), glm::vec3(0, 0, 1));
 
   glm::mat4 mvp = projectionMatrix * modelViewMatrix;
   glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mvp[0][0]);
@@ -105,10 +104,10 @@ void Sketch::initBuffers()
 {
   const GLfloat vertices[] =
   {
-    -10, +5, // A
-    -10, -5, // B
-    +10, -5, // C
-    +10, +5, // D
+    -64, +64, // A
+    -64, -64, // B
+    +64, -64, // C
+    +64, +64, // D
   };
 
   const GLfloat coords[] =
