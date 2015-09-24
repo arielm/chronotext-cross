@@ -185,7 +185,7 @@ void Sketch::initShaders()
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
   glm::mat4 modelViewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0));
-  modelViewMatrix = glm::scale(modelViewMatrix, glm::vec3(scale * radius / DOT_RADIUS_PIXELS));
+  modelViewMatrix = glm::scale(modelViewMatrix, glm::vec3(radius / DOT_RADIUS_PIXELS));
 
   glm::mat4 mvp = projectionMatrix * modelViewMatrix;
   glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mvp[0][0]);
