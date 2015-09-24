@@ -29,6 +29,12 @@ namespace chr
     {
         if (!initialized_)
         {
+            emscripten_set_mousedown_callback(0, 0, 1, mouseCallback);
+            emscripten_set_mouseup_callback(0, 0, 1, mouseCallback);
+            emscripten_set_mousemove_callback(0, 0, 1, mouseCallback);
+
+            // ---
+
             emscripten_set_canvas_size(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y);
 
             EmscriptenWebGLContextAttributes attr;
@@ -128,9 +134,77 @@ namespace chr
         performUninit();
     }
 
+    void CrossDelegate::processMouseEvents()
+    {
+        for (auto &event : mouseEvents)
+        {
+            switch (event.kind)
+            {
+                case MouseEvent::KIND_PRESSED:
+                    sketch->addTouch(event.button, event.x, event.y);
+                    break;
+
+                case MouseEvent::KIND_DRAGGED:
+                    sketch->updateTouch(event.button, event.x, event.y);
+                    break;
+
+                case MouseEvent::KIND_RELEASED:
+                    sketch->removeTouch(event.button, event.x, event.y);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    void CrossDelegate::clearMouseEvents()
+    {
+        mouseEvents.clear();
+    }
+
     void CrossDelegate::mainLoopCallback()
     {
-      intern::instance->performUpdate();
-      intern::instance->performDraw();
+        intern::instance->processMouseEvents();
+
+        intern::instance->performUpdate();
+        intern::instance->performDraw();
+
+        intern::instance->clearMouseEvents();
+    }
+
+    EM_BOOL CrossDelegate::mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData)
+    {
+        switch (eventType)
+        {
+            case EMSCRIPTEN_EVENT_MOUSEDOWN:
+            {
+                intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_PRESSED);
+
+                intern::instance->mouseButton = e->button;
+                intern::instance->mousePressed = true;
+                break;
+            }
+
+            case EMSCRIPTEN_EVENT_MOUSEUP:
+            {
+                intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_RELEASED);
+
+                intern::instance->mouseButton = e->button;
+                intern::instance->mousePressed = false;
+                break;
+            }
+
+            case EMSCRIPTEN_EVENT_MOUSEMOVE:
+            {
+                intern::instance->mouseEvents.emplace_back(e->clientX, e->clientY, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
+
+                intern::instance->mouseX = e->clientX;
+                intern::instance->mouseY = e->clientY;
+                break;
+            }
+        }
+
+        return 0;
     }
 }
