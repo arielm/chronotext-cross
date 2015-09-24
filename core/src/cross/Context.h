@@ -17,8 +17,8 @@ namespace chr
     
     // ---
 
-    CrossDelegate& delegate();
-    SystemManager& systemManager();
+    extern CrossDelegate& delegate();
+    extern SystemManager& systemManager();
 
     template <class T>
     inline T& checkedReference(T *instance)

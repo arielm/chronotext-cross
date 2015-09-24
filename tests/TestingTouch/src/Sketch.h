@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cross/CrossSketch.h"
+#include "cross/Context.h"
 
 class Sketch : public chr::CrossSketch
 {
