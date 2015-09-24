@@ -76,7 +76,8 @@ namespace chr
   namespace utils
   {
     /*
-     * UTILS BORROWED FROM https://github.com/cinder/Cinder/blob/master/include/cinder/Utilities.h
+     * toString() AND split() BORROWED FROM:
+     * https://github.com/cinder/Cinder/blob/master/include/cinder/Utilities.h
      */
 
     template<typename T>
@@ -87,6 +88,8 @@ namespace chr
 
     std::vector<std::string> split(const std::string &str, char separator, bool compress = true);
     std::vector<std::string> split(const std::string &str, const std::string &separators, bool compress = true);
+
+    uint64_t millisSinceEpoch();
   }
 
   bool hasFileResources();
