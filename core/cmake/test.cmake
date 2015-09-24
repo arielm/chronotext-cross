@@ -181,12 +181,18 @@ elseif (PLATFORM MATCHES emscripten)
   endif()
 
 elseif (PLATFORM MATCHES ios)
-  if (RUN MATCHES APP)
+  if (RUN MATCHES TEST)
+    add_definitions(-DCHR_RUN_TEST)
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/ios/run.test.sh.in")
+  elseif (RUN MATCHES APP)
     add_definitions(-DCHR_RUN_APP)
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/ios/run.app.sh.in")
+  endif()
+
+  if (RUN MATCHES TEST|APP)
     add_definitions(-DCHR_FS_BUNDLE)
 
     set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/ios/install.sh.in")
-    set(CONFIG_RUN "${CROSS_ROOT}/cmake/ios/run.sh.in")
 
     add_executable(${PROJECT_NAME}
       ${SRC_FILES}

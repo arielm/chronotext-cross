@@ -9,7 +9,7 @@ if (PLATFORM MATCHES osx)
 
 elseif (PLATFORM MATCHES ios)
   set(ARGS
-    -DRUN=APP
+    -DRUN=TEST
     -DIOS_ARCHS=arm64
 #   -DIOS_DEPLOYMENT_TARGET=5.1.1
 #   -DIOS_ARCHS=armv7
