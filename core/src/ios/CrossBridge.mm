@@ -15,7 +15,7 @@
 #import "cocoa/Utils.h"
 
 #include "ios/CrossDelegate.h"
-#include "ios/Touch.h"
+#include "cross/TouchEvent.h"
 #include "cross/WindowInfo.h"
 
 using namespace std;
@@ -400,7 +400,7 @@ namespace chr
    auto view = viewController.view;
    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
 
-   vector<Touch> activeTouches;
+   vector<TouchEvent> activeTouches;
 
    for (auto &element : touchIdMap)
    {
@@ -418,7 +418,7 @@ namespace chr
    auto view = viewController.view;
    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
 
-   vector<Touch> touchList;
+   vector<TouchEvent> touchList;
 
    for (UITouch *touch in touches)
    {
@@ -440,7 +440,7 @@ namespace chr
    auto view = viewController.view;
    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
 
-   vector<Touch> touchList;
+   vector<TouchEvent> touchList;
 
    for (UITouch *touch in touches)
    {
@@ -462,7 +462,7 @@ namespace chr
    auto view = viewController.view;
    float scale = view.contentScaleFactor; // TODO: TEST ON IPHONE 6+
 
-   vector<Touch> touchList;
+   vector<TouchEvent> touchList;
 
    for (UITouch *touch in touches)
    {

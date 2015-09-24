@@ -168,7 +168,7 @@ namespace chr
 
 #pragma mark ---------------------------------------- TOUCH ----------------------------------------
 
-   void CrossDelegate::touchesBegan(const vector<Touch> &touches)
+   void CrossDelegate::touchesBegan(const vector<TouchEvent> &touches)
    {
        for (auto &touch : touches)
        {
@@ -176,7 +176,7 @@ namespace chr
        }
    }
 
-   void CrossDelegate::touchesMoved(const vector<Touch> &touches)
+   void CrossDelegate::touchesMoved(const vector<TouchEvent> &touches)
    {
        for (auto &touch : touches)
        {
@@ -184,7 +184,7 @@ namespace chr
        }
    }
 
-   void CrossDelegate::touchesEnded(const vector<Touch> &touches)
+   void CrossDelegate::touchesEnded(const vector<TouchEvent> &touches)
    {
        for (auto &touch : touches)
        {

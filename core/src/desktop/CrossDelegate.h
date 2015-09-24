@@ -9,7 +9,7 @@
 #pragma once
 
 #include "cross/CrossDelegateBase.h"
-#include "desktop/MouseEvent.h"
+#include "cross/MouseEvent.h"
 
 namespace chr
 {

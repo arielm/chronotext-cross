@@ -9,7 +9,7 @@
 #pragma once
 
 #include "cross/CrossDelegateBase.h"
-#include "ios/Touch.h"
+#include "cross/TouchEvent.h"
 
 namespace chr
 {
@@ -25,9 +25,9 @@ namespace chr
         void performUpdate();
         void performDraw();
 
-       void touchesBegan(const std::vector<Touch> &touches);
-       void touchesMoved(const std::vector<Touch> &touches);
-       void touchesEnded(const std::vector<Touch> &touches);
+       void touchesBegan(const std::vector<TouchEvent> &touches);
+       void touchesMoved(const std::vector<TouchEvent> &touches);
+       void touchesEnded(const std::vector<TouchEvent> &touches);
 
         void sendMessageToBridge(int what, const std::string &body = "") final;
         void handleEvent(int eventId) final;
