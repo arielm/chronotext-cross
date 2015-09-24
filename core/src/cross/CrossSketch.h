@@ -5,6 +5,7 @@
 #include "Log.h"
 #include "MemoryBuffer.h"
 
+#include "cross/AccelEvent.h"
 #include "cross/WindowInfo.h"
 #include "system/DisplayHelper.h"
 #include "time/FrameClock.h"
@@ -106,6 +107,8 @@ namespace chr
     virtual void addTouch(int index, float x, float y) {}
     virtual void updateTouch(int index, float x, float y) {}
     virtual void removeTouch(int index, float x, float y) {}
+
+    virtual void accelerated(AccelEvent event) {}
 
     const WindowInfo& getWindowInfo() const;
     double getElapsedSeconds();

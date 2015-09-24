@@ -42,7 +42,7 @@ namespace chr
         system::InitInfo initInfo;
         system::SetupInfo setupInfo;
         
-//        AccelEvent::Filter accelFilter;
+        AccelEvent::Filter accelFilter;
 
         virtual void sketchCreated(CrossSketch *sketch) {}
         virtual void sketchDestroyed(CrossSketch *sketch) {}

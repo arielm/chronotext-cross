@@ -290,7 +290,7 @@ namespace chr
     
     void CrossDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
     {
-        // accelFilter = AccelEvent::Filter(filterFactor);
+        accelFilter = AccelEvent::Filter(filterFactor);
         
         int delay = 1000000 / updateFrequency;
         int min = ASensor_getMinDelay(accelerometerSensor);
@@ -321,7 +321,7 @@ namespace chr
          */
         transformed *= glm::vec3(-1, -1, +1) / ASENSOR_STANDARD_GRAVITY; // TODO: DOUBLE-CHECK Z AXIS
         
-        // sketch->accelerated(accelFilter.process(transformed));
+        sketch->accelerated(accelFilter.process(transformed));
     }
     
     /*

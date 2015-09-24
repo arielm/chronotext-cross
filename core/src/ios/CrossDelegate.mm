@@ -200,7 +200,7 @@ namespace chr
     
     void CrossDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
     {
-//        accelFilter = AccelEvent::Filter(filterFactor);
+        accelFilter = AccelEvent::Filter(filterFactor);
 
         if (updateFrequency <= 0)
         {
@@ -218,6 +218,6 @@ namespace chr
     
     void CrossDelegate::handleAcceleration(const glm::vec3 &acceleration)
     {
-//        sketch->accelerated(accelFilter.process(acceleration));
+       sketch->accelerated(accelFilter.process(acceleration));
     }
 }
