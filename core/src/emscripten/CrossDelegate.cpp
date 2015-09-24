@@ -105,6 +105,11 @@ namespace chr
         updateCount++;
     }
 
+    void CrossDelegate::performDraw()
+    {
+        sketch->draw();
+    }
+
     void CrossDelegate::run(int width, int height, int aaSamples)
     {
         initInfo.windowInfo = setupInfo.windowInfo = WindowInfo(width, height, aaSamples);
@@ -115,7 +120,7 @@ namespace chr
 
         sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
 
-        emscripten_set_main_loop_arg(performDraw, sketch, 0, 1);
+        emscripten_set_main_loop(mainLoopCallback, 0, 1);
 
         sketch->performStop(CrossSketch::STOP_REASON_VIEW_HIDDEN);
 
@@ -123,8 +128,9 @@ namespace chr
         performUninit();
     }
 
-    void CrossDelegate::performDraw(void *data)
+    void CrossDelegate::mainLoopCallback()
     {
-      reinterpret_cast<CrossSketch*>(data)->draw();
+      intern::instance->performUpdate();
+      intern::instance->performDraw();
     }
 }
