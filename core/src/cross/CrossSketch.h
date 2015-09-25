@@ -1,46 +1,20 @@
 #pragma once
 
-#include "Platform.h"
 #include "Timer.h"
-#include "Log.h"
-#include "MemoryBuffer.h"
 
 #include "cross/AccelEvent.h"
 #include "cross/WindowInfo.h"
 #include "system/DisplayHelper.h"
 #include "time/FrameClock.h"
-
-#if defined(CHR_PLATFORM_DESKTOP)
-  #include <glad/glad.h>
-  #include <GLFW/glfw3.h>
-#elif defined(CHR_PLATFORM_EMSCRIPTEN)
-  #include <emscripten.h>
-  #include <emscripten/html5.h>
-  #include <GLES2/gl2.h>
-#elif defined(CHR_PLATFORM_IOS)
-  #include <OpenGLES/ES2/gl.h>
-  #include <OpenGLES/ES2/glext.h>
-#elif defined(CHR_PLATFORM_ANDROID)
-  #include <GLES2/gl2.h>
-	#include <GLES2/gl2ext.h>
-#endif
+#include "utils/Utils.h"
+#include "utils/MathUtils.h"
+#include "utils/GLUtils.h"
 
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/epsilon.hpp>
-
-// ---
-
-#ifndef M_PI
-  #define M_PI 3.14159265358979323846
-#endif
-
-static constexpr float D2R (M_PI / 180.0);
-static constexpr float R2D (180.0 / M_PI);
-
-// ---
 
 namespace chr
 {
@@ -81,12 +55,6 @@ namespace chr
       ACTION_CAPTURE_ESCAPE,
       ACTION_RELEASE_ESCAPE,
     };
-
-    static GLuint makeShader(GLenum type, const char *text);
-    static GLuint makeShaderProgram(const char *vs_text, const char *fs_text);
-
-    static GLuint loadTexture(const fs::path &relativePath, bool forceAlpha = false);
-    static void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
 
     static void run(int width, int height, int aaSamples = 0);
 

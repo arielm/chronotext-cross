@@ -4,7 +4,7 @@
 using namespace std;
 using namespace chr;
 
-static const char *vss = R"(
+static const char *vertexShaderSource = R"(
 attribute vec2 a_position;
 attribute vec2 a_coord;
 attribute vec4 a_color;
@@ -22,7 +22,7 @@ void main()
 }
 )";
 
-static const char *pss = R"(
+static const char *fragmentShaderSource = R"(
 #ifdef GL_ES
   precision mediump float;
 #endif
@@ -139,7 +139,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureIds[0] = loadTexture("expo67.png");
+  textureIds[0] = utils::gl::loadTexture("expo67.png");
 
   /*
    * PROBLEMS:
@@ -154,7 +154,7 @@ void Sketch::initTextures()
 
 void Sketch::initShaders()
 {
-  shaderProgram = makeShaderProgram(vss, pss);
+  shaderProgram = utils::gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
   glUseProgram(shaderProgram);
 
   positionLocation = glGetAttribLocation(shaderProgram, "a_position");

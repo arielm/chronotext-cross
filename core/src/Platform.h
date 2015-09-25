@@ -6,8 +6,6 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -73,25 +71,6 @@ namespace chr
 
 namespace chr
 {
-  namespace utils
-  {
-    /*
-     * toString() AND split() BORROWED FROM:
-     * https://github.com/cinder/Cinder/blob/master/include/cinder/Utilities.h
-     */
-
-    template<typename T>
-    inline std::string toString(const T &t)
-    {
-      return boost::lexical_cast<std::string>(t);
-    }
-
-    std::vector<std::string> split(const std::string &str, char separator, bool compress = true);
-    std::vector<std::string> split(const std::string &str, const std::string &separators, bool compress = true);
-
-    uint64_t millisSinceEpoch();
-  }
-
   bool hasFileResources();
   bool hasMemoryResources();
 
