@@ -1,11 +1,3 @@
-/*
- * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
- *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
- * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
- */
-
 #pragma once
 
 #include "Rect.h"
@@ -28,41 +20,15 @@ namespace chr
 
   namespace math
   {
-    inline float boundf(float value, float range)
-    {
-      float bound = fmodf(value, range);
-      return (bound < 0) ? (bound + range) : bound;
-    }
-    
-    inline int bound(int value, int range)
-    {
-      int bound = value % range;
-      return (bound < 0) ? (bound + range) : bound;
-    }
+    float boundf(float value, float range);
+    int bound(int value, int range);
     
     /*
      * S-SHAPED CROSS-FADE CURVE: 3 * (t ^ 2) - 2 * (t ^ 3)
      */
-    inline float ease(float t)
-    {
-      return (t * t * (3 - 2 * t));
-    }
+    float ease(float t);
     
-    inline int nextPowerOfTwo(int x)
-    {
-      int result = 1;
-      
-      while (result < x)
-      {
-        result <<= 1;
-      }
-      
-      return result;
-    }
-    
-    inline bool isPowerOfTwo(int x)
-    {
-      return (x > 0) && !(x & (x - 1));
-    }
+    int nextPowerOfTwo(int x);
+    bool isPowerOfTwo(int x);
   }
 }

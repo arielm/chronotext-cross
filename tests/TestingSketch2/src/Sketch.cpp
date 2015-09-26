@@ -66,12 +66,14 @@ void Sketch::shutdown()
 
 void Sketch::draw()
 {
-  glEnableVertexAttribArray(positionLocation);
+  glUseProgram(shaderProgram);
+
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+  glEnableVertexAttribArray(positionLocation);
   glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-  glEnableVertexAttribArray(coordLocation);
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
+  glEnableVertexAttribArray(coordLocation);
   glVertexAttribPointer(coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
   GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
@@ -155,7 +157,6 @@ void Sketch::initTextures()
 void Sketch::initShaders()
 {
   shaderProgram = gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
-  glUseProgram(shaderProgram);
 
   positionLocation = glGetAttribLocation(shaderProgram, "a_position");
   coordLocation = glGetAttribLocation(shaderProgram, "a_coord");
