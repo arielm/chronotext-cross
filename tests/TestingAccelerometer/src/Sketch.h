@@ -63,5 +63,5 @@ protected:
 
   void accumulateForces();
   void verlet();
-  void satifsfyConstraints();
+  void satisfyConstraints();
 };

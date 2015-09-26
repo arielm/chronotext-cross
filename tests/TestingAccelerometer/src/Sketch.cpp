@@ -1,5 +1,6 @@
 
 #include "Sketch.h"
+#include "math/Rect.h"
 
 using namespace std;
 using namespace chr;
@@ -93,7 +94,7 @@ void Sketch::update()
 {
   accumulateForces();
   verlet();
-  satifsfyConstraints();
+  satisfyConstraints();
 }
 
 void Sketch::draw()
@@ -207,30 +208,30 @@ void Sketch::verlet()
   particle.previousPosition = tmp;
 }
 
-void Sketch::satifsfyConstraints()
+void Sketch::satisfyConstraints()
 {
-  glm::vec4 bounds(particle.radius, particle.radius, windowInfo.size.x - particle.radius, windowInfo.size.y - particle.radius);
+  math::Rectf bounds(particle.radius, particle.radius, windowInfo.size.x - particle.radius * 2, windowInfo.size.y - particle.radius * 2);
   auto velocity = particle.position - particle.previousPosition;
 
-  if (particle.position.x < bounds.x)
+  if (particle.position.x < bounds.x1)
   {
-    particle.position.x = bounds.x - velocity.x * 0.5f;
-    particle.previousPosition.x = bounds.x;
+    particle.position.x = bounds.x1 - velocity.x * 0.5f;
+    particle.previousPosition.x = bounds.x1;
   }
-  else if (particle.position.x > bounds.z)
+  else if (particle.position.x > bounds.x2)
   {
-    particle.position.x = bounds.z -  velocity.x * 0.5f;
-    particle.previousPosition.x = bounds.z;
+    particle.position.x = bounds.x2 -  velocity.x * 0.5f;
+    particle.previousPosition.x = bounds.x2;
   }
 
-  if (particle.position.y < bounds.y)
+  if (particle.position.y < bounds.y1)
   {
-    particle.position.y = bounds.y - velocity.y * 0.5f;
-    particle.previousPosition.y = bounds.y;
+    particle.position.y = bounds.y1 - velocity.y * 0.5f;
+    particle.previousPosition.y = bounds.y1;
   }
-  else if (particle.position.y > bounds.w)
+  else if (particle.position.y > bounds.y2)
   {
-    particle.position.y = bounds.w - velocity.y * 0.5f;
-    particle.previousPosition.y = bounds.w;
+    particle.position.y = bounds.y2 - velocity.y * 0.5f;
+    particle.previousPosition.y = bounds.y2;
   }
 }
