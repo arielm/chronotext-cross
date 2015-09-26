@@ -7,8 +7,8 @@
 #include "system/DisplayHelper.h"
 #include "time/FrameClock.h"
 #include "utils/Utils.h"
-#include "utils/MathUtils.h"
-#include "utils/GLUtils.h"
+#include "math/Utils.h"
+#include "gl/Utils.h"
 
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>

@@ -139,7 +139,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureIds[0] = utils::gl::loadTexture("expo67.png");
+  textureIds[0] = gl::loadTexture("expo67.png");
 
   /*
    * PROBLEMS:
@@ -154,7 +154,7 @@ void Sketch::initTextures()
 
 void Sketch::initShaders()
 {
-  shaderProgram = utils::gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
+  shaderProgram = gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
   glUseProgram(shaderProgram);
 
   positionLocation = glGetAttribLocation(shaderProgram, "a_position");

@@ -14,7 +14,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/time/Clock.cpp"
   "${CROSS_ROOT}/src/time/FrameClock.cpp"
   "${CROSS_ROOT}/src/utils/Utils.cpp"
-  "${CROSS_ROOT}/src/utils/GLUtils.cpp"
+  "${CROSS_ROOT}/src/gl/Utils.cpp"
 )
 
 # ---

@@ -167,12 +167,12 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureIds[0] = utils::gl::loadTexture("dot_112.png", true);
+  textureIds[0] = gl::loadTexture("dot_112.png", true);
 }
 
 void Sketch::initShaders()
 {
-  shaderProgram = utils::gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
+  shaderProgram = gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
   glUseProgram(shaderProgram);
 
   positionLocation = glGetAttribLocation(shaderProgram, "a_position");

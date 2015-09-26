@@ -19,15 +19,12 @@
 
 namespace chr
 {
-  namespace utils
+  namespace gl
   {
-    namespace gl
-    {
-        GLuint makeShader(GLenum type, const char *source);
-        GLuint makeShaderProgram(const char *vertexShaderSource, const char *fragmentShaderSource);
+    GLuint makeShader(GLenum type, const char *source);
+    GLuint makeShaderProgram(const char *vertexShaderSource, const char *fragmentShaderSource);
 
-        GLuint loadTexture(const fs::path &relativePath, bool forceAlpha = false);
-        void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
-    }
+    GLuint loadTexture(const fs::path &relativePath, bool forceAlpha = false);
+    void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
   }
 }
