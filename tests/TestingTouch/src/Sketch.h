@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
+#include "gl/ShaderProgram.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -15,7 +16,7 @@ public:
   void updateTouch(int index, float x, float y) final;
 
 protected:
-  GLuint shaderProgram;
+  chr::gl::ShaderProgram shaderProgram;
   GLint positionLocation;
   GLint coordLocation;
   GLint colorLocation;

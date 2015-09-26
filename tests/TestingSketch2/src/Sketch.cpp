@@ -58,6 +58,8 @@ void Sketch::setup()
 void Sketch::shutdown()
 {
   glUseProgram(0);
+  shaderProgram.unload();
+
   glDisableVertexAttribArray(positionLocation);
   glDisableVertexAttribArray(coordLocation);
   glDeleteBuffers(3, vboIds);
@@ -66,8 +68,6 @@ void Sketch::shutdown()
 
 void Sketch::draw()
 {
-  glUseProgram(shaderProgram);
-
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
   glEnableVertexAttribArray(positionLocation);
   glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -98,6 +98,8 @@ void Sketch::draw()
 
   glClearColor(0, 0, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT);
+
+  glUseProgram(shaderProgram.id);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
@@ -156,11 +158,11 @@ void Sketch::initTextures()
 
 void Sketch::initShaders()
 {
-  shaderProgram = gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
+  shaderProgram.load(vertexShaderSource, fragmentShaderSource);
 
-  positionLocation = glGetAttribLocation(shaderProgram, "a_position");
-  coordLocation = glGetAttribLocation(shaderProgram, "a_coord");
-  colorLocation = glGetAttribLocation(shaderProgram, "a_color");
-  samplerLocation = glGetUniformLocation(shaderProgram, "u_sampler");
-  matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
+  positionLocation = glGetAttribLocation(shaderProgram.id, "a_position");
+  coordLocation = glGetAttribLocation(shaderProgram.id, "a_coord");
+  colorLocation = glGetAttribLocation(shaderProgram.id, "a_color");
+  samplerLocation = glGetUniformLocation(shaderProgram.id, "u_sampler");
+  matrixLocation = glGetUniformLocation(shaderProgram.id, "u_mvp_matrix");
 }

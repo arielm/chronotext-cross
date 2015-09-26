@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Rect.h"
-
 #include <cmath>
 #include <limits>
 

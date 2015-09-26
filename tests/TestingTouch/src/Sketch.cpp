@@ -66,8 +66,11 @@ void Sketch::setup()
 void Sketch::shutdown()
 {
   glUseProgram(0);
+  shaderProgram.unload();
+
   glDisableVertexAttribArray(positionLocation);
   glDisableVertexAttribArray(coordLocation);
+
   glDeleteBuffers(3, vboIds);
   glDeleteTextures(1, textureIds);
 }
@@ -78,8 +81,6 @@ void Sketch::draw()
   glClear(GL_COLOR_BUFFER_BIT);
 
   // ---
-
-  glUseProgram(shaderProgram);
 
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
   glEnableVertexAttribArray(positionLocation);
@@ -98,6 +99,8 @@ void Sketch::draw()
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
 
   // ---
+
+  glUseProgram(shaderProgram.id);
 
   for (auto &position : dotPositions)
   {
@@ -150,13 +153,13 @@ void Sketch::initTextures()
 
 void Sketch::initShaders()
 {
-  shaderProgram = gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
+  shaderProgram.load(vertexShaderSource, fragmentShaderSource);
 
-  positionLocation = glGetAttribLocation(shaderProgram, "a_position");
-  coordLocation = glGetAttribLocation(shaderProgram, "a_coord");
-  colorLocation = glGetAttribLocation(shaderProgram, "a_color");
-  samplerLocation = glGetUniformLocation(shaderProgram, "u_sampler");
-  matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
+  positionLocation = glGetAttribLocation(shaderProgram.id, "a_position");
+  coordLocation = glGetAttribLocation(shaderProgram.id, "a_coord");
+  colorLocation = glGetAttribLocation(shaderProgram.id, "a_color");
+  samplerLocation = glGetUniformLocation(shaderProgram.id, "u_sampler");
+  matrixLocation = glGetUniformLocation(shaderProgram.id, "u_mvp_matrix");
 }
 
 void Sketch::addTouch(int index, float x, float y)

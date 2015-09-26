@@ -73,8 +73,11 @@ void Sketch::setup()
 void Sketch::shutdown()
 {
   glUseProgram(0);
+  shaderProgram.unload();
+
   glDisableVertexAttribArray(positionLocation);
   glDisableVertexAttribArray(coordLocation);
+
   glDeleteBuffers(3, vboIds);
   glDeleteTextures(1, textureIds);
 }
@@ -104,8 +107,6 @@ void Sketch::draw()
 
   // ---
 
-  glUseProgram(shaderProgram);
-
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
   glEnableVertexAttribArray(positionLocation);
   glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -124,6 +125,7 @@ void Sketch::draw()
 
   // ---
 
+  glUseProgram(shaderProgram.id);
   drawDot(particle.position, particle.radius);
 }
 
@@ -175,13 +177,13 @@ void Sketch::initTextures()
 
 void Sketch::initShaders()
 {
-  shaderProgram = gl::makeShaderProgram(vertexShaderSource, fragmentShaderSource);
+  shaderProgram.load(vertexShaderSource, fragmentShaderSource);
 
-  positionLocation = glGetAttribLocation(shaderProgram, "a_position");
-  coordLocation = glGetAttribLocation(shaderProgram, "a_coord");
-  colorLocation = glGetAttribLocation(shaderProgram, "a_color");
-  samplerLocation = glGetUniformLocation(shaderProgram, "u_sampler");
-  matrixLocation = glGetUniformLocation(shaderProgram, "u_mvp_matrix");
+  positionLocation = glGetAttribLocation(shaderProgram.id, "a_position");
+  coordLocation = glGetAttribLocation(shaderProgram.id, "a_coord");
+  colorLocation = glGetAttribLocation(shaderProgram.id, "a_color");
+  samplerLocation = glGetUniformLocation(shaderProgram.id, "u_sampler");
+  matrixLocation = glGetUniformLocation(shaderProgram.id, "u_mvp_matrix");
 }
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
