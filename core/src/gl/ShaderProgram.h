@@ -9,7 +9,7 @@ namespace chr
     class ShaderProgram
     {
     public:
-        GLuint id;
+        GLuint id = 0;
         GLuint vertexShaderId;
         GLuint fragmentShaderId;
 

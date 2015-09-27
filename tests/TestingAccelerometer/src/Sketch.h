@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/TextureAlphaShader.h"
 
 struct Particle
 {
@@ -40,7 +39,6 @@ public:
   void accelerated(chr::AccelEvent event) final;
 
 protected:
-  chr::gl::TextureAlphaShader shaderProgram;
   GLuint vboIds[3];
   GLuint textureIds[1];
 
@@ -52,7 +50,6 @@ protected:
 
   void initBuffers();
   void initTextures();
-  void initShaders();
 
   void drawDot(const glm::vec2 &position, float radius);
 

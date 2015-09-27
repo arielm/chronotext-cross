@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/TextureAlphaShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -16,7 +15,6 @@ public:
   void updateTouch(int index, float x, float y) final;
 
 protected:
-  chr::gl::TextureAlphaShader shaderProgram;
   GLuint vboIds[3];
   GLuint textureIds[1];
 
@@ -27,7 +25,6 @@ protected:
 
   void initBuffers();
   void initTextures();
-  void initShaders();
 
   void drawDot(const glm::vec2 &position, float radius);
 };

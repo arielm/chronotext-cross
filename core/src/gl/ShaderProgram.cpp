@@ -41,57 +41,60 @@ namespace chr
 
      GLuint ShaderProgram::load(const char *vertexShaderSource, const char *fragmentShaderSource)
      {
-       vertexShaderId = createShader(GL_VERTEX_SHADER, vertexShaderSource);
-
-       if (vertexShaderId != 0)
+       if (!id)
        {
-         fragmentShaderId = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+         vertexShaderId = createShader(GL_VERTEX_SHADER, vertexShaderSource);
 
-         if (fragmentShaderId != 0)
+         if (vertexShaderId != 0)
          {
-           id = glCreateProgram();
+           fragmentShaderId = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
-           if (id != 0)
+           if (fragmentShaderId != 0)
            {
-             glAttachShader(id, vertexShaderId);
-             glAttachShader(id, fragmentShaderId);
-             glLinkProgram(id);
+             id = glCreateProgram();
 
-             GLint success;
-             glGetProgramiv(id, GL_LINK_STATUS, &success);
-
-             if (success != GL_TRUE)
+             if (id != 0)
              {
-               GLint maxLength = 0;
-               glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
-               string buf(maxLength, 0);
-               glGetShaderInfoLog(id, maxLength, &maxLength, &buf[0]);
+               glAttachShader(id, vertexShaderId);
+               glAttachShader(id, fragmentShaderId);
+               glLinkProgram(id);
 
-               LOGE << "ERROR: FAILED TO LINK SHADER PROGRAM" << endl;
-               LOGE << buf << endl;
+               GLint success;
+               glGetProgramiv(id, GL_LINK_STATUS, &success);
 
-               glDeleteShader(vertexShaderId);
-               vertexShaderId = 0;
+               if (success != GL_TRUE)
+               {
+                 GLint maxLength = 0;
+                 glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
+                 string buf(maxLength, 0);
+                 glGetShaderInfoLog(id, maxLength, &maxLength, &buf[0]);
 
-               glDeleteShader(fragmentShaderId);
-               fragmentShaderId = 0;
+                 LOGE << "ERROR: FAILED TO LINK SHADER PROGRAM" << endl;
+                 LOGE << buf << endl;
 
-               glDeleteProgram(id);
-               id = 0;
+                 glDeleteShader(vertexShaderId);
+                 vertexShaderId = 0;
+
+                 glDeleteShader(fragmentShaderId);
+                 fragmentShaderId = 0;
+
+                 glDeleteProgram(id);
+                 id = 0;
+               }
              }
+           }
+           else
+           {
+             LOGE << "ERROR: UNABLE TO LOAD FRAGMENT SHADER" << endl;
+
+             glDeleteShader(vertexShaderId);
+             vertexShaderId = 0;
            }
          }
          else
          {
-           LOGE << "ERROR: UNABLE TO LOAD FRAGMENT SHADER" << endl;
-
-           glDeleteShader(vertexShaderId);
-           vertexShaderId = 0;
+           LOGE << "ERROR: UNABLE TO LOAD VERTEX SHADER" << endl;
          }
-       }
-       else
-       {
-         LOGE << "ERROR: UNABLE TO LOAD VERTEX SHADER" << endl;
        }
 
        return id;
@@ -99,16 +102,19 @@ namespace chr
 
      void ShaderProgram::unload()
      {
-       glDetachShader(id, fragmentShaderId);
-       glDeleteShader(fragmentShaderId);
-       fragmentShaderId = 0;
+       if (id)
+       {
+         glDetachShader(id, fragmentShaderId);
+         glDeleteShader(fragmentShaderId);
+         fragmentShaderId = 0;
 
-       glDetachShader(id, vertexShaderId);
-       glDeleteShader(vertexShaderId);
-       vertexShaderId = 0;
+         glDetachShader(id, vertexShaderId);
+         glDeleteShader(vertexShaderId);
+         vertexShaderId = 0;
 
-       glDeleteProgram(id);
-       id = 0;
+         glDeleteProgram(id);
+         id = 0;
+       }
      }
   }
 }

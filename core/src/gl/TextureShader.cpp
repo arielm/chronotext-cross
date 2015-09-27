@@ -38,15 +38,31 @@ namespace chr
     }
     )";
 
-    void TextureShader::load()
+    bool TextureShader::load()
     {
-      ShaderProgram::load(vertexShaderSource, fragmentShaderSource);
+      if (!id)
+      {
+        ShaderProgram::load(vertexShaderSource, fragmentShaderSource);
 
-      positionLocation = glGetAttribLocation(id, "a_position");
-      coordLocation = glGetAttribLocation(id, "a_coord");
-      colorLocation = glGetAttribLocation(id, "a_color");
-      samplerLocation = glGetUniformLocation(id, "u_sampler");
-      matrixLocation = glGetUniformLocation(id, "u_mvp_matrix");
+        positionLocation = glGetAttribLocation(id, "a_position");
+        coordLocation = glGetAttribLocation(id, "a_coord");
+        colorLocation = glGetAttribLocation(id, "a_color");
+        samplerLocation = glGetUniformLocation(id, "u_sampler");
+        matrixLocation = glGetUniformLocation(id, "u_mvp_matrix");
+      }
+
+      return bool(id);
+    }
+
+    bool TextureShader::use()
+    {
+      if (load())
+      {
+        glUseProgram(id);
+        return true;
+      }
+
+      return false;
     }
   }
 }

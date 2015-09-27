@@ -1,8 +1,10 @@
 
 #include "Sketch.h"
+#include "gl/TextureAlphaShader.h"
 
 using namespace std;
 using namespace chr;
+using namespace gl;
 
 static constexpr float DOT_RADIUS_DP = 22;
 static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
@@ -15,7 +17,6 @@ void Sketch::setup()
 
   initBuffers();
   initTextures();
-  initShaders();
 
   // ---
 
@@ -31,10 +32,10 @@ void Sketch::setup()
 void Sketch::shutdown()
 {
   glUseProgram(0);
-  shaderProgram.unload();
+  textureAlphaShader.unload();
 
-  glDisableVertexAttribArray(shaderProgram.positionLocation);
-  glDisableVertexAttribArray(shaderProgram.coordLocation);
+  glDisableVertexAttribArray(textureAlphaShader.positionLocation);
+  glDisableVertexAttribArray(textureAlphaShader.coordLocation);
 
   glDeleteBuffers(3, vboIds);
   glDeleteTextures(1, textureIds);
@@ -45,32 +46,34 @@ void Sketch::draw()
   glClearColor(0, 0, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-  glEnableVertexAttribArray(shaderProgram.positionLocation);
-  glVertexAttribPointer(shaderProgram.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-  glEnableVertexAttribArray(shaderProgram.coordLocation);
-  glVertexAttribPointer(shaderProgram.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-  GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
-  glVertexAttrib4fv(shaderProgram.colorLocation, color);
-
-  glActiveTexture(GL_TEXTURE0);
-  glUniform1i(shaderProgram.samplerLocation, 0);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-
   // ---
 
-  glUseProgram(shaderProgram.id);
-
-  for (auto &position : dotPositions)
+  textureAlphaShader.use();
   {
-    drawDot(position, scale * DOT_RADIUS_DP);
-  }
+    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+    glEnableVertexAttribArray(textureAlphaShader.positionLocation);
+    glVertexAttribPointer(textureAlphaShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-  dotPositions.clear();
+    glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
+    glEnableVertexAttribArray(textureAlphaShader.coordLocation);
+    glVertexAttribPointer(textureAlphaShader.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
+    glVertexAttrib4fv(textureAlphaShader.colorLocation, color);
+
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(textureAlphaShader.samplerLocation, 0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
+
+    // ---
+
+    for (auto &position : dotPositions) {
+      drawDot(position, scale * DOT_RADIUS_DP);
+    }
+
+    dotPositions.clear();
+  }
 }
 
 void Sketch::initBuffers()
@@ -111,12 +114,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureIds[0] = gl::loadTexture("dot_112.png", true);
-}
-
-void Sketch::initShaders()
-{
-  shaderProgram.load();
+  textureIds[0] = loadTexture("dot_112.png", true);
 }
 
 void Sketch::addTouch(int index, float x, float y)
@@ -135,7 +133,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   modelViewMatrix = glm::scale(modelViewMatrix, glm::vec3(radius / DOT_RADIUS_PIXELS));
 
   glm::mat4 mvp = projectionMatrix * modelViewMatrix;
-  glUniformMatrix4fv(shaderProgram.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
+  glUniformMatrix4fv(textureAlphaShader.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
 
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 }

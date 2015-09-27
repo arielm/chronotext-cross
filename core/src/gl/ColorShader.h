@@ -18,7 +18,10 @@ namespace chr
       GLint samplerLocation;
       GLint matrixLocation;
 
-      void load();
+      bool load();
+      bool use();
     };
+
+    static ColorShader colorShader;
   }
 }

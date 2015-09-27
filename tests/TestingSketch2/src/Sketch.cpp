@@ -1,14 +1,15 @@
 
 #include "Sketch.h"
+#include "gl/TextureShader.h"
 
 using namespace std;
 using namespace chr;
+using namespace gl;
 
 void Sketch::setup()
 {
   initBuffers();
   initTextures();
-  initShaders();
 
   // ---
 
@@ -24,10 +25,10 @@ void Sketch::setup()
 void Sketch::shutdown()
 {
   glUseProgram(0);
-  shaderProgram.unload();
+  textureShader.unload();
 
-  glDisableVertexAttribArray(shaderProgram.positionLocation);
-  glDisableVertexAttribArray(shaderProgram.coordLocation);
+  glDisableVertexAttribArray(textureShader.positionLocation);
+  glDisableVertexAttribArray(textureShader.coordLocation);
 
   glDeleteBuffers(3, vboIds);
   glDeleteTextures(1, textureIds);
@@ -35,41 +36,44 @@ void Sketch::shutdown()
 
 void Sketch::draw()
 {
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 100.0f);
-
-  glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1)); // SCALE
-  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -30)); // DISTANCE
-  modelViewMatrix = glm::rotate(modelViewMatrix, -15 * D2R, glm::vec3(1, 0, 0)); // ELEVATION
-  modelViewMatrix = glm::rotate(modelViewMatrix, (float)getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
-
-  glm::mat4 mvp = projectionMatrix * modelViewMatrix;
-  glUniformMatrix4fv(shaderProgram.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
-
-  // ---
-
   glClearColor(0, 0, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-  glEnableVertexAttribArray(shaderProgram.positionLocation);
-  glVertexAttribPointer(shaderProgram.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-  glEnableVertexAttribArray(shaderProgram.coordLocation);
-  glVertexAttribPointer(shaderProgram.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-  GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-  glVertexAttrib4fv(shaderProgram.colorLocation, color);
-
-  glActiveTexture(GL_TEXTURE0);
-  glUniform1i(shaderProgram.samplerLocation, 0);
-
   // ---
 
-  glUseProgram(shaderProgram.id);
+  textureShader.use();
+  {
+    glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 100.0f);
 
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+    glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1)); // SCALE
+    modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -30)); // DISTANCE
+    modelViewMatrix = glm::rotate(modelViewMatrix, -15 * D2R, glm::vec3(1, 0, 0)); // ELEVATION
+    modelViewMatrix = glm::rotate(modelViewMatrix, (float) getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
+
+    glm::mat4 mvp = projectionMatrix * modelViewMatrix;
+    glUniformMatrix4fv(textureShader.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
+
+    // ---
+
+    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+    glEnableVertexAttribArray(textureShader.positionLocation);
+    glVertexAttribPointer(textureShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
+    glEnableVertexAttribArray(textureShader.coordLocation);
+    glVertexAttribPointer(textureShader.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    glVertexAttrib4fv(textureShader.colorLocation, color);
+
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(textureShader.samplerLocation, 0);
+
+    // ---
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+  }
 }
 
 void Sketch::initBuffers()
@@ -110,7 +114,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureIds[0] = gl::loadTexture("expo67.png");
+  textureIds[0] = loadTexture("expo67.png");
 
   /*
    * PROBLEMS:
@@ -121,9 +125,4 @@ void Sketch::initTextures()
   LOGI << "max-anisotropy: " << maxAnisotropy << endl;
 
   glTexParameteri( GL_TEXTURE_2D, 0x84FF, maxAnisotropy);
-}
-
-void Sketch::initShaders()
-{
-  shaderProgram.load();
 }
