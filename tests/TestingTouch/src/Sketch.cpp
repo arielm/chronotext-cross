@@ -4,41 +4,6 @@
 using namespace std;
 using namespace chr;
 
-static const char *vertexShaderSource = R"(
-attribute vec2 a_position;
-attribute vec2 a_coord;
-attribute vec4 a_color;
-
-uniform mat4 u_mvp_matrix;
-
-varying vec2 v_coord;
-varying vec4 v_color;
-
-void main()
-{
-  v_coord = a_coord;
-  v_color = a_color;
-  gl_Position = u_mvp_matrix * vec4(a_position, 0, 1);
-}
-)";
-
-static const char *fragmentShaderSource = R"(
-#ifdef GL_ES
-  precision mediump float;
-#endif
-
-uniform sampler2D u_sampler;
-
-varying vec2 v_coord;
-varying vec4 v_color;
-
-void main()
-{
-  float alpha = texture2D(u_sampler, v_coord).a;
-  gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);
-}
-)";
-
 static constexpr float DOT_RADIUS_DP = 22;
 static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 static constexpr float TEXTURE_RADIUS_PIXELS = 64; // SPECIFIC TO "dot_112.png"
@@ -68,8 +33,8 @@ void Sketch::shutdown()
   glUseProgram(0);
   shaderProgram.unload();
 
-  glDisableVertexAttribArray(positionLocation);
-  glDisableVertexAttribArray(coordLocation);
+  glDisableVertexAttribArray(shaderProgram.positionLocation);
+  glDisableVertexAttribArray(shaderProgram.coordLocation);
 
   glDeleteBuffers(3, vboIds);
   glDeleteTextures(1, textureIds);
@@ -80,21 +45,19 @@ void Sketch::draw()
   glClearColor(0, 0, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  // ---
-
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-  glEnableVertexAttribArray(positionLocation);
-  glVertexAttribPointer(positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(shaderProgram.positionLocation);
+  glVertexAttribPointer(shaderProgram.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-  glEnableVertexAttribArray(coordLocation);
-  glVertexAttribPointer(coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+  glEnableVertexAttribArray(shaderProgram.coordLocation);
+  glVertexAttribPointer(shaderProgram.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
   GLfloat color[4] = {1.0f, 1.0f, 0.0f, 1.0f};
-  glVertexAttrib4fv(colorLocation, color);
+  glVertexAttrib4fv(shaderProgram.colorLocation, color);
 
   glActiveTexture(GL_TEXTURE0);
-  glUniform1i(samplerLocation, 0);
+  glUniform1i(shaderProgram.samplerLocation, 0);
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
 
@@ -114,10 +77,10 @@ void Sketch::initBuffers()
 {
   const GLfloat vertices[] =
   {
-    -TEXTURE_RADIUS_PIXELS, +TEXTURE_RADIUS_PIXELS, // A
-    -TEXTURE_RADIUS_PIXELS, -TEXTURE_RADIUS_PIXELS, // B
-    +TEXTURE_RADIUS_PIXELS, -TEXTURE_RADIUS_PIXELS, // C
-    +TEXTURE_RADIUS_PIXELS, +TEXTURE_RADIUS_PIXELS, // D
+    -TEXTURE_RADIUS_PIXELS, +TEXTURE_RADIUS_PIXELS, 0, // A
+    -TEXTURE_RADIUS_PIXELS, -TEXTURE_RADIUS_PIXELS, 0, // B
+    +TEXTURE_RADIUS_PIXELS, -TEXTURE_RADIUS_PIXELS, 0, // C
+    +TEXTURE_RADIUS_PIXELS, +TEXTURE_RADIUS_PIXELS, 0, // D
   };
 
   const GLfloat coords[] =
@@ -137,7 +100,7 @@ void Sketch::initBuffers()
   glGenBuffers(3, vboIds);
 
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 3, vertices, GL_STATIC_DRAW);
 
   glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
   glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, coords, GL_STATIC_DRAW);
@@ -153,13 +116,7 @@ void Sketch::initTextures()
 
 void Sketch::initShaders()
 {
-  shaderProgram.load(vertexShaderSource, fragmentShaderSource);
-
-  positionLocation = glGetAttribLocation(shaderProgram.id, "a_position");
-  coordLocation = glGetAttribLocation(shaderProgram.id, "a_coord");
-  colorLocation = glGetAttribLocation(shaderProgram.id, "a_color");
-  samplerLocation = glGetUniformLocation(shaderProgram.id, "u_sampler");
-  matrixLocation = glGetUniformLocation(shaderProgram.id, "u_mvp_matrix");
+  shaderProgram.load();
 }
 
 void Sketch::addTouch(int index, float x, float y)
@@ -178,7 +135,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   modelViewMatrix = glm::scale(modelViewMatrix, glm::vec3(radius / DOT_RADIUS_PIXELS));
 
   glm::mat4 mvp = projectionMatrix * modelViewMatrix;
-  glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &mvp[0][0]);
+  glUniformMatrix4fv(shaderProgram.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
 
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
 }

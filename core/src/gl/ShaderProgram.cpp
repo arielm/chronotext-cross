@@ -8,7 +8,7 @@ namespace chr
 {
   namespace gl
   {
-     GLuint ShaderProgram::makeShader(GLenum type, const char *source)
+     GLuint ShaderProgram::createShader(GLenum type, const char *source)
      {
        GLuint shader = 0;
        shader = glCreateShader(type);
@@ -41,11 +41,11 @@ namespace chr
 
      GLuint ShaderProgram::load(const char *vertexShaderSource, const char *fragmentShaderSource)
      {
-       vertexShaderId = makeShader(GL_VERTEX_SHADER, vertexShaderSource);
+       vertexShaderId = createShader(GL_VERTEX_SHADER, vertexShaderSource);
 
        if (vertexShaderId != 0)
        {
-         fragmentShaderId = makeShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+         fragmentShaderId = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
          if (fragmentShaderId != 0)
          {
@@ -70,13 +70,14 @@ namespace chr
                LOGE << "ERROR: FAILED TO LINK SHADER PROGRAM" << endl;
                LOGE << buf << endl;
 
-               glDeleteProgram(id);
-               glDeleteShader(fragmentShaderId);
                glDeleteShader(vertexShaderId);
-
-               id = 0;
-               fragmentShaderId = 0;
                vertexShaderId = 0;
+
+               glDeleteShader(fragmentShaderId);
+               fragmentShaderId = 0;
+
+               glDeleteProgram(id);
+               id = 0;
              }
            }
          }
@@ -98,16 +99,16 @@ namespace chr
 
      void ShaderProgram::unload()
      {
-       glDetachShader(id, vertexShaderId);
        glDetachShader(id, fragmentShaderId);
-
        glDeleteShader(fragmentShaderId);
-       glDeleteShader(vertexShaderId);
-       glDeleteProgram(id);
-
-       id = 0;
        fragmentShaderId = 0;
+
+       glDetachShader(id, vertexShaderId);
+       glDeleteShader(vertexShaderId);
        vertexShaderId = 0;
+
+       glDeleteProgram(id);
+       id = 0;
      }
   }
 }

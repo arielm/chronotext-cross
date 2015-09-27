@@ -15,6 +15,7 @@ set(LIBRARIES
 set(SRC_FILES
   "src/main.cpp"
   "src/Sketch.cpp"
+  "${CROSS_ROOT}/src/gl/TextureAlphaShader.cpp"
 )
 
 # ---

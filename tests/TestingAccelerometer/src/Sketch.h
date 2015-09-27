@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/ShaderProgram.h"
+#include "gl/TextureAlphaShader.h"
 
 struct Particle
 {
@@ -40,13 +40,7 @@ public:
   void accelerated(chr::AccelEvent event) final;
 
 protected:
-  chr::gl::ShaderProgram shaderProgram;
-  GLint positionLocation;
-  GLint coordLocation;
-  GLint colorLocation;
-  GLint samplerLocation;
-  GLint matrixLocation;
-
+  chr::gl::TextureAlphaShader shaderProgram;
   GLuint vboIds[3];
   GLuint textureIds[1];
 

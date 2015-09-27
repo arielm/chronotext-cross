@@ -4,14 +4,16 @@
 
 namespace chr
 {
-  namespace gl {
-    class ShaderProgram {
+  namespace gl
+  {
+    class ShaderProgram
+    {
     public:
         GLuint id;
         GLuint vertexShaderId;
         GLuint fragmentShaderId;
 
-        static GLuint makeShader(GLenum type, const char *source);
+        static GLuint createShader(GLenum type, const char *source);
 
         GLuint load(const char *vertexShaderSource, const char *fragmentShaderSource);
         void unload();

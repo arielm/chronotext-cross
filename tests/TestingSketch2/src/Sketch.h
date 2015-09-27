@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/ShaderProgram.h"
+#include "gl/TextureShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -17,13 +17,7 @@ public:
   void initShaders();
 
 protected:
-  chr::gl::ShaderProgram shaderProgram;
-  GLint positionLocation;
-  GLint coordLocation;
-  GLint colorLocation;
-  GLint samplerLocation;
-  GLint matrixLocation;
-
+  chr::gl::TextureShader shaderProgram;
   GLuint vboIds[3];
   GLuint textureIds[1];
 
