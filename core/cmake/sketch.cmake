@@ -10,6 +10,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/cross/CrossDelegateBase.cpp"
   "${CROSS_ROOT}/src/system/SystemManagerBase.cpp"
   "${CROSS_ROOT}/src/system/DisplayHelperBase.cpp"
+  "${CROSS_ROOT}/src/Random.cpp"
   "${CROSS_ROOT}/src/Timer.cpp"
   "${CROSS_ROOT}/src/time/Clock.cpp"
   "${CROSS_ROOT}/src/time/FrameClock.cpp"
