@@ -117,7 +117,7 @@ void Sketch::initTextures()
   textureIds[0] = loadTexture("expo67.png");
 
   /*
-   * PROBLEM: RETURN 0 ON EMSCRIPTEN
+   * PROBLEM: RETURNS 0 ON EMSCRIPTEN (TESTED WITH SAFARI ON OSX)
    */
   glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
   LOGI << "max-anisotropy: " << maxAnisotropy << endl;
