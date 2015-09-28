@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Timer.h"
-
 #include "cross/AccelEvent.h"
 #include "cross/WindowInfo.h"
 #include "system/DisplayHelper.h"
@@ -9,6 +8,13 @@
 #include "utils/Utils.h"
 #include "math/Utils.h"
 #include "gl/Utils.h"
+
+#if defined(CHR_PLATFORM_DESKTOP)
+  #include <GLFW/glfw3.h>
+#elif defined(CHR_PLATFORM_EMSCRIPTEN)
+  #include <emscripten.h>
+  #include <emscripten/html5.h>
+#endif
 
 #define GLM_SWIZZLE
 #include <glm/glm.hpp>

@@ -117,12 +117,10 @@ void Sketch::initTextures()
   textureIds[0] = loadTexture("expo67.png");
 
   /*
-   * PROBLEMS:
-   * - DESKTOP AND EMSCRIPTEN: GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT IS NOT RECOGNIZED
-   * - EMSCRIPTEN: RETURNS 0
+   * PROBLEM: RETURN 0 ON EMSCRIPTEN
    */
-  glGetIntegerv(0x84FF, &maxAnisotropy);
+  glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
   LOGI << "max-anisotropy: " << maxAnisotropy << endl;
 
-  glTexParameteri( GL_TEXTURE_2D, 0x84FF, maxAnisotropy);
+  glTexParameteri( GL_TEXTURE_2D, GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
 }

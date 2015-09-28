@@ -4,17 +4,23 @@
 
 #if defined(CHR_PLATFORM_DESKTOP)
   #include <glad/glad.h>
-  #include <GLFW/glfw3.h>
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
-  #include <emscripten.h>
-  #include <emscripten/html5.h>
   #include <GLES2/gl2.h>
+  #include <GLES2/gl2ext.h>
 #elif defined(CHR_PLATFORM_IOS)
   #include <OpenGLES/ES2/gl.h>
   #include <OpenGLES/ES2/glext.h>
 #elif defined(CHR_PLATFORM_ANDROID)
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
+#endif
+
+#if defined (CHR_PLATFORM_DESKTOP)
+  #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+  #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
+
+  #define GL_GENERATE_MIPMAP 0x8191
+  #define GL_GENERATE_MIPMAP_HINT 0x8192
 #endif
 
 namespace chr
