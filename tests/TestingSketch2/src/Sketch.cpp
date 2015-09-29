@@ -119,8 +119,8 @@ void Sketch::initTextures()
   /*
    * PROBLEM: RETURNS 0 ON EMSCRIPTEN (TESTED WITH SAFARI ON OSX)
    */
-  glGetIntegerv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
+  glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
   LOGI << "max-anisotropy: " << maxAnisotropy << endl;
 
-  glTexParameteri( GL_TEXTURE_2D, GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
 }
