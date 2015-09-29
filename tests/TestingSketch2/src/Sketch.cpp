@@ -116,9 +116,11 @@ void Sketch::initTextures()
 {
   textureIds[0] = loadTexture("expo67.png");
 
-  /*
-   * PROBLEM: RETURNS 0 ON EMSCRIPTEN (TESTED WITH SAFARI ON OSX)
-   */
+  #if defined(CHR_PLATFORM_EMSCRIPTEN)
+    emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
+    emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "WEBKIT_EXT_texture_filter_anisotropic");
+  #endif
+
   glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
   LOGI << "max-anisotropy: " << maxAnisotropy << endl;
 
