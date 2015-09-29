@@ -15,8 +15,9 @@ namespace chr
     	float y1;
     	float x2;
     	float y2;
-    	
-    	Rectf(float left, float top, float width, float height);
+
+      Rectf() = default;
+      Rectf(float left, float top, float width, float height);
       Rectf(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight);
 
       float width() const;
