@@ -18,5 +18,5 @@ protected:
   GLuint vboIds[3];
   GLuint textureIds[1];
 
-  GLint maxAnisotropy;
+  GLfloat maxAnisotropy;
 };
