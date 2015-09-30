@@ -22,6 +22,6 @@ namespace chr
       bool use();
     };
 
-    static TextureAlphaShader textureAlphaShader;
+    extern TextureAlphaShader textureAlphaShader;
   }
 }

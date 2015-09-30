@@ -4,6 +4,8 @@ namespace chr
 {
   namespace gl
   {
+    ColorShader colorShader;
+    
     const char *ColorShader::vertexShaderSource = R"(
     attribute vec3 a_position;
     attribute vec4 a_color;

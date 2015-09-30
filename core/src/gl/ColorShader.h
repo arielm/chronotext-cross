@@ -22,6 +22,6 @@ namespace chr
       bool use();
     };
 
-    static ColorShader colorShader;
+    extern ColorShader colorShader;
   }
 }

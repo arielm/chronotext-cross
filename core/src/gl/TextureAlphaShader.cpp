@@ -4,6 +4,8 @@ namespace chr
 {
   namespace gl
   {
+    TextureAlphaShader textureAlphaShader;
+
     const char *TextureAlphaShader::vertexShaderSource = R"(
     attribute vec3 a_position;
     attribute vec2 a_coord;
