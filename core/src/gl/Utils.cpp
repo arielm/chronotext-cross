@@ -1,4 +1,6 @@
 #include "gl/Utils.h"
+#include "math/Utils.h"
+
 #include "Log.h"
 #include "MemoryBuffer.h"
 
@@ -111,6 +113,17 @@ namespace chr
       #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
         glGenerateMipmap(GL_TEXTURE_2D);
       #endif
+    }
+
+    const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)
+    {
+      float halfHeight = zNear * tanf(fovy * PI / 360.0f) / zoom;
+      float halfWidth = halfHeight * width / height;
+
+      float offsetX = -panX * (halfWidth * 2 / width);
+      float offsetY = -panY * (halfHeight * 2 / height);
+
+      return glm::frustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
     }
   }
 }

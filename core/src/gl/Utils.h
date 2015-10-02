@@ -2,6 +2,10 @@
 
 #include "Platform.h"
 
+#define GLM_SWIZZLE
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #if defined(CHR_PLATFORM_DESKTOP)
   #include <glad/glad.h>
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
@@ -29,5 +33,7 @@ namespace chr
   {
     GLuint loadTexture(const fs::path &relativePath, bool forceAlpha = false);
     void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
+
+    const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);
   }
 }
