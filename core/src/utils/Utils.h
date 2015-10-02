@@ -6,21 +6,49 @@
  * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
  */
 
+/*
+ * toString() AND split() BASED ON:
+ * https://github.com/cinder/Cinder/blob/master/include/cinder/Utilities.h
+ */
+
 #pragma once
 
-#include <vector>
+#include "Platform.h"
  
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
+
+#include "utf8.h"
 
 namespace chr
 {
   namespace utils
   {
-    /*
-     * toString() AND split() BORROWED FROM:
-     * https://github.com/cinder/Cinder/blob/master/include/cinder/Utilities.h
-     */
+    template<typename TO, typename FROM>
+    TO to(const FROM&);
+
+    template <>
+    inline std::string to(const std::u16string &in)
+    {
+      std::string out;
+      utf8::unchecked::utf16to8(in.data(), in.data() + in.size(), back_inserter(out));
+      return out;
+    }
+
+    template <>
+    inline std::u16string to(const std::string &in)
+    {
+      std::u16string out;
+      utf8::unchecked::utf8to16(in.data(), in.data() + in.size(), back_inserter(out));
+      return out;
+    }
+
+    // ---
+
+    template<typename T>
+    T readTextResource(const fs::path &resourcePath);
+
+    // ---
 
     template<typename T>
     inline std::string toString(const T &t)

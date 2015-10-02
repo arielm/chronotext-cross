@@ -8,6 +8,8 @@
 
 #include "utils/Utils.h"
 
+#include "MemoryBuffer.h"
+
 #include <chrono>
 
 using namespace std;
@@ -16,6 +18,75 @@ namespace chr
 {
   namespace utils
   {
+    template <>
+    string readTextResource(const fs::path &resourcePath)
+    {
+      string result;
+
+      if (chr::hasMemoryResources())
+      {
+        auto memoryBuffer = getResourceBuffer(resourcePath);
+
+        if (memoryBuffer)
+        {
+          result.assign(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
+        }
+      }
+      else if (chr::hasFileResources())
+      {
+        auto resPath = getResourcePath(resourcePath);
+        fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
+
+        if (in)
+        {
+          auto fileSize = in.tellg();
+          in.seekg(0, ios::beg);
+
+          result.resize(fileSize, 0);
+          in.read(&result[0], fileSize);
+        }
+      }
+
+      return result;
+    }
+
+    template <>
+    u16string readTextResource(const fs::path &resourcePath)
+    {
+      u16string result;
+
+      if (chr::hasMemoryResources())
+      {
+        auto memoryBuffer = getResourceBuffer(resourcePath);
+
+        if (memoryBuffer)
+        {
+          const char *begin = reinterpret_cast<const char*>(memoryBuffer->data());
+          const char *end = begin + memoryBuffer->size();
+
+          utf8::unchecked::utf8to16(begin, end, back_inserter(result));
+        }
+      }
+      else if (chr::hasFileResources())
+      {
+        auto resPath = getResourcePath(resourcePath);
+        fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
+
+        if (in)
+        {
+          auto fileSize = in.tellg();
+          in.seekg(0, ios::beg);
+
+          string text(fileSize, 0);
+          in.read(&text[0], fileSize);
+
+          utf8::unchecked::utf8to16(text.data(), text.data() + text.size(), back_inserter(result));
+        }
+      }
+
+      return result;
+    }
+
     vector<string> split(const string &str, char separator, bool compress)
     {
       return split(str, string(1, separator ), compress);
