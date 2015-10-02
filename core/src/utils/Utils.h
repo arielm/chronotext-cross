@@ -14,7 +14,7 @@
 #pragma once
 
 #include "Platform.h"
- 
+
 #include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
 
@@ -46,7 +46,10 @@ namespace chr
     // ---
 
     template<typename T>
-    T readTextResource(const fs::path &resourcePath);
+    T readTextFromResource(const fs::path &resourcePath);
+
+    template<typename T>
+    std::vector<T> readLinesFromResource(const fs::path &resourcePath);
 
     // ---
 
@@ -58,6 +61,8 @@ namespace chr
 
     std::vector<std::string> split(const std::string &str, char separator, bool compress = true);
     std::vector<std::string> split(const std::string &str, const std::string &separators, bool compress = true);
+
+    std::vector<std::string> splitLines(const std::string &str);
 
     // ---
 

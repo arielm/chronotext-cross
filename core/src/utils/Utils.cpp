@@ -10,6 +10,7 @@
 
 #include "MemoryBuffer.h"
 
+#include <regex>
 #include <chrono>
 
 using namespace std;
@@ -19,7 +20,7 @@ namespace chr
   namespace utils
   {
     template <>
-    string readTextResource(const fs::path &resourcePath)
+    string readTextFromResource(const fs::path &resourcePath)
     {
       string result;
 
@@ -51,7 +52,7 @@ namespace chr
     }
 
     template <>
-    u16string readTextResource(const fs::path &resourcePath)
+    u16string readTextFromResource(const fs::path &resourcePath)
     {
       u16string result;
 
@@ -87,6 +88,31 @@ namespace chr
       return result;
     }
 
+    // ---
+
+    template <>
+    vector<string> readLinesFromResource(const fs::path &resourcePath)
+    {
+      return splitLines(utils::readTextFromResource<string>(resourcePath));
+    }
+
+    template <>
+    vector<u16string> readLinesFromResource(const fs::path &resourcePath)
+    {
+      const auto &lines = splitLines(utils::readTextFromResource<string>(resourcePath));
+
+      vector<u16string> result(lines.size());
+
+      for (const auto &line : lines)
+      {
+        result.emplace_back(to<u16string>(line));
+      }
+
+      return result;
+    }
+
+    // ---
+
     vector<string> split(const string &str, char separator, bool compress)
     {
       return split(str, string(1, separator ), compress);
@@ -98,6 +124,26 @@ namespace chr
       boost::algorithm::split(result, str, boost::is_any_of(separators), compress ? boost::token_compress_on : boost::token_compress_off);
       return result;
     }
+
+    /*
+     * REFERENCE: http://stackoverflow.com/a/30052055/50335
+     */
+    vector<string> splitLines(const string &str)
+    {
+      vector<string> result;
+
+      const regex rgx("(?:\\r\\n|\\r|\\n)");
+      sregex_token_iterator iter(str.begin(), str.end(), rgx, -1);
+
+      for (sregex_token_iterator end; iter != end; ++iter)
+      {
+        result.push_back(iter->str());
+      }
+
+      return result;
+    }
+
+    // ---
 
     uint64_t millisSinceEpoch()
     {
