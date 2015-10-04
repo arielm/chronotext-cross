@@ -37,10 +37,42 @@ namespace chr
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-                initInfo.window = glfwCreateWindow(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, "", NULL, NULL);
+                // ---
+
+                int targetWidth;
+                int targetHeight;
+
+                if (initInfo.windowInfo.size.x * initInfo.windowInfo.size.y == 0)
+                {
+                    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+                    if (monitor)
+                    {
+                        const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+
+                        targetWidth = mode->width;
+                        targetHeight = mode->height;
+
+                        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+                        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+                        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+                        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+                        initInfo.window = glfwCreateWindow(targetWidth, targetHeight, "", monitor, NULL);
+                    }
+                }
+                else
+                {
+                    targetWidth = initInfo.windowInfo.size.x;
+                    targetHeight = initInfo.windowInfo.size.y;
+
+                    initInfo.window = glfwCreateWindow(targetWidth, targetHeight, "", NULL, NULL);    
+                }
 
                 if (initInfo.window)
                 {
+                    setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples);
+
                     glfwSetCursorPosCallback(initInfo.window, cursorPosCallback);
                     glfwSetMouseButtonCallback(initInfo.window, mouseButtonCallback);
                     glfwSetKeyCallback(initInfo.window, keyCallback);
@@ -118,9 +150,9 @@ namespace chr
 
     void CrossDelegate::run(int width, int height, int aaSamples)
     {
-        initInfo.windowInfo = setupInfo.windowInfo = WindowInfo(width, height, aaSamples);
+        initInfo.windowInfo = WindowInfo(width, height, aaSamples);
 
-        performInit();
+        performInit(); // TODO: HANDLE FAILURES
         performSetup();
         performResize(setupInfo.windowInfo.size);
 
