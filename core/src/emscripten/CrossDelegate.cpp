@@ -35,19 +35,24 @@ namespace chr
 
             // ---
 
+            int targetWidth;
+            int targetHeight;
+
             if (initInfo.windowInfo.size.x * initInfo.windowInfo.size.y == 0)
             {
-                int innerWidth = EM_ASM_INT_V("return window.innerWidth");
-                int innerHeight = EM_ASM_INT_V("return window.innerHeight");
-                emscripten_set_canvas_size(innerWidth, innerHeight);
-
-                setupInfo.windowInfo = WindowInfo(innerWidth, innerHeight, initInfo.windowInfo.aaSamples);
+                targetWidth = EM_ASM_INT_V("return window.innerWidth");
+                targetHeight = EM_ASM_INT_V("return window.innerHeight");
             }
             else
             {
-                setupInfo.windowInfo = WindowInfo(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, initInfo.windowInfo.aaSamples);
-                emscripten_set_canvas_size(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y); 
+                targetWidth = initInfo.windowInfo.size.x;
+                targetHeight = initInfo.windowInfo.size.y;
             }
+
+            setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples);
+            emscripten_set_canvas_size(targetWidth, targetHeight);
+
+            // ---
 
             EmscriptenWebGLContextAttributes attr;
             emscripten_webgl_init_context_attributes(&attr);
