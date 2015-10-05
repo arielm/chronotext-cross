@@ -1,0 +1,9 @@
+{
+    "my-encoding" : "UTF-8",
+    "my-plug-ins" : [
+        "python",
+        "c++",
+        "ruby"
+        ],
+    "my-indent" : { "length": 3, "use_space": true }
+}
