@@ -51,11 +51,6 @@ namespace chr
 #if defined(CHR_PLATFORM_MINGW)
   #include <windows.h>
   #undef ERROR // SEE https://google-glog.googlecode.com/svn/trunk/doc/glog.html#windows
-#endif
-
-#if defined(CHR_PLATFORM_MINGW)
-  #include <windows.h>
-  #undef ERROR // SEE https://google-glog.googlecode.com/svn/trunk/doc/glog.html#windows
 #elif defined(CHR_PLATFORM_COCOA)
   #include <CoreFoundation/CoreFoundation.h>
 #elif defined(CHR_PLATFORM_ANDROID)
