@@ -39,7 +39,7 @@ namespace chr
       char *buffer = (char*)malloc(maxSize);
       CFStringGetCString(tmp, buffer, maxSize, kCFStringEncodingUTF8);
                 
-      basePath = fs::path(buffer) / "res";
+      basePath = fs::path(buffer);
                 
       CFRelease(url);
       CFRelease(tmp);
