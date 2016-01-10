@@ -11,6 +11,8 @@
 #include "cross/CrossDelegateBase.h"
 #include "cross/MouseEvent.h"
 
+#include <emscripten.h>
+
 namespace chr
 {
     class CrossDelegate : public CrossDelegateBase
