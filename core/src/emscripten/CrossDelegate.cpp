@@ -57,9 +57,10 @@ namespace chr
             EmscriptenWebGLContextAttributes attr;
             emscripten_webgl_init_context_attributes(&attr);
 
-            attr.alpha = attr.depth = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
+            attr.alpha = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
             attr.enableExtensionsByDefault = 1;
             attr.antialias = (initInfo.windowInfo.aaSamples > 0) ? 1 : 0;
+            attr.depth = (initInfo.windowInfo.depthBits > 0) ? 1 : 0;
             attr.premultipliedAlpha = 0;
             attr.majorVersion = 1;
             attr.minorVersion = 0;
@@ -133,9 +134,9 @@ namespace chr
         sketch->draw();
     }
 
-    void CrossDelegate::run(int width, int height, int aaSamples)
+    void CrossDelegate::run(int width, int height, int aaSamples, int depthBits)
     {
-        initInfo.windowInfo = WindowInfo(width, height, aaSamples);
+        initInfo.windowInfo = WindowInfo(width, height, aaSamples, depthBits);
 
         performInit();
         performSetup();

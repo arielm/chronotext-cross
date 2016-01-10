@@ -44,6 +44,7 @@ namespace chr
 
 - (glm::vec2) windowSize;
 - (int) aaSamples;
+- (int) depthBits;
 
 - (uint32_t) addTouchToMap:(UITouch*)touch;
 - (void) removeTouchFromMap:(UITouch*)touch;
@@ -155,7 +156,7 @@ namespace chr
         DLOG(@"CrossBridge.performSetup");
 
         [self dispatchEvent:SKETCH_WILL_SETUP];
-        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaSamples]));
+        crossDelegate->performSetup(WindowInfo([self windowSize], [self aaSamples], [self depthBits]));
         [self dispatchEvent:SKETCH_DID_SETUP];
         
         setup = YES;
@@ -310,6 +311,21 @@ namespace chr
             
         case GLKViewDrawableMultisample4X:
             return 4;
+    }
+}
+
+- (int) depthBits
+{
+    switch (viewController.glView.drawableDepthFormat)
+    {
+        case GLKViewDrawableDepthFormatNone:
+            return 0;
+            
+        case GLKViewDrawableDepthFormat16:
+            return 16;
+            
+        case GLKViewDrawableDepthFormat24:
+            return 24;
     }
 }
 

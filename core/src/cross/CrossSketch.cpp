@@ -10,10 +10,10 @@ using namespace std;
 namespace chr
 {
 #if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
-  void CrossSketch::run(int width, int height, int aaSamples)
+  void CrossSketch::run(int width, int height, int aaSamples, int depthBits)
   {
       CrossDelegate delegate;
-      delegate.run(width, height, aaSamples);
+      delegate.run(width, height, aaSamples, depthBits);
   }
 #endif
 

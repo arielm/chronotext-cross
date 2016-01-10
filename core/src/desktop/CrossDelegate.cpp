@@ -32,6 +32,7 @@ namespace chr
             if (glfwInit())
             {
                 glfwWindowHint(GLFW_SAMPLES, initInfo.windowInfo.aaSamples);
+                glfwWindowHint(GLFW_DEPTH_BITS, initInfo.windowInfo.depthBits);
                 glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -71,7 +72,7 @@ namespace chr
 
                 if (initInfo.window)
                 {
-                    setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples);
+                    setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits);
 
                     glfwSetCursorPosCallback(initInfo.window, cursorPosCallback);
                     glfwSetMouseButtonCallback(initInfo.window, mouseButtonCallback);
@@ -148,9 +149,9 @@ namespace chr
         sketch->draw();
     }
 
-    void CrossDelegate::run(int width, int height, int aaSamples)
+    void CrossDelegate::run(int width, int height, int aaSamples, int depthBits)
     {
-        initInfo.windowInfo = WindowInfo(width, height, aaSamples);
+        initInfo.windowInfo = WindowInfo(width, height, aaSamples, depthBits);
 
         performInit(); // TODO: HANDLE FAILURES
         performSetup();

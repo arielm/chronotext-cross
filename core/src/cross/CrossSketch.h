@@ -55,7 +55,7 @@ namespace chr
       ACTION_RELEASE_ESCAPE,
     };
 
-    static void run(int width, int height, int aaSamples = 0);
+    static void run(int width, int height, int aaSamples = 0, int depthBits = 0);
 
     virtual bool init() { return true; }
     virtual void uninit() {}

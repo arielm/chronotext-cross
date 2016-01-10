@@ -20,22 +20,25 @@ namespace chr
     {
         glm::vec2 size;
         int aaSamples;
+        int depthBits;
 
-        static WindowInfo create(int width, int height, int aaSamples = 0)
+        static WindowInfo create(int width, int height, int aaSamples = 0, int depthBits = 0)
         {
-            return WindowInfo(width, height, aaSamples);
+            return WindowInfo(width, height, aaSamples, depthBits);
         }
         
-        WindowInfo(const glm::ivec2 &size = glm::zero<glm::ivec2>(), int aaSamples = 0)
+        WindowInfo(const glm::ivec2 &size = glm::zero<glm::ivec2>(), int aaSamples = 0, int depthBits = 0)
         :
         size(size),
-        aaSamples(aaSamples)
+        aaSamples(aaSamples),
+        depthBits(depthBits)
         {}
         
-        WindowInfo(int width, int height, int aaSamples = 0)
+        WindowInfo(int width, int height, int aaSamples = 0, int depthBits = 0)
         :
         size(width, height),
-        aaSamples(aaSamples)
+        aaSamples(aaSamples),
+        depthBits(depthBits)
         {}
         
         void rotate()
@@ -64,6 +67,7 @@ namespace chr
             << "{"
             << "size: [" << rhs.size.x << ", " << rhs.size.y << "]"
             << ", anti-aliasing samples: " << rhs.aaSamples
+            << ", depth-bits: " << rhs.depthBits
             << "}";
             
             return lhs;

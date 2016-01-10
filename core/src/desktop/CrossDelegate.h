@@ -25,7 +25,7 @@ namespace chr
         void performUpdate();
         void performDraw();
 
-        void run(int width, int height, int aaSamples = 0);
+        void run(int width, int height, int aaSamples = 0, int depthBits = 0);
 
     protected:
         int updateCount = 0;
