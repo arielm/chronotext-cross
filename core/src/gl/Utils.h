@@ -36,5 +36,6 @@ namespace chr
     void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);
+    const glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &point);
   }
 }
