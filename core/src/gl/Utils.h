@@ -32,7 +32,9 @@ namespace chr
 {
   namespace gl
   {
-    GLuint loadTexture(const fs::path &relativePath, bool forceAlpha = false);
+    struct TextureInfo;
+
+    TextureInfo loadTexture(const fs::path &relativePath, bool forceAlpha = false);
     void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);

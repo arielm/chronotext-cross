@@ -1,4 +1,5 @@
 #include "gl/Utils.h"
+#include "gl/TextureInfo.h"
 #include "math/Utils.h"
 
 #include "Log.h"
@@ -15,9 +16,9 @@ namespace chr
 {
   namespace gl
   {
-    GLuint loadTexture(const fs::path &relativePath, bool forceAlpha)
+    TextureInfo loadTexture(const fs::path &relativePath, bool forceAlpha)
     {
-      GLuint texture = 0u;
+      TextureInfo result;
 
       stbi_uc *data = nullptr;
       int x, y, comp;
@@ -39,6 +40,9 @@ namespace chr
 
       if (data)
       {
+        result.width = x;
+        result.height = y;
+
         GLenum format = 0;
 
         switch (comp)
@@ -58,8 +62,12 @@ namespace chr
 
         if (format)
         {
-          glGenTextures(1, &texture);
-          glBindTexture(GL_TEXTURE_2D, texture);
+          GLuint id = 0u;
+          glGenTextures(1, &id);
+          glBindTexture(GL_TEXTURE_2D, id);
+
+          result.id = id;
+          result.format = format;
 
           if (forceAlpha && (format != GL_ALPHA))
           {
@@ -93,7 +101,7 @@ namespace chr
         LOGE << "ERROR WHILE LOADING IMAGE" << endl;
       }
 
-      return texture;
+      return result;
     }
 
     void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data)

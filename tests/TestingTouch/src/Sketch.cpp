@@ -38,7 +38,7 @@ void Sketch::shutdown()
   glDisableVertexAttribArray(textureAlphaShader.coordLocation);
 
   glDeleteBuffers(3, vboIds);
-  glDeleteTextures(1, textureIds);
+  glDeleteTextures(1, &textureInfo.id);
 }
 
 void Sketch::draw()
@@ -114,7 +114,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureIds[0] = loadTexture("dot_112.png", true);
+  textureInfo = loadTexture("dot_112.png", true);
 }
 
 void Sketch::addTouch(int index, float x, float y)

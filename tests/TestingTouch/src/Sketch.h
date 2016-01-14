@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
+#include "gl/TextureInfo.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -16,7 +17,7 @@ public:
 
 protected:
   GLuint vboIds[3];
-  GLuint textureIds[1];
+  chr::gl::TextureInfo textureInfo;
 
   float scale;
   glm::mat4 projectionMatrix;

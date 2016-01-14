@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
+#include "gl/TextureInfo.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -16,7 +17,5 @@ public:
 
 protected:
   GLuint vboIds[3];
-  GLuint textureIds[1];
-
-  GLfloat maxAnisotropy;
+  chr::gl::TextureInfo textureInfo;
 };
