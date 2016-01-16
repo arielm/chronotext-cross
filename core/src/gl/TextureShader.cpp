@@ -7,7 +7,7 @@ namespace chr
     TextureShader textureShader;
 
     const char *TextureShader::vertexShaderSource = R"(
-    attribute vec2 a_position;
+    attribute vec3 a_position;
     attribute vec2 a_coord;
     attribute vec4 a_color;
 
@@ -20,7 +20,7 @@ namespace chr
     {
       v_coord = a_coord;
       v_color = a_color;
-      gl_Position = u_mvp_matrix * vec4(a_position, 0, 1);
+      gl_Position = u_mvp_matrix * vec4(a_position, 1);
     }
     )";
 
