@@ -101,7 +101,8 @@ namespace chr
     {
       const auto &lines = splitLines(utils::readTextFromResource<string>(resourcePath));
 
-      vector<u16string> result(lines.size());
+      vector<u16string> result;
+      result.reserve(lines.size());
 
       for (const auto &line : lines)
       {

@@ -20,7 +20,10 @@ namespace chr
   {
     float boundf(float value, float range);
     int bound(int value, int range);
-    
+
+    float constrainf(float value, float min, float max);
+    int constrain(int value, int min, float max);
+
     /*
      * S-SHAPED CROSS-FADE CURVE: 3 * (t ^ 2) - 2 * (t ^ 3)
      */

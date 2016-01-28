@@ -15,6 +15,16 @@ namespace chr
       int bound = value % range;
       return (bound < 0) ? (bound + range) : bound;
     }
+
+    float constrainf(float value, float min, float max)
+    {
+      return (value < min) ? min : ((value > max) ? max : value);
+    }
+
+    int constrain(int value, int min, int max)
+    {
+      return (value < min) ? min : ((value > max) ? max : value);
+    }
     
     float ease(float t)
     {
