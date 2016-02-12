@@ -10,9 +10,7 @@
 #define STBI_ONLY_PNG
 #include "stb_image.h"
 
-#include <cstdio>
 #include <jpeglib.h>
-#include <jerror.h>
 
 using namespace std;
 
@@ -24,64 +22,71 @@ namespace chr
     {
       TextureInfo result;
 
+      struct jpeg_decompress_struct cinfo;
+      struct jpeg_error_mgr jerr;
+
+      cinfo.err = jpeg_std_error(&jerr);
+      jpeg_create_decompress(&cinfo);
+
+      shared_ptr<MemoryBuffer> memoryBuffer;
+      FILE *fd = nullptr;
+
       if (hasMemoryResources())
       {
-        auto memoryBuffer = getResourceBuffer(relativePath);
+        memoryBuffer = getResourceBuffer(relativePath);
 
         if (memoryBuffer)
         {
-          abort(); // TODO
+          jpeg_mem_src(&cinfo, reinterpret_cast<const unsigned char*>(memoryBuffer->data()), memoryBuffer->size());
         }
       }
       else if (hasFileResources())
       {
-        auto resPath = getResourcePath(relativePath);
-
-        FILE *fd = fopen(resPath.string().data(), "rb");
+        fd = fopen(getResourcePath(relativePath).string().data(), "rb");
 
         if (fd)
         {
-          struct jpeg_decompress_struct cinfo;
-          struct jpeg_error_mgr jerr;
-          unsigned char * line;
-
-          cinfo.err = jpeg_std_error(&jerr);
-          jpeg_create_decompress(&cinfo);
-
           jpeg_stdio_src(&cinfo, fd);
-          jpeg_read_header(&cinfo, true);
-
-          LOGI << "w: " << cinfo.image_width << ", h: " << cinfo.image_height << ", comp: " << cinfo.num_components << ", color-space: " << cinfo.out_color_space << endl;
-
-          auto converted = make_unique<uint8_t[]>(cinfo.image_width * cinfo.image_height * cinfo.num_components);
-          auto buffer = converted.get();
-
-          jpeg_start_decompress (&cinfo);
-
-          while (cinfo.output_scanline < cinfo.output_height)
-          {
-            line = buffer + (cinfo.num_components * cinfo.image_width) * cinfo.output_scanline;
-            jpeg_read_scanlines (&cinfo, &line, 1);
-          }
-
-          jpeg_finish_decompress(&cinfo);
-          jpeg_destroy_decompress(&cinfo);
-
-          // XXX: SHOULD fd BE CLOSED?
-
-          // ---
-
-          GLuint id = 0u;
-          glGenTextures(1, &id);
-          glBindTexture(GL_TEXTURE_2D, id);
-
-          result.width = cinfo.image_width;
-          result.height = cinfo.image_height;
-          result.format = GL_RGB; // FIXME
-          result.id = id;
-
-          uploadTextureData(result.format, result.width, result.height, buffer);
         }
+      }
+
+      if (memoryBuffer || fd)
+      {
+        jpeg_read_header(&cinfo, true);
+
+        LOGI << "w: " << cinfo.image_width << ", h: " << cinfo.image_height << ", comp: " << cinfo.num_components << ", color-space: " << cinfo.out_color_space << endl;
+
+        auto buffer = make_unique<uint8_t[]>(cinfo.image_width * cinfo.image_height * cinfo.num_components);
+        auto data = buffer.get();
+
+        jpeg_start_decompress(&cinfo);
+
+        while (cinfo.output_scanline < cinfo.output_height)
+        {
+          uint8_t *line = data + (cinfo.num_components * cinfo.image_width) * cinfo.output_scanline;
+          jpeg_read_scanlines(&cinfo, &line, 1);
+        }
+
+        jpeg_finish_decompress(&cinfo);
+        jpeg_destroy_decompress(&cinfo);
+
+        if (fd)
+        {
+          fclose(fd);
+        }
+
+        // ---
+
+        GLuint id = 0u;
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_2D, id);
+
+        result.width = cinfo.image_width;
+        result.height = cinfo.image_height;
+        result.format = GL_RGB; // FIXME
+        result.id = id;
+
+        uploadTextureData(result.format, result.width, result.height, data);
       }
 
       return result;
