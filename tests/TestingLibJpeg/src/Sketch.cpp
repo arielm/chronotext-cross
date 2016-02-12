@@ -114,7 +114,8 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureInfo = loadTexture("banski.jpg");
+//  textureInfo = loadTexture("banski.jpg");
+  textureInfo = loadTexture2("banski.jpg");
 
   #if defined(CHR_PLATFORM_EMSCRIPTEN)
     emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");

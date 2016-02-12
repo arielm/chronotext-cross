@@ -10,12 +10,83 @@
 #define STBI_ONLY_PNG
 #include "stb_image.h"
 
+#include <cstdio>
+#include <jpeglib.h>
+#include <jerror.h>
+
 using namespace std;
 
 namespace chr
 {
   namespace gl
   {
+    TextureInfo loadTexture2(const fs::path &relativePath, bool forceAlpha)
+    {
+      TextureInfo result;
+
+      if (hasMemoryResources())
+      {
+        auto memoryBuffer = getResourceBuffer(relativePath);
+
+        if (memoryBuffer)
+        {
+          abort(); // TODO
+        }
+      }
+      else if (hasFileResources())
+      {
+        auto resPath = getResourcePath(relativePath);
+
+        FILE *fd = fopen(resPath.string().data(), "rb");
+
+        if (fd)
+        {
+          struct jpeg_decompress_struct cinfo;
+          struct jpeg_error_mgr jerr;
+          unsigned char * line;
+
+          cinfo.err = jpeg_std_error(&jerr);
+          jpeg_create_decompress(&cinfo);
+
+          jpeg_stdio_src(&cinfo, fd);
+          jpeg_read_header(&cinfo, true);
+
+          LOGI << "w: " << cinfo.image_width << ", h: " << cinfo.image_height << ", comp: " << cinfo.num_components << ", color-space: " << cinfo.out_color_space << endl;
+
+          auto converted = make_unique<uint8_t[]>(cinfo.image_width * cinfo.image_height * cinfo.num_components);
+          auto buffer = converted.get();
+
+          jpeg_start_decompress (&cinfo);
+
+          while (cinfo.output_scanline < cinfo.output_height)
+          {
+            line = buffer + (cinfo.num_components * cinfo.image_width) * cinfo.output_scanline;
+            jpeg_read_scanlines (&cinfo, &line, 1);
+          }
+
+          jpeg_finish_decompress(&cinfo);
+          jpeg_destroy_decompress(&cinfo);
+
+          // XXX: SHOULD fd BE CLOSED?
+
+          // ---
+
+          GLuint id = 0u;
+          glGenTextures(1, &id);
+          glBindTexture(GL_TEXTURE_2D, id);
+
+          result.width = cinfo.image_width;
+          result.height = cinfo.image_height;
+          result.format = GL_RGB; // FIXME
+          result.id = id;
+
+          uploadTextureData(result.format, result.width, result.height, buffer);
+        }
+      }
+
+      return result;
+    }
+
     TextureInfo loadTexture(const fs::path &relativePath, bool forceAlpha)
     {
       TextureInfo result;
