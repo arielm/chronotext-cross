@@ -1,4 +1,4 @@
-package org.chronotext.TestingLibJpg;
+package org.chronotext.TestingLibJpeg;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingLibJpg");
+    System.loadLibrary("TestingLibJpeg");
   }
 
   CrossBridge bridge;

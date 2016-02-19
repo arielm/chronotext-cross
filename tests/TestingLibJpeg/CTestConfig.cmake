@@ -1,5 +1,5 @@
 
-set(CTEST_PROJECT_NAME TestingLibJpg)
+set(CTEST_PROJECT_NAME TestingLibJpeg)
 set(CTEST_CONFIGURATION_TYPE Release)
 
 if (PLATFORM MATCHES osx)
