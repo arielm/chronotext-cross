@@ -80,10 +80,10 @@ void Sketch::initBuffers()
 {
   const GLfloat vertices[] =
   {
-    -10, +10, 0, // A
-    -10, -10, 0, // B
-    +10, -10, 0, // C
-    +10, +10, 0, // D
+    -12, +9, 0, // A
+    -12, -9, 0, // B
+    +12, -9, 0, // C
+    +12, +9, 0, // D
   };
 
   const GLfloat coords[] =
@@ -114,8 +114,10 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-//  textureInfo = loadTexture("banski.jpg");
-  textureInfo = loadTexture2("banski.jpg");
+  double t0 = getElapsedSeconds();
+  textureInfo = loadJpegTexture("6980491_UN1_800.jpg");
+  double t1 = getElapsedSeconds();
+  LOGI << (t1 - t0) << endl;
 
   #if defined(CHR_PLATFORM_EMSCRIPTEN)
     emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");

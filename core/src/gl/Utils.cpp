@@ -18,7 +18,7 @@ namespace chr
 {
   namespace gl
   {
-    TextureInfo loadTexture2(const fs::path &relativePath, bool forceAlpha)
+    TextureInfo loadJpegTexture(const fs::path &relativePath, bool forceAlpha)
     {
       TextureInfo result;
 
@@ -54,39 +54,40 @@ namespace chr
       {
         jpeg_read_header(&cinfo, true);
 
-        LOGI << "w: " << cinfo.image_width << ", h: " << cinfo.image_height << ", comp: " << cinfo.num_components << ", color-space: " << cinfo.out_color_space << endl;
-
-        auto buffer = make_unique<uint8_t[]>(cinfo.image_width * cinfo.image_height * cinfo.num_components);
-        auto data = buffer.get();
-
-        jpeg_start_decompress(&cinfo);
-
-        while (cinfo.output_scanline < cinfo.output_height)
+        if ((cinfo.out_color_space == JCS_RGB) && (cinfo.num_components == 3))
         {
-          uint8_t *line = data + (cinfo.num_components * cinfo.image_width) * cinfo.output_scanline;
-          jpeg_read_scanlines(&cinfo, &line, 1);
+          auto buffer = make_unique<uint8_t[]>(cinfo.image_width * cinfo.image_height * 3);
+          auto data = buffer.get();
+
+          jpeg_start_decompress(&cinfo);
+
+          while (cinfo.output_scanline < cinfo.output_height)
+          {
+            uint8_t *line = data + (3 * cinfo.image_width) * cinfo.output_scanline;
+            jpeg_read_scanlines(&cinfo, &line, 1);
+          }
+
+          jpeg_finish_decompress(&cinfo);
+          jpeg_destroy_decompress(&cinfo);
+
+          if (fd)
+          {
+            fclose(fd);
+          }
+
+          // ---
+
+          GLuint id = 0u;
+          glGenTextures(1, &id);
+          glBindTexture(GL_TEXTURE_2D, id);
+
+          result.width = cinfo.image_width;
+          result.height = cinfo.image_height;
+          result.format = GL_RGB;
+          result.id = id;
+
+          uploadTextureData(result.format, result.width, result.height, data);
         }
-
-        jpeg_finish_decompress(&cinfo);
-        jpeg_destroy_decompress(&cinfo);
-
-        if (fd)
-        {
-          fclose(fd);
-        }
-
-        // ---
-
-        GLuint id = 0u;
-        glGenTextures(1, &id);
-        glBindTexture(GL_TEXTURE_2D, id);
-
-        result.width = cinfo.image_width;
-        result.height = cinfo.image_height;
-        result.format = GL_RGB; // FIXME
-        result.id = id;
-
-        uploadTextureData(result.format, result.width, result.height, data);
       }
 
       return result;

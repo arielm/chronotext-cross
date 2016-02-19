@@ -34,7 +34,7 @@ namespace chr
   {
     struct TextureInfo;
 
-    TextureInfo loadTexture2(const fs::path &relativePath, bool forceAlpha = false); // XXX
+    TextureInfo loadJpegTexture(const fs::path &relativePath, bool forceAlpha = false); // XXX
     TextureInfo loadTexture(const fs::path &relativePath, bool forceAlpha = false);
     void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
 
