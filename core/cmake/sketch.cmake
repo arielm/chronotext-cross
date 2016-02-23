@@ -5,6 +5,30 @@ list(APPEND INCLUDE_DIRS
   ${GLM_INCLUDE_DIR}
 )
 
+# ---
+
+if (PLATFORM MATCHES emscripten)
+  set(ZLIB_INCLUDE_DIRS "$ENV{HOME}/.emscripten_cache/ports-builds/zlib")
+  set(ZLIB_LIBRARIES "$ENV{HOME}/.emscripten_cache/zlib.bc")
+
+elseif (PLATFORM MATCHES ios)
+  set(ZLIB_INCLUDE_DIRS "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include")
+  set(ZLIB_LIBRARIES "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libz.dylib")
+
+else()
+  find_package(ZLIB)
+endif()
+
+list(APPEND INCLUDE_DIRS
+  ${ZLIB_INCLUDE_DIRS}
+)
+
+list(APPEND LIBRARIES
+  ${ZLIB_LIBRARIES}
+)
+
+# ---
+
 list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/cross/CrossSketch.cpp"
   "${CROSS_ROOT}/src/cross/CrossDelegateBase.cpp"

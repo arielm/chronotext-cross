@@ -4,14 +4,6 @@ project(TestingLibPng)
 
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
 
-if (PLATFORM MATCHES emscripten)
-  set(ZLIB_INCLUDE_DIRS "$ENV{HOME}/.emscripten_cache/ports-builds/zlib")
-  set(ZLIB_LIBRARIES "$ENV{HOME}/.emscripten_cache/zlib.bc")
-
-else()
-  find_package(ZLIB)
-endif()
-
 set(JPEG_INCLUDE_DIR "${JPEG_ROOT}/include")
 set(JPEG_LIBRARY "${JPEG_ROOT}/lib/libjpeg.a")
 
@@ -22,14 +14,12 @@ set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}
   ${JPEG_INCLUDE_DIR}
   ${PNG_INCLUDE_DIRS}
-  ${ZLIB_INCLUDE_DIRS}
 )
 
 set(LIBRARIES
   ${Boost_LIBRARIES}
   ${JPEG_LIBRARY}
   ${PNG_LIBRARIES}
-  ${ZLIB_LIBRARIES}
 )
 
 set(SRC_FILES
