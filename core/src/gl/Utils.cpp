@@ -11,6 +11,7 @@
 #include "stb_image.h"
 
 #include <jpeglib.h>
+#include <png.h>
 
 using namespace std;
 
@@ -18,6 +19,157 @@ namespace chr
 {
   namespace gl
   {
+    struct PngDataHandle
+    {
+        const png_byte *data = nullptr;
+        png_size_t size = 0;
+        png_size_t offset = 0;
+
+        PngDataHandle(const void *data, size_t size)
+        :
+        data(reinterpret_cast<const png_byte*>(data)),
+        size(size)
+        {}
+    };
+
+    static void readPngDataCallback(png_structp png_ptr, png_byte *raw_data, png_size_t read_length)
+    {
+      PngDataHandle *handle = reinterpret_cast<PngDataHandle*>(png_get_io_ptr(png_ptr));
+      const png_byte *png_src = handle->data + handle->offset;
+
+      memcpy(raw_data, png_src, read_length);
+      handle->offset += read_length;
+    }
+
+    TextureInfo loadPngTexture(const fs::path &relativePath, bool forceAlpha)
+    {
+      TextureInfo result;
+      bool ready = false;
+
+      png_structp png_ptr;
+      png_infop info_ptr;
+
+      shared_ptr<MemoryBuffer> memoryBuffer;
+      FILE *fd = nullptr;
+
+      if (hasMemoryResources())
+      {
+        memoryBuffer = getResourceBuffer(relativePath);
+
+        if (memoryBuffer)
+        {
+          if ((memoryBuffer->size() > 8) && png_check_sig(reinterpret_cast<png_const_bytep>(memoryBuffer->data()), 8))
+          {
+            png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+            if (png_ptr)
+            {
+              info_ptr = png_create_info_struct(png_ptr);
+
+              if (info_ptr)
+              {
+                PngDataHandle handle(memoryBuffer->data(), memoryBuffer->size());
+                png_set_read_fn(png_ptr, &handle, readPngDataCallback);
+
+                if (!setjmp(png_jmpbuf(png_ptr)))
+                {
+                  png_set_sig_bytes(png_ptr, 0);
+                  ready = true;
+                }
+              }
+              else
+              {
+                png_destroy_read_struct(&png_ptr, NULL, NULL);
+              }
+            }
+          }
+        }
+      }
+      else if (hasFileResources())
+      {
+        fd = fopen(getResourcePath(relativePath).string().data(), "rb");
+
+        if (fd)
+        {
+          uint8_t header[8];
+          fread(header, 1, 8, fd);
+
+          if (!png_sig_cmp(header, 0, 8))
+          {
+            png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+            if (png_ptr)
+            {
+              info_ptr = png_create_info_struct(png_ptr);
+
+              if (info_ptr)
+              {
+                if (!setjmp(png_jmpbuf(png_ptr)))
+                {
+                  png_init_io(png_ptr, fd);
+                  png_set_sig_bytes(png_ptr, 8);
+
+                  ready = true;
+                }
+              }
+              else
+              {
+                png_destroy_read_struct(&png_ptr, NULL, NULL);
+              }
+            }
+          }
+        }
+      }
+
+      if (ready)
+      {
+        png_read_info(png_ptr, info_ptr);
+
+        auto width = png_get_image_width(png_ptr, info_ptr);
+        auto height = png_get_image_height(png_ptr, info_ptr);
+        auto color_type = png_get_color_type(png_ptr, info_ptr);
+        auto bit_depth = png_get_bit_depth(png_ptr, info_ptr);
+
+        LOGI << width << "x" << height << endl;
+
+        const png_size_t row_size = png_get_rowbytes(png_ptr, info_ptr);
+        auto buffer = make_unique<uint8_t[]>(row_size * height);
+        auto data = buffer.get();
+
+        png_byte *row_ptrs[height];
+
+        for (auto i = 0; i < height; i++)
+        {
+          row_ptrs[i] = data + i * row_size;
+        }
+
+        png_read_image(png_ptr, &row_ptrs[0]);
+
+        png_read_end(png_ptr, info_ptr);
+        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+
+        // ---
+
+        GLuint id = 0u;
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_2D, id);
+
+        result.width = width;
+        result.height = height;
+        result.format = GL_RGB; // XXX
+        result.id = id;
+
+        uploadTextureData(result.format, result.width, result.height, data);
+
+        if (fd)
+        {
+          fclose(fd);
+        }
+      }
+
+      return result;
+    }
+
     TextureInfo loadJpegTexture(const fs::path &relativePath, bool forceAlpha)
     {
       TextureInfo result;

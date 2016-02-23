@@ -115,7 +115,7 @@ void Sketch::initBuffers()
 void Sketch::initTextures()
 {
   double t0 = getElapsedSeconds();
-  textureInfo = loadTexture("expo67.png");
+  textureInfo = loadPngTexture("expo67.png");
   double t1 = getElapsedSeconds();
   LOGI << (t1 - t0) << endl;
 
