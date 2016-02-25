@@ -1,8 +1,8 @@
 #!/bin/sh
 
-ARCHIVE_ZIP="libpng16.zip"
+ARCHIVE_ZIP="libpng17.zip"
 ARCHIVE_SRC="https://github.com/arielm/libpng/archive/$ARCHIVE_ZIP"
-ARCHIVE_DIR="libpng-libpng16"
+ARCHIVE_DIR="libpng-libpng17"
 
 # ---
 
