@@ -39,5 +39,7 @@ if [ $? != 0 ]; then
   exit -1
 fi
 
+cp "$BUILD_DIR/pnglibconf.h" "$SRC_PATH"
+
 cd "$INSTALL_PATH"
 ln -s "$SRC_PATH" include

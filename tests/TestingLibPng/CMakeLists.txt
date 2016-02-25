@@ -8,7 +8,7 @@ set(JPEG_INCLUDE_DIR "${JPEG_ROOT}/include")
 set(JPEG_LIBRARY "${JPEG_ROOT}/lib/libjpeg.a")
 
 set(PNG_INCLUDE_DIRS "${PNG_ROOT}/include")
-set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng16.a")
+set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
 
 set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}
