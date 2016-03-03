@@ -37,6 +37,7 @@ list(APPEND ARGS
   "-DGLFW_ROOT=$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}"
   "-DGLM_ROOT=$ENV{CROSS_PATH}/deps/glm/dist"
   "-DJPEG_ROOT=$ENV{CROSS_PATH}/deps/libjpeg-turbo/dist/${PLATFORM}"
+  "-DPNG_ROOT=$ENV{CROSS_PATH}/deps/libpng/dist/${PLATFORM}"
 )
 
 include("${CROSS_ROOT}/cmake/platforms.cmake")

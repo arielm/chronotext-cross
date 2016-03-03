@@ -115,7 +115,7 @@ void Sketch::initBuffers()
 void Sketch::initTextures()
 {
   double t0 = getElapsedSeconds();
-  textureInfo = loadJpegTexture("6980491_UN1_800.jpg");
+  textureInfo = loadTexture("6980491_UN1_800.jpg");
   double t1 = getElapsedSeconds();
   LOGI << (t1 - t0) << endl;
 

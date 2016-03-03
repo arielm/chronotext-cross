@@ -34,10 +34,7 @@ namespace chr
   {
     struct TextureInfo;
 
-    TextureInfo loadPngTexture(const fs::path &relativePath, bool forceAlpha = false); // XXX
-    TextureInfo loadJpegTexture(const fs::path &relativePath, bool forceAlpha = false); // XXX
-
-    TextureInfo loadTexture(const fs::path &relativePath, bool forceAlpha = false);
+    TextureInfo loadTexture(const fs::path &relativePath, int flags = 0);
     void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);

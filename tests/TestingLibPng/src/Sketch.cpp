@@ -1,6 +1,8 @@
-
 #include "Sketch.h"
+
 #include "gl/TextureShader.h"
+#include "gl/TextureAlphaShader.h"
+#include <image/ImageBuffer.h>
 
 using namespace std;
 using namespace chr;
@@ -25,10 +27,10 @@ void Sketch::setup()
 void Sketch::shutdown()
 {
   glUseProgram(0);
-  textureShader.unload();
+  textureAlphaShader.unload();
 
-  glDisableVertexAttribArray(textureShader.positionLocation);
-  glDisableVertexAttribArray(textureShader.coordLocation);
+  glDisableVertexAttribArray(textureAlphaShader.positionLocation);
+  glDisableVertexAttribArray(textureAlphaShader.coordLocation);
 
   glDeleteBuffers(3, vboIds);
   glDeleteTextures(1, &textureInfo.id);
@@ -41,7 +43,7 @@ void Sketch::draw()
 
   // ---
 
-  textureShader.use();
+  textureAlphaShader.use();
   {
     glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 100.0f);
 
@@ -51,23 +53,23 @@ void Sketch::draw()
     modelViewMatrix = glm::rotate(modelViewMatrix, (float) getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
 
     glm::mat4 mvp = projectionMatrix * modelViewMatrix;
-    glUniformMatrix4fv(textureShader.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
+    glUniformMatrix4fv(textureAlphaShader.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
 
     // ---
 
     glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-    glEnableVertexAttribArray(textureShader.positionLocation);
-    glVertexAttribPointer(textureShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(textureAlphaShader.positionLocation);
+    glVertexAttribPointer(textureAlphaShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-    glEnableVertexAttribArray(textureShader.coordLocation);
-    glVertexAttribPointer(textureShader.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(textureAlphaShader.coordLocation);
+    glVertexAttribPointer(textureAlphaShader.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glVertexAttrib4fv(textureShader.colorLocation, color);
+    glVertexAttrib4fv(textureAlphaShader.colorLocation, color);
 
     glActiveTexture(GL_TEXTURE0);
-    glUniform1i(textureShader.samplerLocation, 0);
+    glUniform1i(textureAlphaShader.samplerLocation, 0);
 
     // ---
 
@@ -115,7 +117,7 @@ void Sketch::initBuffers()
 void Sketch::initTextures()
 {
   double t0 = getElapsedSeconds();
-  textureInfo = loadPngTexture("expo67.png");
+  textureInfo = loadTexture("lys_256.png", chr::image::FLAGS_TRANSLUCENT);
   double t1 = getElapsedSeconds();
   LOGI << (t1 - t0) << endl;
 

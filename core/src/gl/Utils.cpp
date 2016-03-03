@@ -1,17 +1,7 @@
 #include "gl/Utils.h"
 #include "gl/TextureInfo.h"
 #include "math/Utils.h"
-
-#include "Log.h"
-#include "MemoryBuffer.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#define STBI_ONLY_JPEG
-#define STBI_ONLY_PNG
-#include "stb_image.h"
-
-#include <jpeglib.h>
-#include <png.h>
+#include "image/Utils.h"
 
 using namespace std;
 
@@ -19,315 +9,49 @@ namespace chr
 {
   namespace gl
   {
-    struct PngDataHandle
-    {
-        const png_byte *data = nullptr;
-        png_size_t size = 0;
-        png_size_t offset = 0;
-
-        PngDataHandle(const void *data, size_t size)
-        :
-        data(reinterpret_cast<const png_byte*>(data)),
-        size(size)
-        {}
-    };
-
-    static void readPngDataCallback(png_structp png_ptr, png_byte *raw_data, png_size_t read_length)
-    {
-      PngDataHandle *handle = reinterpret_cast<PngDataHandle*>(png_get_io_ptr(png_ptr));
-      const png_byte *png_src = handle->data + handle->offset;
-
-      memcpy(raw_data, png_src, read_length);
-      handle->offset += read_length;
-    }
-
-    TextureInfo loadPngTexture(const fs::path &relativePath, bool forceAlpha)
+    TextureInfo loadTexture(const fs::path &relativePath, int flags)
     {
       TextureInfo result;
-      bool ready = false;
+      image::ImageBuffer image;
 
-      png_structp png_ptr;
-      png_infop info_ptr;
-
-      shared_ptr<MemoryBuffer> memoryBuffer;
-      FILE *fd = nullptr;
-
-      if (hasMemoryResources())
+      if (relativePath.extension() == ".png")
       {
-        memoryBuffer = getResourceBuffer(relativePath);
-
-        if (memoryBuffer)
-        {
-          if ((memoryBuffer->size() > 8) && png_check_sig(reinterpret_cast<png_const_bytep>(memoryBuffer->data()), 8))
-          {
-            png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-
-            if (png_ptr)
-            {
-              info_ptr = png_create_info_struct(png_ptr);
-
-              if (info_ptr)
-              {
-                PngDataHandle handle(memoryBuffer->data(), memoryBuffer->size());
-                png_set_read_fn(png_ptr, &handle, readPngDataCallback);
-
-                if (!setjmp(png_jmpbuf(png_ptr)))
-                {
-                  png_set_sig_bytes(png_ptr, 0);
-                  ready = true;
-                }
-              }
-              else
-              {
-                png_destroy_read_struct(&png_ptr, NULL, NULL);
-              }
-            }
-          }
-        }
+        image = image::loadPngImage(relativePath, flags);
       }
-      else if (hasFileResources())
+      else if ((relativePath.extension() == ".jpg") || (relativePath.extension() == ".jpeg"))
       {
-        fd = fopen(getResourcePath(relativePath).string().data(), "rb");
-
-        if (fd)
-        {
-          uint8_t header[8];
-          fread(header, 1, 8, fd);
-
-          if (!png_sig_cmp(header, 0, 8))
-          {
-            png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-
-            if (png_ptr)
-            {
-              info_ptr = png_create_info_struct(png_ptr);
-
-              if (info_ptr)
-              {
-                if (!setjmp(png_jmpbuf(png_ptr)))
-                {
-                  png_init_io(png_ptr, fd);
-                  png_set_sig_bytes(png_ptr, 8);
-
-                  ready = true;
-                }
-              }
-              else
-              {
-                png_destroy_read_struct(&png_ptr, NULL, NULL);
-              }
-            }
-          }
-        }
+        image = image::loadJpgImage(relativePath, flags);
       }
 
-      if (ready)
+      if (image.width * image.height)
       {
-        png_read_info(png_ptr, info_ptr);
-
-        auto width = png_get_image_width(png_ptr, info_ptr);
-        auto height = png_get_image_height(png_ptr, info_ptr);
-        auto color_type = png_get_color_type(png_ptr, info_ptr);
-        auto bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-
-        LOGI << width << "x" << height << endl;
-
-        const png_size_t row_size = png_get_rowbytes(png_ptr, info_ptr);
-        auto buffer = make_unique<uint8_t[]>(row_size * height);
-        auto data = buffer.get();
-
-        png_byte *row_ptrs[height];
-
-        for (auto i = 0; i < height; i++)
-        {
-          row_ptrs[i] = data + i * row_size;
-        }
-
-        png_read_image(png_ptr, &row_ptrs[0]);
-
-        png_read_end(png_ptr, info_ptr);
-        png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-
-        // ---
-
-        GLuint id = 0u;
-        glGenTextures(1, &id);
-        glBindTexture(GL_TEXTURE_2D, id);
-
-        result.width = width;
-        result.height = height;
-        result.format = GL_RGB; // XXX
-        result.id = id;
-
-        uploadTextureData(result.format, result.width, result.height, data);
-
-        if (fd)
-        {
-          fclose(fd);
-        }
-      }
-
-      return result;
-    }
-
-    TextureInfo loadJpegTexture(const fs::path &relativePath, bool forceAlpha)
-    {
-      TextureInfo result;
-
-      struct jpeg_decompress_struct cinfo;
-      struct jpeg_error_mgr jerr;
-
-      cinfo.err = jpeg_std_error(&jerr);
-      jpeg_create_decompress(&cinfo);
-
-      shared_ptr<MemoryBuffer> memoryBuffer;
-      FILE *fd = nullptr;
-
-      if (hasMemoryResources())
-      {
-        memoryBuffer = getResourceBuffer(relativePath);
-
-        if (memoryBuffer)
-        {
-          jpeg_mem_src(&cinfo, reinterpret_cast<const unsigned char*>(memoryBuffer->data()), memoryBuffer->size());
-        }
-      }
-      else if (hasFileResources())
-      {
-        fd = fopen(getResourcePath(relativePath).string().data(), "rb");
-
-        if (fd)
-        {
-          jpeg_stdio_src(&cinfo, fd);
-        }
-      }
-
-      if (memoryBuffer || fd)
-      {
-        jpeg_read_header(&cinfo, true);
-
-        if ((cinfo.out_color_space == JCS_RGB) && (cinfo.num_components == 3))
-        {
-          auto buffer = make_unique<uint8_t[]>(cinfo.image_width * cinfo.image_height * 3);
-          auto data = buffer.get();
-
-          jpeg_start_decompress(&cinfo);
-
-          while (cinfo.output_scanline < cinfo.output_height)
-          {
-            uint8_t *line = data + (3 * cinfo.image_width) * cinfo.output_scanline;
-            jpeg_read_scanlines(&cinfo, &line, 1);
-          }
-
-          jpeg_finish_decompress(&cinfo);
-          jpeg_destroy_decompress(&cinfo);
-
-          if (fd)
-          {
-            fclose(fd);
-          }
-
-          // ---
-
-          GLuint id = 0u;
-          glGenTextures(1, &id);
-          glBindTexture(GL_TEXTURE_2D, id);
-
-          result.width = cinfo.image_width;
-          result.height = cinfo.image_height;
-          result.format = GL_RGB;
-          result.id = id;
-
-          uploadTextureData(result.format, result.width, result.height, data);
-        }
-      }
-
-      return result;
-    }
-
-    TextureInfo loadTexture(const fs::path &relativePath, bool forceAlpha)
-    {
-      TextureInfo result;
-
-      stbi_uc *data = nullptr;
-      int x, y, comp;
-
-      if (hasMemoryResources())
-      {
-        auto memoryBuffer = getResourceBuffer(relativePath);
-
-        if (memoryBuffer)
-        {
-          data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memoryBuffer->data()), memoryBuffer->size(), &x, &y, &comp, 0);
-        }
-      }
-      else if (hasFileResources())
-      {
-        auto resPath = getResourcePath(relativePath);
-        data = stbi_load(resPath.string().data(), &x, &y, &comp, 0);
-      }
-
-      if (data)
-      {
-        result.width = x;
-        result.height = y;
-
-        GLenum format = 0;
-
-        switch (comp)
+        switch (image.components)
         {
           case 1:
-            format = GL_ALPHA;
+            result.format = GL_ALPHA;
             break;
 
           case 3:
-            format = GL_RGB;
+            result.format = GL_RGB;
             break;
 
           case 4:
-            format = GL_RGBA;
+            result.format = GL_RGBA;
             break;
         }
 
-        if (format)
+        if (result.format)
         {
           GLuint id = 0u;
           glGenTextures(1, &id);
-          glBindTexture(GL_TEXTURE_2D, id);
 
+          result.width = image.width;
+          result.height = image.height;
           result.id = id;
-          result.format = format;
 
-          if (forceAlpha && (format != GL_ALPHA))
-          {
-            int size = x * y;
-            int offset = comp - 1;
-
-            auto converted = make_unique<uint8_t[]>(size);
-            auto buffer = converted.get();
-
-            for (auto i = 0; i < size; i++, offset += comp)
-            {
-              *buffer++ = data[offset];
-            }
-
-            uploadTextureData(GL_ALPHA, x, y, converted.get());
-          }
-          else
-          {
-            uploadTextureData(format, x, y, data);
-          }
+          glBindTexture(GL_TEXTURE_2D, id);
+          uploadTextureData(result.format, result.width, result.height, image.buffer.get());
         }
-        else
-        {
-          LOGE << "UNSUPPORTED IMAGE FORMAT" << endl;
-        }
-
-        stbi_image_free(data);
-      }
-      else
-      {
-        LOGE << "ERROR WHILE LOADING IMAGE" << endl;
       }
 
       return result;
