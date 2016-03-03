@@ -116,6 +116,8 @@ void Sketch::initTextures()
 {
   double t0 = getElapsedSeconds();
   textureInfo = loadTexture("6980491_UN1_800.jpg", chr::image::FLAGS_POT);
+  //textureInfo = loadTexture("banski.jpg", chr::image::FLAGS_RBGA);
+  //textureInfo = loadTexture("camo.jpg", chr::image::FLAGS_TRANSLUCENT);
   double t1 = getElapsedSeconds();
   LOGI << (t1 - t0) << endl;
 

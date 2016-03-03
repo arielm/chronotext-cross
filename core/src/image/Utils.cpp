@@ -1,6 +1,7 @@
 #include "image/Utils.h"
 #include "math/Utils.h"
 #include "MemoryBuffer.h"
+#include "Log.h"
 
 #include <jpeglib.h>
 
@@ -38,7 +39,6 @@ namespace chr
 
     ImageBuffer loadPngImage(const fs::path &relativePath, int flags)
     {
-      bool forceTranslucent = (flags & FLAGS_TRANSLUCENT) | (flags & FLAGS_TRANSLUCENT_INVERSE);
       bool ready = false;
 
       png_structp png_ptr;
@@ -126,6 +126,8 @@ namespace chr
         png_read_info(png_ptr, info_ptr);
         png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, NULL, NULL, NULL);
 
+        bool forceTranslucent = (flags & FLAGS_TRANSLUCENT) | (flags & FLAGS_TRANSLUCENT_INVERSE);
+
         switch (color_type)
         {
           case PNG_COLOR_TYPE_GRAY:
@@ -187,7 +189,7 @@ namespace chr
         }
         else if ((flags & FLAGS_RBGA) && (image.components == 3))
         {
-          png_set_add_alpha(png_ptr, 0xFF, PNG_FILLER_AFTER);
+          png_set_add_alpha(png_ptr, 0xff, PNG_FILLER_AFTER);
           image.components = 4;
         }
 
@@ -268,6 +270,23 @@ namespace chr
 
         if ((cinfo.out_color_space == JCS_RGB) && (cinfo.num_components == 3))
         {
+          bool forceTranslucent = (flags & FLAGS_TRANSLUCENT) | (flags & FLAGS_TRANSLUCENT_INVERSE);
+
+          if (forceTranslucent)
+          {
+            image.components = 1;
+          }
+          else if (flags & FLAGS_RBGA)
+          {
+            image.components = 4;
+          }
+          else
+          {
+            image.components = 3;
+          }
+
+          // ---
+
           image.effectiveWidth = cinfo.image_width;
           image.effectiveHeight = cinfo.image_height;
 
@@ -282,15 +301,64 @@ namespace chr
             image.height = cinfo.image_height;
           }
 
-          image.buffer = shared_ptr<uint8_t>(new uint8_t[3 * image.width * image.height], boost::checked_array_deleter<uint8_t>());
+          image.buffer = shared_ptr<uint8_t>(new uint8_t[image.components * image.width * image.height], boost::checked_array_deleter<uint8_t>());
           auto data = image.buffer.get();
 
           jpeg_start_decompress(&cinfo);
 
-          while (cinfo.output_scanline < cinfo.output_height)
+          if (image.components == 3)
           {
-            uint8_t *line = data + (3 * image.width) * cinfo.output_scanline;
-            jpeg_read_scanlines(&cinfo, &line, 1);
+            while (cinfo.output_scanline < cinfo.output_height)
+            {
+              uint8_t *line = data + (3 * image.width) * cinfo.output_scanline;
+              jpeg_read_scanlines(&cinfo, &line, 1);
+            }
+          }
+          else
+          {
+            auto lineBuffer = make_unique<uint8_t[]>(3 * cinfo.image_width);
+            auto line = lineBuffer.get();
+
+            while (cinfo.output_scanline < cinfo.output_height)
+            {
+              uint8_t *input = lineBuffer.get();
+              uint8_t *output = data + (image.components * image.width) * cinfo.output_scanline;
+              jpeg_read_scanlines(&cinfo, &line, 1);
+
+              if (image.components == 4)
+              {
+                for (int i = 0; i < cinfo.image_width; i++)
+                {
+                  *output++ = *input++;
+                  *output++ = *input++;
+                  *output++ = *input++;
+                  *output++ = 0xff;
+                }
+              }
+              else if (image.components == 1)
+              {
+                if (flags & FLAGS_TRANSLUCENT_INVERSE)
+                {
+                  for (int i = 0; i < cinfo.image_width; i++)
+                  {
+                    int r = *input++;
+                    int g = *input++;
+                    int b = *input++;
+                    *output++ = 0xff - (r + g + b) / 3;
+                  }
+                }
+                else
+                {
+                  for (int i = 0; i < cinfo.image_width; i++)
+                  {
+                    int r = *input++;
+                    int g = *input++;
+                    int b = *input++;
+                    *output++ = (r + g + b) / 3;
+                  }
+                }
+              }
+            }
           }
 
           jpeg_finish_decompress(&cinfo);
@@ -300,8 +368,6 @@ namespace chr
           {
             fclose(fd);
           }
-
-          image.components = 3;
         }
       }
 
