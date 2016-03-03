@@ -11,8 +11,8 @@ namespace chr
         FLAGS_NONE = 0,
         FLAGS_TRANSLUCENT = 1,
         FLAGS_TRANSLUCENT_INVERSE = 2,
-        FLAGS_RBGA = 3,
-        FLAGS_POT = 4,
+        FLAGS_RBGA = 4,
+        FLAGS_POT = 8,
     };
 
     struct ImageBuffer

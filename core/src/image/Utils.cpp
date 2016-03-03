@@ -1,7 +1,6 @@
 #include "image/Utils.h"
 #include "math/Utils.h"
 #include "MemoryBuffer.h"
-#include "Log.h"
 
 #include <jpeglib.h>
 
