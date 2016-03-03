@@ -1,6 +1,7 @@
 #include "image/Utils.h"
 #include "math/Utils.h"
 #include "MemoryBuffer.h"
+#include "Log.h"
 
 #include <jpeglib.h>
 
@@ -173,6 +174,12 @@ namespace chr
 
             break;
           }
+
+          case PNG_COLOR_TYPE_RGB_ALPHA:
+          {
+            image.components = 4;
+            break;
+          }
         }
 
         if ((flags & FLAGS_TRANSLUCENT_INVERSE) && (image.components == 1))
@@ -203,16 +210,16 @@ namespace chr
           image.height = height;
         }
 
-        if (png_get_rowbytes(png_ptr, info_ptr) == width)
+        if (png_get_rowbytes(png_ptr, info_ptr) == image.components * width)
         {
-          image.buffer = shared_ptr<uint8_t>(new uint8_t[image.width * image.height], boost::checked_array_deleter<uint8_t>());
+          image.buffer = shared_ptr<uint8_t>(new uint8_t[image.components * image.width * image.height], boost::checked_array_deleter<uint8_t>());
           auto data = image.buffer.get();
 
           png_byte *rows[height];
 
           for (auto i = 0; i < height; i++)
           {
-            rows[i] = data + i * image.width;
+            rows[i] = data + i * image.components * image.width;
           }
 
           png_read_image(png_ptr, &rows[0]);
