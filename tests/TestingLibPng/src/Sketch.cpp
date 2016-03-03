@@ -117,7 +117,7 @@ void Sketch::initBuffers()
 void Sketch::initTextures()
 {
   double t0 = getElapsedSeconds();
-  textureInfo = loadTexture("lys_256.png", chr::image::FLAGS_TRANSLUCENT);
+  textureInfo = loadTexture("6980491_UN1_800_MASK.png", chr::image::FLAGS_TRANSLUCENT | chr::image::FLAGS_POT);
   double t1 = getElapsedSeconds();
   LOGI << (t1 - t0) << endl;
 

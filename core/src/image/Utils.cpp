@@ -1,7 +1,6 @@
-
 #include "image/Utils.h"
+#include "math/Utils.h"
 #include "MemoryBuffer.h"
-#include "Log.h"
 
 #include <jpeglib.h>
 
@@ -127,8 +126,6 @@ namespace chr
         png_read_info(png_ptr, info_ptr);
         png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth, &color_type, NULL, NULL, NULL);
 
-        LOGI << color_type << endl;
-
         switch (color_type)
         {
           case PNG_COLOR_TYPE_GRAY:
@@ -192,24 +189,36 @@ namespace chr
 
         // ---
 
-        const png_size_t row_size = png_get_rowbytes(png_ptr, info_ptr);
-        image.buffer = shared_ptr<uint8_t>(new uint8_t[row_size * height], boost::checked_array_deleter<uint8_t>());
-        auto data = image.buffer.get();
+        image.effectiveWidth = width;
+        image.effectiveHeight = height;
 
-        png_byte *row_ptrs[height];
-
-        for (auto i = 0; i < height; i++)
+        if (flags & FLAGS_POT)
         {
-          row_ptrs[i] = data + i * row_size;
+          image.width = math::nextPowerOfTwo(width);
+          image.height = math::nextPowerOfTwo(height);
+        }
+        else
+        {
+          image.width = width;
+          image.height = height;
         }
 
-        png_read_image(png_ptr, &row_ptrs[0]);
+        if (png_get_rowbytes(png_ptr, info_ptr) == width)
+        {
+          image.buffer = shared_ptr<uint8_t>(new uint8_t[image.width * image.height], boost::checked_array_deleter<uint8_t>());
+          auto data = image.buffer.get();
 
-        png_read_end(png_ptr, info_ptr);
+          png_byte *rows[height];
+
+          for (auto i = 0; i < height; i++)
+          {
+            rows[i] = data + i * image.width;
+          }
+
+          png_read_image(png_ptr, &rows[0]);
+        }
+
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-
-        image.width = width;
-        image.height = height;
       }
 
       return image;

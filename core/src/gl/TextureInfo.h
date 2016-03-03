@@ -12,6 +12,8 @@ namespace chr
       GLenum format;
       int width;
       int height;
+      float maxU;
+      float maxV;
     };
   }
 }

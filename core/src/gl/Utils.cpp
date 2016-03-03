@@ -45,9 +45,11 @@ namespace chr
           GLuint id = 0u;
           glGenTextures(1, &id);
 
+          result.id = id;
           result.width = image.width;
           result.height = image.height;
-          result.id = id;
+          result.maxU = image.effectiveWidth / image.width;
+          result.maxV = image.effectiveHeight / image.height;
 
           glBindTexture(GL_TEXTURE_2D, id);
           uploadTextureData(result.format, result.width, result.height, image.buffer.get());
