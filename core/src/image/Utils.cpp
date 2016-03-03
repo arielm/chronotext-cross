@@ -268,14 +268,28 @@ namespace chr
 
         if ((cinfo.out_color_space == JCS_RGB) && (cinfo.num_components == 3))
         {
-          image.buffer = shared_ptr<uint8_t>(new uint8_t[cinfo.image_width * cinfo.image_height * 3], boost::checked_array_deleter<uint8_t>());
+          image.effectiveWidth = cinfo.image_width;
+          image.effectiveHeight = cinfo.image_height;
+
+          if (flags & FLAGS_POT)
+          {
+            image.width = math::nextPowerOfTwo(cinfo.image_width);
+            image.height = math::nextPowerOfTwo(cinfo.image_height);
+          }
+          else
+          {
+            image.width = cinfo.image_width;
+            image.height = cinfo.image_height;
+          }
+
+          image.buffer = shared_ptr<uint8_t>(new uint8_t[3 * image.width * image.height], boost::checked_array_deleter<uint8_t>());
           auto data = image.buffer.get();
 
           jpeg_start_decompress(&cinfo);
 
           while (cinfo.output_scanline < cinfo.output_height)
           {
-            uint8_t *line = data + (3 * cinfo.image_width) * cinfo.output_scanline;
+            uint8_t *line = data + (3 * image.width) * cinfo.output_scanline;
             jpeg_read_scanlines(&cinfo, &line, 1);
           }
 
@@ -287,8 +301,6 @@ namespace chr
             fclose(fd);
           }
 
-          image.width = cinfo.image_width;
-          image.height = cinfo.image_height;
           image.components = 3;
         }
       }

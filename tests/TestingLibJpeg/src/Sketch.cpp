@@ -1,5 +1,5 @@
-
 #include "Sketch.h"
+#include <image/ImageBuffer.h>
 #include "gl/TextureShader.h"
 
 using namespace std;
@@ -115,7 +115,7 @@ void Sketch::initBuffers()
 void Sketch::initTextures()
 {
   double t0 = getElapsedSeconds();
-  textureInfo = loadTexture("6980491_UN1_800.jpg");
+  textureInfo = loadTexture("6980491_UN1_800.jpg", chr::image::FLAGS_POT);
   double t1 = getElapsedSeconds();
   LOGI << (t1 - t0) << endl;
 
