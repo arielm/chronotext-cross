@@ -65,6 +65,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/utils/Utils.cpp"
   "${CROSS_ROOT}/src/gl/Utils.cpp"
   "${CROSS_ROOT}/src/gl/ShaderProgram.cpp"
+  "${CROSS_ROOT}/src/gl/QuadBuffer.cpp"
   "${CROSS_ROOT}/src/gl/TextureBuffer.cpp"
   "${CROSS_ROOT}/src/math/Utils.cpp"
   "${CROSS_ROOT}/src/math/Rect.cpp"
