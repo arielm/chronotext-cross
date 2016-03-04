@@ -13,6 +13,24 @@ list(APPEND INCLUDE_DIRS
 
 # ---
 
+set(JPEG_INCLUDE_DIR "${JPEG_ROOT}/include")
+set(JPEG_LIBRARY "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
+
+set(PNG_INCLUDE_DIRS "${PNG_ROOT}/include")
+set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
+
+list(APPEND INCLUDE_DIRS
+  ${JPEG_INCLUDE_DIR}
+  ${PNG_INCLUDE_DIRS}
+)
+
+list(APPEND LIBRARIES
+  ${JPEG_LIBRARY}
+  ${PNG_LIBRARIES}
+)
+
+# ---
+
 if (PLATFORM MATCHES emscripten)
   set(ZLIB_INCLUDE_DIRS "$ENV{HOME}/.emscripten_cache/ports-builds/zlib")
   set(ZLIB_LIBRARIES "$ENV{HOME}/.emscripten_cache/zlib.bc")
@@ -31,24 +49,6 @@ list(APPEND INCLUDE_DIRS
 
 list(APPEND LIBRARIES
   ${ZLIB_LIBRARIES}
-)
-
-# ---
-
-set(JPEG_INCLUDE_DIR "${JPEG_ROOT}/include")
-set(JPEG_LIBRARY "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
-
-set(PNG_INCLUDE_DIRS "${PNG_ROOT}/include")
-set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
-
-list(APPEND INCLUDE_DIRS
-  ${JPEG_INCLUDE_DIR}
-  ${PNG_INCLUDE_DIRS}
-)
-
-list(APPEND LIBRARIES
-  ${JPEG_LIBRARY}
-  ${PNG_LIBRARIES}
 )
 
 # ---
