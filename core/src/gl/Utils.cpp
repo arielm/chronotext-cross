@@ -58,6 +58,47 @@ namespace chr
       return texture;
     }
 
+    TextureHandle uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    {
+      TextureHandle texture;
+
+      if ((image.components == 4) && (mask.components == 1))
+      {
+        if ((mask.width >= image.effectiveWidth) && (mask.height >= image.effectiveHeight))
+        {
+          auto input = mask.buffer.get();
+          auto output = image.buffer.get();
+
+          for (int iy = 0; iy < image.effectiveHeight; iy++)
+          {
+            uint8_t *inputLine = input + (mask.width) * iy;
+            uint8_t *outputLine = output + (4 * image.width) * iy;
+
+            for (int ix = 0; ix < image.effectiveWidth; ix++)
+            {
+              outputLine += 3;
+              *outputLine ++= *inputLine++;
+            }
+          }
+        }
+
+        GLuint id = 0u;
+        glGenTextures(1, &id);
+
+        texture.id = id;
+        texture.format = GL_RGBA;
+        texture.width = image.width;
+        texture.height = image.height;
+        texture.maxU = image.effectiveWidth / image.width;
+        texture.maxV = image.effectiveHeight / image.height;
+
+        glBindTexture(GL_TEXTURE_2D, id);
+        uploadTexture(texture.format, texture.width, texture.height, image.buffer.get(), useMipmap, wrapS, wrapT);
+      }
+
+      return  texture;
+    }
+
     void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);

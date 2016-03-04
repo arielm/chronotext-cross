@@ -114,12 +114,13 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  double t0 = getElapsedSeconds();
-  texture = loadTexture("6980491_UN1_800.jpg", chr::image::FLAGS_POT);
-  //texture = loadTexture("banski.jpg", chr::image::FLAGS_RBGA);
-  //texture = loadTexture("camo.jpg", chr::image::FLAGS_TRANSLUCENT);
-  double t1 = getElapsedSeconds();
-  LOGI << (t1 - t0) << endl;
+  image::ImageBuffer image = image::loadJpgImage("6980491_UN1_800.jpg", image::FLAGS_RBGA | image::FLAGS_POT);
+  image::ImageBuffer mask = image::loadPngImage("6980491_UN1_800_MASK.png", image::FLAGS_TRANSLUCENT);
+  texture = uploadMaskedTexture(image, mask);
+
+  //texture = loadTexture("6980491_UN1_800.jpg", image::FLAGS_POT);
+  //texture = loadTexture("banski.jpg", image::FLAGS_RBGA);
+  //texture = loadTexture("camo.jpg", image::FLAGS_TRANSLUCENT);
 
   #if defined(CHR_PLATFORM_EMSCRIPTEN)
     emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
