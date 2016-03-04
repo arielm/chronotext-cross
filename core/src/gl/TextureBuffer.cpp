@@ -86,5 +86,15 @@ namespace chr
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
+
+    void TextureBuffer::setColor(float r, float g, float b, float a)
+    {
+      glVertexAttrib4fv(textureShader.colorLocation, &glm::vec4(r, g, b, a)[0]);
+    }
+
+    void TextureBuffer::setColor(const glm::vec4 &color)
+    {
+      glVertexAttrib4fv(textureShader.colorLocation, &color[0]);
+    }
   }
 }

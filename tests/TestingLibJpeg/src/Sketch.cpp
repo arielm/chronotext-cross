@@ -53,12 +53,7 @@ void Sketch::draw()
 
     // ---
 
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(textureShader.samplerLocation, 0);
-
-    GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glVertexAttrib4fv(textureShader.colorLocation, color);
-
+    textureBuffer.setColor(1, 1, 1, 1);
     textureBuffer.draw(texture, -400 * 0.03f, -300 * 0.03f, 0.03f); // XXX
   }
 }
