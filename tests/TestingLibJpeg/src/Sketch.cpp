@@ -8,12 +8,10 @@ using namespace gl;
 
 void Sketch::setup()
 {
-  initBuffers();
   initTextures();
+  textureBuffer.setup();
 
   // ---
-
-  glEnable(GL_TEXTURE_2D);
 
   glDisable(GL_DEPTH_TEST);
   glDepthMask(GL_FALSE);
@@ -30,8 +28,8 @@ void Sketch::shutdown()
   glDisableVertexAttribArray(textureShader.positionLocation);
   glDisableVertexAttribArray(textureShader.coordLocation);
 
-  glDeleteBuffers(3, vboIds);
   glDeleteTextures(1, &texture.id);
+  textureBuffer.shutdown();
 }
 
 void Sketch::draw()
@@ -55,61 +53,14 @@ void Sketch::draw()
 
     // ---
 
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-    glEnableVertexAttribArray(textureShader.positionLocation);
-    glVertexAttribPointer(textureShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-    glEnableVertexAttribArray(textureShader.coordLocation);
-    glVertexAttribPointer(textureShader.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(textureShader.samplerLocation, 0);
 
     GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
     glVertexAttrib4fv(textureShader.colorLocation, color);
 
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(textureShader.samplerLocation, 0);
-
-    // ---
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+    textureBuffer.draw(texture, -400 * 0.03f, -300 * 0.03f, 0.03f); // XXX
   }
-}
-
-void Sketch::initBuffers()
-{
-  const GLfloat vertices[] =
-  {
-    -12, +9, 0, // A
-    -12, -9, 0, // B
-    +12, -9, 0, // C
-    +12, +9, 0, // D
-  };
-
-  const GLfloat coords[] =
-  {
-    0, 0, // A
-    0, 1, // B
-    1, 1, // C
-    1, 0, // D
-  };
-
-  const GLushort indices[] =
-  {
-    0, 1, 2,
-    2, 3, 0
-  };
-
-  glGenBuffers(3, vboIds);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 3, vertices, GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, coords, GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
 }
 
 void Sketch::initTextures()

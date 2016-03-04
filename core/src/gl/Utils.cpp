@@ -47,8 +47,8 @@ namespace chr
           texture.id = id;
           texture.width = image.width;
           texture.height = image.height;
-          texture.maxU = image.effectiveWidth / image.width;
-          texture.maxV = image.effectiveHeight / image.height;
+          texture.maxU = image.effectiveWidth / (float) image.width;
+          texture.maxV = image.effectiveHeight / (float) image.height;
 
           glBindTexture(GL_TEXTURE_2D, id);
           uploadTexture(texture.format, texture.width, texture.height, image.buffer.get(), useMipmap, wrapS, wrapT);
@@ -89,8 +89,8 @@ namespace chr
         texture.format = GL_RGBA;
         texture.width = image.width;
         texture.height = image.height;
-        texture.maxU = image.effectiveWidth / image.width;
-        texture.maxV = image.effectiveHeight / image.height;
+        texture.maxU = image.effectiveWidth / (float) image.width;
+        texture.maxV = image.effectiveHeight / (float) image.height;
 
         glBindTexture(GL_TEXTURE_2D, id);
         uploadTexture(texture.format, texture.width, texture.height, image.buffer.get(), useMipmap, wrapS, wrapT);
@@ -129,6 +129,11 @@ namespace chr
           glGenerateMipmap(GL_TEXTURE_2D);
         #endif
       }
+    }
+
+    void drawTexture(const TextureHandle &texture)
+    {
+
     }
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)

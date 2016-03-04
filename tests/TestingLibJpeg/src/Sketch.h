@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/TextureHandle.h"
+#include "gl/TextureBuffer.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -12,10 +12,9 @@ public:
   void shutdown() final;
   void draw() final;
 
-  void initBuffers();
   void initTextures();
 
 protected:
-  GLuint vboIds[3];
+  chr::gl::TextureBuffer textureBuffer;
   chr::gl::TextureHandle texture;
 };
