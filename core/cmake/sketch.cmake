@@ -1,6 +1,6 @@
 set(GLFW_ROOT "$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}")
 set(GLM_ROOT "$ENV{CROSS_PATH}/deps/glm/dist")
-set(JPEG_ROOT "$ENV{CROSS_PATH}/deps/libjpeg-turbo/dist/${PLATFORM}")
+set(JPEG_ROOT "$ENV{CROSS_PATH}/deps/libjpeg-turbo")
 set(PNG_ROOT "$ENV{CROSS_PATH}/deps/libpng/dist/${PLATFORM}")
 
 # ---
@@ -36,7 +36,7 @@ list(APPEND LIBRARIES
 # ---
 
 set(JPEG_INCLUDE_DIR "${JPEG_ROOT}/include")
-set(JPEG_LIBRARY "${JPEG_ROOT}/lib/libjpeg.a")
+set(JPEG_LIBRARY "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
 
 set(PNG_INCLUDE_DIRS "${PNG_ROOT}/include")
 set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
