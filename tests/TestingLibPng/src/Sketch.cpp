@@ -2,7 +2,6 @@
 
 #include "gl/TextureShader.h"
 #include "gl/TextureAlphaShader.h"
-#include <image/ImageBuffer.h>
 
 using namespace std;
 using namespace chr;
@@ -33,7 +32,7 @@ void Sketch::shutdown()
   glDisableVertexAttribArray(textureAlphaShader.coordLocation);
 
   glDeleteBuffers(3, vboIds);
-  glDeleteTextures(1, &textureInfo.id);
+  glDeleteTextures(1, &texture.id);
 }
 
 void Sketch::draw()
@@ -117,7 +116,7 @@ void Sketch::initBuffers()
 void Sketch::initTextures()
 {
   double t0 = getElapsedSeconds();
-  textureInfo = loadTexture("6980491_UN1_800_MASK.png", chr::image::FLAGS_TRANSLUCENT | chr::image::FLAGS_POT);
+  texture = loadTexture("6980491_UN1_800_MASK.png", chr::image::FLAGS_TRANSLUCENT | chr::image::FLAGS_POT);
   double t1 = getElapsedSeconds();
   LOGI << (t1 - t0) << endl;
 

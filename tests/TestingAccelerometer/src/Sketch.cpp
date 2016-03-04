@@ -45,7 +45,7 @@ void Sketch::shutdown()
   glDisableVertexAttribArray(textureAlphaShader.coordLocation);
 
   glDeleteBuffers(3, vboIds);
-  glDeleteTextures(1, &textureInfo.id);
+  glDeleteTextures(1, &texture.id);
 }
 
 void Sketch::start(StartReason reason)
@@ -140,7 +140,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureInfo = loadTexture("dot_112.png", true);
+  texture = loadTexture("dot_112.png", chr::image::FLAGS_TRANSLUCENT);
 }
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)

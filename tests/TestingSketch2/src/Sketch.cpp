@@ -31,7 +31,7 @@ void Sketch::shutdown()
   glDisableVertexAttribArray(textureShader.coordLocation);
 
   glDeleteBuffers(3, vboIds);
-  glDeleteTextures(1, &textureInfo.id);
+  glDeleteTextures(1, &texture.id);
 }
 
 void Sketch::draw()
@@ -114,7 +114,7 @@ void Sketch::initBuffers()
 
 void Sketch::initTextures()
 {
-  textureInfo = loadTexture("expo67.png");
+  texture = loadTexture("expo67.png");
 
   #if defined(CHR_PLATFORM_EMSCRIPTEN)
     emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");

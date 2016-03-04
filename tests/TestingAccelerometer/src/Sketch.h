@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/TextureInfo.h"
+#include "gl/TextureHandle.h"
 
 struct Particle
 {
@@ -41,7 +41,7 @@ public:
 
 protected:
   GLuint vboIds[3];
-  chr::gl::TextureInfo textureInfo;
+  chr::gl::TextureHandle texture;
 
   float scale;
   glm::mat4 projectionMatrix;

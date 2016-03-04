@@ -28,14 +28,16 @@
   #define GL_GENERATE_MIPMAP_HINT 0x8192
 #endif
 
+#include <image/Utils.h>
+
 namespace chr
 {
   namespace gl
   {
-    struct TextureInfo;
+    struct TextureHandle;
 
-    TextureInfo loadTexture(const fs::path &relativePath, int flags = 0);
-    void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data);
+    TextureHandle loadTexture(const fs::path &relativePath, int flags = 0, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);
     glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &point);

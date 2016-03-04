@@ -1,7 +1,6 @@
 #include "gl/Utils.h"
-#include "gl/TextureInfo.h"
+#include "gl/TextureHandle.h"
 #include "math/Utils.h"
-#include "image/Utils.h"
 
 using namespace std;
 
@@ -9,9 +8,9 @@ namespace chr
 {
   namespace gl
   {
-    TextureInfo loadTexture(const fs::path &relativePath, int flags)
+    TextureHandle loadTexture(const fs::path &relativePath, int flags, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
-      TextureInfo result;
+      TextureHandle texture;
       image::ImageBuffer image;
 
       if (relativePath.extension() == ".png")
@@ -28,54 +27,67 @@ namespace chr
         switch (image.components)
         {
           case 1:
-            result.format = GL_ALPHA;
+            texture.format = GL_ALPHA;
             break;
 
           case 3:
-            result.format = GL_RGB;
+            texture.format = GL_RGB;
             break;
 
           case 4:
-            result.format = GL_RGBA;
+            texture.format = GL_RGBA;
             break;
         }
 
-        if (result.format)
+        if (texture.format)
         {
           GLuint id = 0u;
           glGenTextures(1, &id);
 
-          result.id = id;
-          result.width = image.width;
-          result.height = image.height;
-          result.maxU = image.effectiveWidth / image.width;
-          result.maxV = image.effectiveHeight / image.height;
+          texture.id = id;
+          texture.width = image.width;
+          texture.height = image.height;
+          texture.maxU = image.effectiveWidth / image.width;
+          texture.maxV = image.effectiveHeight / image.height;
 
           glBindTexture(GL_TEXTURE_2D, id);
-          uploadTextureData(result.format, result.width, result.height, image.buffer.get());
+          uploadTexture(texture.format, texture.width, texture.height, image.buffer.get(), useMipmap, wrapS, wrapT);
         }
       }
 
-      return result;
+      return texture;
     }
 
-    void uploadTextureData(GLenum format, GLsizei width, GLsizei height, const GLvoid *data)
+    void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-      #if defined(CHR_PLATFORM_DESKTOP)
-        glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-      #endif
+      if (useMipmap)
+      {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+        #if defined(CHR_PLATFORM_DESKTOP)
+          glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+          glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        #endif
+      }
+      else
+      {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      }
 
       glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
-      #if defined(CHR_PLATFORM_DESKTOP)
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-      #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
-        glGenerateMipmap(GL_TEXTURE_2D);
-      #endif
+      if (useMipmap)
+      {
+        #if defined(CHR_PLATFORM_DESKTOP)
+          glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+        #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
+          glGenerateMipmap(GL_TEXTURE_2D);
+        #endif
+      }
     }
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)
