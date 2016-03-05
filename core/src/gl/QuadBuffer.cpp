@@ -1,5 +1,4 @@
 #include "gl/QuadBuffer.h"
-#include "gl/ColorShader.h"
 
 using namespace std;
 
@@ -41,8 +40,8 @@ namespace chr
       // ---
 
       glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-      glEnableVertexAttribArray(colorShader.positionLocation);
-      glVertexAttribPointer(colorShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(positionLocation);
+      glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
       glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 4 * 3, vertices.data());
 
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
@@ -50,7 +49,7 @@ namespace chr
 
       // ---
 
-      glDisableVertexAttribArray(colorShader.positionLocation);
+      glDisableVertexAttribArray(positionLocation);
 
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -58,17 +57,17 @@ namespace chr
 
     void QuadBuffer::setMatrix(const glm::mat4 &matrix)
     {
-      glUniformMatrix4fv(colorShader.matrixLocation, 1, GL_FALSE, &matrix[0][0]);
+      glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &matrix[0][0]);
     }
 
     void QuadBuffer::setColor(float r, float g, float b, float a)
     {
-      glVertexAttrib4fv(colorShader.colorLocation, &glm::vec4(r, g, b, a)[0]);
+      glVertexAttrib4fv(colorLocation, &glm::vec4(r, g, b, a)[0]);
     }
 
     void QuadBuffer::setColor(const glm::vec4 &color)
     {
-      glVertexAttrib4fv(colorShader.colorLocation, &color[0]);
+      glVertexAttrib4fv(colorLocation, &color[0]);
     }
   }
 }

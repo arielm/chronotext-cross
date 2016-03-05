@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/TextureHandle.h"
+#include "gl/TextureBuffer.h"
 
 struct Particle
 {
@@ -40,8 +40,8 @@ public:
   void accelerated(chr::AccelEvent event) final;
 
 protected:
-  GLuint vboIds[3];
   chr::gl::TextureHandle texture;
+  chr::gl::TextureBuffer textureBuffer;
 
   float scale;
   glm::mat4 projectionMatrix;
@@ -49,12 +49,11 @@ protected:
   glm::vec2 acceleration;
   Particle particle;
 
-  void initBuffers();
-  void initTextures();
-
   void drawDot(const glm::vec2 &position, float radius);
 
   void accumulateForces();
   void verlet();
   void satisfyConstraints();
+
+  void initTextures();
 };

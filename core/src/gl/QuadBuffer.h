@@ -10,6 +10,10 @@ namespace chr
     class QuadBuffer
     {
     public:
+      GLint positionLocation;
+      GLint colorLocation;
+      GLint matrixLocation;
+
       void setup();
       void shutdown();
 
@@ -19,6 +23,16 @@ namespace chr
       void setMatrix(const glm::mat4 &matrix);
       void setColor(float r, float g, float b, float a);
       void setColor(const glm::vec4 &color);
+
+      template <typename T>
+      void setShader(T &shader)
+      {
+        shader.use();
+
+        positionLocation = shader.positionLocation;
+        colorLocation = shader.colorLocation;
+        matrixLocation = shader.matrixLocation;
+      }
 
     protected:
       std::vector<glm::vec3> vertices;

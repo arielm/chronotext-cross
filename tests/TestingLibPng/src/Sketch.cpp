@@ -9,12 +9,10 @@ using namespace gl;
 
 void Sketch::setup()
 {
-  initBuffers();
   initTextures();
+  textureBuffer.setup();
 
   // ---
-
-  glEnable(GL_TEXTURE_2D);
 
   glDisable(GL_DEPTH_TEST);
   glDepthMask(GL_FALSE);
@@ -25,14 +23,11 @@ void Sketch::setup()
 
 void Sketch::shutdown()
 {
-  glUseProgram(0);
-  textureAlphaShader.unload();
+  glDeleteTextures(1, &textures[0].id);
+  glDeleteTextures(1, &textures[1].id);
+  glDeleteTextures(1, &textures[2].id);
 
-  glDisableVertexAttribArray(textureAlphaShader.positionLocation);
-  glDisableVertexAttribArray(textureAlphaShader.coordLocation);
-
-  glDeleteBuffers(3, vboIds);
-  glDeleteTextures(1, &texture.id);
+  textureBuffer.shutdown();
 }
 
 void Sketch::draw()
@@ -42,83 +37,40 @@ void Sketch::draw()
 
   // ---
 
-  textureAlphaShader.use();
-  {
-    glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 100.0f);
+  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 1000.0f);
 
-    glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, 1, 1)); // SCALE
-    modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -30)); // DISTANCE
-    modelViewMatrix = glm::rotate(modelViewMatrix, -15 * D2R, glm::vec3(1, 0, 0)); // ELEVATION
-    modelViewMatrix = glm::rotate(modelViewMatrix, (float) getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
+  glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, -1, 1)); // SCALE
+  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -300)); // DISTANCE
+  modelViewMatrix = glm::rotate(modelViewMatrix, 15 * D2R, glm::vec3(1, 0, 0)); // ELEVATION
+  modelViewMatrix = glm::rotate(modelViewMatrix, (float) getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
 
-    glm::mat4 mvp = projectionMatrix * modelViewMatrix;
-    glUniformMatrix4fv(textureAlphaShader.matrixLocation, 1, GL_FALSE, &mvp[0][0]);
+  // ---
 
-    // ---
+  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
+  textureBuffer.setShader(textureShader);
+  textureBuffer.setColor(1, 1, 1, 1);
+  textureBuffer.drawFromCenter(textures[0], 0, 0, 0.333f);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-    glEnableVertexAttribArray(textureAlphaShader.positionLocation);
-    glVertexAttribPointer(textureAlphaShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, 5));
+  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
+  textureBuffer.setShader(textureAlphaShader);
+  textureBuffer.setColor(1, 0.5f, 0, 1);
+  textureBuffer.drawInRect(textures[1], math::Rectf(-200, -150, 400, 300));
 
-    glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-    glEnableVertexAttribArray(textureAlphaShader.coordLocation);
-    glVertexAttribPointer(textureAlphaShader.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-    GLfloat color[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-    glVertexAttrib4fv(textureAlphaShader.colorLocation, color);
-
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(textureAlphaShader.samplerLocation, 0);
-
-    // ---
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-  }
-}
-
-void Sketch::initBuffers()
-{
-  const GLfloat vertices[] =
-  {
-    -12, +6, 0, // A
-    -12, -6, 0, // B
-    +12, -6, 0, // C
-    +12, +6, 0, // D
-  };
-
-  const GLfloat coords[] =
-  {
-    0, 0, // A
-    0, 1, // B
-    1, 1, // C
-    1, 0, // D
-  };
-
-  const GLushort indices[] =
-  {
-    0, 1, 2,
-    2, 3, 0
-  };
-
-  glGenBuffers(3, vboIds);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 3, vertices, GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, coords, GL_STATIC_DRAW);
-
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
+  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, 5));
+  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
+  textureBuffer.setShader(textureShader);
+  textureBuffer.setColor(1, 1, 1, 1);
+  textureBuffer.drawFromCenter(textures[2], 100, 100);
 }
 
 void Sketch::initTextures()
 {
-  double t0 = getElapsedSeconds();
-  texture = loadTexture("6980491_UN1_800_MASK.png", chr::image::FLAGS_TRANSLUCENT | chr::image::FLAGS_POT);
-  double t1 = getElapsedSeconds();
-  LOGI << (t1 - t0) << endl;
+  textures[0] = loadTexture("6980491_UN1_800_MASK.png", chr::image::FLAGS_POT);
+  textures[1] = loadTexture("lys_32.png", image::FLAGS_TRANSLUCENT_INVERSE, true, GL_REPEAT, GL_REPEAT);
+  textures[2] = loadTexture("expo67.png");
+
+  // ---
 
   #if defined(CHR_PLATFORM_EMSCRIPTEN)
     emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
@@ -127,7 +79,5 @@ void Sketch::initTextures()
 
   GLfloat maxAnisotropy;
   glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-  LOGI << "max-anisotropy: " << maxAnisotropy << endl;
-
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
 }

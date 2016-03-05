@@ -1,5 +1,4 @@
 #include "gl/TextureBuffer.h"
-#include "gl/TextureShader.h"
 
 using namespace std;
 
@@ -38,14 +37,16 @@ namespace chr
     void TextureBuffer::draw(const TextureHandle &texture, float x, float y, float scale)
     {
       float x1 = x;
-      float y1 = y + texture.height * texture.maxV * scale;
+      float y1 = y;
       float x2 = x + texture.width * texture.maxU * scale;
-      float y2 = y;
+      float y2 = y + texture.height * texture.maxV * scale;
 
       vertices[0] = { x1, y1, 0 };
-      vertices[1] = { x1, y2, 0 };
+      vertices[1] = { x2, y1, 0 };
       vertices[2] = { x2, y2, 0 };
-      vertices[3] = { x2, y1, 0 };
+      vertices[3] = { x1, y2, 0 };
+
+      // ---
 
       float u1 = 0;
       float v1 = 0;
@@ -53,23 +54,86 @@ namespace chr
       float v2 = texture.maxV;
 
       coords[0] = { u1, v1 };
-      coords[1] = { u1, v2 };
+      coords[1] = { u2, v1 };
       coords[2] = { u2, v2 };
-      coords[3] = { u2, v1 };
+      coords[3] = { u1, v2 };
+
+      apply(texture);
+    }
+
+    void TextureBuffer::drawFromCenter(const TextureHandle &texture, float x, float y, float scale)
+    {
+      float halfWidth = texture.width * texture.maxU * scale * 0.5f;
+      float halfHeight = texture.height * texture.maxV * scale * 0.5f;
+
+      float x1 = x - halfWidth;
+      float y1 = y - halfHeight;
+      float x2 = x + halfWidth;
+      float y2 = y + halfHeight;
+
+      vertices[0] = { x1, y1, 0 };
+      vertices[1] = { x2, y1, 0 };
+      vertices[2] = { x2, y2, 0 };
+      vertices[3] = { x1, y2, 0 };
 
       // ---
 
+      float u1 = 0;
+      float v1 = 0;
+      float u2 = texture.maxU;
+      float v2 = texture.maxV;
+
+      coords[0] = { u1, v1 };
+      coords[1] = { u2, v1 };
+      coords[2] = { u2, v2 };
+      coords[3] = { u1, v2 };
+
+      apply(texture);
+    }
+
+    void TextureBuffer::drawInRect(const TextureHandle &texture, const math::Rectf &rect, float ox, float oy)
+    {
+      float x1 = rect.x1;
+      float y1 = rect.y1;
+      float x2 = rect.x2;
+      float y2 = rect.y2;
+
+      vertices[0] = { x1, y1, 0 };
+      vertices[1] = { x2, y1, 0 };
+      vertices[2] = { x2, y2, 0 };
+      vertices[3] = { x1, y2, 0 };
+
+      // ---
+
+      float width = texture.width * texture.maxU;
+      float height = texture.height * texture.maxV;
+
+      float u1 = (rect.x1 - ox) / width;
+      float v1 = (rect.y1 - oy) / height;
+      float u2 = (rect.x2 - ox) / width;
+      float v2 = (rect.y2 - oy) / height;
+
+      coords[0] = { u1, v1 };
+      coords[1] = { u2, v1 };
+      coords[2] = { u2, v2 };
+      coords[3] = { u1, v2 };
+
+      apply(texture);
+    }
+
+    void TextureBuffer::apply(const TextureHandle &texture)
+    {
       glEnable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D, texture.id);
 
       glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-      glEnableVertexAttribArray(textureShader.positionLocation);
-      glVertexAttribPointer(textureShader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(positionLocation);
+      glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
       glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 4 * 3, vertices.data());
 
       glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-      glEnableVertexAttribArray(textureShader.coordLocation);
-      glVertexAttribPointer(textureShader.coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(coordLocation);
+      glVertexAttribPointer(coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
       glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 4 * 2, coords.data());
 
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
@@ -80,8 +144,8 @@ namespace chr
       glDisable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D, 0);
 
-      glDisableVertexAttribArray(textureShader.positionLocation);
-      glDisableVertexAttribArray(textureShader.coordLocation);
+      glDisableVertexAttribArray(positionLocation);
+      glDisableVertexAttribArray(coordLocation);
 
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -89,17 +153,17 @@ namespace chr
 
     void TextureBuffer::setMatrix(const glm::mat4 &matrix)
     {
-      glUniformMatrix4fv(textureShader.matrixLocation, 1, GL_FALSE, &matrix[0][0]);
+      glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &matrix[0][0]);
     }
 
     void TextureBuffer::setColor(float r, float g, float b, float a)
     {
-      glVertexAttrib4fv(textureShader.colorLocation, &glm::vec4(r, g, b, a)[0]);
+      glVertexAttrib4fv(colorLocation, &glm::vec4(r, g, b, a)[0]);
     }
 
     void TextureBuffer::setColor(const glm::vec4 &color)
     {
-      glVertexAttrib4fv(textureShader.colorLocation, &color[0]);
+      glVertexAttrib4fv(colorLocation, &color[0]);
     }
   }
 }

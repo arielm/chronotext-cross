@@ -16,5 +16,5 @@ public:
 
 protected:
   chr::gl::TextureBuffer textureBuffer;
-  chr::gl::TextureHandle texture;
+  chr::gl::TextureHandle textures[3];
 };
