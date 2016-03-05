@@ -56,6 +56,11 @@ namespace chr
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
+    void QuadBuffer::setMatrix(const glm::mat4 &matrix)
+    {
+      glUniformMatrix4fv(colorShader.matrixLocation, 1, GL_FALSE, &matrix[0][0]);
+    }
+
     void QuadBuffer::setColor(float r, float g, float b, float a)
     {
       glVertexAttrib4fv(colorShader.colorLocation, &glm::vec4(r, g, b, a)[0]);
