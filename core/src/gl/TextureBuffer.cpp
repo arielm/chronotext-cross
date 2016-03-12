@@ -6,32 +6,17 @@ namespace chr
 {
   namespace gl
   {
-    void TextureBuffer::setup()
-    {
-      vertices.resize(4);
-      coords.resize(4);
-
-      const GLushort indices[] =
-      {
-        0, 1, 2,
-        2, 3, 0
-      };
-
-      glGenBuffers(3, vboIds);
-
-      glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 3, nullptr, GL_DYNAMIC_DRAW);
-
-      glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 2, nullptr, GL_DYNAMIC_DRAW);
-
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
-    }
-
     void TextureBuffer::shutdown()
     {
-      glDeleteBuffers(3, vboIds);
+      if (vertexVBOId > 0)
+      {
+        glDeleteBuffers(1, &vertexVBOId);
+      }
+
+      if (coordVBOId > 0)
+      {
+        glDeleteBuffers(1, &coordVBOId);
+      }
     }
 
     void TextureBuffer::draw(const TextureHandle &texture, float x, float y, float scale)
@@ -42,9 +27,9 @@ namespace chr
       float y2 = y + texture.height * texture.maxV * scale;
 
       vertices[0] = { x1, y1, 0 };
-      vertices[1] = { x2, y1, 0 };
-      vertices[2] = { x2, y2, 0 };
-      vertices[3] = { x1, y2, 0 };
+      vertices[1] = { x1, y2, 0 };
+      vertices[2] = { x2, y1, 0 };
+      vertices[3] = { x2, y2, 0 };
 
       // ---
 
@@ -54,9 +39,9 @@ namespace chr
       float v2 = texture.maxV;
 
       coords[0] = { u1, v1 };
-      coords[1] = { u2, v1 };
-      coords[2] = { u2, v2 };
-      coords[3] = { u1, v2 };
+      coords[1] = { u1, v2 };
+      coords[2] = { u2, v1 };
+      coords[3] = { u2, v2 };
 
       apply(texture);
     }
@@ -72,9 +57,9 @@ namespace chr
       float y2 = y + halfHeight;
 
       vertices[0] = { x1, y1, 0 };
-      vertices[1] = { x2, y1, 0 };
-      vertices[2] = { x2, y2, 0 };
-      vertices[3] = { x1, y2, 0 };
+      vertices[1] = { x1, y2, 0 };
+      vertices[2] = { x2, y1, 0 };
+      vertices[3] = { x2, y2, 0 };
 
       // ---
 
@@ -84,9 +69,9 @@ namespace chr
       float v2 = texture.maxV;
 
       coords[0] = { u1, v1 };
-      coords[1] = { u2, v1 };
-      coords[2] = { u2, v2 };
-      coords[3] = { u1, v2 };
+      coords[1] = { u1, v2 };
+      coords[2] = { u2, v1 };
+      coords[3] = { u2, v2 };
 
       apply(texture);
     }
@@ -99,9 +84,9 @@ namespace chr
       float y2 = rect.y2;
 
       vertices[0] = { x1, y1, 0 };
-      vertices[1] = { x2, y1, 0 };
-      vertices[2] = { x2, y2, 0 };
-      vertices[3] = { x1, y2, 0 };
+      vertices[1] = { x1, y2, 0 };
+      vertices[2] = { x2, y1, 0 };
+      vertices[3] = { x2, y2, 0 };
 
       // ---
 
@@ -114,41 +99,54 @@ namespace chr
       float v2 = (rect.y2 - oy) / height;
 
       coords[0] = { u1, v1 };
-      coords[1] = { u2, v1 };
-      coords[2] = { u2, v2 };
-      coords[3] = { u1, v2 };
+      coords[1] = { u1, v2 };
+      coords[2] = { u2, v1 };
+      coords[3] = { u2, v2 };
 
       apply(texture);
     }
 
     void TextureBuffer::apply(const TextureHandle &texture)
     {
+      if (vertexVBOId == 0)
+      {
+        glGenBuffers(1, &vertexVBOId);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vertexVBOId);
+        glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(glm::vec3), nullptr, GL_DYNAMIC_DRAW);
+      }
+
+      if (coordVBOId == 0)
+      {
+        glGenBuffers(1, &coordVBOId);
+
+        glBindBuffer(GL_ARRAY_BUFFER, coordVBOId);
+        glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(glm::vec2), nullptr, GL_DYNAMIC_DRAW);
+      }
+
+      // ---
+
       glEnable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D, texture.id);
 
-      glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+      glBindBuffer(GL_ARRAY_BUFFER, vertexVBOId);
       glEnableVertexAttribArray(positionLocation);
       glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 4 * 3, vertices.data());
+      glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(glm::vec3), &vertices);
 
-      glBindBuffer(GL_ARRAY_BUFFER, vboIds[1]);
+      glBindBuffer(GL_ARRAY_BUFFER, coordVBOId);
       glEnableVertexAttribArray(coordLocation);
       glVertexAttribPointer(coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
-      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 4 * 2, coords.data());
+      glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(glm::vec2), &coords);
 
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[2]);
-      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-
-      // ---
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
       glDisable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D, 0);
 
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
       glDisableVertexAttribArray(positionLocation);
       glDisableVertexAttribArray(coordLocation);
-
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void TextureBuffer::setMatrix(const glm::mat4 &matrix)

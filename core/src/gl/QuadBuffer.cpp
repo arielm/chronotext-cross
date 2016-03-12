@@ -6,53 +6,42 @@ namespace chr
 {
   namespace gl
   {
-    void QuadBuffer::setup()
-    {
-      vertices.resize(4);
-
-      const GLushort indices[] =
-      {
-        0, 1, 2,
-        2, 3, 0
-      };
-
-      glGenBuffers(2, vboIds);
-
-      glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
-      glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 3, nullptr, GL_DYNAMIC_DRAW);
-
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * 6, indices, GL_STATIC_DRAW);
-    }
-
     void QuadBuffer::shutdown()
     {
-      glDeleteBuffers(2, vboIds);
+      if (vertexVBOId > 0)
+      {
+        glDeleteBuffers(1, &vertexVBOId);
+      }
     }
 
     void QuadBuffer::draw(float x1, float y1, float x2, float y2)
     {
       vertices[0] = { x1, y1, 0 };
       vertices[1] = { x1, y2, 0 };
-      vertices[2] = { x2, y2, 0 };
-      vertices[3] = { x2, y1, 0 };
+      vertices[2] = { x2, y1, 0 };
+      vertices[3] = { x2, y2, 0 };
 
       // ---
 
-      glBindBuffer(GL_ARRAY_BUFFER, vboIds[0]);
+      if (vertexVBOId == 0)
+      {
+        glGenBuffers(1, &vertexVBOId);
+
+        glBindBuffer(GL_ARRAY_BUFFER, vertexVBOId);
+        glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(glm::vec3), nullptr, GL_DYNAMIC_DRAW);
+      }
+
+      // ---
+
+      glBindBuffer(GL_ARRAY_BUFFER, vertexVBOId);
       glEnableVertexAttribArray(positionLocation);
       glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(GLfloat) * 4 * 3, vertices.data());
+      glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(glm::vec3), &vertices);
 
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIds[1]);
-      glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-
-      // ---
-
-      glDisableVertexAttribArray(positionLocation);
+      glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
       glBindBuffer(GL_ARRAY_BUFFER, 0);
-      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+      glDisableVertexAttribArray(positionLocation);
     }
 
     void QuadBuffer::setMatrix(const glm::mat4 &matrix)

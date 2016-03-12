@@ -14,7 +14,6 @@ namespace chr
       GLint colorLocation;
       GLint matrixLocation;
 
-      void setup();
       void shutdown();
 
       void draw(float x1, float y1, float x2, float y2);
@@ -35,8 +34,8 @@ namespace chr
       }
 
     protected:
-      std::vector<glm::vec3> vertices;
-      GLuint vboIds[2];
+      glm::vec3 vertices[4];
+      uint32_t vertexVBOId = 0;
     };
   }
 }
