@@ -15,7 +15,6 @@ void Sketch::setup()
   projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
 
   initTextures();
-  textureBuffer.setup();
 
   // ---
 

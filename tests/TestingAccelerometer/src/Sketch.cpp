@@ -19,7 +19,6 @@ void Sketch::setup()
   particle = Particle(windowInfo.size * 0.5f, scale * DOT_RADIUS_DP);
 
   initTextures();
-  textureBuffer.setup();
 
   // ---
 

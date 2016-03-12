@@ -10,7 +10,6 @@ using namespace gl;
 void Sketch::setup()
 {
   initTextures();
-  textureBuffer.setup();
 
   // ---
 
@@ -46,20 +45,22 @@ void Sketch::draw()
 
   // ---
 
-  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
   textureBuffer.setShader(textureShader);
+  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
   textureBuffer.setColor(1, 1, 1, 1);
   textureBuffer.drawFromCenter(textures[0], 0, 0, 0.333f);
 
   modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, 5));
-  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
+
   textureBuffer.setShader(textureAlphaShader);
+  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
   textureBuffer.setColor(1, 0.5f, 0, 1);
   textureBuffer.drawInRect(textures[1], math::Rectf(-200, -150, 400, 300));
 
   modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, 5));
-  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
+
   textureBuffer.setShader(textureShader);
+  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
   textureBuffer.setColor(1, 1, 1, 1);
   textureBuffer.drawFromCenter(textures[2], 100, 100, 0.5f);
 }
