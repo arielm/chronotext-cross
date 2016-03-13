@@ -26,7 +26,7 @@ namespace chr
 
     void QuadBuffer::draw(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
     {
-      transformQuadAffine(matrix, x1, y1, x2, y2, &vertices[0]);
+      transformQuadAffine<GL_TRIANGLE_STRIP>(matrix, x1, y1, x2, y2, &vertices[0]);
       apply();
     }
 

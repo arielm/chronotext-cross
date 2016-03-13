@@ -151,7 +151,8 @@ namespace chr
       return glm::vec3(x, y, z);
     }
 
-    void transformQuadAffine(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, glm::vec3 *output)
+    template <>
+    void transformQuadAffine<GL_TRIANGLE_STRIP>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, glm::vec3 *output)
     {
       float x100 = x1 * matrix[0][0];
       float x110 = x1 * matrix[0][1];
