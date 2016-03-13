@@ -41,6 +41,8 @@ namespace chr
     void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);
-    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &point);
+
+    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &input);
+    void transformQuadAffine(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, glm::vec3 *output);
   }
 }

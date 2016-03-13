@@ -26,11 +26,7 @@ namespace chr
 
     void QuadBuffer::draw(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
     {
-      vertices[0] = transformPointAffine(matrix, glm::vec3(x1, y1, 0));
-      vertices[1] = transformPointAffine(matrix, glm::vec3(x2, y1, 0));
-      vertices[2] = transformPointAffine(matrix, glm::vec3(x1, y2, 0));
-      vertices[3] = transformPointAffine(matrix, glm::vec3(x2, y2, 0));
-
+      transformQuadAffine(matrix, x1, y1, x2, y2, &vertices[0]);
       apply();
     }
 

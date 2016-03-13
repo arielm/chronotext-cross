@@ -131,11 +131,6 @@ namespace chr
       }
     }
 
-    void drawTexture(const TextureHandle &texture)
-    {
-
-    }
-
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)
     {
       float halfHeight = zNear * tanf(fovy * PI / 360.0f) / zoom;
@@ -147,13 +142,37 @@ namespace chr
       return glm::frustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
     }
 
-    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &point)
+    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &input)
     {
-      float x = matrix[0][0] * point.x + matrix[1][0] * point.y + matrix[2][0] * point.z + matrix[3][0];
-      float y = matrix[0][1] * point.x + matrix[1][1] * point.y + matrix[2][1] * point.z + matrix[3][1];
-      float z = matrix[0][2] * point.x + matrix[1][2] * point.y + matrix[2][2] * point.z + matrix[3][2];
+      float x = matrix[0][0] * input.x + matrix[1][0] * input.y + matrix[2][0] * input.z + matrix[3][0];
+      float y = matrix[0][1] * input.x + matrix[1][1] * input.y + matrix[2][1] * input.z + matrix[3][1];
+      float z = matrix[0][2] * input.x + matrix[1][2] * input.y + matrix[2][2] * input.z + matrix[3][2];
 
       return glm::vec3(x, y, z);
+    }
+
+    void transformQuadAffine(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, glm::vec3 *output)
+    {
+      float x100 = x1 * matrix[0][0];
+      float x110 = x1 * matrix[0][1];
+      float x120 = x1 * matrix[0][2];
+
+      float y101 = y1 * matrix[1][0];
+      float y111 = y1 * matrix[1][1];
+      float y121 = y1 * matrix[1][2];
+
+      float x200 = x2 * matrix[0][0];
+      float x210 = x2 * matrix[0][1];
+      float x220 = x2 * matrix[0][2];
+
+      float y201 = y2 * matrix[1][0];
+      float y211 = y2 * matrix[1][1];
+      float y221 = y2 * matrix[1][2];
+
+      *output++ = glm::vec3(x100 + y101 + matrix[3][0], x110 + y111 + matrix[3][1], x120 + y121 + matrix[3][2]); // x1, y1
+      *output++ = glm::vec3(x200 + y101 + matrix[3][0], x210 + y111 + matrix[3][1], x220 + y121 + matrix[3][2]); // x2, y1
+      *output++ = glm::vec3(x100 + y201 + matrix[3][0], x110 + y211 + matrix[3][1], x120 + y221 + matrix[3][2]); // x1, y2
+      *output   = glm::vec3(x200 + y201 + matrix[3][0], x210 + y211 + matrix[3][1], x220 + y221 + matrix[3][2]); // x2, y2
     }
   }
 }
