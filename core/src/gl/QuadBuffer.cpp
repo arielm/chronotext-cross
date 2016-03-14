@@ -6,6 +6,11 @@ namespace chr
 {
   namespace gl
   {
+    QuadBuffer::QuadBuffer()
+    {
+      vertices.reserve(4);
+    }
+
     void QuadBuffer::shutdown()
     {
       if (vertexVBOId > 0)
@@ -16,17 +21,30 @@ namespace chr
 
     void QuadBuffer::draw(float x1, float y1, float x2, float y2)
     {
-      vertices[0] = { x1, y1, 0 };
-      vertices[1] = { x2, y1, 0 };
-      vertices[2] = { x1, y2, 0 };
-      vertices[3] = { x2, y2, 0 };
+      vertices.clear();
+      vertices.emplace_back(x1, y1, 0);
+      vertices.emplace_back(x2, y1, 0);
+      vertices.emplace_back(x1, y2, 0);
+      vertices.emplace_back(x2, y2, 0);
 
       apply();
     }
 
-    void QuadBuffer::draw(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
+    template <>
+    void QuadBuffer::draw<GL_CCW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
     {
-      transformQuadAffine<GL_TRIANGLE_STRIP>(matrix, x1, y1, x2, y2, &vertices[0]);
+      vertices.clear();
+      transformQuadAffine<GL_TRIANGLE_STRIP, GL_CCW>(matrix, (x1 < x2) ? x1 : x2, (y1 < y2) ? y1 : y2, (x2 > x1) ? x2 : x1, (y2 > y1) ? y2 : y1, vertices);
+
+      apply();
+    }
+
+    template <>
+    void QuadBuffer::draw<GL_CW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
+    {
+      vertices.clear();
+      transformQuadAffine<GL_TRIANGLE_STRIP, GL_CW>(matrix, (x1 < x2) ? x1 : x2, (y1 < y2) ? y1 : y2, (x2 > x1) ? x2 : x1, (y2 > y1) ? y2 : y1, vertices);
+
       apply();
     }
 
@@ -60,7 +78,7 @@ namespace chr
       glBindBuffer(GL_ARRAY_BUFFER, vertexVBOId);
       glEnableVertexAttribArray(positionLocation);
       glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(glm::vec3), &vertices);
+      glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(glm::vec3), vertices.data());
 
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
