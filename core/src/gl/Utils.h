@@ -42,6 +42,7 @@ namespace chr
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);
 
+    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec2 &input);
     glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &input);
 
     template<int MODE, int ORIENTATION = GL_CCW>

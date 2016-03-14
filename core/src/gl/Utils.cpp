@@ -142,6 +142,15 @@ namespace chr
       return glm::frustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
     }
 
+    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec2 &input)
+    {
+      float x = matrix[0][0] * input.x + matrix[1][0] * input.y + matrix[3][0];
+      float y = matrix[0][1] * input.x + matrix[1][1] * input.y + matrix[3][1];
+      float z = matrix[0][2] * input.x + matrix[1][2] * input.y + matrix[3][2];
+
+      return glm::vec3(x, y, z);
+    }
+
     glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &input)
     {
       float x = matrix[0][0] * input.x + matrix[1][0] * input.y + matrix[2][0] * input.z + matrix[3][0];
