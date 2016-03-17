@@ -209,5 +209,43 @@ namespace chr
       output.emplace_back(x100 + y201 + matrix[3][0], x110 + y211 + matrix[3][1], x120 + y221 + matrix[3][2]); // x1, y2
       output.emplace_back(x200 + y201 + matrix[3][0], x210 + y211 + matrix[3][1], x220 + y221 + matrix[3][2]); // x2, y2
     }
+
+    bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor)
+    {
+      if ((quad.x1 > clipRect.x2 ) || (quad.x2 < clipRect.x1) || (quad.y1 > clipRect.y2) || (quad.y2 < clipRect.y1))
+      {
+        return false;
+      }
+
+      if (quad.x1 < clipRect.x1)
+      {
+        float dx = clipRect.x1 - quad.x1;
+        quad.x1 += dx;
+        quad.u1 += dx / textureFactor.x;
+      }
+
+      if (quad.x2 > clipRect.x2)
+      {
+        float dx = clipRect.x2 - quad.x2;
+        quad.x2 += dx;
+        quad.u2 += dx / textureFactor.x;
+      }
+
+      if (quad.y1 < clipRect.y1)
+      {
+        float dy = clipRect.y1 - quad.y1;
+        quad.y1 += dy;
+        quad.v1 += dy / textureFactor.y;
+      }
+
+      if (quad.y2 > clipRect.y2)
+      {
+        float dy = clipRect.y2 - quad.y2;
+        quad.y2 += dy;
+        quad.v2 += dy / textureFactor.y;
+      }
+
+      return true;
+    }
   }
 }

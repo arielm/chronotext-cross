@@ -28,7 +28,8 @@
   #define GL_GENERATE_MIPMAP_HINT 0x8192
 #endif
 
-#include <image/Utils.h>
+#include "image/Utils.h"
+#include "gl/Quad.h"
 
 namespace chr
 {
@@ -47,5 +48,7 @@ namespace chr
 
     template<int MODE, int ORIENTATION = GL_CCW>
     void transformQuadAffine(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, std::vector<glm::vec3> &output);
+
+    bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
   }
 }
