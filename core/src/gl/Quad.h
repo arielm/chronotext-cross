@@ -13,6 +13,75 @@ namespace chr
       N = 2
     };
 
+    // ---
+
+    struct BaseVertex
+    {
+      float x;
+      float y;
+      float z;
+
+      BaseVertex() = default;
+
+      BaseVertex(float x, float y, float z)
+      :
+      x(x),
+      y(y),
+      z(z)
+      {}
+    };
+
+    template<int T = XY> struct Vertex
+    {};
+
+    template<> struct Vertex<XY> : BaseVertex
+    {
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z)
+      :
+      BaseVertex(x, y, z)
+      {}
+
+      Vertex(const glm::vec3 &point)
+      :
+      BaseVertex(point.x, point.y, point.z)
+      {}
+    };
+
+    template<> struct Vertex<UV> : Vertex<XY>
+    {
+      float u;
+      float v;
+
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z, float u, float v)
+      :
+      Vertex<XY>(x, y, z),
+      u(u),
+      v(v)
+      {}
+
+      Vertex(const glm::vec3 &point, float u, float v)
+      :
+      Vertex<XY>(point.x, point.y, point.z),
+      u(u),
+      v(v)
+      {}
+
+      Vertex(const glm::vec3 &point, const glm::vec2 &coords)
+      :
+      Vertex<XY>(point.x, point.y, point.z),
+      u(coords.x),
+      v(coords.y)
+      {}
+    };
+
+    // ---
+
     struct BaseQuad
     {
       float x1;
