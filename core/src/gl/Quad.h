@@ -15,38 +15,39 @@ namespace chr
 
     // ---
 
-    struct BaseVertex
+    template<int T = XY> struct Vertex
+    {};
+
+    template<> struct Vertex<XY>
     {
       float x;
       float y;
       float z;
 
-      BaseVertex() = default;
+      Vertex() = default;
 
-      BaseVertex(float x, float y, float z)
+      Vertex(float x, float y, float z)
       :
       x(x),
       y(y),
       z(z)
       {}
-    };
-
-    template<int T = XY> struct Vertex
-    {};
-
-    template<> struct Vertex<XY> : BaseVertex
-    {
-      Vertex()
-      {}
-
-      Vertex(float x, float y, float z)
-      :
-      BaseVertex(x, y, z)
-      {}
 
       Vertex(const glm::vec3 &point)
       :
-      BaseVertex(point.x, point.y, point.z)
+      Vertex(point.x, point.y, point.z)
+      {}
+
+      Vertex(float x, float y)
+      :
+      x(x),
+      y(y),
+      z(0)
+      {}
+
+      Vertex(const glm::vec2 &point)
+      :
+      Vertex(point.x, point.y)
       {}
     };
 
@@ -82,45 +83,34 @@ namespace chr
 
     // ---
 
-    struct BaseQuad
+    template<int T = XY> struct Quad
+    {};
+
+    template<> struct Quad<XY>
     {
       float x1;
       float y1;
       float x2;
       float y2;
 
-      BaseQuad() = default;
+      Quad() = default;
 
-      BaseQuad(float x1, float y1, float x2, float y2)
+      Quad(float x1, float y1, float x2, float y2)
       :
       x1(x1),
       y1(y1),
       x2(x2),
       y2(y2)
       {}
-    };
-
-    template<int T = XY> struct Quad
-    {};
-
-    template<> struct Quad<XY> : BaseQuad
-    {
-      Quad()
-      {}
-
-      Quad(float x1, float y1, float x2, float y2)
-      :
-      BaseQuad(x1, y1, x2, y2)
-      {}
 
       Quad(const math::Rectf &rect)
       :
-      BaseQuad(rect.x1, rect.y1, rect.x2, rect.y2)
+      Quad(rect.x1, rect.y1, rect.x2, rect.y2)
       {}
 
       Quad(const glm::vec2 &point1, const glm::vec2 &point2)
       :
-      BaseQuad(point1.x, point1.y, point2.x, point2.y)
+      Quad(point1.x, point1.y, point2.x, point2.y)
       {}
     };
 

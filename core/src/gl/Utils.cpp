@@ -161,53 +161,53 @@ namespace chr
     }
 
     template <>
-    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CCW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<glm::vec3> &output)
+    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CCW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<Vertex<XY>> &output)
     {
-      float x100 = x1 * matrix[0][0];
-      float x110 = x1 * matrix[0][1];
-      float x120 = x1 * matrix[0][2];
+      float x100 = x1 * matrix[0][0] + matrix[3][0];
+      float x110 = x1 * matrix[0][1] + matrix[3][1];
+      float x120 = x1 * matrix[0][2] + matrix[3][2];
 
       float y101 = y1 * matrix[1][0];
       float y111 = y1 * matrix[1][1];
       float y121 = y1 * matrix[1][2];
 
-      float x200 = x2 * matrix[0][0];
-      float x210 = x2 * matrix[0][1];
-      float x220 = x2 * matrix[0][2];
+      float x200 = x2 * matrix[0][0] + matrix[3][0];
+      float x210 = x2 * matrix[0][1] + matrix[3][1];
+      float x220 = x2 * matrix[0][2] + matrix[3][2];
 
       float y201 = y2 * matrix[1][0];
       float y211 = y2 * matrix[1][1];
       float y221 = y2 * matrix[1][2];
 
-      output.emplace_back(x100 + y101 + matrix[3][0], x110 + y111 + matrix[3][1], x120 + y121 + matrix[3][2]); // x1, y1
-      output.emplace_back(x100 + y201 + matrix[3][0], x110 + y211 + matrix[3][1], x120 + y221 + matrix[3][2]); // x1, y2
-      output.emplace_back(x200 + y101 + matrix[3][0], x210 + y111 + matrix[3][1], x220 + y121 + matrix[3][2]); // x2, y1
-      output.emplace_back(x200 + y201 + matrix[3][0], x210 + y211 + matrix[3][1], x220 + y221 + matrix[3][2]); // x2, y2
+      output.emplace_back(x100 + y101, x110 + y111, x120 + y121); // x1, y1
+      output.emplace_back(x100 + y201, x110 + y211, x120 + y221); // x1, y2
+      output.emplace_back(x200 + y101, x210 + y111, x220 + y121); // x2, y1
+      output.emplace_back(x200 + y201, x210 + y211, x220 + y221); // x2, y2
     }
 
     template <>
-    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<glm::vec3> &output)
+    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<Vertex<XY>> &output)
     {
-      float x100 = x1 * matrix[0][0];
-      float x110 = x1 * matrix[0][1];
-      float x120 = x1 * matrix[0][2];
+      float x100 = x1 * matrix[0][0] + matrix[3][0];
+      float x110 = x1 * matrix[0][1] + matrix[3][1];
+      float x120 = x1 * matrix[0][2] + matrix[3][2];
 
       float y101 = y1 * matrix[1][0];
       float y111 = y1 * matrix[1][1];
       float y121 = y1 * matrix[1][2];
 
-      float x200 = x2 * matrix[0][0];
-      float x210 = x2 * matrix[0][1];
-      float x220 = x2 * matrix[0][2];
+      float x200 = x2 * matrix[0][0] + matrix[3][0];
+      float x210 = x2 * matrix[0][1] + matrix[3][1];
+      float x220 = x2 * matrix[0][2] + matrix[3][2];
 
       float y201 = y2 * matrix[1][0];
       float y211 = y2 * matrix[1][1];
       float y221 = y2 * matrix[1][2];
 
-      output.emplace_back(x100 + y101 + matrix[3][0], x110 + y111 + matrix[3][1], x120 + y121 + matrix[3][2]); // x1, y1
-      output.emplace_back(x200 + y101 + matrix[3][0], x210 + y111 + matrix[3][1], x220 + y121 + matrix[3][2]); // x2, y1
-      output.emplace_back(x100 + y201 + matrix[3][0], x110 + y211 + matrix[3][1], x120 + y221 + matrix[3][2]); // x1, y2
-      output.emplace_back(x200 + y201 + matrix[3][0], x210 + y211 + matrix[3][1], x220 + y221 + matrix[3][2]); // x2, y2
+      output.emplace_back(x100 + y101, x110 + y111, x120 + y121); // x1, y1
+      output.emplace_back(x200 + y101, x210 + y111, x220 + y121); // x2, y1
+      output.emplace_back(x100 + y201, x110 + y211, x120 + y221); // x1, y2
+      output.emplace_back(x200 + y201, x210 + y211, x220 + y221); // x2, y2
     }
 
     bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor)

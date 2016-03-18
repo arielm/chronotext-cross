@@ -38,7 +38,7 @@ namespace chr
       }
 
     protected:
-      std::vector<glm::vec3> vertices;
+      std::vector<Vertex<XY>> vertices;
       uint32_t vertexVBOId = 0;
 
       void apply();

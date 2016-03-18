@@ -22,10 +22,10 @@ namespace chr
     void QuadBuffer::draw(float x1, float y1, float x2, float y2)
     {
       vertices.clear();
-      vertices.emplace_back(x1, y1, 0);
-      vertices.emplace_back(x2, y1, 0);
-      vertices.emplace_back(x1, y2, 0);
-      vertices.emplace_back(x2, y2, 0);
+      vertices.emplace_back(x1, y1);
+      vertices.emplace_back(x2, y1);
+      vertices.emplace_back(x1, y2);
+      vertices.emplace_back(x2, y2);
 
       apply();
     }
@@ -34,7 +34,7 @@ namespace chr
     void QuadBuffer::draw<GL_CCW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
     {
       vertices.clear();
-      transformQuadAffine<GL_TRIANGLE_STRIP, GL_CCW>(matrix, (x1 < x2) ? x1 : x2, (y1 < y2) ? y1 : y2, (x2 > x1) ? x2 : x1, (y2 > y1) ? y2 : y1, vertices);
+      transformQuadAffine<GL_TRIANGLE_STRIP, GL_CCW>(matrix, x1, y1, x2, y2, vertices);
 
       apply();
     }
@@ -43,7 +43,7 @@ namespace chr
     void QuadBuffer::draw<GL_CW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
     {
       vertices.clear();
-      transformQuadAffine<GL_TRIANGLE_STRIP, GL_CW>(matrix, (x1 < x2) ? x1 : x2, (y1 < y2) ? y1 : y2, (x2 > x1) ? x2 : x1, (y2 > y1) ? y2 : y1, vertices);
+      transformQuadAffine<GL_TRIANGLE_STRIP, GL_CW>(matrix, x1, y1, x2, y2, vertices);
 
       apply();
     }
