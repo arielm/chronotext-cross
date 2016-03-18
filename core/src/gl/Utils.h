@@ -47,7 +47,7 @@ namespace chr
     glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &input);
 
     template<int MODE, int ORIENTATION = GL_CCW>
-    void transformQuadAffine(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, std::vector<Vertex<XY>> &output);
+    void transformQuadAffine(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, std::vector<Vertex<>> &output);
 
     bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
   }

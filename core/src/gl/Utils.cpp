@@ -161,7 +161,7 @@ namespace chr
     }
 
     template <>
-    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CCW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<Vertex<XY>> &output)
+    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CCW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<Vertex<>> &output)
     {
       float x100 = x1 * matrix[0][0] + matrix[3][0];
       float x110 = x1 * matrix[0][1] + matrix[3][1];
@@ -186,7 +186,7 @@ namespace chr
     }
 
     template <>
-    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<Vertex<XY>> &output)
+    void transformQuadAffine<GL_TRIANGLE_STRIP, GL_CW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, vector<Vertex<>> &output)
     {
       float x100 = x1 * matrix[0][0] + matrix[3][0];
       float x110 = x1 * matrix[0][1] + matrix[3][1];

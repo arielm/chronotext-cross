@@ -8,17 +8,16 @@ namespace chr
   {
     enum
     {
-      XY = 0,
       UV = 1,
       N = 2
     };
 
     // ---
 
-    template<int T = XY> struct Vertex
+    template<int T = 0> struct Vertex
     {};
 
-    template<> struct Vertex<XY>
+    template<> struct Vertex<0>
     {
       float x;
       float y;
@@ -51,7 +50,7 @@ namespace chr
       {}
     };
 
-    template<> struct Vertex<UV> : Vertex<XY>
+    template<> struct Vertex<UV> : Vertex<>
     {
       float u;
       float v;
@@ -61,21 +60,21 @@ namespace chr
 
       Vertex(float x, float y, float z, float u, float v)
       :
-      Vertex<XY>(x, y, z),
+      Vertex<>(x, y, z),
       u(u),
       v(v)
       {}
 
       Vertex(const glm::vec3 &point, float u, float v)
       :
-      Vertex<XY>(point.x, point.y, point.z),
+      Vertex<>(point.x, point.y, point.z),
       u(u),
       v(v)
       {}
 
       Vertex(const glm::vec3 &point, const glm::vec2 &coords)
       :
-      Vertex<XY>(point.x, point.y, point.z),
+      Vertex<>(point.x, point.y, point.z),
       u(coords.x),
       v(coords.y)
       {}
@@ -83,10 +82,10 @@ namespace chr
 
     // ---
 
-    template<int T = XY> struct Quad
+    template<int T = 0> struct Quad
     {};
 
-    template<> struct Quad<XY>
+    template<> struct Quad<0>
     {
       float x1;
       float y1;
@@ -114,7 +113,7 @@ namespace chr
       {}
     };
 
-    template<> struct Quad<UV> : Quad<XY>
+    template<> struct Quad<UV> : Quad<>
     {
       float u1;
       float v1;
@@ -126,7 +125,7 @@ namespace chr
 
       Quad(float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2)
       :
-      Quad<XY>(x1, y1, x2, y2),
+      Quad<>(x1, y1, x2, y2),
       u1(u1),
       v1(v1),
       u2(u2),

@@ -38,7 +38,7 @@ namespace chr
       }
 
     protected:
-      std::vector<Vertex<XY>> vertices;
+      std::vector<Vertex<>> vertices;
       uint32_t vertexVBOId = 0;
 
       void apply();
