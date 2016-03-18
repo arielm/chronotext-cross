@@ -34,7 +34,7 @@ namespace chr
     void QuadBuffer::draw<GL_CCW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
     {
       vertices.clear();
-      addTransformedQuad<GL_TRIANGLE_STRIP>(matrix, x1, y1, x2, y2, vertices, GL_CCW);
+      addTransformedQuad<GL_TRIANGLE_STRIP>(matrix, Quad<>(x1, y1, x2, y2), vertices, GL_CCW);
 
       apply();
     }
@@ -43,7 +43,7 @@ namespace chr
     void QuadBuffer::draw<GL_CW>(const glm::mat4 &matrix, float x1, float y1, float x2, float y2)
     {
       vertices.clear();
-      addTransformedQuad<GL_TRIANGLE_STRIP>(matrix, x1, y1, x2, y2, vertices, GL_CW);
+      addTransformedQuad<GL_TRIANGLE_STRIP>(matrix, Quad<>(x1, y1, x2, y2), vertices, GL_CW);
 
       apply();
     }

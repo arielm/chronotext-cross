@@ -46,8 +46,8 @@ namespace chr
     glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec2 &input);
     glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec3 &input);
 
-    template<int MODE>
-    void addTransformedQuad(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, std::vector<Vertex<>> &output, int orientation = GL_CCW);
+    template<int VertexOrder, int QuadType, int VertexType>
+    void addTransformedQuad(const glm::mat4 &matrix, const Quad<QuadType> &quad, std::vector<Vertex<VertexType>> &output, int orientation = GL_CCW);
 
     bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
   }
