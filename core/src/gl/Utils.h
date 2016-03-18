@@ -43,11 +43,11 @@ namespace chr
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);
 
-    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec2 &input);
-    glm::vec3 transformPointAffine(const glm::mat4 &matrix, const glm::vec3 &input);
+    glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec2 &input);
+    glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec3 &input);
 
-    template<int MODE, int ORIENTATION = GL_CCW>
-    void transformQuadAffine(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, std::vector<Vertex<>> &output);
+    template<int MODE>
+    void addTransformedQuad(const glm::mat4 &matrix, float x1, float y1, float x2, float y2, std::vector<Vertex<>> &output, int orientation = GL_CCW);
 
     bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
   }
