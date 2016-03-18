@@ -195,6 +195,41 @@ namespace chr
       output.emplace_back(x200 + y201, x210 + y211, x220 + y221); // x2, y2
     }
 
+    template <>
+    void addTransformedQuad<GL_TRIANGLE_STRIP>(const glm::mat4 &matrix, const Quad<UV> &quad, vector<Vertex<UV>> &output, int orientation)
+    {
+      float x100 = quad.x1 * matrix[0][0] + matrix[3][0];
+      float x110 = quad.x1 * matrix[0][1] + matrix[3][1];
+      float x120 = quad.x1 * matrix[0][2] + matrix[3][2];
+
+      float y101 = quad.y1 * matrix[1][0];
+      float y111 = quad.y1 * matrix[1][1];
+      float y121 = quad.y1 * matrix[1][2];
+
+      float x200 = quad.x2 * matrix[0][0] + matrix[3][0];
+      float x210 = quad.x2 * matrix[0][1] + matrix[3][1];
+      float x220 = quad.x2 * matrix[0][2] + matrix[3][2];
+
+      float y201 = quad.y2 * matrix[1][0];
+      float y211 = quad.y2 * matrix[1][1];
+      float y221 = quad.y2 * matrix[1][2];
+
+      output.emplace_back(x100 + y101, x110 + y111, x120 + y121, quad.u1, quad.v1); // x1, y1
+
+      if (orientation == GL_CCW)
+      {
+        output.emplace_back(x100 + y201, x110 + y211, x120 + y221, quad.u1, quad.v2); // x1, y2
+        output.emplace_back(x200 + y101, x210 + y111, x220 + y121, quad.u2, quad.v1); // x2, y1
+      }
+      else
+      {
+        output.emplace_back(x200 + y101, x210 + y111, x220 + y121, quad.u2, quad.v1); // x2, y1
+        output.emplace_back(x100 + y201, x110 + y211, x120 + y221, quad.u1, quad.v2); // x1, y2
+      }
+
+      output.emplace_back(x200 + y201, x210 + y211, x220 + y221, quad.u2, quad.v2); // x2, y2
+    }
+
     bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor)
     {
       if ((quad.x1 > clipRect.x2 ) || (quad.x2 < clipRect.x1) || (quad.y1 > clipRect.y2) || (quad.y2 < clipRect.y1))
