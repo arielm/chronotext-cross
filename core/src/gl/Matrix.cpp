@@ -261,8 +261,30 @@ namespace chr
       m31 = r31;
       m32 = r32;
     }
-    
-    glm::vec3 Matrix::transformPoint(float x, float y) const
+
+  glm::mat4 Matrix::getMVPMatrix(const glm::mat4 &projectionMatrix)
+  {
+    return projectionMatrix * m;
+  }
+
+  glm::quat Matrix::getQuat() const
+    {
+      return glm::quat_cast(m);
+    }
+
+    template <>
+    void Matrix::applyQuat<+1>(const glm::quat &q)
+    {
+      m *= glm::mat4_cast(q);
+    }
+
+    template <>
+    void Matrix::applyQuat<-1>(const glm::quat &q)
+    {
+      m *= glm::inverse(glm::mat4_cast(q));
+    }
+
+  glm::vec3 Matrix::transformPoint(float x, float y) const
     {
       float x00 = x * m00;
       float x10 = x * m10;

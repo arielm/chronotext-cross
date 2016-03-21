@@ -66,6 +66,12 @@ namespace chr
       void rotateZ(float a);
       void rotateXY(float sx, float sy);
 
+      glm::mat4 getMVPMatrix(const glm::mat4 &projectionMatrix);
+      glm::quat getQuat() const;
+
+      template<int T = 1>
+      void applyQuat(const glm::quat &q);
+
       inline glm::vec3 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec3 transformPoint(float x, float y) const;
 
