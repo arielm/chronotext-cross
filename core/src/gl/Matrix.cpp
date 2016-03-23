@@ -262,11 +262,6 @@ namespace chr
       m32 = r32;
     }
 
-  glm::mat4 Matrix::getMVPMatrix(const glm::mat4 &projectionMatrix)
-  {
-    return projectionMatrix * m;
-  }
-
   glm::quat Matrix::getQuat() const
     {
       return glm::quat_cast(m);

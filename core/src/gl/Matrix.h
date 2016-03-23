@@ -39,6 +39,8 @@ namespace chr
       operator float* () { return glm::value_ptr(m); }
       operator const float* () const { return glm::value_ptr(m); }
 
+      glm::mat4 operator * (const glm::mat4 &matrix) { return matrix * m; }
+
       Matrix& load(const Matrix &matrix);
       Matrix& load(const glm::mat4 &matrix);
       Matrix& load(const glm::mat3x3 &matrix);
@@ -66,7 +68,6 @@ namespace chr
       void rotateZ(float a);
       void rotateXY(float sx, float sy);
 
-      glm::mat4 getMVPMatrix(const glm::mat4 &projectionMatrix);
       glm::quat getQuat() const;
 
       template<int T = 1>
