@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gl/Quad.h"
+#include "gl/Utils.h"
 
 #include <array>
 #include <vector>
@@ -77,8 +77,12 @@ namespace chr
       inline glm::vec3 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec3 transformPoint(float x, float y) const;
 
-      void addTransformedQuad(const Quad<UV> &quad, std::vector<Vertex<UV>> &vertices) const;
-      
+      inline glm::vec3 transformPoint(const glm::vec3 &point) const { return transformPoint(point.x, point.y, point.z); }
+      glm::vec3 transformPoint(float x, float y, float z) const;
+
+      template<int Order = GL_TRIANGLES, int Type>
+      void addTransformedQuad(const Quad<Type> &quad, std::vector<Vertex<Type>> &output) const;
+
     protected:
       std::vector<Values> stack;
     };

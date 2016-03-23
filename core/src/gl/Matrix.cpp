@@ -279,41 +279,120 @@ namespace chr
       m *= glm::inverse(glm::mat4_cast(q));
     }
 
-  glm::vec3 Matrix::transformPoint(float x, float y) const
+    glm::vec3 Matrix::transformPoint(float x, float y) const
     {
-      float x00 = x * m00;
-      float x10 = x * m10;
-      float x20 = x * m20;
-      
-      float y01 = y * m01;
-      float y11 = y * m11;
-      float y21 = y * m21;
-      
-      return glm::vec3(x00 + y01 + m03, x10 + y11 + m13, x20 + y21 + m23);
+      return glm::vec3(
+        x * m00 + y * m01 + m03,
+        x * m10 + y * m11 + m13,
+        x * m20 + y * m21 + m23);
     }
-    
-    void Matrix::addTransformedQuad(const Quad<UV> &quad, std::vector<Vertex<UV>> &vertices) const
+
+    glm::vec3 Matrix::transformPoint(float x, float y, float z) const
+    {
+      return glm::vec3(
+        x * m00 + y * m01 + z * m02 + m03,
+        x * m10 + y * m11 + z * m12 + m13,
+        x * m20 + y * m21 + z * m22 + m23);
+    }
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLES>(const Quad<> &quad, std::vector<Vertex<>> &output) const
     {
       float x100 = quad.x1 * m00 + m03;
       float x110 = quad.x1 * m10 + m13;
       float x120 = quad.x1 * m20 + m23;
-      
+
       float y101 = quad.y1 * m01;
       float y111 = quad.y1 * m11;
       float y121 = quad.y1 * m21;
-      
+
       float x200 = quad.x2 * m00 + m03;
       float x210 = quad.x2 * m10 + m13;
       float x220 = quad.x2 * m20 + m23;
-      
+
       float y201 = quad.y2 * m01;
       float y211 = quad.y2 * m11;
       float y221 = quad.y2 * m21;
-      
-      vertices.emplace_back(x100 + y101, x110 + y111, x120 + y121, quad.u1, quad.v1); // x1, y1
-      vertices.emplace_back(x100 + y201, x110 + y211, x120 + y221, quad.u1, quad.v2); // x1, y2
-      vertices.emplace_back(x200 + y201, x210 + y211, x220 + y221, quad.u2, quad.v2); // x2, y2
-      vertices.emplace_back(x200 + y101, x210 + y111, x220 + y121, quad.u2, quad.v1); // x2, y1
+
+      output.emplace_back(x100 + y101, x110 + y111, x120 + y121); // x1, y1
+      output.emplace_back(x100 + y201, x110 + y211, x120 + y221); // x1, y2
+      output.emplace_back(x200 + y201, x210 + y211, x220 + y221); // x2, y2
+      output.emplace_back(x200 + y101, x210 + y111, x220 + y121); // x2, y1
+    };
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLES>(const Quad<UV> &quad, std::vector<Vertex<UV>> &output) const
+    {
+      float x100 = quad.x1 * m00 + m03;
+      float x110 = quad.x1 * m10 + m13;
+      float x120 = quad.x1 * m20 + m23;
+
+      float y101 = quad.y1 * m01;
+      float y111 = quad.y1 * m11;
+      float y121 = quad.y1 * m21;
+
+      float x200 = quad.x2 * m00 + m03;
+      float x210 = quad.x2 * m10 + m13;
+      float x220 = quad.x2 * m20 + m23;
+
+      float y201 = quad.y2 * m01;
+      float y211 = quad.y2 * m11;
+      float y221 = quad.y2 * m21;
+
+      output.emplace_back(x100 + y101, x110 + y111, x120 + y121, quad.u1, quad.v1); // x1, y1
+      output.emplace_back(x100 + y201, x110 + y211, x120 + y221, quad.u1, quad.v2); // x1, y2
+      output.emplace_back(x200 + y201, x210 + y211, x220 + y221, quad.u2, quad.v2); // x2, y2
+      output.emplace_back(x200 + y101, x210 + y111, x220 + y121, quad.u2, quad.v1); // x2, y1
+    }
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLE_STRIP>(const Quad<> &quad, std::vector<Vertex<>> &output) const
+    {
+      float x100 = quad.x1 * m00 + m03;
+      float x110 = quad.x1 * m10 + m13;
+      float x120 = quad.x1 * m20 + m23;
+
+      float y101 = quad.y1 * m01;
+      float y111 = quad.y1 * m11;
+      float y121 = quad.y1 * m21;
+
+      float x200 = quad.x2 * m00 + m03;
+      float x210 = quad.x2 * m10 + m13;
+      float x220 = quad.x2 * m20 + m23;
+
+      float y201 = quad.y2 * m01;
+      float y211 = quad.y2 * m11;
+      float y221 = quad.y2 * m21;
+
+      output.emplace_back(x100 + y101, x110 + y111, x120 + y121); // x1, y1
+      output.emplace_back(x100 + y201, x110 + y211, x120 + y221); // x1, y2
+      output.emplace_back(x200 + y101, x210 + y111, x220 + y121); // x2, y1
+      output.emplace_back(x200 + y201, x210 + y211, x220 + y221); // x2, y2
+    };
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLE_STRIP>(const Quad<UV> &quad, std::vector<Vertex<UV>> &output) const
+    {
+      float x100 = quad.x1 * m00 + m03;
+      float x110 = quad.x1 * m10 + m13;
+      float x120 = quad.x1 * m20 + m23;
+
+      float y101 = quad.y1 * m01;
+      float y111 = quad.y1 * m11;
+      float y121 = quad.y1 * m21;
+
+      float x200 = quad.x2 * m00 + m03;
+      float x210 = quad.x2 * m10 + m13;
+      float x220 = quad.x2 * m20 + m23;
+
+      float y201 = quad.y2 * m01;
+      float y211 = quad.y2 * m11;
+      float y221 = quad.y2 * m21;
+
+      output.emplace_back(x100 + y101, x110 + y111, x120 + y121, quad.u1, quad.v1); // x1, y1
+      output.emplace_back(x100 + y201, x110 + y211, x120 + y221, quad.u1, quad.v2); // x1, y2
+      output.emplace_back(x200 + y101, x210 + y111, x220 + y121, quad.u2, quad.v1); // x2, y1
+      output.emplace_back(x200 + y201, x210 + y211, x220 + y221, quad.u2, quad.v2); // x2, y2
     }
   }
 }
