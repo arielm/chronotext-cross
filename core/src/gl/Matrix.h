@@ -40,6 +40,7 @@ namespace chr
       operator const float* () const { return glm::value_ptr(m); }
 
       glm::mat4 operator * (const glm::mat4 &matrix) { return matrix * m; }
+      Matrix& operator *= (const glm::mat4 &matrix) { m *= matrix; return *this; }
 
       Matrix& load(const Matrix &matrix);
       Matrix& load(const glm::mat4 &matrix);
