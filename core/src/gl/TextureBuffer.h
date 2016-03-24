@@ -16,6 +16,7 @@ namespace chr
       GLint colorLocation;
       GLint matrixLocation;
 
+      TextureBuffer();
       void shutdown();
 
       void draw(const TextureHandle &texture, float x = 0, float y = 0, float scale = 1);
@@ -38,11 +39,8 @@ namespace chr
       }
 
     protected:
-      glm::vec3 vertices[4];
+      std::vector<Vertex<UV>> vertices;
       uint32_t vertexVBOId = 0;
-
-      glm::vec2 coords[4];
-      uint32_t coordVBOId = 0;
 
       void apply(const TextureHandle &texture);
     };
