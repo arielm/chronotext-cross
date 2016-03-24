@@ -84,6 +84,8 @@ namespace chr
       vertices.emplace_back(x1, y2, 0, u1, v2);
       vertices.emplace_back(x2, y1, 0, u2, v1);
       vertices.emplace_back(x2, y2, 0, u2, v2);
+
+      apply(texture);
     }
 
     void TextureBuffer::apply(const TextureHandle &texture)
