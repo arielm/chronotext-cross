@@ -44,9 +44,9 @@ namespace chr
       {
         ShaderProgram::load(vertexShaderSource, fragmentShaderSource);
 
+        mvpMatrixLocation = glGetUniformLocation(id, "u_mvp_matrix");
         positionLocation = glGetAttribLocation(id, "a_position");
         colorLocation = glGetAttribLocation(id, "a_color");
-        matrixLocation = glGetUniformLocation(id, "u_mvp_matrix");
 
         fogDensityLocation = glGetUniformLocation(id, "u_fogDensity");
         fogColorLocation = glGetUniformLocation(id, "u_fogColor");

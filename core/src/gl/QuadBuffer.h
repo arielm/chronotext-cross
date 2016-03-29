@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gl/ShaderProgram.h"
 #include "gl/Matrix.h"
 
 namespace chr
@@ -11,7 +12,7 @@ namespace chr
     public:
       GLint positionLocation;
       GLint colorLocation;
-      GLint matrixLocation;
+      GLint mvpMatrixLocation;
 
       QuadBuffer();
       void shutdown();
@@ -35,18 +36,13 @@ namespace chr
         apply();
       }
 
-      void setMatrix(const glm::mat4 &matrix);
-      void setColor(float r, float g, float b, float a);
-      void setColor(const glm::vec4 &color);
-
-      template <typename T>
-      void setShader(T &shader)
+      void setShader(ShaderProgram &shader)
       {
-        shader.use();
+        shader.use(); // XXX
 
+        mvpMatrixLocation = shader.mvpMatrixLocation;
         positionLocation = shader.positionLocation;
         colorLocation = shader.colorLocation;
-        matrixLocation = shader.matrixLocation;
       }
 
     protected:

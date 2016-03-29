@@ -47,11 +47,11 @@ namespace chr
       {
         ShaderProgram::load(vertexShaderSource, fragmentShaderSource);
 
+        mvpMatrixLocation = glGetUniformLocation(id, "u_mvp_matrix");
         positionLocation = glGetAttribLocation(id, "a_position");
-        coordLocation = glGetAttribLocation(id, "a_coord");
         colorLocation = glGetAttribLocation(id, "a_color");
+        coordLocation = glGetAttribLocation(id, "a_coord");
         samplerLocation = glGetUniformLocation(id, "u_sampler");
-        matrixLocation = glGetUniformLocation(id, "u_mvp_matrix");
       }
 
       return bool(id);

@@ -12,14 +12,8 @@ namespace chr
       static const char *vertexShaderSource;
       static const char *fragmentShaderSource;
 
-      GLint positionLocation;
-      GLint coordLocation;
-      GLint colorLocation;
-      GLint samplerLocation;
-      GLint matrixLocation;
-
       bool load();
-      bool use();
+      bool use() override;
     };
 
     extern TextureShader textureShader;

@@ -9,14 +9,28 @@ namespace chr
     class ShaderProgram
     {
     public:
-        GLuint id = 0;
-        GLuint vertexShaderId;
-        GLuint fragmentShaderId;
+      GLuint id = 0;
+      GLuint vertexShaderId;
+      GLuint fragmentShaderId;
 
-        static GLuint createShader(GLenum type, const char *source);
+      GLint mvpMatrixLocation;
+      GLint positionLocation;
+      GLint colorLocation;
+      GLint normalLocation;
+      GLint coordLocation;
+      GLint samplerLocation;
 
-        GLuint load(const char *vertexShaderSource, const char *fragmentShaderSource);
-        void unload();
+      static GLuint createShader(GLenum type, const char *source);
+
+      GLuint load(const char *vertexShaderSource, const char *fragmentShaderSource);
+      void unload();
+
+      virtual bool use() = 0;
+
+      void applyMVPMatrix(const glm::mat4 &matrix);
+
+      void inline applyColor(float r, float g, float b, float a) { applyColor(glm::vec4(r, g, b, a)); }
+      void applyColor(const glm::vec4 &color);
     };
   }
 }

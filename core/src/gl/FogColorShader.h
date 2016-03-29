@@ -12,10 +12,6 @@ namespace chr
       static const char *vertexShaderSource;
       static const char *fragmentShaderSource;
 
-      GLint positionLocation;
-      GLint colorLocation;
-      GLint matrixLocation;
-
       GLint fogDensityLocation;
       GLint fogColorLocation;
 

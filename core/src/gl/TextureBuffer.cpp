@@ -119,20 +119,5 @@ namespace chr
       glDisableVertexAttribArray(positionLocation);
       glDisableVertexAttribArray(coordLocation);
     }
-
-    void TextureBuffer::setMatrix(const glm::mat4 &matrix)
-    {
-      glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &matrix[0][0]);
-    }
-
-    void TextureBuffer::setColor(float r, float g, float b, float a)
-    {
-      glVertexAttrib4fv(colorLocation, &glm::vec4(r, g, b, a)[0]);
-    }
-
-    void TextureBuffer::setColor(const glm::vec4 &color)
-    {
-      glVertexAttrib4fv(colorLocation, &color[0]);
-    }
   }
 }

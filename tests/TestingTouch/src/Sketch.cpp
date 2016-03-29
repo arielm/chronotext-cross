@@ -1,5 +1,7 @@
 
 #include "Sketch.h"
+
+#include "gl/Matrix.h"
 #include "gl/TextureAlphaShader.h"
 
 using namespace std;
@@ -39,7 +41,7 @@ void Sketch::draw()
   // ---
 
   textureBuffer.setShader(textureAlphaShader);
-  textureBuffer.setColor(1, 1, 1, 1);
+  textureAlphaShader.applyColor(1, 1, 1, 1);
 
   for (auto &position : dotPositions)
   {
@@ -61,10 +63,11 @@ void Sketch::updateTouch(int index, float x, float y)
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
-  glm::mat4 modelViewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0));
-  modelViewMatrix = glm::scale(modelViewMatrix, glm::vec3(radius / DOT_RADIUS_PIXELS));
+  Matrix modelViewMatrix;
+  modelViewMatrix.translate(position);
+  modelViewMatrix.scale(radius / DOT_RADIUS_PIXELS);
 
-  textureBuffer.setMatrix(projectionMatrix * modelViewMatrix);
+  textureAlphaShader.applyMVPMatrix(modelViewMatrix * projectionMatrix);
   textureBuffer.drawFromCenter(texture);
 }
 
