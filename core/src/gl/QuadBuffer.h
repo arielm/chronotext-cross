@@ -36,7 +36,7 @@ namespace chr
         apply();
       }
 
-      void setShader(ShaderProgram &shader)
+      void useShader(ShaderProgram &shader)
       {
         shader.use(); // XXX
 

@@ -23,7 +23,7 @@ namespace chr
       void drawFromCenter(const TextureHandle &texture, float x = 0, float y = 0, float scale = 1);
       void drawInRect(const TextureHandle &texture, const math::Rectf &rect, float ox = 0, float oy = 0);
 
-      void setShader(ShaderProgram &shader)
+      void useShader(ShaderProgram &shader)
       {
         shader.use(); // XXX
 
