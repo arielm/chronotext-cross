@@ -12,9 +12,7 @@
 
 #pragma once
 
-#define GLM_SWIZZLE
-#include <glm/glm.hpp>
-#include <glm/gtc/constants.hpp>
+#include "glm.h"
 
 namespace chr
 {
@@ -74,6 +72,6 @@ namespace chr
         
     protected:
         glm::vec3 data, prevData;
-    	  glm::vec3 rawData, prevRawData;
+    	glm::vec3 rawData, prevRawData;
     };
 }

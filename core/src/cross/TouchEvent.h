@@ -1,8 +1,7 @@
 
 #pragma once
 
-#define GLM_SWIZZLE
-#include <glm/glm.hpp>
+#include "glm.h"
 
 namespace chr
 {

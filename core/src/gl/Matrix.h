@@ -1,11 +1,10 @@
 #pragma once
 
-#include "gl/Utils.h"
+#include "gl/gl.h"
+#include "gl/Quad.h"
 
 #include <array>
 #include <vector>
-
-#include <glm/gtc/type_ptr.hpp>
 
 namespace chr
 {

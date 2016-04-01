@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gl/Utils.h"
+#include "gl/gl.h"
 
 namespace chr
 {

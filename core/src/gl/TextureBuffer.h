@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gl/Vertex.h"
 #include "gl/ShaderProgram.h"
 #include "gl/TextureHandle.h"
 #include "math/Rect.h"

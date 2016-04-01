@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glm.h"
 #include "Timer.h"
 #include "cross/AccelEvent.h"
 #include "cross/WindowInfo.h"
@@ -8,12 +9,6 @@
 #include "utils/Utils.h"
 #include "math/Utils.h"
 #include "gl/Utils.h"
-
-#define GLM_SWIZZLE
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/constants.hpp>
-#include <glm/gtc/epsilon.hpp>
 
 namespace chr
 {

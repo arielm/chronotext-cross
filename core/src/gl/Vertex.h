@@ -1,17 +1,16 @@
 #pragma once
 
-#define GLM_SWIZZLE
-#include <glm/glm.hpp>
+#include "glm.h"
 
 namespace chr
 {
   namespace gl
   {
-    enum
+    enum VertexType
     {
       UV = 1,
       N = 2,
-      RGBA
+      RGBA = 4
     };
 
     // ---

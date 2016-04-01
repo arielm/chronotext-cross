@@ -1,5 +1,4 @@
 #include "gl/Utils.h"
-#include "gl/TextureHandle.h"
 #include "math/Utils.h"
 
 using namespace std;

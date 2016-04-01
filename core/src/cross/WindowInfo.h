@@ -8,11 +8,9 @@
 
 #pragma once
 
-#include <iostream>
+#include "glm.h"
 
-#define GLM_SWIZZLE
-#include <glm/glm.hpp>
-#include <glm/gtc/constants.hpp>
+#include <iostream>
 
 namespace chr
 {
