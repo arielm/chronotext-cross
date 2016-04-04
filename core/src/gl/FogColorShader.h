@@ -12,8 +12,8 @@ namespace chr
       static const char *vertexShaderSource;
       static const char *fragmentShaderSource;
 
-      GLint fogDensityLocation;
-      GLint fogColorLocation;
+      GLuint fogDensityLocation;
+      GLuint fogColorLocation;
 
       bool load();
       bool use();

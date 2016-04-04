@@ -13,12 +13,12 @@ namespace chr
       GLuint vertexShaderId;
       GLuint fragmentShaderId;
 
-      GLint mvpMatrixLocation;
-      GLint positionLocation;
-      GLint colorLocation;
-      GLint normalLocation;
-      GLint coordLocation;
-      GLint samplerLocation;
+      GLuint mvpMatrixLocation;
+      GLuint positionLocation;
+      GLuint colorLocation;
+      GLuint normalLocation;
+      GLuint coordLocation;
+      GLuint samplerLocation;
 
       static GLuint createShader(GLenum type, const char *source);
 
