@@ -89,7 +89,11 @@ namespace chr
 
         if (it->second.useCount == 0)
         {
-          unbind();
+          if (it->second.vboId != 0)
+          {
+            glDeleteBuffers(1, &it->second.vboId);
+          }
+
           TypeTraits<T>::map.erase(it);
         }
       }
@@ -133,14 +137,6 @@ namespace chr
 
       void unbind()
       {
-        auto &e = element();
-
-        if (e.vboId != 0)
-        {
-          glDeleteBuffers(1, &e.vboId);
-          e.vboId = 0;
-        }
-
         glBindBuffer(target, 0);
       }
 
@@ -157,7 +153,7 @@ namespace chr
             if (e.allocatedSize == 0)
             {
               e.allocatedSize = e.storage.size();
-              glBufferData(target, e.storage.size() * sizeof(T), storage.data(), GL_DYNAMIC_DRAW);
+              glBufferData(target, e.storage.size() * sizeof(T), storage.data(), GL_STATIC_DRAW);
             }
           }
           break;
