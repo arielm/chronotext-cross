@@ -6,19 +6,19 @@ namespace chr
 {
   namespace gl
   {
-    int TypeTraits<Vertex<>>::counter = 0;
-    int TypeTraits<Vertex<UV>>::counter = 0;
-    int TypeTraits<Vertex<N>>::counter = 0;
-    int TypeTraits<Vertex<RGBA>>::counter = 0;
-    int TypeTraits<Vertex<N|UV>>::counter = 0;
-    int TypeTraits<Vertex<N|UV|RGBA>>::counter = 0;
-    int TypeTraits<Vertex<UV|RGBA>>::counter = 0;
-    int TypeTraits<Vertex<N|RGBA>>::counter = 0;
-    int TypeTraits<glm::vec2>::counter = 0;
-    int TypeTraits<glm::vec3>::counter = 0;
-    int TypeTraits<glm::vec4>::counter = 0;
-    int TypeTraits<GLushort>::counter = 0;
-    int TypeTraits<GLuint>::counter = 0;
+    int TypeTraits<Vertex<>>::usageCounter = 0;
+    int TypeTraits<Vertex<UV>>::usageCounter = 0;
+    int TypeTraits<Vertex<N>>::usageCounter = 0;
+    int TypeTraits<Vertex<RGBA>>::usageCounter = 0;
+    int TypeTraits<Vertex<N|UV>>::usageCounter = 0;
+    int TypeTraits<Vertex<N|UV|RGBA>>::usageCounter = 0;
+    int TypeTraits<Vertex<UV|RGBA>>::usageCounter = 0;
+    int TypeTraits<Vertex<N|RGBA>>::usageCounter = 0;
+    int TypeTraits<glm::vec2>::usageCounter = 0;
+    int TypeTraits<glm::vec3>::usageCounter = 0;
+    int TypeTraits<glm::vec4>::usageCounter = 0;
+    int TypeTraits<GLushort>::usageCounter = 0;
+    int TypeTraits<GLuint>::usageCounter = 0;
 
     unordered_map<int, Element<Vertex<>>> TypeTraits<Vertex<>>::map;
     unordered_map<int, Element<Vertex<UV>>> TypeTraits<Vertex<UV>>::map;

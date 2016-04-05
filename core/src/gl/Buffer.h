@@ -49,12 +49,13 @@ namespace chr
       GLenum usage;
       int bufferId;
       std::vector<T> &storage;
+      std::vector<GLuint> locations;
 
       Buffer(GLenum usage = GL_DYNAMIC_DRAW)
       :
       usage(usage),
-      bufferId(TypeTraits<T>::counter),
-      storage(TypeTraits<T>::map.emplace(TypeTraits<T>::counter++, Element<T>()).first->second.storage)
+      bufferId(TypeTraits<T>::usageCounter),
+      storage(TypeTraits<T>::map.emplace(TypeTraits<T>::usageCounter++, Element<T>()).first->second.storage)
       {
         element().useCount++;
       }
@@ -123,7 +124,8 @@ namespace chr
         return element().useCount;
       }
 
-      void bind()
+      template<typename... Args>
+      void bind(Args... args)
       {
         auto &e = element();
 
@@ -133,16 +135,21 @@ namespace chr
         }
 
         glBindBuffer(target, e.vboId);
+
+        locations = { args... };
+        TypeTraits<T>::bindAttributes(locations);
       }
 
       void unbind()
       {
+        TypeTraits<T>::unbindAttributes(locations);
         glBindBuffer(target, 0);
       }
 
-      void upload()
+      template<typename... Args>
+      void bindAndUpload(Args... args)
       {
-        bind();
+        bind(std::forward<Args>(args)...);
 
         auto &e = element();
 
@@ -194,8 +201,19 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<>>> map;
+
+      static void bindAttributes(const std::vector<GLuint> &locations)
+      {
+        glEnableVertexAttribArray(locations[0]);
+        glVertexAttribPointer(locations[0], 3, GL_FLOAT, GL_FALSE, 0, 0);
+      }
+
+      static void unbindAttributes(const std::vector<GLuint> &locations)
+      {
+        glDisableVertexAttribArray(locations[0]);
+      }
     };
 
     template <>
@@ -204,8 +222,23 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX_UV;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<UV>>> map;
+
+      static void bindAttributes(const std::vector<GLuint> &locations)
+      {
+        glEnableVertexAttribArray(locations[0]);
+        glVertexAttribPointer(locations[0], 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), 0);
+
+        glEnableVertexAttribArray(locations[1]);
+        glVertexAttribPointer(locations[1], 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), (GLvoid *) sizeof(Vertex<>));
+      }
+
+      static void unbindAttributes(const std::vector<GLuint> &locations)
+      {
+        glDisableVertexAttribArray(locations[0]);
+        glDisableVertexAttribArray(locations[1]);
+      }
     };
 
     template <>
@@ -214,7 +247,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX_N;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<N>>> map;
     };
 
@@ -224,7 +257,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX_RGBA;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<RGBA>>> map;
     };
 
@@ -234,7 +267,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX_N_UV;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<N|UV>>> map;
     };
 
@@ -245,7 +278,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX_N_UV_RGBA;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<N|UV|RGBA>>> map;
     };
 
@@ -255,7 +288,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_RGBA;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<UV|RGBA>>> map;
     };
 
@@ -265,7 +298,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VERTEX_N_RGBA;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<Vertex<N|RGBA>>> map;
     };
 
@@ -275,7 +308,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VEC2;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<glm::vec2>> map;
     };
 
@@ -285,7 +318,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VEC3;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<glm::vec3>> map;
     };
 
@@ -295,8 +328,19 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::VEC4;
       static constexpr GLenum target = GL_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<glm::vec4>> map;
+
+      static void bindAttributes(const std::vector<GLuint> &locations)
+      {
+        glEnableVertexAttribArray(locations[0]);
+        glVertexAttribPointer(locations[0], 4, GL_FLOAT, GL_FALSE, 0, 0);
+      }
+
+      static void unbindAttributes(const std::vector<GLuint> &locations)
+      {
+        glDisableVertexAttribArray(locations[0]);
+      }
     };
 
     template <>
@@ -305,7 +349,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::GLUSHORT;
       static constexpr GLenum target = GL_ELEMENT_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<GLushort>> map;
     };
 
@@ -315,7 +359,7 @@ namespace chr
       static constexpr size_t typeIndex = TypeIndex::GLUINT;
       static constexpr GLenum target = GL_ELEMENT_ARRAY_BUFFER;
 
-      static int counter;
+      static int usageCounter;
       static std::unordered_map<int, Element<GLuint>> map;
     };
   }
