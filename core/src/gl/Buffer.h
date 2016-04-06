@@ -320,6 +320,17 @@ namespace chr
 
       static int usageCounter;
       static std::unordered_map<int, Element<glm::vec3>> map;
+
+      static void bindAttributes(const std::vector<GLuint> &locations)
+      {
+        glEnableVertexAttribArray(locations[0]);
+        glVertexAttribPointer(locations[0], 3, GL_FLOAT, GL_FALSE, 0, 0);
+      }
+
+      static void unbindAttributes(const std::vector<GLuint> &locations)
+      {
+        glDisableVertexAttribArray(locations[0]);
+      }
     };
 
     template <>
