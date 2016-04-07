@@ -48,6 +48,7 @@ namespace chr
 
       GLenum usage;
       int bufferId;
+      Element<T> &element;
       std::vector<T> &storage;
       std::vector<GLuint> locations;
 
@@ -55,18 +56,20 @@ namespace chr
       :
       usage(usage),
       bufferId(TypeTraits<T>::usageCounter),
-      storage(TypeTraits<T>::map.emplace(TypeTraits<T>::usageCounter++, Element<T>()).first->second.storage)
+      element(TypeTraits<T>::map.emplace(TypeTraits<T>::usageCounter++, Element<T>()).first->second),
+      storage(element.storage)
       {
-        element().useCount++;
+        element.useCount++;
       }
 
       Buffer(const Buffer &other)
       :
       usage(other.usage),
       bufferId(other.bufferId),
+      element(other.element),
       storage(other.storage)
       {
-        element().useCount++;
+        element.useCount++;
       }
 
       Buffer& operator=(const Buffer &other)
@@ -74,10 +77,11 @@ namespace chr
         if (this != &other)
         {
           usage = other.usage;
+          element = other.element;
           bufferId = other.bufferId;
           storage = other.storage;
 
-          element().useCount++;
+          element.useCount++;
         }
 
         return *this;
@@ -121,20 +125,18 @@ namespace chr
 
       int useCount() const
       {
-        return element().useCount;
+        return element.useCount;
       }
 
       template<typename... Args>
       void bind(Args... args)
       {
-        auto &e = element();
-
-        if (e.vboId == 0)
+        if (element.vboId == 0)
         {
-          glGenBuffers(1, &e.vboId);
+          glGenBuffers(1, &element.vboId);
         }
 
-        glBindBuffer(target, e.vboId);
+        glBindBuffer(target, element.vboId);
 
         locations = { args... };
         TypeTraits<T>::bindAttributes(locations);
@@ -151,16 +153,14 @@ namespace chr
       {
         bind(std::forward<Args>(args)...);
 
-        auto &e = element();
-
         switch (usage)
         {
           case GL_STATIC_DRAW:
           {
-            if (e.allocatedSize == 0)
+            if (element.allocatedSize == 0)
             {
-              e.allocatedSize = e.storage.size();
-              glBufferData(target, e.storage.size() * sizeof(T), storage.data(), GL_STATIC_DRAW);
+              element.allocatedSize = element.storage.size();
+              glBufferData(target, element.storage.size() * sizeof(T), storage.data(), GL_STATIC_DRAW);
             }
           }
           break;
@@ -168,13 +168,13 @@ namespace chr
           case GL_DYNAMIC_DRAW:
           default:
           {
-            if (e.allocatedSize < e.storage.size())
+            if (element.allocatedSize < element.storage.size())
             {
-              e.allocatedSize = e.storage.size();
-              glBufferData(target, e.storage.size() * sizeof(T), nullptr, GL_DYNAMIC_DRAW);
+              element.allocatedSize = element.storage.size();
+              glBufferData(target, element.storage.size() * sizeof(T), nullptr, GL_DYNAMIC_DRAW);
             }
 
-            glBufferSubData(target, 0, e.storage.size() * sizeof(T), storage.data());
+            glBufferSubData(target, 0, element.storage.size() * sizeof(T), storage.data());
           }
           break;
         }
@@ -184,12 +184,6 @@ namespace chr
       inline void add(Args&&... args)
       {
         storage.emplace_back(std::forward<Args>(args)...);
-      }
-
-    protected:
-      inline Element<T>& element() const
-      {
-        return TypeTraits<T>::map[bufferId];
       }
     };
 
