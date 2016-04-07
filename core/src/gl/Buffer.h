@@ -2,6 +2,7 @@
 
 #include "gl/gl.h"
 #include "gl/Vertex.h"
+#include "gl/ShaderProgram.h"
 
 #include <unordered_map>
 
@@ -128,8 +129,7 @@ namespace chr
         return element.useCount;
       }
 
-      template<typename... Args>
-      void bind(Args... args)
+      void bind(const ShaderProgram &shader)
       {
         if (element.vboId == 0)
         {
@@ -138,8 +138,7 @@ namespace chr
 
         glBindBuffer(target, element.vboId);
 
-        locations = { args... };
-        TypeTraits<T>::bindAttributes(locations);
+        locations = TypeTraits<T>::bindAttributes(shader);
       }
 
       void unbind()
@@ -148,10 +147,9 @@ namespace chr
         glBindBuffer(target, 0);
       }
 
-      template<typename... Args>
-      void bindAndUpload(Args... args)
+      void bindAndUpload(const ShaderProgram &shader)
       {
-        bind(std::forward<Args>(args)...);
+        bind(shader);
 
         switch (usage)
         {
@@ -198,10 +196,12 @@ namespace chr
       static int usageCounter;
       static std::unordered_map<int, Element<Vertex<>>> map;
 
-      static void bindAttributes(const std::vector<GLuint> &locations)
+      static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
       {
-        glEnableVertexAttribArray(locations[0]);
-        glVertexAttribPointer(locations[0], 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(shader.positionLocation);
+        glVertexAttribPointer(shader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+        return { shader.positionLocation };
       }
 
       static void unbindAttributes(const std::vector<GLuint> &locations)
@@ -219,13 +219,15 @@ namespace chr
       static int usageCounter;
       static std::unordered_map<int, Element<Vertex<UV>>> map;
 
-      static void bindAttributes(const std::vector<GLuint> &locations)
+      static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
       {
-        glEnableVertexAttribArray(locations[0]);
-        glVertexAttribPointer(locations[0], 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), 0);
+        glEnableVertexAttribArray(shader.positionLocation);
+        glVertexAttribPointer(shader.positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), 0);
 
-        glEnableVertexAttribArray(locations[1]);
-        glVertexAttribPointer(locations[1], 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), (GLvoid *) sizeof(Vertex<>));
+        glEnableVertexAttribArray(shader.coordLocation);
+        glVertexAttribPointer(shader.coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), (GLvoid *) sizeof(Vertex<>));
+
+        return { shader.positionLocation, shader.coordLocation };
       }
 
       static void unbindAttributes(const std::vector<GLuint> &locations)
@@ -315,10 +317,12 @@ namespace chr
       static int usageCounter;
       static std::unordered_map<int, Element<glm::vec3>> map;
 
-      static void bindAttributes(const std::vector<GLuint> &locations)
+      static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
       {
-        glEnableVertexAttribArray(locations[0]);
-        glVertexAttribPointer(locations[0], 3, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(shader.positionLocation);
+        glVertexAttribPointer(shader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+        return { shader.positionLocation };
       }
 
       static void unbindAttributes(const std::vector<GLuint> &locations)
@@ -336,10 +340,12 @@ namespace chr
       static int usageCounter;
       static std::unordered_map<int, Element<glm::vec4>> map;
 
-      static void bindAttributes(const std::vector<GLuint> &locations)
+      static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
       {
-        glEnableVertexAttribArray(locations[0]);
-        glVertexAttribPointer(locations[0], 4, GL_FLOAT, GL_FALSE, 0, 0);
+        glEnableVertexAttribArray(shader.positionLocation);
+        glVertexAttribPointer(shader.positionLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+        return { shader.positionLocation };
       }
 
       static void unbindAttributes(const std::vector<GLuint> &locations)
