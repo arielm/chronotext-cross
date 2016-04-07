@@ -146,6 +146,7 @@ namespace chr
         if (!vertexShaderResourcePath.empty() && !fragmentShaderResourcePath.empty())
         {
           load(utils::readTextFromResource<string>(vertexShaderResourcePath), utils::readTextFromResource<string>(fragmentShaderResourcePath));
+          mapLocations();
         }
       }
 
