@@ -120,6 +120,11 @@ namespace chr
 
        glDeleteProgram(programId);
        programId = 0;
+
+       // ---
+
+       map_uniform1i.clear();
+       map_uniform1f.clear();
      }
     }
 
@@ -173,6 +178,26 @@ namespace chr
     void ShaderProgram::applyColor(const glm::vec4 &color)
     {
       glVertexAttrib4fv(colorLocation, &color[0]);
+    }
+
+    // ---
+
+    GLuint ShaderProgram::getUniformLocation(std::unordered_map<std::string, GLuint> &map, const std::string &name)
+    {
+      GLuint location;
+      auto found = map_uniform1f.find(name);
+
+      if (found == map_uniform1f.end())
+      {
+        location = glGetUniformLocation(programId, name.data());
+        map_uniform1f.emplace(name, location);
+      }
+      else
+      {
+        location = found->second;
+      }
+
+      return location;
     }
   }
 }

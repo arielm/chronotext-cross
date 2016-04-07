@@ -54,9 +54,6 @@ namespace chr
       {
         ShaderProgram::load(vertexShaderSource, fragmentShaderSource);
         mapLocations();
-
-        fogDensityLocation = glGetUniformLocation(programId, "u_fogDensity");
-        fogColorLocation = glGetUniformLocation(programId, "u_fogColor");
       }
 
       return bool(programId);
