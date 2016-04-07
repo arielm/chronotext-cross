@@ -1,6 +1,6 @@
 #include "gl/ShaderProgram.h"
 
-#include "Log.h"
+#include "Utils/Utils.h"
 
 using namespace std;
 
@@ -8,6 +8,12 @@ namespace chr
 {
   namespace gl
   {
+    ShaderProgram::ShaderProgram(const string &vertexShaderResourcePath, const string &fragmentShaderResourcePath)
+    :
+    vertexShaderResourcePath(vertexShaderResourcePath),
+    fragmentShaderResourcePath(fragmentShaderResourcePath)
+    {}
+
     GLuint ShaderProgram::createShader(GLenum type, const char *source)
     {
      GLuint shader = 0;
@@ -39,35 +45,35 @@ namespace chr
      return shader;
     }
 
-    GLuint ShaderProgram::load(const char *vertexShaderSource, const char *fragmentShaderSource)
+    GLuint ShaderProgram::load(experimental::string_view vertexShaderSource, experimental::string_view fragmentShaderSource)
     {
-     if (!id)
+     if (!programId)
      {
-       vertexShaderId = createShader(GL_VERTEX_SHADER, vertexShaderSource);
+       vertexShaderId = createShader(GL_VERTEX_SHADER, vertexShaderSource.data());
 
        if (vertexShaderId != 0)
        {
-         fragmentShaderId = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+         fragmentShaderId = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource.data());
 
          if (fragmentShaderId != 0)
          {
-           id = glCreateProgram();
+           programId = glCreateProgram();
 
-           if (id != 0)
+           if (programId != 0)
            {
-             glAttachShader(id, vertexShaderId);
-             glAttachShader(id, fragmentShaderId);
-             glLinkProgram(id);
+             glAttachShader(programId, vertexShaderId);
+             glAttachShader(programId, fragmentShaderId);
+             glLinkProgram(programId);
 
              GLint success;
-             glGetProgramiv(id, GL_LINK_STATUS, &success);
+             glGetProgramiv(programId, GL_LINK_STATUS, &success);
 
              if (success != GL_TRUE)
              {
                GLint maxLength = 0;
-               glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
+               glGetShaderiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
                string buf(maxLength, 0);
-               glGetShaderInfoLog(id, maxLength, &maxLength, &buf[0]);
+               glGetShaderInfoLog(programId, maxLength, &maxLength, &buf[0]);
 
                LOGE << "ERROR: FAILED TO LINK SHADER PROGRAM" << endl;
                LOGE << buf << endl;
@@ -78,8 +84,8 @@ namespace chr
                glDeleteShader(fragmentShaderId);
                fragmentShaderId = 0;
 
-               glDeleteProgram(id);
-               id = 0;
+               glDeleteProgram(programId);
+               programId = 0;
              }
            }
          }
@@ -97,29 +103,71 @@ namespace chr
        }
      }
 
-     return id;
+     return programId;
     }
 
     void ShaderProgram::unload()
     {
-     if (id)
+     if (programId)
      {
-       glDetachShader(id, fragmentShaderId);
+       glDetachShader(programId, fragmentShaderId);
        glDeleteShader(fragmentShaderId);
        fragmentShaderId = 0;
 
-       glDetachShader(id, vertexShaderId);
+       glDetachShader(programId, vertexShaderId);
        glDeleteShader(vertexShaderId);
        vertexShaderId = 0;
 
-       glDeleteProgram(id);
-       id = 0;
+       glDeleteProgram(programId);
+       programId = 0;
      }
     }
 
-    void ShaderProgram::applyMVPMatrix(const glm::mat4 &matrix)
+    bool ShaderProgram::bind()
     {
-     glUniformMatrix4fv(mvpMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
+      if (load())
+      {
+        glUseProgram(programId);
+        return true;
+      }
+
+      return false;
+    }
+
+    bool ShaderProgram::load()
+    {
+      if (!programId)
+      {
+        if (!vertexShaderResourcePath.empty() && !fragmentShaderResourcePath.empty())
+        {
+          load(utils::readTextFromResource<string>(vertexShaderResourcePath), utils::readTextFromResource<string>(fragmentShaderResourcePath));
+        }
+      }
+
+      return bool(programId);
+    }
+
+    void ShaderProgram::mapLocations()
+    {
+      if (programId)
+      {
+        matrixLocation = glGetUniformLocation(programId, "u_matrix");
+        positionLocation = glGetAttribLocation(programId, "a_position");
+        colorLocation = glGetAttribLocation(programId, "a_color");
+        normalLocation = glGetAttribLocation(programId, "a_normal");
+        coordLocation = glGetAttribLocation(programId, "a_coord");
+        samplerLocation = glGetUniformLocation(programId, "u_sampler");
+      }
+    }
+
+    void ShaderProgram::applyMatrix(const glm::mat4 &matrix)
+    {
+     glUniformMatrix4fv(matrixLocation, 1, GL_FALSE, &matrix[0][0]);
+    }
+
+    void ShaderProgram::applyColor(float r, float g, float b, float a)
+    {
+      glVertexAttrib4f(colorLocation, r, g, b, a);
     }
 
     void ShaderProgram::applyColor(const glm::vec4 &color)

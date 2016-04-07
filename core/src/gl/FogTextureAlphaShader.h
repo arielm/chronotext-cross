@@ -16,7 +16,6 @@ namespace chr
       GLint fogColorLocation;
 
       bool load();
-      bool use();
     };
 
     extern FogTextureAlphaShader fogTextureAlphaShader;

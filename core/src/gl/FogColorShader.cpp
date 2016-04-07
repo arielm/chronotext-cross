@@ -9,13 +9,13 @@ namespace chr
     const char *FogColorShader::vertexShaderSource = R"(
     attribute vec3 a_position;
     attribute vec4 a_color;
-    uniform mat4 u_mvp_matrix;
+    uniform mat4 u_matrix;
     varying vec4 v_color;
 
     void main()
     {
       v_color = a_color;
-      gl_Position = u_mvp_matrix * vec4(a_position, 1);
+      gl_Position = u_matrix * vec4(a_position, 1);
     }
     )";
 
@@ -40,30 +40,16 @@ namespace chr
 
     bool FogColorShader::load()
     {
-      if (!id)
+      if (!programId)
       {
         ShaderProgram::load(vertexShaderSource, fragmentShaderSource);
+        mapLocations();
 
-        mvpMatrixLocation = glGetUniformLocation(id, "u_mvp_matrix");
-        positionLocation = glGetAttribLocation(id, "a_position");
-        colorLocation = glGetAttribLocation(id, "a_color");
-
-        fogDensityLocation = glGetUniformLocation(id, "u_fogDensity");
-        fogColorLocation = glGetUniformLocation(id, "u_fogColor");
+        fogDensityLocation = glGetUniformLocation(programId, "u_fogDensity");
+        fogColorLocation = glGetUniformLocation(programId, "u_fogColor");
       }
 
-      return bool(id);
-    }
-
-    bool FogColorShader::use()
-    {
-      if (load())
-      {
-        glUseProgram(id);
-        return true;
-      }
-
-      return false;
+      return bool(programId);
     }
   }
 }

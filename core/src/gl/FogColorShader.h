@@ -16,7 +16,6 @@ namespace chr
       GLuint fogColorLocation;
 
       bool load();
-      bool use();
     };
 
     extern FogColorShader fogColorShader;

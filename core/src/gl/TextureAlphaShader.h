@@ -13,7 +13,6 @@ namespace chr
       static const char *fragmentShaderSource;
 
       bool load();
-      bool use() override;
     };
 
     extern TextureAlphaShader textureAlphaShader;

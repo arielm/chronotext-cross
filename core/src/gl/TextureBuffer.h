@@ -12,7 +12,7 @@ namespace chr
     class TextureBuffer
     {
     public:
-      GLint mvpMatrixLocation;
+      GLint matrixLocation;
       GLint positionLocation;
       GLint colorLocation;
       GLint coordLocation;
@@ -26,9 +26,9 @@ namespace chr
 
       void useShader(ShaderProgram &shader)
       {
-        shader.use(); // XXX
+        shader.bind(); // XXX
 
-        mvpMatrixLocation = shader.mvpMatrixLocation;
+        matrixLocation = shader.matrixLocation;
         positionLocation = shader.positionLocation;
         colorLocation = shader.colorLocation;
         coordLocation = shader.coordLocation;

@@ -2,6 +2,8 @@
 
 #include "gl/gl.h"
 
+#include <experimental/string_view>
+
 namespace chr
 {
   namespace gl
@@ -9,11 +11,7 @@ namespace chr
     class ShaderProgram
     {
     public:
-      GLuint id = 0;
-      GLuint vertexShaderId;
-      GLuint fragmentShaderId;
-
-      GLuint mvpMatrixLocation;
+      GLuint matrixLocation;
       GLuint positionLocation;
       GLuint colorLocation;
       GLuint normalLocation;
@@ -22,15 +20,27 @@ namespace chr
 
       static GLuint createShader(GLenum type, const char *source);
 
-      GLuint load(const char *vertexShaderSource, const char *fragmentShaderSource);
+      ShaderProgram() = default;
+      ShaderProgram(const std::string &vertexShaderResourcePath, const std::string &fragmentShaderResourcePath);
+
+      GLuint load(std::experimental::string_view vertexShaderSource, std::experimental::string_view fragmentShaderSource);
       void unload();
+      bool bind();
 
-      virtual bool use() = 0;
+      virtual bool load();
+      virtual void mapLocations();
 
-      void applyMVPMatrix(const glm::mat4 &matrix);
-
-      void inline applyColor(float r, float g, float b, float a) { applyColor(glm::vec4(r, g, b, a)); }
+      void applyMatrix(const glm::mat4 &matrix);
+      void applyColor(float r, float g, float b, float a);
       void applyColor(const glm::vec4 &color);
+
+    protected:
+      std::string vertexShaderResourcePath;
+      std::string fragmentShaderResourcePath;
+
+      GLuint programId = 0;
+      GLuint vertexShaderId;
+      GLuint fragmentShaderId;
     };
   }
 }

@@ -12,7 +12,7 @@ namespace chr
     public:
       GLint positionLocation;
       GLint colorLocation;
-      GLint mvpMatrixLocation;
+      GLint matrixLocation;
 
       QuadBuffer();
       void shutdown();
@@ -38,9 +38,9 @@ namespace chr
 
       void useShader(ShaderProgram &shader)
       {
-        shader.use(); // XXX
+        shader.bind(); // XXX
 
-        mvpMatrixLocation = shader.mvpMatrixLocation;
+        matrixLocation = shader.matrixLocation;
         positionLocation = shader.positionLocation;
         colorLocation = shader.colorLocation;
       }
