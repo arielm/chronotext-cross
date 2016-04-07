@@ -195,12 +195,12 @@ namespace chr
     GLuint ShaderProgram::getUniformLocation(std::unordered_map<std::string, GLuint> &map, const std::string &name)
     {
       GLuint location;
-      auto found = map_uniform1f.find(name);
+      auto found = map.find(name);
 
-      if (found == map_uniform1f.end())
+      if (found == map.end())
       {
         location = glGetUniformLocation(programId, name.data());
-        map_uniform1f.emplace(name, location);
+        map.emplace(name, location);
       }
       else
       {

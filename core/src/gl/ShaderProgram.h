@@ -19,8 +19,6 @@ namespace chr
       GLuint coordLocation;
       GLuint samplerLocation;
 
-      static GLuint createShader(GLenum type, const char *source);
-
       ShaderProgram() = default;
       ShaderProgram(const std::string &vertexShaderResourcePath, const std::string &fragmentShaderResourcePath);
 
@@ -66,7 +64,9 @@ namespace chr
       std::unordered_map<std::string, GLuint> map_uniform3fv;
       std::unordered_map<std::string, GLuint> map_uniform4fv;
 
+      static GLuint createShader(GLenum type, const char *source);
       GLuint load(std::experimental::string_view vertexShaderSource, std::experimental::string_view fragmentShaderSource);
+
       GLuint getUniformLocation(std::unordered_map<std::string, GLuint> &map, const std::string &name);
     };
   }
