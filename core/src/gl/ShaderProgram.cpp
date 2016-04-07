@@ -124,7 +124,16 @@ namespace chr
        // ---
 
        map_uniform1i.clear();
+       map_uniform2i.clear();
+       map_uniform3i.clear();
+       map_uniform4i.clear();
        map_uniform1f.clear();
+       map_uniform2f.clear();
+       map_uniform3f.clear();
+       map_uniform4f.clear();
+       map_uniform2fv.clear();
+       map_uniform3fv.clear();
+       map_uniform4fv.clear();
      }
     }
 
