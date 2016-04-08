@@ -7,9 +7,9 @@ namespace chr
 {
   namespace gl
   {
-    TextureHandle loadTexture(const fs::path &relativePath, int flags, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    Texture loadTexture(const fs::path &relativePath, int flags, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
-      TextureHandle texture;
+      Texture texture;
       image::ImageBuffer image;
 
       if (relativePath.extension() == ".png")
@@ -57,9 +57,9 @@ namespace chr
       return texture;
     }
 
-    TextureHandle uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    Texture uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
-      TextureHandle texture;
+      Texture texture;
 
       if ((image.components == 4) && (mask.components == 1))
       {

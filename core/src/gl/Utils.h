@@ -2,7 +2,7 @@
 
 #include "gl/gl.h"
 #include "gl/Quad.h"
-#include "gl/TextureHandle.h"
+#include "gl/Texture.h"
 #include "gl/ShaderHelper.h"
 #include "image/Utils.h"
 
@@ -10,8 +10,8 @@ namespace chr
 {
   namespace gl
   {
-    TextureHandle loadTexture(const fs::path &relativePath, int flags = 0, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
-    TextureHandle uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    Texture loadTexture(const fs::path &relativePath, int flags = 0, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
+    Texture uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
     void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap = true, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
 
     const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom);

@@ -6,7 +6,7 @@ namespace chr
 {
   namespace gl
   {
-    struct TextureHandle
+    struct Texture
     {
       GLuint id;
       GLenum format;
