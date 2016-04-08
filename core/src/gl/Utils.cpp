@@ -7,18 +7,18 @@ namespace chr
 {
   namespace gl
   {
-    Texture loadTexture(const fs::path &relativePath, int flags, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    Texture::Response loadAndUploadTexture(const Texture::Request &request)
     {
-      Texture texture;
+      Texture::Response response;
       image::ImageBuffer image;
 
-      if (relativePath.extension() == ".png")
+      if (request.relativePath.extension() == ".png")
       {
-        image = image::loadPngImage(relativePath, flags);
+        image = image::loadPngImage(request.relativePath, request.imageFlags);
       }
-      else if ((relativePath.extension() == ".jpg") || (relativePath.extension() == ".jpeg"))
+      else if ((request.relativePath.extension() == ".jpg") || (request.relativePath.extension() == ".jpeg"))
       {
-        image = image::loadJpgImage(relativePath, flags);
+        image = image::loadJpgImage(request.relativePath, request.imageFlags);
       }
 
       if (image.width * image.height)
@@ -26,54 +26,54 @@ namespace chr
         switch (image.components)
         {
           case 1:
-            texture.format = GL_ALPHA;
+            response.format = GL_ALPHA;
             break;
 
           case 3:
-            texture.format = GL_RGB;
+            response.format = GL_RGB;
             break;
 
           case 4:
-            texture.format = GL_RGBA;
+            response.format = GL_RGBA;
             break;
         }
 
-        if (texture.format)
+        if (response.format)
         {
-          GLuint id = 0u;
-          glGenTextures(1, &id);
+          GLuint textureId = 0u;
+          glGenTextures(1, &textureId);
 
-          texture.id = id;
-          texture.width = image.width;
-          texture.height = image.height;
-          texture.maxU = image.effectiveWidth / (float) image.width;
-          texture.maxV = image.effectiveHeight / (float) image.height;
+          response.textureId = textureId;
+          response.width = image.width;
+          response.height = image.height;
+          response.maxU = image.effectiveWidth / (float) image.width;
+          response.maxV = image.effectiveHeight / (float) image.height;
 
-          glBindTexture(GL_TEXTURE_2D, id);
-          uploadTexture(texture.format, texture.width, texture.height, image.buffer.get(), useMipmap, wrapS, wrapT);
+          glBindTexture(GL_TEXTURE_2D, textureId);
+          uploadTexture(response.format, response.width, response.height, image.buffer.get(), request.useMipmap, request.wrapS, request.wrapT);
         }
       }
 
-      return texture;
+      return response;
     }
 
-    Texture uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    Texture::Response uploadMaskedTexture(const Texture::MaskedRequest &request)
     {
-      Texture texture;
+      Texture::Response response;
 
-      if ((image.components == 4) && (mask.components == 1))
+      if ((request.image->components == 4) && (request.mask->components == 1))
       {
-        if ((mask.width >= image.effectiveWidth) && (mask.height >= image.effectiveHeight))
+        if ((request.mask->width >= request.image->effectiveWidth) && (request.mask->height >= request.image->effectiveHeight))
         {
-          auto input = mask.buffer.get();
-          auto output = image.buffer.get();
+          auto input = request.mask->buffer.get();
+          auto output = request.image->buffer.get();
 
-          for (int iy = 0; iy < image.effectiveHeight; iy++)
+          for (int iy = 0; iy < request.image->effectiveHeight; iy++)
           {
-            uint8_t *inputLine = input + (mask.width) * iy;
-            uint8_t *outputLine = output + (4 * image.width) * iy;
+            uint8_t *inputLine = input + (request.mask->width) * iy;
+            uint8_t *outputLine = output + (4 * request.image->width) * iy;
 
-            for (int ix = 0; ix < image.effectiveWidth; ix++)
+            for (int ix = 0; ix < request.image->effectiveWidth; ix++)
             {
               outputLine += 3;
               *outputLine ++= *inputLine++;
@@ -81,21 +81,21 @@ namespace chr
           }
         }
 
-        GLuint id = 0u;
-        glGenTextures(1, &id);
+        GLuint textureId = 0u;
+        glGenTextures(1, &textureId);
 
-        texture.id = id;
-        texture.format = GL_RGBA;
-        texture.width = image.width;
-        texture.height = image.height;
-        texture.maxU = image.effectiveWidth / (float) image.width;
-        texture.maxV = image.effectiveHeight / (float) image.height;
+        response.textureId = textureId;
+        response.format = GL_RGBA;
+        response.width = request.image->width;
+        response.height = request.image->height;
+        response.maxU = request.image->effectiveWidth / (float) request.image->width;
+        response.maxV = request.image->effectiveHeight / (float) request.image->height;
 
-        glBindTexture(GL_TEXTURE_2D, id);
-        uploadTexture(texture.format, texture.width, texture.height, image.buffer.get(), useMipmap, wrapS, wrapT);
+        glBindTexture(GL_TEXTURE_2D, textureId);
+        uploadTexture(response.format, response.width, response.height, request.image->buffer.get(), request.useMipmap, request.wrapS, request.wrapT);
       }
 
-      return  texture;
+      return response;
     }
 
     void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap, GLenum wrapS, GLenum wrapT)

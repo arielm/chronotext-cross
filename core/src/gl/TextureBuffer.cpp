@@ -100,8 +100,7 @@ namespace chr
 
       // ---
 
-      glEnable(GL_TEXTURE_2D);
-      glBindTexture(GL_TEXTURE_2D, texture.id);
+      texture.bind();
 
       glBindBuffer(GL_ARRAY_BUFFER, vertexVBOId);
       glEnableVertexAttribArray(positionLocation);
@@ -112,8 +111,7 @@ namespace chr
 
       glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-      glDisable(GL_TEXTURE_2D);
-      glBindTexture(GL_TEXTURE_2D, 0);
+      texture.unbind();
 
       glBindBuffer(GL_ARRAY_BUFFER, 0);
       glDisableVertexAttribArray(positionLocation);
