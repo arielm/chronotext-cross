@@ -10,9 +10,6 @@ namespace chr
     {
     public:
       TextureShader();
-      bool load() override;
     };
-
-    extern TextureShader textureShader;
   }
 }

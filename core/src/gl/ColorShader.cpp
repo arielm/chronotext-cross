@@ -4,8 +4,6 @@ namespace chr
 {
   namespace gl
   {
-    ColorShader colorShader;
-    
     static const char *vertexShaderSource = R"(
     attribute vec3 a_position;
     attribute vec4 a_color;
@@ -35,17 +33,9 @@ namespace chr
     ColorShader::ColorShader()
     :
     ShaderProgram()
-    {}
-
-    bool ColorShader::load()
     {
-      if (!element.programId)
-      {
-        reload(vertexShaderSource, fragmentShaderSource);
-        mapLocations();
-      }
-
-      return bool(element.programId);
+      element->vertexShaderSource = vertexShaderSource;
+      element->fragmentShaderSource = fragmentShaderSource;
     }
   }
 }

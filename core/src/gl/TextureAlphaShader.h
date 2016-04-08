@@ -10,9 +10,6 @@ namespace chr
     {
     public:
       TextureAlphaShader();
-      bool load() override;
     };
-
-    extern TextureAlphaShader textureAlphaShader;
   }
 }

@@ -10,9 +10,6 @@ namespace chr
     {
     public:
       ColorShader();
-      bool load() override;
     };
-
-    extern ColorShader colorShader;
   }
 }

@@ -117,39 +117,39 @@ namespace chr
     template <>
     void ShaderHelper::bindAttributes<Vertex<>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element.positionLocation);
-      glVertexAttribPointer(shader.element.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader.element->positionLocation);
+      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<UV>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element.positionLocation);
-      glVertexAttribPointer(shader.element.positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), 0);
+      glEnableVertexAttribArray(shader.element->positionLocation);
+      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), 0);
 
-      glEnableVertexAttribArray(shader.element.coordLocation);
-      glVertexAttribPointer(shader.element.coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), (GLvoid *) sizeof(Vertex<>));
+      glEnableVertexAttribArray(shader.element->coordLocation);
+      glVertexAttribPointer(shader.element->coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), (GLvoid *) sizeof(Vertex<>));
     }
 
     template <>
     void ShaderHelper::bindAttributes<glm::vec2>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element.positionLocation);
-      glVertexAttribPointer(shader.element.positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader.element->positionLocation);
+      glVertexAttribPointer(shader.element->positionLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     template <>
     void ShaderHelper::bindAttributes<glm::vec3>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element.positionLocation);
-      glVertexAttribPointer(shader.element.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader.element->positionLocation);
+      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     template <>
     void ShaderHelper::bindAttributes<glm::vec4>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element.positionLocation);
-      glVertexAttribPointer(shader.element.positionLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader.element->positionLocation);
+      glVertexAttribPointer(shader.element->positionLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     // ---
@@ -157,32 +157,32 @@ namespace chr
     template <>
     void ShaderHelper::unbindAttributes<Vertex<>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element.positionLocation);
+      glDisableVertexAttribArray(shader.element->positionLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<UV>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element.positionLocation);
-      glDisableVertexAttribArray(shader.element.coordLocation);
+      glDisableVertexAttribArray(shader.element->positionLocation);
+      glDisableVertexAttribArray(shader.element->coordLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<glm::vec2>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element.positionLocation);
+      glDisableVertexAttribArray(shader.element->positionLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<glm::vec3>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element.positionLocation);
+      glDisableVertexAttribArray(shader.element->positionLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<glm::vec4>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element.positionLocation);
+      glDisableVertexAttribArray(shader.element->positionLocation);
     }
   }
 }

@@ -28,10 +28,10 @@ namespace chr
       {
         shader.bind(); // XXX
 
-        matrixLocation = shader.element.matrixLocation;
-        positionLocation = shader.element.positionLocation;
-        colorLocation = shader.element.colorLocation;
-        coordLocation = shader.element.coordLocation;
+        matrixLocation = shader.element->matrixLocation;
+        positionLocation = shader.element->positionLocation;
+        colorLocation = shader.element->colorLocation;
+        coordLocation = shader.element->coordLocation;
       }
 
     protected:
