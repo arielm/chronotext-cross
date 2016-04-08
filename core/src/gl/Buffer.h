@@ -90,17 +90,16 @@ namespace chr
 
       ~Buffer()
       {
-        auto found = buffer::TypeTraits<T>::map.find(id);
-        found->second.useCount--;
+        element.useCount--;
 
-        if (found->second.useCount == 0)
+        if (element.useCount == 0)
         {
-          if (found->second.vboId != 0)
+          if (element.vboId != 0)
           {
-            glDeleteBuffers(1, &found->second.vboId);
+            glDeleteBuffers(1, &element.vboId);
           }
 
-          buffer::TypeTraits<T>::map.erase(found);
+          buffer::TypeTraits<T>::map.erase(id);
         }
       }
 

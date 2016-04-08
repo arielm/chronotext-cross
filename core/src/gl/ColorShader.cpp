@@ -32,15 +32,20 @@ namespace chr
     }
     )";
 
+    ColorShader::ColorShader()
+    :
+    ShaderProgram()
+    {}
+
     bool ColorShader::load()
     {
-      if (!programId)
+      if (!element.programId)
       {
         reload(vertexShaderSource, fragmentShaderSource);
         mapLocations();
       }
 
-      return bool(programId);
+      return bool(element.programId);
     }
   }
 }

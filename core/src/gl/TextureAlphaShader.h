@@ -9,6 +9,7 @@ namespace chr
     class TextureAlphaShader : public ShaderProgram
     {
     public:
+      TextureAlphaShader();
       bool load() override;
     };
 

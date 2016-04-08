@@ -9,6 +9,7 @@ namespace chr
     class ColorShader : public ShaderProgram
     {
     public:
+      ColorShader();
       bool load() override;
     };
 
