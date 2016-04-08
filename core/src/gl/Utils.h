@@ -3,6 +3,7 @@
 #include "gl/gl.h"
 #include "gl/Quad.h"
 #include "gl/TextureHandle.h"
+#include "gl/ShaderHelper.h"
 #include "image/Utils.h"
 
 namespace chr

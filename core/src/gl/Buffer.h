@@ -1,7 +1,6 @@
 #pragma once
 
-#include "gl/Vertex.h"
-#include "gl/ShaderProgram.h"
+#include "gl/ShaderHelper.h"
 
 #include <unordered_map>
 
@@ -49,28 +48,27 @@ namespace chr
       static constexpr size_t typeIndex = buffer::TypeTraits<T>::typeIndex;
       static constexpr GLenum target = buffer::TypeTraits<T>::target;
 
-      GLenum usage;
-      int bufferId;
+      int id;
       buffer::Element<T> &element;
       std::vector<T> &storage;
-      std::vector<GLuint> locations;
+      GLenum usage;
 
       Buffer(GLenum usage = GL_DYNAMIC_DRAW)
       :
-      usage(usage),
-      bufferId(buffer::TypeTraits<T>::usageCounter),
+      id(buffer::TypeTraits<T>::usageCounter),
       element(buffer::TypeTraits<T>::map.emplace(buffer::TypeTraits<T>::usageCounter++, buffer::Element<T>()).first->second),
-      storage(element.storage)
+      storage(element.storage),
+      usage(usage)
       {
         element.useCount++;
       }
 
       Buffer(const Buffer &other)
       :
-      usage(other.usage),
-      bufferId(other.bufferId),
+      id(other.id),
       element(other.element),
-      storage(other.storage)
+      storage(other.storage),
+      usage(other.usage)
       {
         element.useCount++;
       }
@@ -79,10 +77,10 @@ namespace chr
       {
         if (this != &other)
         {
-          usage = other.usage;
           element = other.element;
-          bufferId = other.bufferId;
+          id = other.id;
           storage = other.storage;
+          usage = other.usage;
 
           element.useCount++;
         }
@@ -92,17 +90,17 @@ namespace chr
 
       ~Buffer()
       {
-        auto it = buffer::TypeTraits<T>::map.find(bufferId);
-        it->second.useCount--;
+        auto found = buffer::TypeTraits<T>::map.find(id);
+        found->second.useCount--;
 
-        if (it->second.useCount == 0)
+        if (found->second.useCount == 0)
         {
-          if (it->second.vboId != 0)
+          if (found->second.vboId != 0)
           {
-            glDeleteBuffers(1, &it->second.vboId);
+            glDeleteBuffers(1, &found->second.vboId);
           }
 
-          buffer::TypeTraits<T>::map.erase(it);
+          buffer::TypeTraits<T>::map.erase(found);
         }
       }
 
@@ -139,13 +137,12 @@ namespace chr
         }
 
         glBindBuffer(target, element.vboId);
-
-        locations = buffer::TypeTraits<T>::bindAttributes(shader);
+        ShaderHelper::bindAttributes<T>(shader);
       }
 
-      void unbind()
+      void unbind(const ShaderProgram &shader)
       {
-        buffer::TypeTraits<T>::unbindAttributes(locations);
+        ShaderHelper::unbindAttributes<T>(shader);
         glBindBuffer(target, 0);
       }
 
@@ -199,19 +196,6 @@ namespace chr
 
         static int usageCounter;
         static std::unordered_map<int, Element<Vertex<>>> map;
-
-        static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
-        {
-          glEnableVertexAttribArray(shader.positionLocation);
-          glVertexAttribPointer(shader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-          return {shader.positionLocation};
-        }
-
-        static void unbindAttributes(const std::vector<GLuint> &locations)
-        {
-          glDisableVertexAttribArray(locations[0]);
-        }
       };
 
       template<>
@@ -222,23 +206,6 @@ namespace chr
 
         static int usageCounter;
         static std::unordered_map<int, Element<Vertex<UV>>> map;
-
-        static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
-        {
-          glEnableVertexAttribArray(shader.positionLocation);
-          glVertexAttribPointer(shader.positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), 0);
-
-          glEnableVertexAttribArray(shader.coordLocation);
-          glVertexAttribPointer(shader.coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV>), (GLvoid *) sizeof(Vertex<>));
-
-          return {shader.positionLocation, shader.coordLocation};
-        }
-
-        static void unbindAttributes(const std::vector<GLuint> &locations)
-        {
-          glDisableVertexAttribArray(locations[0]);
-          glDisableVertexAttribArray(locations[1]);
-        }
       };
 
       template<>
@@ -320,19 +287,6 @@ namespace chr
 
         static int usageCounter;
         static std::unordered_map<int, Element<glm::vec3>> map;
-
-        static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
-        {
-          glEnableVertexAttribArray(shader.positionLocation);
-          glVertexAttribPointer(shader.positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-          return {shader.positionLocation};
-        }
-
-        static void unbindAttributes(const std::vector<GLuint> &locations)
-        {
-          glDisableVertexAttribArray(locations[0]);
-        }
       };
 
       template<>
@@ -343,19 +297,6 @@ namespace chr
 
         static int usageCounter;
         static std::unordered_map<int, Element<glm::vec4>> map;
-
-        static std::vector<GLuint> bindAttributes(const ShaderProgram &shader)
-        {
-          glEnableVertexAttribArray(shader.positionLocation);
-          glVertexAttribPointer(shader.positionLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-          return {shader.positionLocation};
-        }
-
-        static void unbindAttributes(const std::vector<GLuint> &locations)
-        {
-          glDisableVertexAttribArray(locations[0]);
-        }
       };
 
       template<>

@@ -6,7 +6,7 @@ namespace chr
   {
     ColorShader colorShader;
     
-    const char *ColorShader::vertexShaderSource = R"(
+    static const char *vertexShaderSource = R"(
     attribute vec3 a_position;
     attribute vec4 a_color;
     uniform mat4 u_matrix;
@@ -19,7 +19,7 @@ namespace chr
     }
     )";
 
-    const char *ColorShader::fragmentShaderSource = R"(
+    static const char *fragmentShaderSource = R"(
     #ifdef GL_ES
       precision mediump float;
     #endif
@@ -36,7 +36,7 @@ namespace chr
     {
       if (!programId)
       {
-        ShaderProgram::load(vertexShaderSource, fragmentShaderSource);
+        reload(vertexShaderSource, fragmentShaderSource);
         mapLocations();
       }
 

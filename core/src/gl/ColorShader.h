@@ -9,10 +9,7 @@ namespace chr
     class ColorShader : public ShaderProgram
     {
     public:
-      static const char *vertexShaderSource;
-      static const char *fragmentShaderSource;
-
-      bool load();
+      bool load() override;
     };
 
     extern ColorShader colorShader;

@@ -1,5 +1,6 @@
 #include "gl/ShaderProgram.h"
 
+#include "gl/Utils.h"
 #include "Utils/Utils.h"
 
 using namespace std;
@@ -14,112 +15,25 @@ namespace chr
     fragmentShaderResourcePath(fragmentShaderResourcePath)
     {}
 
-    GLuint ShaderProgram::createShader(GLenum type, const char *source)
+    bool ShaderProgram::reload(experimental::string_view vertexShaderSource, experimental::string_view fragmentShaderSource)
     {
-     GLuint shader = 0;
-     shader = glCreateShader(type);
+      unload();
 
-     if (shader != 0)
-     {
-       glShaderSource(shader, 1, reinterpret_cast<const GLchar**>(&source), NULL);
-       glCompileShader(shader);
+      tie(programId, vertexShaderId, fragmentShaderId) = ShaderHelper::loadProgram(vertexShaderSource, fragmentShaderSource);
+      mapLocations();
 
-       GLint success;
-       glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-
-       if (success != GL_TRUE)
-       {
-         GLint maxLength = 0;
-         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
-         string buf(maxLength, 0);
-         glGetShaderInfoLog(shader, maxLength, &maxLength, &buf[0]);
-
-         LOGE << "ERROR: FAILED TO COMPILE " << ((type == GL_FRAGMENT_SHADER) ? "FRAGMENT" : "VERTEX") << " SHADER" << endl;
-         LOGE << buf << endl;
-
-         glDeleteShader(shader);
-         shader = 0;
-       }
-     }
-
-     return shader;
-    }
-
-    GLuint ShaderProgram::load(experimental::string_view vertexShaderSource, experimental::string_view fragmentShaderSource)
-    {
-     if (!programId)
-     {
-       vertexShaderId = createShader(GL_VERTEX_SHADER, vertexShaderSource.data());
-
-       if (vertexShaderId != 0)
-       {
-         fragmentShaderId = createShader(GL_FRAGMENT_SHADER, fragmentShaderSource.data());
-
-         if (fragmentShaderId != 0)
-         {
-           programId = glCreateProgram();
-
-           if (programId != 0)
-           {
-             glAttachShader(programId, vertexShaderId);
-             glAttachShader(programId, fragmentShaderId);
-             glLinkProgram(programId);
-
-             GLint success;
-             glGetProgramiv(programId, GL_LINK_STATUS, &success);
-
-             if (success != GL_TRUE)
-             {
-               GLint maxLength = 0;
-               glGetShaderiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
-               string buf(maxLength, 0);
-               glGetShaderInfoLog(programId, maxLength, &maxLength, &buf[0]);
-
-               LOGE << "ERROR: FAILED TO LINK SHADER PROGRAM" << endl;
-               LOGE << buf << endl;
-
-               glDeleteShader(vertexShaderId);
-               vertexShaderId = 0;
-
-               glDeleteShader(fragmentShaderId);
-               fragmentShaderId = 0;
-
-               glDeleteProgram(programId);
-               programId = 0;
-             }
-           }
-         }
-         else
-         {
-           LOGE << "ERROR: UNABLE TO LOAD FRAGMENT SHADER" << endl;
-
-           glDeleteShader(vertexShaderId);
-           vertexShaderId = 0;
-         }
-       }
-       else
-       {
-         LOGE << "ERROR: UNABLE TO LOAD VERTEX SHADER" << endl;
-       }
-     }
-
-     return programId;
-    }
+      return bool(programId);
+    };
 
     void ShaderProgram::unload()
     {
-     if (programId)
-     {
-       glDetachShader(programId, fragmentShaderId);
-       glDeleteShader(fragmentShaderId);
-       fragmentShaderId = 0;
+      if (programId)
+      {
+       ShaderHelper::unloadProgram(programId, vertexShaderId, fragmentShaderId);
 
-       glDetachShader(programId, vertexShaderId);
-       glDeleteShader(vertexShaderId);
-       vertexShaderId = 0;
-
-       glDeleteProgram(programId);
        programId = 0;
+       vertexShaderId = 0;
+       fragmentShaderId = 0;
 
        // ---
 
@@ -134,7 +48,7 @@ namespace chr
        map_uniform2fv.clear();
        map_uniform3fv.clear();
        map_uniform4fv.clear();
-     }
+      }
     }
 
     bool ShaderProgram::bind()
@@ -154,7 +68,10 @@ namespace chr
       {
         if (!vertexShaderResourcePath.empty() && !fragmentShaderResourcePath.empty())
         {
-          load(utils::readTextFromResource<string>(vertexShaderResourcePath), utils::readTextFromResource<string>(fragmentShaderResourcePath));
+          auto vertexShaderSource = utils::readTextFromResource<string>(vertexShaderResourcePath);
+          auto fragmentShaderSource = utils::readTextFromResource<string>(fragmentShaderResourcePath);
+
+          reload(vertexShaderSource, fragmentShaderSource);
           mapLocations();
         }
       }
