@@ -2,7 +2,6 @@
 #include "Sketch.h"
 
 #include "gl/Matrix.h"
-#include "gl/TextureAlphaShader.h"
 
 using namespace std;
 using namespace chr;
@@ -29,7 +28,7 @@ void Sketch::setup()
 
 void Sketch::shutdown()
 {
-  glDeleteTextures(1, &texture.id);
+  texture.unload();
   textureBuffer.shutdown();
 }
 
@@ -40,7 +39,7 @@ void Sketch::draw()
 
   // ---
 
-  textureBuffer.setShader(textureAlphaShader);
+  textureBuffer.useShader(textureAlphaShader);
   textureAlphaShader.applyColor(1, 1, 1, 1);
 
   for (auto &position : dotPositions)
@@ -67,11 +66,11 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   modelViewMatrix.translate(position);
   modelViewMatrix.scale(radius / DOT_RADIUS_PIXELS);
 
-  textureAlphaShader.applyMVPMatrix(modelViewMatrix * projectionMatrix);
+  textureAlphaShader.applyMatrix(modelViewMatrix * projectionMatrix);
   textureBuffer.drawFromCenter(texture);
 }
 
 void Sketch::initTextures()
 {
-  texture = loadTexture("dot_112.png", image::FLAGS_TRANSLUCENT);
+  texture = Texture(Texture::Request("dot_112.png").setFlags(image::FLAGS_TRANSLUCENT));
 }

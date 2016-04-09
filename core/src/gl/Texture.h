@@ -11,17 +11,14 @@ namespace chr
     {
       struct Element
       {
+        int useCount;
         GLuint textureId;
-        GLenum format;
-        int width;
-        int height;
-        float maxU;
-        float maxV;
       };
     }
 
-    struct Texture
+    class Texture
     {
+    public:
       struct Request
       {
         fs::path relativePath;
@@ -29,6 +26,8 @@ namespace chr
         bool useMipmap;
         GLenum wrapS;
         GLenum wrapT;
+
+        Request() = default;
 
         Request(const fs::path &relativePath)
         :
@@ -68,6 +67,8 @@ namespace chr
         bool useMipmap;
         GLenum wrapS;
         GLenum wrapT;
+
+        MaskedRequest() = default;
 
         MaskedRequest(const fs::path &imageRelativePath, const fs::path &maskRelativePath)
         :
@@ -111,22 +112,43 @@ namespace chr
         float maxV;
       };
 
-      GLuint textureId;
+      // ---
+
+      Texture() = default;
+      Texture(const Response &response);
+      Texture(const Request &request);
+      Texture(const MaskedRequest &request);
+      Texture(const Texture &other);
+      Texture& operator=(const Texture &other);
+
+      ~Texture();
+
+      int id;
+      texture::Element *element;
+
       GLenum format;
       int width;
       int height;
       float maxU;
       float maxV;
 
-      Texture() = default;
-      Texture(const Response &response);
-      Texture(const Request &request);
-      Texture(const MaskedRequest &request);
-
       void bind();
       void unbind();
 
+      bool reload();
+      bool unload();
+
     protected:
+      enum RequestType
+      {
+        REQUEST_REGULAR = 1,
+        REQUEST_MASKED = 2
+      };
+
+      RequestType requestType;
+      Request request;
+      MaskedRequest maskedRequest;
+
       static int usageCounter;
     };
   }

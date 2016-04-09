@@ -2,6 +2,7 @@
 
 #include "cross/Context.h"
 #include "gl/TextureBuffer.h"
+#include "gl/TextureAlphaShader.h"
 
 struct Particle
 {
@@ -40,8 +41,9 @@ public:
   void accelerated(chr::AccelEvent event) final;
 
 protected:
-  chr::gl::TextureHandle texture;
+  chr::gl::Texture texture;
   chr::gl::TextureBuffer textureBuffer;
+  chr::gl::TextureAlphaShader textureAlphaShader;
 
   float scale;
   glm::mat4 projectionMatrix;

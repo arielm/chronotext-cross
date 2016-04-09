@@ -2,6 +2,7 @@
 
 #include "cross/Context.h"
 #include "gl/TextureBuffer.h"
+#include "gl/TextureAlphaShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -16,8 +17,9 @@ public:
   void updateTouch(int index, float x, float y) final;
 
 protected:
-  chr::gl::TextureHandle texture;
+  chr::gl::Texture texture;
   chr::gl::TextureBuffer textureBuffer;
+  chr::gl::TextureAlphaShader textureAlphaShader;
 
   float scale;
   glm::mat4 projectionMatrix;
