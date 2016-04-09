@@ -55,8 +55,8 @@ namespace chr
 
       Buffer(GLenum usage = GL_DYNAMIC_DRAW)
       :
-      id(buffer::TypeTraits<T>::usageCounter),
-      element(buffer::TypeTraits<T>::map.emplace(buffer::TypeTraits<T>::usageCounter++, new buffer::Element<T>()).first->second),
+      id(buffer::TypeTraits<T>::usageCounter++),
+      element(new buffer::Element<T>()),
       storage(element->storage),
       usage(usage)
       {
@@ -99,9 +99,7 @@ namespace chr
             glDeleteBuffers(1, &element->vboId);
           }
 
-          auto found = buffer::TypeTraits<T>::map.find(id);
-          delete found->second;
-          buffer::TypeTraits<T>::map.erase(found);
+          delete element;
         }
       }
 
@@ -196,7 +194,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<>>*> map;
       };
 
       template<>
@@ -206,7 +203,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<UV>>*> map;
       };
 
       template<>
@@ -216,7 +212,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<N>>*> map;
       };
 
       template<>
@@ -226,7 +221,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<RGBA>>*> map;
       };
 
       template<>
@@ -236,7 +230,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<N | UV>>*> map;
       };
 
       template<>
@@ -247,7 +240,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<N | UV | RGBA>>*> map;
       };
 
       template<>
@@ -257,7 +249,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<UV | RGBA>>*> map;
       };
 
       template<>
@@ -277,7 +268,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<glm::vec2>*> map;
       };
 
       template<>
@@ -287,7 +277,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<glm::vec3>*> map;
       };
 
       template<>
@@ -297,7 +286,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<glm::vec4>*> map;
       };
 
       template<>
@@ -307,7 +295,6 @@ namespace chr
         static constexpr GLenum target = GL_ELEMENT_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<GLushort>*> map;
       };
 
       template<>
@@ -317,7 +304,6 @@ namespace chr
         static constexpr GLenum target = GL_ELEMENT_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<GLuint>*> map;
       };
     }
   }

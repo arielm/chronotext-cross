@@ -10,12 +10,11 @@ namespace chr
   namespace gl
   {
     int ShaderProgram::usageCounter = 0;
-    unordered_map<int, shader::Element*> ShaderProgram::map;
 
     ShaderProgram::ShaderProgram()
     :
-    id(usageCounter),
-    element(map.emplace(usageCounter++, new shader::Element()).first->second)
+    id(usageCounter++),
+    element(new shader::Element())
     {
       element->useCount++;
     }
@@ -60,9 +59,7 @@ namespace chr
           ShaderHelper::unloadProgram(element->programId, element->vertexShaderId, element->fragmentShaderId);
         }
 
-        auto found = map.find(id);
-        delete found->second;
-        map.erase(found);
+        delete element;
       }
     }
 

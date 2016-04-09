@@ -75,7 +75,6 @@ namespace chr
 
     protected:
       static int usageCounter;
-      static std::unordered_map<int, shader::Element*> map;
 
       bool load();
       void unload();
