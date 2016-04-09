@@ -106,8 +106,11 @@ namespace chr
       Texture(const Request &request);
       Texture(const MaskedRequest &request);
 
-      void bind() const;
-      void unbind() const;
+      void bind();
+      void unbind();
+
+    protected:
+      static int usageCounter;
     };
   }
 }

@@ -20,9 +20,9 @@ namespace chr
       TextureBuffer();
       void shutdown();
 
-      void draw(const Texture &texture, float x = 0, float y = 0, float scale = 1);
-      void drawFromCenter(const Texture &texture, float x = 0, float y = 0, float scale = 1);
-      void drawInRect(const Texture &texture, const math::Rectf &rect, float ox = 0, float oy = 0);
+      void draw(Texture &texture, float x = 0, float y = 0, float scale = 1);
+      void drawFromCenter(Texture &texture, float x = 0, float y = 0, float scale = 1);
+      void drawInRect(Texture &texture, const math::Rectf &rect, float ox = 0, float oy = 0);
 
       void useShader(ShaderProgram &shader)
       {
@@ -38,7 +38,7 @@ namespace chr
       std::vector<Vertex<UV>> vertices;
       uint32_t vertexVBOId = 0;
 
-      void apply(const Texture &texture);
+      void apply(Texture &texture);
     };
   }
 }

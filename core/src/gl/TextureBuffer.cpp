@@ -19,7 +19,7 @@ namespace chr
       }
     }
 
-    void TextureBuffer::draw(const Texture &texture, float x, float y, float scale)
+    void TextureBuffer::draw(Texture &texture, float x, float y, float scale)
     {
       float x1 = x;
       float y1 = y;
@@ -40,7 +40,7 @@ namespace chr
       apply(texture);
     }
 
-    void TextureBuffer::drawFromCenter(const Texture &texture, float x, float y, float scale)
+    void TextureBuffer::drawFromCenter(Texture &texture, float x, float y, float scale)
     {
       float halfWidth = texture.width * texture.maxU * scale * 0.5f;
       float halfHeight = texture.height * texture.maxV * scale * 0.5f;
@@ -64,7 +64,7 @@ namespace chr
       apply(texture);
     }
 
-    void TextureBuffer::drawInRect(const Texture &texture, const math::Rectf &rect, float ox, float oy)
+    void TextureBuffer::drawInRect(Texture &texture, const math::Rectf &rect, float ox, float oy)
     {
       float width = texture.width * texture.maxU;
       float height = texture.height * texture.maxV;
@@ -88,7 +88,7 @@ namespace chr
       apply(texture);
     }
 
-    void TextureBuffer::apply(const Texture &texture)
+    void TextureBuffer::apply(Texture &texture)
     {
       if (vertexVBOId == 0)
       {

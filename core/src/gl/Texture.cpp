@@ -5,6 +5,8 @@ namespace chr
 {
   namespace gl
   {
+    int Texture ::usageCounter = 0;
+
     Texture::Texture(const Response &response)
     :
     textureId(response.textureId),
@@ -25,13 +27,13 @@ namespace chr
     Texture(uploadMaskedTexture(request))
     {}
 
-    void Texture::bind() const
+    void Texture::bind()
     {
       glEnable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D, textureId);
     }
 
-    void Texture::unbind() const
+    void Texture::unbind()
     {
       glDisable(GL_TEXTURE_2D);
       glBindTexture(GL_TEXTURE_2D, 0);
