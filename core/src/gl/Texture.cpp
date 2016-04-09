@@ -5,29 +5,25 @@ namespace chr
 {
   namespace gl
   {
-    Texture::Texture(const Request &request)
-    {
-      auto response = loadAndUploadTexture(request);
+    Texture::Texture(const Response &response)
+    :
+    textureId(response.textureId),
+    format(response.format),
+    width(response.width),
+    height(response.height),
+    maxU(response.maxU),
+    maxV(response.maxV)
+    {}
 
-      textureId = response.textureId;
-      format = response.format;
-      width = response.width;
-      height = response.height;
-      maxU = response.maxU;
-      maxV = response.maxV;
-    }
+    Texture::Texture(const Request &request)
+    :
+    Texture(loadAndUploadTexture(request))
+    {}
 
     Texture::Texture(const MaskedRequest &request)
-    {
-      auto response = uploadMaskedTexture(request);
-
-      textureId = response.textureId;
-      format = response.format;
-      width = response.width;
-      height = response.height;
-      maxU = response.maxU;
-      maxV = response.maxV;
-    }
+    :
+    Texture(uploadMaskedTexture(request))
+    {}
 
     void Texture::bind() const
     {

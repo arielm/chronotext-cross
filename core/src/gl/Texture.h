@@ -102,6 +102,7 @@ namespace chr
       float maxV;
 
       Texture() = default;
+      Texture(const Response &response);
       Texture(const Request &request);
       Texture(const MaskedRequest &request);
 

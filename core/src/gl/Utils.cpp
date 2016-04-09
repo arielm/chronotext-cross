@@ -68,12 +68,15 @@ namespace chr
           auto input = request.mask->buffer.get();
           auto output = request.image->buffer.get();
 
-          for (int iy = 0; iy < request.image->effectiveHeight; iy++)
+          int width = request.image->effectiveWidth;
+          int height = request.image->effectiveHeight;
+
+          for (int iy = 0; iy < height; iy++)
           {
             uint8_t *inputLine = input + (request.mask->width) * iy;
             uint8_t *outputLine = output + (4 * request.image->width) * iy;
 
-            for (int ix = 0; ix < request.image->effectiveWidth; ix++)
+            for (int ix = 0; ix < width; ix++)
             {
               outputLine += 3;
               *outputLine ++= *inputLine++;
