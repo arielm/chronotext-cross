@@ -9,17 +9,12 @@ namespace chr
   {
     Texture::Response loadAndUploadTexture(const Texture::Request &request)
     {
-      Texture::Response response;
-      image::ImageBuffer image;
+      return uploadTexture(image::loadImage(request.relativePath, request.imageFlags), request.useMipmap, request.wrapS, request.wrapT);
+    }
 
-      if (request.relativePath.extension() == ".png")
-      {
-        image = image::loadPngImage(request.relativePath, request.imageFlags);
-      }
-      else if ((request.relativePath.extension() == ".jpg") || (request.relativePath.extension() == ".jpeg"))
-      {
-        image = image::loadJpgImage(request.relativePath, request.imageFlags);
-      }
+    Texture::Response uploadTexture(const image::ImageBuffer &image, bool useMipmap, GLenum wrapS, GLenum wrapT)
+    {
+      Texture::Response response;
 
       if (image.width * image.height)
       {
@@ -50,31 +45,39 @@ namespace chr
           response.maxV = image.effectiveHeight / (float) image.height;
 
           glBindTexture(GL_TEXTURE_2D, textureId);
-          uploadTexture(response.format, response.width, response.height, image.buffer.get(), request.useMipmap, request.wrapS, request.wrapT);
+          uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, wrapS, wrapT);
         }
       }
 
       return response;
     }
 
-    Texture::Response uploadMaskedTexture(const Texture::MaskedRequest &request)
+    Texture::Response loadAndUploadMaskedTexture(const Texture::MaskedRequest &request)
+    {
+      const auto image = image::loadImage(request.imageRelativePath, request.imageFlags);
+      const auto mask = image::loadImage(request.maskRelativePath, request.maskFlags);
+
+      return uploadMaskedTexture(image, mask, request.useMipmap, request.wrapS, request.wrapT);
+    }
+
+    Texture::Response uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap, GLenum wrapS, GLenum wrapT)
     {
       Texture::Response response;
 
-      if ((request.image->components == 4) && (request.mask->components == 1))
+      if ((image.components == 4) && (mask.components == 1))
       {
-        if ((request.mask->width >= request.image->effectiveWidth) && (request.mask->height >= request.image->effectiveHeight))
+        if ((mask.width >= image.effectiveWidth) && (mask.height >= image.effectiveHeight))
         {
-          auto input = request.mask->buffer.get();
-          auto output = request.image->buffer.get();
+          auto input = mask.buffer.get();
+          auto output = image.buffer.get();
 
-          int width = request.image->effectiveWidth;
-          int height = request.image->effectiveHeight;
+          int width = image.effectiveWidth;
+          int height = image.effectiveHeight;
 
           for (int iy = 0; iy < height; iy++)
           {
-            uint8_t *inputLine = input + (request.mask->width) * iy;
-            uint8_t *outputLine = output + (4 * request.image->width) * iy;
+            uint8_t *inputLine = input + (mask.width) * iy;
+            uint8_t *outputLine = output + (4 * image.width) * iy;
 
             for (int ix = 0; ix < width; ix++)
             {
@@ -89,16 +92,16 @@ namespace chr
 
         response.textureId = textureId;
         response.format = GL_RGBA;
-        response.width = request.image->width;
-        response.height = request.image->height;
-        response.maxU = request.image->effectiveWidth / (float) request.image->width;
-        response.maxV = request.image->effectiveHeight / (float) request.image->height;
+        response.width = image.width;
+        response.height = image.height;
+        response.maxU = image.effectiveWidth / (float) image.width;
+        response.maxV = image.effectiveHeight / (float) image.height;
 
         glBindTexture(GL_TEXTURE_2D, textureId);
-        uploadTexture(response.format, response.width, response.height, request.image->buffer.get(), request.useMipmap, request.wrapS, request.wrapT);
+        uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, wrapS, wrapT);
       }
 
-      return response;
+      return  response;
     }
 
     void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap, GLenum wrapS, GLenum wrapT)

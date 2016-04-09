@@ -24,7 +24,7 @@ namespace chr
 
     Texture::Texture(const MaskedRequest &request)
     :
-    Texture(uploadMaskedTexture(request))
+    Texture(loadAndUploadMaskedTexture(request))
     {}
 
     void Texture::bind()

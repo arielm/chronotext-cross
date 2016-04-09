@@ -30,14 +30,20 @@ namespace chr
         GLenum wrapS;
         GLenum wrapT;
 
-        Request(const fs::path &relativePath, int imageFlags = image::FLAGS_NONE)
+        Request(const fs::path &relativePath)
         :
         relativePath(relativePath),
-        imageFlags(imageFlags),
+        imageFlags(image::FLAGS_NONE),
         useMipmap(false),
         wrapS(GL_CLAMP_TO_EDGE),
         wrapT(GL_CLAMP_TO_EDGE)
         {}
+
+        Request& setFlags(int flags = image::FLAGS_NONE)
+        {
+          imageFlags = flags;
+          return *this;
+        }
 
         Request& setMipmap(bool mipmap)
         {
@@ -55,20 +61,31 @@ namespace chr
 
       struct MaskedRequest
       {
-        const image::ImageBuffer *image;
-        const image::ImageBuffer *mask;
+        fs::path imageRelativePath;
+        fs::path maskRelativePath;
+        int imageFlags;
+        int maskFlags;
         bool useMipmap;
         GLenum wrapS;
         GLenum wrapT;
 
-        MaskedRequest(const image::ImageBuffer *image, const image::ImageBuffer *mask)
+        MaskedRequest(const fs::path &imageRelativePath, const fs::path &maskRelativePath)
         :
-        image(image),
-        mask(mask),
+        imageRelativePath(imageRelativePath),
+        maskRelativePath(maskRelativePath),
+        imageFlags(image::FLAGS_NONE),
+        maskFlags(image::FLAGS_NONE),
         useMipmap(false),
         wrapS(GL_CLAMP_TO_EDGE),
         wrapT(GL_CLAMP_TO_EDGE)
         {}
+
+        MaskedRequest& setFlags(int imageFlags = image::FLAGS_NONE, int maskFlags = image::FLAGS_NONE)
+        {
+          this->imageFlags = imageFlags;
+          this->maskFlags = maskFlags;
+          return *this;
+        }
 
         MaskedRequest& setMipmap(bool mipmap)
         {

@@ -25,7 +25,8 @@ namespace chr
     void readPngDataCallback(png_structp png_ptr, png_byte *raw_data, png_size_t read_length);
     bool isPaletteGrayscale(const png_structp png_ptr, const png_infop info_ptr);
 
-    ImageBuffer loadPngImage(const fs::path &relativePath, int flags);
-    ImageBuffer loadJpgImage(const fs::path &relativePath, int flags);
+    ImageBuffer loadPngImage(const fs::path &relativePath, int flags = FLAGS_NONE);
+    ImageBuffer loadJpgImage(const fs::path &relativePath, int flags = FLAGS_NONE);
+    ImageBuffer loadImage(const fs::path &relativePath, int flags = FLAGS_NONE);
   }
 }

@@ -372,5 +372,21 @@ namespace chr
 
       return  image;
     }
+
+    ImageBuffer loadImage(const fs::path &relativePath, int flags)
+    {
+      ImageBuffer image;
+
+      if (relativePath.extension() == ".png")
+      {
+        image = image::loadPngImage(relativePath, flags);
+      }
+      else if ((relativePath.extension() == ".jpg") || (relativePath.extension() == ".jpeg"))
+      {
+        image = image::loadJpgImage(relativePath, flags);
+      }
+
+      return image;
+    }
   }
 }
