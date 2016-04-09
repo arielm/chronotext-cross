@@ -56,6 +56,8 @@ namespace chr
       ~ShaderProgram();
 
       bool bind();
+      void unbind();
+      void unload();
 
       void applyMatrix(const glm::mat4 &matrix);
       void applyColor(float r, float g, float b, float a);
@@ -77,7 +79,6 @@ namespace chr
       static int usageCounter;
 
       bool load();
-      void unload();
 
       GLuint getUniformLocation(std::unordered_map<std::string, GLuint> &map, const std::string &name);
     };

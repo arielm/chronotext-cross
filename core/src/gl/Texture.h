@@ -132,11 +132,9 @@ namespace chr
       float maxU;
       float maxV;
 
-      void bind();
+      bool bind();
       void unbind();
-
-      bool reload();
-      bool unload();
+      void unload();
 
     protected:
       enum RequestType
@@ -150,6 +148,8 @@ namespace chr
       MaskedRequest maskedRequest;
 
       static int usageCounter;
+
+      bool load();
     };
   }
 }

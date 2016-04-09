@@ -54,11 +54,7 @@ namespace chr
 
       if (element->useCount == 0)
       {
-        if (element->programId != 0)
-        {
-          ShaderHelper::unloadProgram(element->programId, element->vertexShaderId, element->fragmentShaderId);
-        }
-
+        unload();
         delete element;
       }
     }
@@ -72,6 +68,14 @@ namespace chr
       }
 
       return false;
+    }
+
+    void ShaderProgram::unbind()
+    {
+      if (element->programId)
+      {
+        glUseProgram(0);
+      }
     }
 
     void ShaderProgram::applyMatrix(const glm::mat4 &matrix)

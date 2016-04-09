@@ -76,23 +76,23 @@ namespace chr
 
         if (element->useCount == 0)
         {
-          if (element->textureId != 0)
-          {
-            unload();
-          }
-
+          unload();
           delete element;
         }
       }
     }
 
-    void Texture::bind()
+    bool Texture::bind()
     {
-      if (element && element->textureId)
+      if (load())
       {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, element->textureId);
+
+        return true;
       }
+
+      return false;
     }
 
     void Texture::unbind()
@@ -104,7 +104,7 @@ namespace chr
       }
     }
 
-    bool Texture::reload()
+    bool Texture::load()
     {
       if (element && !element->textureId)
       {
@@ -124,20 +124,16 @@ namespace chr
         }
       }
 
-      return false;
+      return (element && element->textureId);
     }
 
-    bool Texture::unload()
+    void Texture::unload()
     {
       if (element && element->textureId)
       {
         glDeleteTextures(1, &element->textureId);
         element->textureId = 0;
-
-        return true;
       }
-
-      return false;
     }
   }
 }
