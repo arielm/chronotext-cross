@@ -123,36 +123,19 @@ namespace chr
         element->vertexShaderId = 0;
         element->fragmentShaderId = 0;
 
-        // ---
-
-        element->map_uniform1i.clear();
-        element->map_uniform2i.clear();
-        element->map_uniform3i.clear();
-        element->map_uniform4i.clear();
-        element->map_uniform1f.clear();
-        element->map_uniform2f.clear();
-        element->map_uniform3f.clear();
-        element->map_uniform4f.clear();
-        element->map_uniformiv.clear();
-        element->map_uniform2iv.clear();
-        element->map_uniform3iv.clear();
-        element->map_uniform4iv.clear();
-        element->map_uniformfv.clear();
-        element->map_uniform2fv.clear();
-        element->map_uniform3fv.clear();
-        element->map_uniform4fv.clear();
+        element->map_uniform.clear();
       }
     }
 
-    GLuint ShaderProgram::getUniformLocation(map<string, GLuint> &map, const string &name)
+    GLuint ShaderProgram::getUniformLocation(const string &name)
     {
       GLuint location;
-      auto found = map.find(name);
+      auto found = element->map_uniform.find(name);
 
-      if (found == map.end())
+      if (found == element->map_uniform.end())
       {
         location = glGetUniformLocation(element->programId, name.data());
-        map.emplace(name, location);
+        element->map_uniform.emplace(name, location);
       }
       else
       {
