@@ -2,7 +2,7 @@
 
 #include "gl/gl.h"
 
-#include <unordered_map>
+#include <map>
 #include <experimental/string_view>
 
 namespace chr
@@ -28,17 +28,17 @@ namespace chr
         GLuint coordLocation;
         GLuint samplerLocation;
 
-        std::unordered_map<std::string, GLuint> map_uniform1i;
-        std::unordered_map<std::string, GLuint> map_uniform2i;
-        std::unordered_map<std::string, GLuint> map_uniform3i;
-        std::unordered_map<std::string, GLuint> map_uniform4i;
-        std::unordered_map<std::string, GLuint> map_uniform1f;
-        std::unordered_map<std::string, GLuint> map_uniform2f;
-        std::unordered_map<std::string, GLuint> map_uniform3f;
-        std::unordered_map<std::string, GLuint> map_uniform4f;
-        std::unordered_map<std::string, GLuint> map_uniform2fv;
-        std::unordered_map<std::string, GLuint> map_uniform3fv;
-        std::unordered_map<std::string, GLuint> map_uniform4fv;
+        std::map<std::string, GLuint> map_uniform1i;
+        std::map<std::string, GLuint> map_uniform2i;
+        std::map<std::string, GLuint> map_uniform3i;
+        std::map<std::string, GLuint> map_uniform4i;
+        std::map<std::string, GLuint> map_uniform1f;
+        std::map<std::string, GLuint> map_uniform2f;
+        std::map<std::string, GLuint> map_uniform3f;
+        std::map<std::string, GLuint> map_uniform4f;
+        std::map<std::string, GLuint> map_uniform2fv;
+        std::map<std::string, GLuint> map_uniform3fv;
+        std::map<std::string, GLuint> map_uniform4fv;
       };
     }
 
@@ -80,7 +80,7 @@ namespace chr
 
       bool load();
 
-      GLuint getUniformLocation(std::unordered_map<std::string, GLuint> &map, const std::string &name);
+      GLuint getUniformLocation(std::map<std::string, GLuint> &map, const std::string &name);
     };
   }
 }

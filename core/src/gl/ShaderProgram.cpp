@@ -139,7 +139,7 @@ namespace chr
       }
     }
 
-    GLuint ShaderProgram::getUniformLocation(std::unordered_map<std::string, GLuint> &map, const std::string &name)
+    GLuint ShaderProgram::getUniformLocation(map<string, GLuint> &map, const string &name)
     {
       GLuint location;
       auto found = map.find(name);
