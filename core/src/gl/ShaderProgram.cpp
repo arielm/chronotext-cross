@@ -133,6 +133,11 @@ namespace chr
         element->map_uniform2f.clear();
         element->map_uniform3f.clear();
         element->map_uniform4f.clear();
+        element->map_uniformiv.clear();
+        element->map_uniform2iv.clear();
+        element->map_uniform3iv.clear();
+        element->map_uniform4iv.clear();
+        element->map_uniformfv.clear();
         element->map_uniform2fv.clear();
         element->map_uniform3fv.clear();
         element->map_uniform4fv.clear();

@@ -36,6 +36,11 @@ namespace chr
         std::map<std::string, GLuint> map_uniform2f;
         std::map<std::string, GLuint> map_uniform3f;
         std::map<std::string, GLuint> map_uniform4f;
+        std::map<std::string, GLuint> map_uniformiv;
+        std::map<std::string, GLuint> map_uniform2iv;
+        std::map<std::string, GLuint> map_uniform3iv;
+        std::map<std::string, GLuint> map_uniform4iv;
+        std::map<std::string, GLuint> map_uniformfv;
         std::map<std::string, GLuint> map_uniform2fv;
         std::map<std::string, GLuint> map_uniform3fv;
         std::map<std::string, GLuint> map_uniform4fv;
@@ -71,9 +76,14 @@ namespace chr
       inline void applyUniform(const std::string &name, float v0, float v1) { glUniform2f(getUniformLocation(element->map_uniform2f, name), v0, v1); }
       inline void applyUniform(const std::string &name, float v0, float v1, float v2) { glUniform3f(getUniformLocation(element->map_uniform3f, name), v0, v1, v2); }
       inline void applyUniform(const std::string &name, float v0, float v1, float v2, float v3) { glUniform4f(getUniformLocation(element->map_uniform4f, name), v0, v1, v2, v3); }
-      inline void applyUniform(const std::string &name, const glm::vec2 &v) { glUniform2fv(getUniformLocation(element->map_uniform2fv, name), 2, &v[0]); }
-      inline void applyUniform(const std::string &name, const glm::vec3 &v) { glUniform3fv(getUniformLocation(element->map_uniform3fv, name), 3, &v[0]); }
-      inline void applyUniform(const std::string &name, const glm::vec4 &v) { glUniform4fv(getUniformLocation(element->map_uniform4fv, name), 4, &v[0]); }
+      inline void applyUniform(const std::string &name, const std::vector<int> &v) { glUniform1iv(getUniformLocation(element->map_uniformiv, name), v.size(), v.data()); }
+      inline void applyUniform(const std::string &name, const glm::ivec2 &v) { glUniform2iv(getUniformLocation(element->map_uniform2iv, name), 1, &v[0]); }
+      inline void applyUniform(const std::string &name, const glm::ivec3 &v) { glUniform3iv(getUniformLocation(element->map_uniform3iv, name), 1, &v[0]); }
+      inline void applyUniform(const std::string &name, const glm::ivec4 &v) { glUniform4iv(getUniformLocation(element->map_uniform4iv, name), 1, &v[0]); }
+      inline void applyUniform(const std::string &name, const std::vector<float> &v) { glUniform1fv(getUniformLocation(element->map_uniformiv, name), v.size(), v.data()); }
+      inline void applyUniform(const std::string &name, const glm::vec2 &v) { glUniform2fv(getUniformLocation(element->map_uniform2fv, name), 1, &v[0]); }
+      inline void applyUniform(const std::string &name, const glm::vec3 &v) { glUniform3fv(getUniformLocation(element->map_uniform3fv, name), 1, &v[0]); }
+      inline void applyUniform(const std::string &name, const glm::vec4 &v) { glUniform4fv(getUniformLocation(element->map_uniform4fv, name), 1, &v[0]); }
 
     protected:
       static int usageCounter;
