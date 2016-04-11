@@ -126,7 +126,7 @@ namespace chr
         return element->useCount;
       }
 
-      void bind(const ShaderProgram &shader)
+      void bind(const ShaderProgram &shader, bool forceUpload = false)
       {
         if (element->vboId == 0)
         {
@@ -135,6 +135,12 @@ namespace chr
 
         glBindBuffer(target, element->vboId);
         ShaderHelper::bindAttributes<T>(shader);
+
+        if (forceUpload || uploadRequired)
+        {
+          upload();
+          uploadRequired = false;
+        }
       }
 
       void unbind(const ShaderProgram &shader)
@@ -143,10 +149,22 @@ namespace chr
         glBindBuffer(target, 0);
       }
 
-      void bindAndUpload(const ShaderProgram &shader)
+      void requestUpload()
       {
-        bind(shader);
+        uploadRequired = true;
+      }
 
+      template<typename... Args>
+      inline void add(Args&&... args)
+      {
+        storage.emplace_back(std::forward<Args>(args)...);
+      }
+
+    protected:
+      bool uploadRequired = true;
+
+      void upload()
+      {
         switch (usage)
         {
           case GL_STATIC_DRAW:
@@ -172,12 +190,6 @@ namespace chr
           }
           break;
         }
-      }
-
-      template<typename... Args>
-      inline void add(Args&&... args)
-      {
-        storage.emplace_back(std::forward<Args>(args)...);
       }
     };
 
