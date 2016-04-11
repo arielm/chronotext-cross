@@ -2,8 +2,6 @@
 
 #include "gl/ShaderHelper.h"
 
-#include <unordered_map>
-
 namespace chr
 {
   namespace gl
@@ -258,7 +256,6 @@ namespace chr
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
-        static std::unordered_map<int, Element<Vertex<N | RGBA>>*> map;
       };
 
       template<>
