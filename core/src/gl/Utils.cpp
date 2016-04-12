@@ -82,7 +82,7 @@ namespace chr
             for (int ix = 0; ix < width; ix++)
             {
               outputLine += 3;
-              *outputLine ++= *inputLine++;
+              *outputLine++ = *inputLine++;
             }
           }
         }
