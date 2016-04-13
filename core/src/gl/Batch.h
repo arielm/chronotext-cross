@@ -11,6 +11,8 @@ namespace chr
     {
     public:
       Batch() = default;
+
+      virtual void bind() = 0;
     };
 
     template<int V = 0>
@@ -113,7 +115,7 @@ namespace chr
         propui[PROPERTY_GL_DEPTH_FUNC] = { func };
       }
 
-      void glBlendFunc(GLenum sfactor, GLenum dfactor
+      void glBlendFunc(GLenum sfactor, GLenum dfactor)
       {
         propui[PROPERTY_GL_BLEND_FUNC] = { sfactor, dfactor };
       }
@@ -234,10 +236,10 @@ namespace chr
         }
       }
 
-      void bind()
+      void bind() override
       {
         vertexBuffer.bind(shader);
-        glDrawArrays(primitive, 0, vertexBuffer.size());
+        vertexBuffer.draw(primitive);
         vertexBuffer.unbind(shader);
       }
     };
@@ -265,6 +267,20 @@ namespace chr
       {}
 
       inline std::vector<I>& indices() const { return indexBuffer.storage; }
+
+      inline void addIndex(I index)
+      {
+        indexBuffer.storage.emplace_back(index);
+      }
+
+      void bind() override
+      {
+        VertexBatch<V>::vertexBuffer.bind(VertexBatch<V>::shader);
+        indexBuffer.bind();
+        indexBuffer.draw(VertexBatch<V>::primitive);
+        VertexBatch<V>::vertexBuffer.unbind(VertexBatch<V>::shader);
+        indexBuffer.unbind();
+      }
     };
   }
 }

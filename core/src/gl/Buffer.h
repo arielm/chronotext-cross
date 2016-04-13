@@ -133,8 +133,18 @@ namespace chr
           glGenBuffers(1, &element->vboId);
         }
 
-        glBindBuffer(target, element->vboId);
-        ShaderHelper::bindAttributes<T>(shader);
+        switch (typeIndex)
+        {
+          case buffer::GLUSHORT:
+          case buffer::GLUINT:
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element->vboId);
+            break;
+
+          default:
+            glBindBuffer(target, element->vboId);
+            ShaderHelper::bindAttributes<T>(shader);
+            break;
+        }
 
         if (forceUpload || uploadRequired)
         {
@@ -145,8 +155,33 @@ namespace chr
 
       void unbind(const ShaderProgram &shader)
       {
-        ShaderHelper::unbindAttributes<T>(shader);
-        glBindBuffer(target, 0);
+        switch (typeIndex)
+        {
+          case buffer::GLUSHORT:
+          case buffer::GLUINT:
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            break;
+
+          default:
+            ShaderHelper::unbindAttributes<T>(shader);
+            glBindBuffer(target, 0);
+            break;
+        }
+      }
+
+      void draw(GLenum primitive)
+      {
+        switch (typeIndex)
+        {
+          case buffer::GLUSHORT:
+          case buffer::GLUINT:
+            glDrawElements(primitive, storage.size(), (typeIndex == buffer::GLUSHORT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, 0);
+            break;
+
+          default:
+            glDrawArrays(primitive, 0, storage.size());
+            break;
+        }
       }
 
       void requestUpload()
