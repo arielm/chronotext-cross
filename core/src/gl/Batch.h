@@ -21,7 +21,15 @@ namespace chr
       {
         PROPERTY_SHADER_MATRIX,
         PROPERTY_SHADER_COLOR,
-        PROPERTY_LINE_WIDTH
+        PROPERTY_GL_ENABLE,
+        PROPERTY_GL_DISABLE,
+        PROPERTY_GL_DEPTH_MASK,
+        PROPERTY_GL_DEPTH_FUNC,
+        PROPERTY_GL_BLEND_FUNC,
+        PROPERTY_GL_CULL_FACE,
+        PROPERTY_GL_FRONT_FACE,
+        PROPERTY_GL_LINE_WIDTH,
+        PROPERTY_GL_POLYGON_OFFSET
       };
 
       GLenum primitive;
@@ -61,11 +69,13 @@ namespace chr
       inline void setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = std::vector<float>(&v[0], &v[3]); }
       inline void setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = std::vector<float>(&v[0], &v[4]); }
 
+      // ---
+
       void setShader(const ShaderProgram &shader)
       {
         this->shader = shader;
       }
-      
+
       void setShaderMatrix(const glm::mat4 &matrix)
       {
         propf[PROPERTY_SHADER_MATRIX] = std::vector<float>(&matrix[0][0], &matrix[4][4]);
@@ -81,10 +91,54 @@ namespace chr
         propf[PROPERTY_SHADER_COLOR] = { r, g, b, a };
       }
 
-      void setLineWidth(float lineWidth)
+      // ---
+
+      void glEnable(GLenum cap)
       {
-        propf[PROPERTY_LINE_WIDTH] = { lineWidth };
+        propui[PROPERTY_GL_ENABLE] = { cap };
       }
+
+      void glDisable(GLenum cap)
+      {
+        propui[PROPERTY_GL_DISABLE] = { cap };
+      }
+
+      void glDepthMask(bool flag)
+      {
+        propui[PROPERTY_GL_DEPTH_MASK] = { flag };
+      }
+
+      void glDepthFunc(GLenum func)
+      {
+        propui[PROPERTY_GL_DEPTH_FUNC] = { func };
+      }
+
+      void glBlendFunc(GLenum sfactor, GLenum dfactor
+      {
+        propui[PROPERTY_GL_BLEND_FUNC] = { sfactor, dfactor };
+      }
+
+      void glCullFace(GLenum mode)
+      {
+        propui[PROPERTY_GL_CULL_FACE] = { mode };
+      }
+
+      void glFrontFace(GLenum mode)
+      {
+        propui[PROPERTY_GL_FRONT_FACE] = { mode };
+      }
+
+      void glLineWidth(float width)
+      {
+        propf[PROPERTY_GL_LINE_WIDTH] = { width };
+      }
+
+      void glPolygonOffset(GLfloat factor, GLfloat units)
+      {
+        propf[PROPERTY_GL_POLYGON_OFFSET] = { factor, units };
+      }
+
+      // ---
 
       void flush()
       {
@@ -102,7 +156,7 @@ namespace chr
       std::map<std::string, std::vector<int>> uniformi;
       std::map<std::string, std::vector<float>> uniformf;
 
-      std::map<int, std::vector<int>> propi;
+      std::map<int, std::vector<unsigned int>> propui;
       std::map<int, std::vector<float>> propf;
 
       void apply()
@@ -123,10 +177,42 @@ namespace chr
 
         // ---
         
-        for (auto it = propi.begin(); it != propi.end(); ++it)
+        for (auto it = propui.begin(); it != propui.end(); ++it)
         {
           switch (it->first)
-          {}
+          {
+            case PROPERTY_GL_ENABLE:
+              glEnable(it->second[0]);
+              break;
+
+            case PROPERTY_GL_DISABLE:
+              glEnable(it->second[0]);
+              break;
+
+            case PROPERTY_GL_DEPTH_MASK:
+              glDepthMask(it->second[0]);
+              break;
+
+            case PROPERTY_GL_DEPTH_FUNC:
+              glDepthFunc(it->second[0]);
+              break;
+
+            case PROPERTY_GL_BLEND_FUNC:
+              glBlendFunc(it->second[0], it->second[1]);
+              break;
+
+            case PROPERTY_GL_CULL_FACE:
+              glCullFace(it->second[0]);
+              break;
+
+            case PROPERTY_GL_FRONT_FACE:
+              glFrontFace(it->second[0]);
+              break;
+
+             case PROPERTY_GL_POLYGON_OFFSET:
+              glPolygonOffset(it->second[0], it->second[1]);
+              break;
+          }
         }
 
         for (auto it = propf.begin(); it != propf.end(); ++it)
@@ -141,7 +227,7 @@ namespace chr
               glVertexAttrib4fv(shader.element->colorLocation, it->second.data());
               break;
 
-            case PROPERTY_LINE_WIDTH:
+            case PROPERTY_GL_LINE_WIDTH:
               glLineWidth(it->second[0]);
               break;
           }
