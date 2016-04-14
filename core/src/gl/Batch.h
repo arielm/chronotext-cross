@@ -169,12 +169,12 @@ namespace chr
 
         for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
         {
-          shader.applyUniform(it->first.data(), it->second);
+          shader.applyUniform(it->first, it->second);
         }
 
         for (auto it = uniformf.begin(); it != uniformf.end(); ++it)
         {
-          shader.applyUniform(it->first.data(), it->second);
+          shader.applyUniform(it->first, it->second);
         }
 
         // ---
