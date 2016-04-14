@@ -184,35 +184,35 @@ namespace chr
           switch (it->first)
           {
             case PROPERTY_GL_ENABLE:
-              glEnable(it->second[0]);
+              ::glEnable(it->second[0]);
               break;
 
             case PROPERTY_GL_DISABLE:
-              glEnable(it->second[0]);
+              ::glEnable(it->second[0]);
               break;
 
             case PROPERTY_GL_DEPTH_MASK:
-              glDepthMask(it->second[0]);
+              ::glDepthMask(it->second[0]);
               break;
 
             case PROPERTY_GL_DEPTH_FUNC:
-              glDepthFunc(it->second[0]);
+              ::glDepthFunc(it->second[0]);
               break;
 
             case PROPERTY_GL_BLEND_FUNC:
-              glBlendFunc(it->second[0], it->second[1]);
+              ::glBlendFunc(it->second[0], it->second[1]);
               break;
 
             case PROPERTY_GL_CULL_FACE:
-              glCullFace(it->second[0]);
+              ::glCullFace(it->second[0]);
               break;
 
             case PROPERTY_GL_FRONT_FACE:
-              glFrontFace(it->second[0]);
+              ::glFrontFace(it->second[0]);
               break;
 
              case PROPERTY_GL_POLYGON_OFFSET:
-              glPolygonOffset(it->second[0], it->second[1]);
+              ::glPolygonOffset(it->second[0], it->second[1]);
               break;
           }
         }
@@ -230,7 +230,7 @@ namespace chr
               break;
 
             case PROPERTY_GL_LINE_WIDTH:
-              glLineWidth(it->second[0]);
+              ::glLineWidth(it->second[0]);
               break;
           }
         }
