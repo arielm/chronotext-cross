@@ -382,5 +382,19 @@ namespace chr
       output.emplace_back(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2); // x1, y2
       output.emplace_back(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2); // x2, y2
     }
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLES>(const Quad<UV> &quad, IndexedVertexBatch<UV, GLushort> &output) const
+    {
+      TRANSFORM_QUAD_HEADER
+
+      output.addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1); // x1, y1
+      output.addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2); // x1, y2
+      output.addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2); // x2, y2
+      output.addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1); // x2, y1
+
+      output.addIndices(0, 1, 2, 2, 3, 0);
+      output.incrementIndices(4);
+    }
   }
 }

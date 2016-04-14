@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gl/gl.h"
 #include "gl/Quad.h"
+#include "gl/Batch.h"
 
 #include <array>
 #include <vector>
@@ -79,8 +79,11 @@ namespace chr
       inline glm::vec3 transformPoint(const glm::vec3 &point) const { return transformPoint(point.x, point.y, point.z); }
       glm::vec3 transformPoint(float x, float y, float z) const;
 
-      template<int Primitive = GL_TRIANGLES, int Orientation = GL_CCW, int Type>
-      void addTransformedQuad(const Quad<Type> &quad, std::vector<Vertex<Type>> &output) const;
+      template<int Primitive = GL_TRIANGLES, int Orientation = GL_CCW, int V = 0>
+      void addTransformedQuad(const Quad<V> &quad, std::vector<Vertex<V>> &output) const;
+
+      template<int Primitive = GL_TRIANGLES, int Orientation = GL_CCW, int V = 0, typename I = GLushort>
+      void addTransformedQuad(const Quad<V> &quad, IndexedVertexBatch<V, I> &output) const;
 
     protected:
       std::vector<Values> stack;

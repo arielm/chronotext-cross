@@ -2,6 +2,7 @@
 
 #include "gl/Buffer.h"
 #include "gl/ShaderProgram.h"
+#include "gl/Texture.h"
 
 namespace chr
 {
@@ -13,6 +14,7 @@ namespace chr
       Batch() = default;
 
       virtual void bind() = 0;
+      virtual void clear() = 0;
     };
 
     template<int V = 0>
@@ -35,6 +37,7 @@ namespace chr
       };
 
       GLenum primitive;
+      Texture texture;
       ShaderProgram shader;
       Buffer<Vertex<V>> vertexBuffer;
 
@@ -58,34 +61,41 @@ namespace chr
       inline void setShaderUniform(const std::string &name, int v0, int v1, int v2) { uniformi[name] = { v0, v1, v2 }; }
       inline void setShaderUniform(const std::string &name, int v0, int v1, int v2, int v3) { uniformi[name] = { v0, v1, v2, v3 }; }
 
-      inline void setShaderUniform(const std::string &name, const glm::ivec2 &v) { uniformi[name] = std::vector<int>(&v[0], &v[2]); }
-      inline void setShaderUniform(const std::string &name, const glm::ivec3 &v) { uniformi[name] = std::vector<int>(&v[0], &v[3]); }
-      inline void setShaderUniform(const std::string &name, const glm::ivec4 &v) { uniformi[name] = std::vector<int>(&v[0], &v[4]); }
+      inline void setShaderUniform(const std::string &name, const glm::ivec2 &v) { uniformi[name] = { v[0], v[1] }; }
+      inline void setShaderUniform(const std::string &name, const glm::ivec3 &v) { uniformi[name] = { v[0], v[1], v[2] }; }
+      inline void setShaderUniform(const std::string &name, const glm::ivec4 &v) { uniformi[name] = { v[0], v[1], v[2], v[3] }; }
 
       inline void setShaderUniform(const std::string &name, float v0) { uniformf[name] = { v0 }; }
       inline void setShaderUniform(const std::string &name, float v0, float v1) { uniformf[name] = { v0, v1 }; }
       inline void setShaderUniform(const std::string &name, float v0, float v1, float v2) { uniformf[name] = { v0, v1, v2 }; }
       inline void setShaderUniform(const std::string &name, float v0, float v1, float v2, float v3) { uniformf[name] = { v0, v1, v2, v3 }; }
 
-      inline void setShaderUniform(const std::string &name, const glm::vec2 &v) { uniformf[name] = std::vector<float>(&v[0], &v[2]); }
-      inline void setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = std::vector<float>(&v[0], &v[3]); }
-      inline void setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = std::vector<float>(&v[0], &v[4]); }
+      inline void setShaderUniform(const std::string &name, const glm::vec2 &v) { uniformf[name] = { v[0], v[1] }; }
+      inline void setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = { v[0], v[1], v[2] }; }
+      inline void setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = { v[0], v[1], v[2], v[3] }; }
 
       // ---
+
+      void setTexture(const Texture &texture)
+      {
+        this->texture = texture;
+        hasTexture = true;
+      }
 
       void setShader(const ShaderProgram &shader)
       {
         this->shader = shader;
+        hasShader = true;
       }
 
       void setShaderMatrix(const glm::mat4 &matrix)
       {
-        propf[PROPERTY_SHADER_MATRIX] = std::vector<float>(&matrix[0][0], &matrix[4][4]);
+        propm[PROPERTY_SHADER_MATRIX] = matrix;
       }
 
       void setShaderColor(const glm::vec4 &color)
       {
-        propf[PROPERTY_SHADER_COLOR] = std::vector<int>(&color[0], &color[4]);
+        propf[PROPERTY_SHADER_COLOR] = {color.r, color.g, color.b, color.a};
       }
 
       void setShaderColor(float r, float g, float b, float a)
@@ -148,6 +158,12 @@ namespace chr
         bind();
       }
 
+      void clear() override
+      {
+        vertexBuffer.clear();
+        vertexBuffer.requestUpload();
+      }
+
       template<typename... Args>
       inline void addVertex(Args&&... args)
       {
@@ -155,11 +171,15 @@ namespace chr
       }
 
     protected:
+      bool hasTexture;
+      bool hasShader;
+
       std::map<std::string, std::vector<int>> uniformi;
       std::map<std::string, std::vector<float>> uniformf;
 
       std::map<int, std::vector<unsigned int>> propui;
       std::map<int, std::vector<float>> propf;
+      std::map<int, glm::mat4> propm;
 
       void apply()
       {
@@ -221,10 +241,6 @@ namespace chr
         {
           switch (it->first)
           {
-            case PROPERTY_SHADER_MATRIX:
-              glUniformMatrix4fv(shader.element->matrixLocation, 1, GL_FALSE, it->second.data());
-              break;
-
             case PROPERTY_SHADER_COLOR:
               glVertexAttrib4fv(shader.element->colorLocation, it->second.data());
               break;
@@ -234,13 +250,36 @@ namespace chr
               break;
           }
         }
+
+        for (auto it = propm.begin(); it != propm.end(); ++it)
+        {
+          switch (it->first)
+          {
+            case PROPERTY_SHADER_MATRIX:
+              glUniformMatrix4fv(shader.element->matrixLocation, 1, GL_FALSE,  glm::value_ptr(it->second));
+              break;
+          }
+        }
       }
 
       void bind() override
       {
-        vertexBuffer.bind(shader);
-        vertexBuffer.draw(primitive);
-        vertexBuffer.unbind(shader);
+        if (hasShader)
+        {
+          if (hasTexture)
+          {
+            texture.bind();
+          }
+
+          vertexBuffer.bind(shader);
+          vertexBuffer.draw(primitive);
+          vertexBuffer.unbind(shader);
+
+          if (hasTexture)
+          {
+            texture.unbind();
+          }
+        }
       }
     };
 
@@ -266,20 +305,54 @@ namespace chr
       VertexBatch<V>(primitive, vertexBuffer)
       {}
 
-      inline std::vector<I>& indices() const { return indexBuffer.storage; }
-
-      inline void addIndex(I index)
+      template<typename... Args>
+      inline void addIndices(Args&&... args)
       {
-        indexBuffer.storage.emplace_back(index);
+        for (I offset : {args...})
+        {
+          indexBuffer.storage.emplace_back(index + offset);
+        }
       }
+
+      inline void incrementIndices(I increment)
+      {
+        index += increment;
+      }
+
+      void clear() override
+      {
+        VertexBatch<V>::clear();
+
+        indexBuffer.clear();
+        indexBuffer.requestUpload();
+
+        index = 0;
+      }
+
+    protected:
+      I index;
 
       void bind() override
       {
-        VertexBatch<V>::vertexBuffer.bind(VertexBatch<V>::shader);
-        indexBuffer.bind();
-        indexBuffer.draw(VertexBatch<V>::primitive);
-        VertexBatch<V>::vertexBuffer.unbind(VertexBatch<V>::shader);
-        indexBuffer.unbind();
+        if (VertexBatch<V>::hasShader)
+        {
+          if (VertexBatch<V>::hasTexture)
+          {
+            VertexBatch<V>::texture.bind();
+          }
+
+          VertexBatch<V>::vertexBuffer.bind(VertexBatch<V>::shader);
+          indexBuffer.bind(VertexBatch<V>::shader);
+          indexBuffer.draw(VertexBatch<V>::primitive);
+
+          VertexBatch<V>::vertexBuffer.unbind(VertexBatch<V>::shader);
+          indexBuffer.unbind(VertexBatch<V>::shader);
+
+          if (VertexBatch<V>::hasTexture)
+          {
+            VertexBatch<V>::texture.unbind();
+          }
+        }
       }
     };
   }
