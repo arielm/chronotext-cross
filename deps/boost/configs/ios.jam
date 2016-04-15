@@ -4,5 +4,5 @@
 
 using clang : iphoneos
 :
-xcrun clang -arch armv7 -arch arm64 -stdlib=libc++ -std=c++11 -miphoneos-version-min=6.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
+xcrun clang -arch armv7 -arch arm64 -stdlib=libc++ -std=c++11 -miphoneos-version-min=6.0 -fembed-bitcode -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk
 ;
