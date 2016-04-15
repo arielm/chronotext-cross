@@ -262,7 +262,7 @@ namespace chr
       m32 = r32;
     }
 
-  glm::quat Matrix::getQuat() const
+    glm::quat Matrix::getQuat() const
     {
       return glm::quat_cast(m);
     }
