@@ -36,6 +36,12 @@ namespace chr
         }
 
         template<int Orientation=GL_CCW>
+        inline void drawFromCenter(Matrix &matrix, float x = 0, float y = 0)
+        {
+          draw<Orientation>(matrix, x - batch.texture.width * batch.texture.maxU * 0.5f, y - batch.texture.height * batch.texture.maxV * 0.5f);
+        }
+
+        template<int Orientation=GL_CCW>
         void draw(float x = 0, float y = 0)
         {
           float x2 = x + batch.texture.width * batch.texture.maxU;
@@ -59,6 +65,12 @@ namespace chr
           }
 
           batch.incrementIndices(4);
+        }
+
+        template<int Orientation=GL_CCW>
+        inline void drawFromCenter(float x = 0, float y = 0)
+        {
+          draw<Orientation>(x - batch.texture.width * batch.texture.maxU * 0.5f, y - batch.texture.height * batch.texture.maxV * 0.5f);
         }
       };
     }
