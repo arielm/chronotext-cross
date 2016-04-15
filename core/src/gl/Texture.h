@@ -123,8 +123,8 @@ namespace chr
 
       ~Texture();
 
-      int id;
-      texture::Element *element;
+      int id = -1;
+      texture::Element *element = nullptr;
 
       GLenum format;
       int width;
