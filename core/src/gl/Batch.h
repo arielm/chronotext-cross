@@ -15,6 +15,7 @@ namespace chr
 
       virtual void bind() = 0;
       virtual void clear() = 0;
+      virtual bool empty() const = 0;
     };
 
     template<int V = 0>
@@ -162,6 +163,11 @@ namespace chr
       {
         vertexBuffer.clear();
         vertexBuffer.requestUpload();
+      }
+
+      bool empty() const override
+      {
+        return vertexBuffer.empty();
       }
 
       template<typename... Args>
@@ -327,6 +333,11 @@ namespace chr
         indexBuffer.requestUpload();
 
         index = 0;
+      }
+
+      bool empty() const override
+      {
+        return VertexBatch<V>::vertexBuffer.empty() || indexBuffer.empty();
       }
 
     protected:
