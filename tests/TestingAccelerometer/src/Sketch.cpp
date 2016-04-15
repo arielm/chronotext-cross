@@ -2,6 +2,7 @@
 #include "Sketch.h"
 
 #include "gl/Matrix.h"
+#include "gl/geom/TextureRect.h"
 
 using namespace std;
 using namespace chr;
@@ -21,6 +22,11 @@ void Sketch::setup()
 
   initTextures();
 
+  textureBatch.setShader(textureAlphaShader);
+  textureBatch.setShaderColor(1, 1, 1, 1);
+  textureBatch.setShaderMatrix(projectionMatrix);
+  textureBatch.setTexture(texture);
+
   // ---
 
   glDisable(GL_DEPTH_TEST);
@@ -28,12 +34,6 @@ void Sketch::setup()
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void Sketch::shutdown()
-{
-  texture.unload();
-  textureBuffer.shutdown();
 }
 
 void Sketch::start(StartReason reason)
@@ -59,11 +59,6 @@ void Sketch::draw()
   glClearColor(0, 0, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  // ---
-
-  textureBuffer.useShader(textureAlphaShader);
-  textureAlphaShader.applyColor(1, 1, 1, 1);
-
   drawDot(particle.position, particle.radius);
 }
 
@@ -74,12 +69,13 @@ void Sketch::accelerated(AccelEvent event)
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
-  Matrix modelViewMatrix;
-  modelViewMatrix.translate(position);
-  modelViewMatrix.scale(radius / DOT_RADIUS_PIXELS);
+  Matrix matrix;
+  matrix.translate(position);
+  matrix.scale(radius / DOT_RADIUS_PIXELS);
 
-  textureAlphaShader.applyMatrix(modelViewMatrix * projectionMatrix);
-  textureBuffer.drawFromCenter(texture);
+  textureBatch.clear();
+  geom::TextureRect<UV>(textureBatch).drawFromCenter(matrix);
+  textureBatch.flush();
 }
 
 // ---

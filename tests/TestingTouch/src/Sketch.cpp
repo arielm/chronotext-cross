@@ -2,6 +2,7 @@
 #include "Sketch.h"
 
 #include "gl/Matrix.h"
+#include "gl/geom/TextureRect.h"
 
 using namespace std;
 using namespace chr;
@@ -17,6 +18,11 @@ void Sketch::setup()
 
   initTextures();
 
+  textureBatch.setShader(textureAlphaShader);
+  textureBatch.setShaderColor(1, 1, 1, 1);
+  textureBatch.setShaderMatrix(projectionMatrix);
+  textureBatch.setTexture(texture);
+
   // ---
 
   glDisable(GL_DEPTH_TEST);
@@ -25,13 +31,6 @@ void Sketch::setup()
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
-
-void Sketch::shutdown()
-{
-  texture.unload();
-  textureBuffer.shutdown();
-}
-
 void Sketch::draw()
 {
   glClearColor(0, 0, 1, 1);
@@ -39,35 +38,34 @@ void Sketch::draw()
 
   // ---
 
-  textureBuffer.useShader(textureAlphaShader);
-  textureAlphaShader.applyColor(1, 1, 1, 1);
+  textureBatch.clear();
 
-  for (auto &position : dotPositions)
+  for (auto it = touchPositions.begin(); it != touchPositions.end(); ++it)
   {
-    drawDot(position, scale * DOT_RADIUS_DP);
+    drawDot(it->second, scale * DOT_RADIUS_DP);
   }
 
-  dotPositions.clear();
+  textureBatch.flush();
+  touchPositions.clear();
 }
 
 void Sketch::addTouch(int index, float x, float y)
 {
-  dotPositions.emplace_back(x, y);
+  touchPositions[index] = glm::vec2(x, y);
 }
 
 void Sketch::updateTouch(int index, float x, float y)
 {
-  dotPositions.emplace_back(x, y);
+  touchPositions[index] = glm::vec2(x, y);
 }
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
-  Matrix modelViewMatrix;
-  modelViewMatrix.translate(position);
-  modelViewMatrix.scale(radius / DOT_RADIUS_PIXELS);
+  Matrix matrix;
+  matrix.translate(position);
+  matrix.scale(radius / DOT_RADIUS_PIXELS);
 
-  textureAlphaShader.applyMatrix(modelViewMatrix * projectionMatrix);
-  textureBuffer.drawFromCenter(texture);
+  geom::TextureRect<UV>(textureBatch).drawFromCenter(matrix);
 }
 
 void Sketch::initTextures()

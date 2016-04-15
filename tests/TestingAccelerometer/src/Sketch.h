@@ -1,7 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/TextureBuffer.h"
+#include "gl/Batch.h"
 #include "gl/TextureAlphaShader.h"
 
 struct Particle
@@ -30,7 +30,6 @@ public:
   virtual ~Sketch() {}
 
   void setup() final;
-  void shutdown() final;
 
   void start(StartReason reason) final;
   void stop(StopReason reason) final;
@@ -42,7 +41,7 @@ public:
 
 protected:
   chr::gl::Texture texture;
-  chr::gl::TextureBuffer textureBuffer;
+  chr::gl::IndexedVertexBatch<chr::gl::UV> textureBatch;
   chr::gl::TextureAlphaShader textureAlphaShader;
 
   float scale;

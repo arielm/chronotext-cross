@@ -1,8 +1,10 @@
 #pragma once
 
 #include "cross/Context.h"
-#include "gl/TextureBuffer.h"
+#include "gl/Batch.h"
 #include "gl/TextureAlphaShader.h"
+
+#include <map>
 
 class Sketch : public chr::CrossSketch
 {
@@ -10,7 +12,6 @@ public:
   virtual ~Sketch() {}
 
   void setup() final;
-  void shutdown() final;
   void draw() final;
 
   void addTouch(int index, float x, float y) final;
@@ -18,13 +19,13 @@ public:
 
 protected:
   chr::gl::Texture texture;
-  chr::gl::TextureBuffer textureBuffer;
+  chr::gl::IndexedVertexBatch<chr::gl::UV> textureBatch;
   chr::gl::TextureAlphaShader textureAlphaShader;
 
   float scale;
   glm::mat4 projectionMatrix;
 
-  std::vector<glm::vec2> dotPositions;
+  std::map<int, glm::vec2> touchPositions;
 
   void drawDot(const glm::vec2 &position, float radius);
   void initTextures();
