@@ -12,6 +12,8 @@ namespace chr
     {
     public:
       Batch() = default;
+      Batch(const Batch &other) = delete;
+      Batch& operator=(const Batch &other) = delete;
 
       virtual void bind() = 0;
       virtual void clear() = 0;
@@ -177,8 +179,8 @@ namespace chr
       }
 
     protected:
-      bool hasTexture;
-      bool hasShader;
+      bool hasTexture = false;
+      bool hasShader = false;
 
       std::map<std::string, std::vector<int>> uniformi;
       std::map<std::string, std::vector<float>> uniformf;
@@ -341,7 +343,7 @@ namespace chr
       }
 
     protected:
-      I index;
+      I index = 0;
 
       void bind() override
       {
