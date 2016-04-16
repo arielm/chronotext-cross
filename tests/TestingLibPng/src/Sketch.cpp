@@ -1,7 +1,6 @@
 #include "Sketch.h"
 
-#include "gl/TextureShader.h"
-#include "gl/TextureAlphaShader.h"
+#include "gl/geom/TextureRect.h"
 
 using namespace std;
 using namespace chr;
@@ -11,6 +10,18 @@ void Sketch::setup()
 {
   initTextures();
 
+  textureBatches[0].setShader(textureShader);
+  textureBatches[0].setShaderColor(1, 1, 1, 1);
+  textureBatches[0].setTexture(textures[0]);
+
+  textureBatches[1].setShader(textureAlphaShader);
+  textureBatches[1].setShaderColor(1, 0.5f, 0, 1);
+  textureBatches[1].setTexture(textures[1]);
+
+  textureBatches[2].setShader(textureShader);
+  textureBatches[2].setShaderColor(1, 1, 1, 1);
+  textureBatches[2].setTexture(textures[2]);
+
   // ---
 
   glDisable(GL_DEPTH_TEST);
@@ -18,15 +29,6 @@ void Sketch::setup()
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void Sketch::shutdown()
-{
-  glDeleteTextures(1, &textures[0].id);
-  glDeleteTextures(1, &textures[1].id);
-  glDeleteTextures(1, &textures[2].id);
-
-  textureBuffer.shutdown();
 }
 
 void Sketch::draw()
@@ -43,33 +45,42 @@ void Sketch::draw()
   modelViewMatrix = glm::rotate(modelViewMatrix, 15 * D2R, glm::vec3(1, 0, 0)); // ELEVATION
   modelViewMatrix = glm::rotate(modelViewMatrix, (float) getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
 
+  glm::mat4 mvpMatrix = projectionMatrix * modelViewMatrix;
+
   // ---
 
-  textureBuffer.setShader(textureShader);
-  textureShader.applyMVPMatrix(projectionMatrix * modelViewMatrix);
-  textureShader.applyColor(1, 1, 1, 1);
-  textureBuffer.drawFromCenter(textures[0], 0, 0, 0.333f);
+  textureBatches[0].clear();
+  textureBatches[1].clear();
+  textureBatches[2].clear();
 
-  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, 5));
+  textureBatches[0].setShaderMatrix(mvpMatrix);
+  textureBatches[1].setShaderMatrix(mvpMatrix);
+  textureBatches[2].setShaderMatrix(mvpMatrix);
 
-  textureBuffer.setShader(textureAlphaShader);
-  textureAlphaShader.applyMVPMatrix(projectionMatrix * modelViewMatrix);
-  textureAlphaShader.applyColor(1, 0.5f, 0, 1);
-  textureBuffer.drawInRect(textures[1], math::Rectf(-200, -150, 400, 300));
+  Matrix matrix;
 
-  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, 5));
+  matrix.push();
+  matrix.scale(0.333f);
+  geom::TextureRect<UV>(textureBatches[0]).drawFromCenter(matrix);
+  matrix.pop();
 
-  textureBuffer.setShader(textureShader);
-  textureShader.applyMVPMatrix(projectionMatrix * modelViewMatrix);
-  textureShader.applyColor(1, 1, 1, 1);
-  textureBuffer.drawFromCenter(textures[2], 100, 100);
+  matrix.translate(0, 0, 5);
+  geom::TextureRect<UV>(textureBatches[1]).drawInRect(math::Rectf(-200, -150, 400, 300));
+
+  matrix.translate(0, 0, 5);
+  matrix.scale(0.5f);
+  geom::TextureRect<UV>(textureBatches[2]).drawFromCenter(matrix, 100, 100);
+
+  textureBatches[0].flush();
+  textureBatches[1].flush();
+  textureBatches[2].flush();
 }
 
 void Sketch::initTextures()
 {
-  textures[0] = loadTexture("6980491_UN1_800_MASK.png", chr::image::FLAGS_POT);
-  textures[1] = loadTexture("lys_32.png", image::FLAGS_TRANSLUCENT_INVERSE, true, GL_REPEAT, GL_REPEAT);
-  textures[2] = loadTexture("expo67.png");
+  textures[0] = Texture(Texture::Request("6980491_UN1_800_MASK.png").setFlags(image::FLAGS_POT));
+  textures[1] = Texture(Texture::Request("lys_32.png").setFlags(image::FLAGS_TRANSLUCENT_INVERSE).setMipmap(true).setWrap(GL_REPEAT, GL_REPEAT));
+  textures[2] = Texture(Texture::Request("expo67.png"));
 
   // ---
 
