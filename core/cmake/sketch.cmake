@@ -67,8 +67,6 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/gl/ShaderProgram.cpp"
   "${CROSS_ROOT}/src/gl/ShaderHelper.cpp"
   "${CROSS_ROOT}/src/gl/Matrix.cpp"
-  "${CROSS_ROOT}/src/gl/QuadBuffer.cpp"
-  "${CROSS_ROOT}/src/gl/TextureBuffer.cpp"
   "${CROSS_ROOT}/src/gl/Texture.cpp"
   "${CROSS_ROOT}/src/gl/Buffer.cpp"
   "${CROSS_ROOT}/src/math/Utils.cpp"
