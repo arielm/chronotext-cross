@@ -10,6 +10,8 @@ void Sketch::setup()
 {
   initTextures();
 
+  // ---
+
   textureBatches[0].setShader(textureShader);
   textureBatches[0].setShaderColor(1, 1, 1, 1);
   textureBatches[0].setTexture(textures[0]);
@@ -21,6 +23,20 @@ void Sketch::setup()
   textureBatches[2].setShader(textureShader);
   textureBatches[2].setShaderColor(1, 1, 1, 1);
   textureBatches[2].setTexture(textures[2]);
+
+  Matrix matrix;
+
+  matrix.push();
+  matrix.scale(0.333f);
+  geom::TextureRect<UV>(textureBatches[0]).drawFromCenter(matrix);
+  matrix.pop();
+
+  matrix.translate(0, 0, 10);
+  geom::TextureRect<UV>(textureBatches[1]).drawInRect(matrix, math::Rectf(-200, -150, 400, 300));
+
+  matrix.translate(0, 0, 10);
+  matrix.scale(0.5f);
+  geom::TextureRect<UV>(textureBatches[2]).drawFromCenter(matrix, 100, 100);
 
   // ---
 
@@ -49,27 +65,9 @@ void Sketch::draw()
 
   // ---
 
-  textureBatches[0].clear();
-  textureBatches[1].clear();
-  textureBatches[2].clear();
-
   textureBatches[0].setShaderMatrix(mvpMatrix);
   textureBatches[1].setShaderMatrix(mvpMatrix);
   textureBatches[2].setShaderMatrix(mvpMatrix);
-
-  Matrix matrix;
-
-  matrix.push();
-  matrix.scale(0.333f);
-  geom::TextureRect<UV>(textureBatches[0]).drawFromCenter(matrix);
-  matrix.pop();
-
-  matrix.translate(0, 0, 5);
-  geom::TextureRect<UV>(textureBatches[1]).drawInRect(math::Rectf(-200, -150, 400, 300));
-
-  matrix.translate(0, 0, 5);
-  matrix.scale(0.5f);
-  geom::TextureRect<UV>(textureBatches[2]).drawFromCenter(matrix, 100, 100);
 
   textureBatches[0].flush();
   textureBatches[1].flush();
