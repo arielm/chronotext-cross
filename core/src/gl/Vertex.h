@@ -26,28 +26,21 @@ namespace chr
 
       Vertex() = default;
 
-      Vertex(float x, float y, float z)
+      Vertex(float x, float y, float z = 0)
       :
       x(x),
       y(y),
       z(z)
       {}
 
-      Vertex(const glm::vec3 &point)
+      Vertex(const glm::vec3 &position)
       :
-      Vertex(point.x, point.y, point.z)
+      Vertex(position.x, position.y, position.z)
       {}
 
-      Vertex(float x, float y)
+      Vertex(const glm::vec2 &position)
       :
-      x(x),
-      y(y),
-      z(0)
-      {}
-
-      Vertex(const glm::vec2 &point)
-      :
-      Vertex(point.x, point.y)
+      Vertex(position.x, position.y)
       {}
     };
 
@@ -66,18 +59,94 @@ namespace chr
       v(v)
       {}
 
-      Vertex(const glm::vec3 &point, float u, float v)
+      Vertex(const glm::vec3 &position, float u, float v)
       :
-      Vertex<>(point.x, point.y, point.z),
+      Vertex<>(position),
       u(u),
       v(v)
       {}
 
-      Vertex(const glm::vec3 &point, const glm::vec2 &coords)
+      Vertex(const glm::vec3 &position, const glm::vec2 &coords)
       :
-      Vertex<>(point.x, point.y, point.z),
+      Vertex<>(position),
       u(coords.x),
       v(coords.y)
+      {}
+    };
+
+    template<> struct Vertex<RGBA> : Vertex<>
+    {
+      float r;
+      float g;
+      float b;
+      float a;
+
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z, float r, float g, float b, float a)
+      :
+      Vertex<>(x, y, z),
+      r(r),
+      g(g),
+      b(b),
+      a(a)
+      {}
+
+      Vertex(const glm::vec3 &position, float r, float g, float b, float a)
+      :
+      Vertex<>(position),
+      r(r),
+      g(g),
+      b(b),
+      a(a)
+      {}
+
+      Vertex(const glm::vec3 &position, const glm::vec4 &color)
+      :
+      Vertex<>(position),
+      r(color.r),
+      g(color.g),
+      b(color.b),
+      a(color.a)
+      {}
+    };
+
+    template<> struct Vertex<UV|RGBA> : Vertex<UV>
+    {
+      float r;
+      float g;
+      float b;
+      float a;
+
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z, float u, float v, float r, float g, float b, float a)
+      :
+      Vertex<UV>(x, y, z, u, v),
+      r(r),
+      g(g),
+      b(b),
+      a(a)
+      {}
+
+      Vertex(const glm::vec3 &position, float u, float v, float r, float g, float b, float a)
+      :
+      Vertex<UV>(position, u, v),
+      r(r),
+      g(g),
+      b(b),
+      a(a)
+      {}
+
+      Vertex(const glm::vec3 &position, const glm::vec2 &coords, const glm::vec4 &color)
+      :
+      Vertex<UV>(position, coords),
+      r(color.r),
+      g(color.g),
+      b(color.b),
+      a(color.a)
       {}
     };
   }
