@@ -106,10 +106,10 @@ namespace chr
       {
         GLuint textureId;
         GLenum format;
-        int width;
-        int height;
-        float maxU;
-        float maxV;
+        int width, height;
+        int innerWidth, innerHeight;
+        float u1, v1;
+        float u2, v2;
       };
 
       // ---
@@ -127,10 +127,10 @@ namespace chr
       texture::Element *element = nullptr;
 
       GLenum format;
-      int width;
-      int height;
-      float maxU;
-      float maxV;
+      int width, height;
+      int innerWidth, innerHeight;
+      float u1, v1;
+      float u2, v2;
 
       bool bind();
       void unbind();

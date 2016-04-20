@@ -28,15 +28,15 @@ void Sketch::setup()
 
   matrix.push();
   matrix.scale(0.333f);
-  geom::TextureRect<UV>(textureBatches[0]).drawFromCenter(matrix);
+  geom::TextureRect<>(textureBatches[0]).drawFromCenter(matrix);
   matrix.pop();
 
   matrix.translate(0, 0, 10);
-  geom::TextureRect<UV>(textureBatches[1]).drawInRect(matrix, math::Rectf(-200, -150, 400, 300));
+  geom::TextureRect<>(textureBatches[1]).drawInRect(matrix, math::Rectf(-200, -150, 400, 300));
 
   matrix.translate(0, 0, 10);
   matrix.scale(0.5f);
-  geom::TextureRect<UV>(textureBatches[2]).drawFromCenter(matrix, 100, 100);
+  geom::TextureRect<>(textureBatches[2]).drawFromCenter(matrix, 100, 100);
 
   // ---
 

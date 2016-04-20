@@ -14,8 +14,12 @@ namespace chr
     format(response.format),
     width(response.width),
     height(response.height),
-    maxU(response.maxU),
-    maxV(response.maxV)
+    innerWidth(response.innerWidth),
+    innerHeight(response.innerHeight),
+    u1(response.u1),
+    v1(response.v1),
+    u2(response.u2),
+    v2(response.v2)
     {
       element->textureId = response.textureId;
       element->useCount++;
@@ -44,8 +48,12 @@ namespace chr
     format(other.format),
     width(other.width),
     height(other.height),
-    maxU(other.maxU),
-    maxV(other.maxV)
+    innerWidth(other.innerWidth),
+    innerHeight(other.innerHeight),
+    u1(other.u1),
+    v1(other.v1),
+    u2(other.u2),
+    v2(other.v2)
     {
       element->useCount++;
     }
@@ -59,8 +67,12 @@ namespace chr
         format = other.format;
         width = other.width;
         height = other.height;
-        maxU = other.maxU;
-        maxV = other.maxV;
+        innerWidth = other.innerWidth;
+        innerHeight = other.innerHeight;
+        u1 = other.u1;
+        v1 = other.v1;
+        u2 = other.u2;
+        v2 = other.v2;
 
         element->useCount++;
       }

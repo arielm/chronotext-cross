@@ -41,8 +41,12 @@ namespace chr
           response.textureId = textureId;
           response.width = image.width;
           response.height = image.height;
-          response.maxU = image.effectiveWidth / (float) image.width;
-          response.maxV = image.effectiveHeight / (float) image.height;
+          response.innerWidth = image.innerWidth;
+          response.innerHeight = image.innerHeight;
+          response.u1 = 0;
+          response.v1 = 0;
+          response.u2 = image.innerWidth / (float) image.width;
+          response.v2 = image.innerHeight / (float) image.height;
 
           glBindTexture(GL_TEXTURE_2D, textureId);
           uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, wrapS, wrapT);
@@ -66,13 +70,13 @@ namespace chr
 
       if ((image.components == 4) && (mask.components == 1))
       {
-        if ((mask.width >= image.effectiveWidth) && (mask.height >= image.effectiveHeight))
+        if ((mask.width >= image.innerWidth) && (mask.height >= image.innerHeight))
         {
           auto input = mask.buffer.get();
           auto output = image.buffer.get();
 
-          int width = image.effectiveWidth;
-          int height = image.effectiveHeight;
+          int width = image.innerWidth;
+          int height = image.innerHeight;
 
           for (int iy = 0; iy < height; iy++)
           {
@@ -94,8 +98,12 @@ namespace chr
         response.format = GL_RGBA;
         response.width = image.width;
         response.height = image.height;
-        response.maxU = image.effectiveWidth / (float) image.width;
-        response.maxV = image.effectiveHeight / (float) image.height;
+        response.innerWidth = image.innerWidth;
+        response.innerHeight = image.innerHeight;
+        response.u1 = 0;
+        response.v1 = 0;
+        response.u2 = image.innerWidth / (float) image.width;
+        response.v2 = image.innerHeight / (float) image.height;
 
         glBindTexture(GL_TEXTURE_2D, textureId);
         uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, wrapS, wrapT);

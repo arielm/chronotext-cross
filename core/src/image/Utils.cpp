@@ -196,8 +196,8 @@ namespace chr
 
         // ---
 
-        image.effectiveWidth = width;
-        image.effectiveHeight = height;
+        image.innerWidth = width;
+        image.innerHeight = height;
 
         if (flags & FLAGS_POT)
         {
@@ -286,8 +286,8 @@ namespace chr
 
           // ---
 
-          image.effectiveWidth = cinfo.image_width;
-          image.effectiveHeight = cinfo.image_height;
+          image.innerWidth = cinfo.image_width;
+          image.innerHeight = cinfo.image_height;
 
           if (flags & FLAGS_POT)
           {

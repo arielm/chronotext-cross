@@ -22,11 +22,13 @@ namespace chr
         template<int Orientation=GL_CCW>
         void draw(Matrix &matrix, float x = 0, float y = 0)
         {
-          float x2 = x + batch.texture.width * batch.texture.maxU;
-          float y2 = y + batch.texture.height * batch.texture.maxV;
+          float x2 = x + batch.texture.innerWidth;
+          float y2 = y + batch.texture.innerHeight;
 
-          float u2 = batch.texture.maxU;
-          float v2 = batch.texture.maxV;
+          float u1 = batch.texture.u1;
+          float v1 = batch.texture.v1;
+          float u2 = batch.texture.u2;
+          float v2 = batch.texture.v2;
 
           matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV>(x, y, x2, y2, 0, 0, u2, v2), batch);
         }
@@ -34,11 +36,13 @@ namespace chr
         template<int Orientation=GL_CCW>
         void draw(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
         {
-          float x2 = x + batch.texture.width * batch.texture.maxU; // TODO: texture.cleanWidth
-          float y2 = y + batch.texture.height * batch.texture.maxV; // TODO: texture.cleanHeight
+          float x2 = x + batch.texture.innerWidth;
+          float y2 = y + batch.texture.innerHeight;
 
-          float u2 = batch.texture.maxU;
-          float v2 = batch.texture.maxV;
+          float u1 = batch.texture.u1;
+          float v1 = batch.texture.v1;
+          float u2 = batch.texture.u2;
+          float v2 = batch.texture.v2;
 
           matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV|RGBA>(x, y, x2, y2, 0, 0, u2, v2, color), batch);
         }
@@ -46,20 +50,20 @@ namespace chr
         template<int Orientation=GL_CCW>
         inline void drawFromCenter(Matrix &matrix, float x = 0, float y = 0)
         {
-          draw<Orientation>(matrix, x - batch.texture.width * batch.texture.maxU * 0.5f, y - batch.texture.height * batch.texture.maxV * 0.5f);
+          draw<Orientation>(matrix, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
         }
 
         template<int Orientation=GL_CCW>
         inline void drawFromCenter(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
         {
-          draw<Orientation>(matrix, color, x - batch.texture.width * batch.texture.maxU * 0.5f, y - batch.texture.height * batch.texture.maxV * 0.5f);
+          draw<Orientation>(matrix, color, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
         }
 
         template<int Orientation=GL_CCW>
         void drawInRect(Matrix &matrix, const math::Rectf &rect, float ox = 0, float oy = 0)
         {
-          float width = batch.texture.width * batch.texture.maxU;
-          float height = batch.texture.height * batch.texture.maxV;
+          float width = batch.texture.innerWidth;
+          float height = batch.texture.innerHeight;
 
           float x1 = rect.x1;
           float y1 = rect.y1;
@@ -77,8 +81,8 @@ namespace chr
         template<int Orientation=GL_CCW>
         void drawInRect(Matrix &matrix, const math::Rectf &rect, const glm::vec4 &color, float ox = 0, float oy = 0)
         {
-          float width = batch.texture.width * batch.texture.maxU;
-          float height = batch.texture.height * batch.texture.maxV;
+          float width = batch.texture.innerWidth;
+          float height = batch.texture.innerHeight;
 
           float x1 = rect.x1;
           float y1 = rect.y1;

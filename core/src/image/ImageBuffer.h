@@ -19,8 +19,8 @@ namespace chr
     {
         int width = 0;
         int height = 0;
-        int effectiveWidth;
-        int effectiveHeight;
+        int innerWidth;
+        int innerHeight;
         int components = 0;
 
         std::shared_ptr<uint8_t> buffer;
