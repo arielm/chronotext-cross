@@ -132,6 +132,29 @@ namespace chr
     }
 
     template <>
+    void ShaderHelper::bindAttributes<Vertex<RGBA>>(const ShaderProgram &shader)
+    {
+      glEnableVertexAttribArray(shader.element->positionLocation);
+      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<RGBA>), 0);
+
+      glEnableVertexAttribArray(shader.element->colorLocation);
+      glVertexAttribPointer(shader.element->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<RGBA>), (GLvoid *) sizeof(Vertex<>));
+    }
+
+    template <>
+    void ShaderHelper::bindAttributes<Vertex<UV|RGBA>>(const ShaderProgram &shader)
+    {
+      glEnableVertexAttribArray(shader.element->positionLocation);
+      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV|RGBA>), 0);
+
+      glEnableVertexAttribArray(shader.element->coordLocation);
+      glVertexAttribPointer(shader.element->coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV|RGBA>), (GLvoid *) sizeof(Vertex<>));
+
+      glEnableVertexAttribArray(shader.element->colorLocation);
+      glVertexAttribPointer(shader.element->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<UV|RGBA>), (GLvoid *) sizeof(Vertex<UV>));
+    }
+
+    template <>
     void ShaderHelper::bindAttributes<glm::vec2>(const ShaderProgram &shader)
     {
       glEnableVertexAttribArray(shader.element->positionLocation);
@@ -165,6 +188,21 @@ namespace chr
     {
       glDisableVertexAttribArray(shader.element->positionLocation);
       glDisableVertexAttribArray(shader.element->coordLocation);
+    }
+
+    template <>
+    void ShaderHelper::unbindAttributes<Vertex<RGBA>>(const ShaderProgram &shader)
+    {
+      glDisableVertexAttribArray(shader.element->positionLocation);
+      glDisableVertexAttribArray(shader.element->colorLocation);
+    }
+
+    template <>
+    void ShaderHelper::unbindAttributes<Vertex<UV|RGBA>>(const ShaderProgram &shader)
+    {
+      glDisableVertexAttribArray(shader.element->positionLocation);
+      glDisableVertexAttribArray(shader.element->coordLocation);
+      glDisableVertexAttribArray(shader.element->colorLocation);
     }
 
     template <>
