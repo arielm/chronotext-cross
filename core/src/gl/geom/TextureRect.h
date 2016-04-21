@@ -30,7 +30,7 @@ namespace chr
           float u2 = batch.texture.u2;
           float v2 = batch.texture.v2;
 
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV>(x, y, x2, y2, 0, 0, u2, v2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV>(x, y, x2, y2, u1, v1, u2, v2), batch);
         }
 
         template<int Orientation=GL_CCW>
@@ -44,7 +44,7 @@ namespace chr
           float u2 = batch.texture.u2;
           float v2 = batch.texture.v2;
 
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV|RGBA>(x, y, x2, y2, 0, 0, u2, v2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV|RGBA>(x, y, x2, y2, u1, v1, u2, v2, color), batch);
         }
 
         template<int Orientation=GL_CCW>
