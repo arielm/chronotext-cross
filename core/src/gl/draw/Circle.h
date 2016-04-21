@@ -42,11 +42,11 @@ namespace chr
             {
               if (Orientation == GL_CCW)
               {
-                batch.addIndices(i + 1, 0, i + 2);
+                batch.addIndices(0, i + 1, i + 2);
               }
               else
               {
-                batch.addIndices(0, i + 1, i + 2);
+                batch.addIndices(i + 1, 0, i + 2);
               }
             }
           }
