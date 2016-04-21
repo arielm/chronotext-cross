@@ -1,6 +1,6 @@
 #include "Sketch.h"
 
-#include "gl/geom/TextureRect.h"
+#include "gl/draw/Texture.h"
 
 using namespace std;
 using namespace chr;
@@ -25,18 +25,18 @@ void Sketch::setup()
 
   matrix.push();
   matrix.scale(0.333f);
-  geom::TextureRect<UV|RGBA>(textureBatches[0]).drawFromCenter(matrix, glm::vec4(1, 1, 0.5f, 1));
+  draw::Texture<UV|RGBA>(textureBatches[0]).fillFromCenter(matrix, glm::vec4(1, 1, 0.5f, 1));
   matrix.pop();
 
   matrix.translate(0, 0, 5);
-  geom::TextureRect<UV|RGBA>(textureBatches[1]).drawInRect(matrix, math::Rectf(-200, -150, 400, 300), glm::vec4(1, 0.5f, 0, 1));
+  draw::Texture<UV|RGBA>(textureBatches[1]).fillInRect(matrix, math::Rectf(-200, -150, 400, 300), glm::vec4(1, 0.5f, 0, 1));
 
   matrix.translate(0, 0, 5);
   matrix.scale(0.75f);
-  geom::TextureRect<UV|RGBA>(textureBatches[2]).drawFromCenter(matrix, glm::vec4(1, 1, 1, 1), 100, 100);
+  draw::Texture<UV|RGBA>(textureBatches[2]).fillFromCenter(matrix, glm::vec4(1, 1, 1, 1), 100, 100);
 
   matrix.translate(0, 0, 10);
-  geom::TextureRect<UV|RGBA>(textureBatches[2]).drawFromCenter(matrix, glm::vec4(1, 0, 0, 0.25f), 100, 100);
+  draw::Texture<UV|RGBA>(textureBatches[2]).fillFromCenter(matrix, glm::vec4(1, 0, 0, 0.25f), 100, 100);
 
   // ---
 

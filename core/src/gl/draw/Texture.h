@@ -7,20 +7,21 @@ namespace chr
 {
   namespace gl
   {
-    namespace geom
+    namespace draw
     {
-      template<int V = UV, typename I = GLushort> class TextureRect
+      template<int V = UV, typename I = GLushort>
+      class Texture
       {
       public:
         IndexedVertexBatch<V,I> &batch;
 
-        TextureRect(IndexedVertexBatch<V,I> &batch)
+        Texture(IndexedVertexBatch<V,I> &batch)
         :
         batch(batch)
         {}
 
         template<int Orientation=GL_CCW>
-        void draw(Matrix &matrix, float x = 0, float y = 0)
+        void fill(Matrix &matrix, float x = 0, float y = 0)
         {
           float x2 = x + batch.texture.innerWidth;
           float y2 = y + batch.texture.innerHeight;
@@ -34,7 +35,7 @@ namespace chr
         }
 
         template<int Orientation=GL_CCW>
-        void draw(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
+        void fill(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
         {
           float x2 = x + batch.texture.innerWidth;
           float y2 = y + batch.texture.innerHeight;
@@ -48,19 +49,19 @@ namespace chr
         }
 
         template<int Orientation=GL_CCW>
-        inline void drawFromCenter(Matrix &matrix, float x = 0, float y = 0)
+        inline void fillFromCenter(Matrix &matrix, float x = 0, float y = 0)
         {
-          draw<Orientation>(matrix, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
+          fill<Orientation>(matrix, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
         }
 
         template<int Orientation=GL_CCW>
-        inline void drawFromCenter(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
+        inline void fillFromCenter(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
         {
-          draw<Orientation>(matrix, color, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
+          fill<Orientation>(matrix, color, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
         }
 
         template<int Orientation=GL_CCW>
-        void drawInRect(Matrix &matrix, const math::Rectf &rect, float ox = 0, float oy = 0)
+        void fillInRect(Matrix &matrix, const math::Rectf &rect, float ox = 0, float oy = 0)
         {
           float width = batch.texture.innerWidth;
           float height = batch.texture.innerHeight;
@@ -79,7 +80,7 @@ namespace chr
         }
 
         template<int Orientation=GL_CCW>
-        void drawInRect(Matrix &matrix, const math::Rectf &rect, const glm::vec4 &color, float ox = 0, float oy = 0)
+        void fillInRect(Matrix &matrix, const math::Rectf &rect, const glm::vec4 &color, float ox = 0, float oy = 0)
         {
           float width = batch.texture.innerWidth;
           float height = batch.texture.innerHeight;

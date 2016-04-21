@@ -1,6 +1,6 @@
 #include "Sketch.h"
 
-#include "gl/geom/TextureRect.h"
+#include "gl/draw/Texture.h"
 
 using namespace std;
 using namespace chr;
@@ -28,15 +28,15 @@ void Sketch::setup()
 
   matrix.push();
   matrix.scale(0.333f);
-  geom::TextureRect<>(textureBatches[0]).drawFromCenter(matrix);
+  draw::Texture<>(textureBatches[0]).fillFromCenter(matrix);
   matrix.pop();
 
   matrix.translate(0, 0, 10);
-  geom::TextureRect<>(textureBatches[1]).drawInRect(matrix, math::Rectf(-200, -150, 400, 300));
+  draw::Texture<>(textureBatches[1]).fillInRect(matrix, math::Rectf(-200, -150, 400, 300));
 
   matrix.translate(0, 0, 10);
   matrix.scale(0.5f);
-  geom::TextureRect<>(textureBatches[2]).drawFromCenter(matrix, 100, 100);
+  draw::Texture<>(textureBatches[2]).fillFromCenter(matrix, 100, 100);
 
   // ---
 

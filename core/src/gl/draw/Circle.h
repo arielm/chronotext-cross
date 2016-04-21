@@ -7,21 +7,21 @@ namespace chr
 {
   namespace gl
   {
-    namespace geom
+    namespace draw
     {
       template<int V = 0, typename I = GLushort>
-      class FillCircle
+      class Circle
       {
       public:
         IndexedVertexBatch<V,I> &batch;
 
-        FillCircle(IndexedVertexBatch<V,I> &batch)
+        Circle(IndexedVertexBatch<V,I> &batch)
         :
         batch(batch)
         {}
 
         template<int Orientation=GL_CCW>
-        void draw(Matrix &matrix, float x, float y, float r, float a0 = 0, float a1 = TWO_PI, float dd = 8) const
+        void fill(Matrix &matrix, float x, float y, float r, float a0 = 0, float a1 = TWO_PI, float dd = 8) const
         {
           float aa = fabsf(a1 - a0);
           int n = ceilf(aa * r / dd) + 1;
@@ -55,7 +55,7 @@ namespace chr
         }
 
         template<int Orientation=GL_CCW>
-        void draw(float x, float y, float r, float a0 = 0, float a1 = TWO_PI, float dd = 8) const
+        void fill(float x, float y, float r, float a0 = 0, float a1 = TWO_PI, float dd = 8) const
         {
           float aa = fabsf(a1 - a0);
           int n = ceilf(aa * r / dd) + 1;
