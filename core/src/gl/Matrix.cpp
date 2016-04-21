@@ -88,27 +88,32 @@ namespace chr
       return *this;
     }
 
-    void Matrix::push()
+    Matrix& Matrix::push()
     {
       stack.push_back(values);
+      return *this;
     }
-    
-    void Matrix::pop()
+
+    Matrix& Matrix::pop()
     {
       if (!stack.empty())
       {
         values = stack.back();
         stack.pop_back();
       }
+
+      return *this;
     }
-    
-    void Matrix::setToIdentity()
+
+    Matrix& Matrix::setToIdentity()
     {
       m00 = m11 = m22 = m33 = 1.0f;
       m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
+
+      return *this;
     }
-    
-    void Matrix::setTranslation(float x, float y, float z)
+
+    Matrix& Matrix::setTranslation(float x, float y, float z)
     {
       m00 = m11 = m22 = m33 = 1.0f;
       m01 = m02 = m10 = m12 = m20 = m21 = m30 = m31 = m32 = 0.0f;
@@ -116,17 +121,21 @@ namespace chr
       m03 = x;
       m13 = y;
       m23 = z;
+
+      return *this;
     }
-    
-    void Matrix::translate(float x, float y, float z)
+
+    Matrix& Matrix::translate(float x, float y, float z)
     {
       m03 += x * m00 + y * m01 + z * m02;
       m13 += x * m10 + y * m11 + z * m12;
       m23 += x * m20 + y * m21 + z * m22;
       m33 += x * m30 + y * m31 + z * m32;
+
+      return *this;
     }
-    
-    void Matrix::scale(float x, float y, float z)
+
+    Matrix& Matrix::scale(float x, float y, float z)
     {
       m00 *= x;
       m10 *= x;
@@ -142,9 +151,11 @@ namespace chr
       m12 *= z;
       m22 *= z;
       m32 *= z;
+
+      return *this;
     }
-    
-    void Matrix::rotateX(float a)
+
+    Matrix& Matrix::rotateX(float a)
     {
       float c = cosf(a);
       float s = sinf(a);
@@ -169,9 +180,11 @@ namespace chr
       m22 = r22;
       m31 = r31;
       m32 = r32;
+
+      return *this;
     }
-    
-    void Matrix::rotateY(float a)
+
+    Matrix& Matrix::rotateY(float a)
     {
       float c = cosf(a);
       float s = sinf(a);
@@ -196,9 +209,11 @@ namespace chr
       m22 = r22;
       m30 = r30;
       m32 = r32;
+
+      return *this;
     }
-    
-    void Matrix::rotateZ(float a)
+
+    Matrix& Matrix::rotateZ(float a)
     {
       float c = cosf(a);
       float s = sinf(a);
@@ -223,9 +238,11 @@ namespace chr
       m21 = r21;
       m30 = r30;
       m31 = r31;
+
+      return *this;
     }
-    
-    void Matrix::rotateXY(float sx, float sy)
+
+    Matrix& Matrix::rotateXY(float sx, float sy)
     {
       float cx = sqrtf(1.0f - sx * sx);
       float cy = sqrtf(1.0f - sy * sy);
@@ -260,23 +277,27 @@ namespace chr
       m30 = r30;
       m31 = r31;
       m32 = r32;
+
+      return *this;
+    }
+
+    template <>
+    Matrix& Matrix::applyQuat<+1>(const glm::quat &q)
+    {
+      m *= glm::mat4_cast(q);
+      return *this;
+    }
+
+    template <>
+    Matrix& Matrix::applyQuat<-1>(const glm::quat &q)
+    {
+      m *= glm::inverse(glm::mat4_cast(q));
+      return *this;
     }
 
     glm::quat Matrix::getQuat() const
     {
       return glm::quat_cast(m);
-    }
-
-    template <>
-    void Matrix::applyQuat<+1>(const glm::quat &q)
-    {
-      m *= glm::mat4_cast(q);
-    }
-
-    template <>
-    void Matrix::applyQuat<-1>(const glm::quat &q)
-    {
-      m *= glm::inverse(glm::mat4_cast(q));
     }
 
     glm::vec3 Matrix::transformPoint(float x, float y) const

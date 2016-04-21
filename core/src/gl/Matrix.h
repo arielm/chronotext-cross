@@ -45,33 +45,33 @@ namespace chr
       Matrix& load(const glm::mat4 &matrix);
       Matrix& load(const glm::mat3x3 &matrix);
 
-      void push();
-      void pop();
-      
-      void setToIdentity();
+      Matrix& push();
+      Matrix& pop();
 
-      inline void setTranslation(const glm::vec2 &t) { setTranslation(t.x, t.y, 0); }
-      inline void setTranslation(const glm::vec3 &t) { setTranslation(t.x, t.y, t.z); }
-      void setTranslation(float x, float y, float z = 0);
+      Matrix& setToIdentity();
 
-      inline void translate(const glm::vec2 &t) { translate(t.x, t.y, 0); }
-      inline void translate(const glm::vec3 &t) { translate(t.x, t.y, t.z); }
-      void translate(float x, float y, float z = 0);
+      inline Matrix& setTranslation(const glm::vec2 &t) { return setTranslation(t.x, t.y, 0); }
+      inline Matrix& setTranslation(const glm::vec3 &t) { return setTranslation(t.x, t.y, t.z); }
+      Matrix& setTranslation(float x, float y, float z = 0);
 
-      inline void scale(const glm::vec2 &s) { scale(s.x, s.y); }
-      inline void scale(const glm::vec3 &s) { scale(s.x, s.y, s.z); }
-      inline void scale(float s) { scale(s, s, s); }
-      void scale(float x, float y, float z = 1);
-      
-      void rotateX(float a);
-      void rotateY(float a);
-      void rotateZ(float a);
-      void rotateXY(float sx, float sy);
+      inline Matrix& translate(const glm::vec2 &t) { return translate(t.x, t.y, 0); }
+      inline Matrix& translate(const glm::vec3 &t) { return translate(t.x, t.y, t.z); }
+      Matrix& translate(float x, float y, float z = 0);
 
-      glm::quat getQuat() const;
+      inline Matrix& scale(const glm::vec2 &s) { return scale(s.x, s.y); }
+      inline Matrix& scale(const glm::vec3 &s) { return scale(s.x, s.y, s.z); }
+      inline Matrix& scale(float s) { return scale(s, s, s); }
+      Matrix& scale(float x, float y, float z = 1);
+
+      Matrix& rotateX(float a);
+      Matrix& rotateY(float a);
+      Matrix& rotateZ(float a);
+      Matrix& rotateXY(float sx, float sy);
 
       template<int T = 1>
-      void applyQuat(const glm::quat &q);
+      Matrix& applyQuat(const glm::quat &q);
+
+      glm::quat getQuat() const;
 
       inline glm::vec3 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec3 transformPoint(float x, float y) const;

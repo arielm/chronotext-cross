@@ -24,21 +24,22 @@ void Sketch::setup()
   glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, 0.0f, windowInfo.size.y);
 
   Matrix modelViewMatrix;
-  modelViewMatrix.translate(windowInfo.size.x / 2, windowInfo.size.y / 2);
-  modelViewMatrix.scale(1, -1);
+
+  modelViewMatrix.translate(windowInfo.size.x / 2, windowInfo.size.y / 2)
+    .scale(1, -1);
 
   glm::mat4 mvpMatrix = modelViewMatrix * projectionMatrix;
 
   colorBatch.setShaderMatrix(mvpMatrix);
   textureBatch.setShaderMatrix(mvpMatrix);
-  
+
   // ---
 
   Matrix matrix;
 
-  matrix.push();
-  matrix.translate(200, 100);
-  matrix.rotateZ(30 * D2R);
+  matrix.push()
+    .translate(200, 100)
+    .rotateZ(30 * D2R);
   draw::Rect<RGBA>(colorBatch).fill(matrix, math::Rectf(-200, -150, 300, 150), glm::vec4(1, 1, 0.5f, 1));
   matrix.pop();
 
@@ -46,9 +47,9 @@ void Sketch::setup()
     .setRadius(100)
     .fill(matrix, 0, 0, glm::vec4(1, 0.5f, 0, 1));
 
-  matrix.push();
-  matrix.scale(0.5f);
-  matrix.rotateZ(-15 * D2R);
+  matrix.push()
+    .scale(0.5f)
+    .rotateZ(-15 * D2R);
   draw::Texture<UV|RGBA>(textureBatch).fillFromCenter(matrix, 0, 0, glm::vec4(1, 1, 1, 1));
   matrix.pop();
 
@@ -78,8 +79,6 @@ void Sketch::initTextures()
                       .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
                       .setMipmap(true)
                       .setWrap(GL_REPEAT, GL_REPEAT));
-
-  LOGI << texture.width << " " << texture.height << endl;
 
   // ---
 
