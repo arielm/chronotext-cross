@@ -92,6 +92,15 @@ namespace chr
       v2(v2)
       {}
 
+      Quad(const math::Rectf &rect, float u1, float v1, float u2, float v2)
+      :
+      Quad<>(rect),
+      u1(u1),
+      v1(v1),
+      u2(u2),
+      v2(v2)
+      {}
+
       Quad(const math::Rectf &rect, const glm::vec2 &coords1, const glm::vec2 &coords2)
       :
       Quad<>(rect),
@@ -159,6 +168,12 @@ namespace chr
       Quad(float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2, const glm::vec4 &color)
       :
       Quad<UV>(x1, y1, x2, y2, u1, v1, u2, v2),
+      color(color)
+      {}
+
+      Quad(const math::Rectf &rect, float u1, float v1, float u2, float v2, const glm::vec4 &color)
+      :
+      Quad<UV>(rect, u1, v1, u2, v2),
       color(color)
       {}
 

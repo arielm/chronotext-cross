@@ -20,8 +20,8 @@ namespace chr
         batch(batch)
         {}
 
-        template<int Orientation=GL_CCW>
-        void fill(Matrix &matrix, float x = 0, float y = 0)
+        template<int Orientation=GL_CCW, typename... Args>
+        void fill(Matrix &matrix, float x, float y, Args&&... args)
         {
           float x2 = x + batch.texture.innerWidth;
           float y2 = y + batch.texture.innerHeight;
@@ -31,11 +31,11 @@ namespace chr
           float u2 = batch.texture.u2;
           float v2 = batch.texture.v2;
 
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV>(x, y, x2, y2, u1, v1, u2, v2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<V>(x, y, x2, y2, u1, v1, u2, v2, std::forward<Args>(args)...), batch);
         }
 
-        template<int Orientation=GL_CCW>
-        void fill(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
+        template<int Orientation=GL_CCW, typename... Args>
+        void fill(float x, float y, Args&&... args)
         {
           float x2 = x + batch.texture.innerWidth;
           float y2 = y + batch.texture.innerHeight;
@@ -45,24 +45,10 @@ namespace chr
           float u2 = batch.texture.u2;
           float v2 = batch.texture.v2;
 
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<UV|RGBA>(x, y, x2, y2, u1, v1, u2, v2, color), batch);
-        }
-
-        template<int Orientation=GL_CCW>
-        void fill(float x = 0, float y = 0)
-        {
-          float x2 = x + batch.texture.innerWidth;
-          float y2 = y + batch.texture.innerHeight;
-
-          float u1 = batch.texture.u1;
-          float v1 = batch.texture.v1;
-          float u2 = batch.texture.u2;
-          float v2 = batch.texture.v2;
-
-          batch.addVertex( x,  y, 0, u1, v1);
-          batch.addVertex( x, y2, 0, u1, v2);
-          batch.addVertex(x2, y2, 0, u2, v2);
-          batch.addVertex(x2,  y, 0, u2, v1);
+          batch.addVertex( x,  y, 0, u1, v1, std::forward<Args>(args)...);
+          batch.addVertex( x, y2, 0, u1, v2, std::forward<Args>(args)...);
+          batch.addVertex(x2, y2, 0, u2, v2, std::forward<Args>(args)...);
+          batch.addVertex(x2,  y, 0, u2, v1, std::forward<Args>(args)...);
 
           if (Orientation == GL_CCW)
           {
@@ -76,44 +62,10 @@ namespace chr
           batch.incrementIndices(4);
         }
 
-        template<int Orientation=GL_CCW>
-        void fill(const glm::vec4 &color, float x = 0, float y = 0)
+        template<int Orientation=GL_CCW, typename... Args>
+        inline void fillFromCenter(Matrix &matrix, float x, float y, Args&&... args)
         {
-          float x2 = x + batch.texture.innerWidth;
-          float y2 = y + batch.texture.innerHeight;
-
-          float u1 = batch.texture.u1;
-          float v1 = batch.texture.v1;
-          float u2 = batch.texture.u2;
-          float v2 = batch.texture.v2;
-
-          batch.addVertex( x,  y, 0, u1, v1, color);
-          batch.addVertex( x, y2, 0, u1, v2, color);
-          batch.addVertex(x2, y2, 0, u2, v2, color);
-          batch.addVertex(x2,  y, 0, u2, v1, color);
-
-          if (Orientation == GL_CCW)
-          {
-            batch.addIndices(0, 1, 2, 2, 3, 0);
-          }
-          else
-          {
-            batch.addIndices(0, 3, 2, 2, 1, 0);
-          }
-
-          batch.incrementIndices(4);
-        }
-
-        template<int Orientation=GL_CCW>
-        inline void fillFromCenter(Matrix &matrix, float x = 0, float y = 0)
-        {
-          fill<Orientation>(matrix, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
-        }
-
-        template<int Orientation=GL_CCW>
-        inline void fillFromCenter(Matrix &matrix, const glm::vec4 &color, float x = 0, float y = 0)
-        {
-          fill<Orientation>(matrix, color, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
+          fill<Orientation>(matrix, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f, std::forward<Args>(args)...);
         }
 
         template<int Orientation=GL_CCW>
@@ -122,36 +74,12 @@ namespace chr
           float width = batch.texture.innerWidth;
           float height = batch.texture.innerHeight;
 
-          float x1 = rect.x1;
-          float y1 = rect.y1;
-          float x2 = rect.x2;
-          float y2 = rect.y2;
+          float u1 = (rect.x1 - ox) / width;
+          float v1 = (rect.y1 - oy) / height;
+          float u2 = (rect.x2 - ox) / width;
+          float v2 = (rect.y2 - oy) / height;
 
-          float u1 = (x1 - ox) / width;
-          float v1 = (y1 - oy) / height;
-          float u2 = (x2 - ox) / width;
-          float v2 = (y2 - oy) / height;
-
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<V>(x1, y1, x2, y2, u1, v1, u2, v2), batch);
-        }
-
-        template<int Orientation=GL_CCW>
-        void fillInRect(Matrix &matrix, const math::Rectf &rect, const glm::vec4 &color, float ox = 0, float oy = 0)
-        {
-          float width = batch.texture.innerWidth;
-          float height = batch.texture.innerHeight;
-
-          float x1 = rect.x1;
-          float y1 = rect.y1;
-          float x2 = rect.x2;
-          float y2 = rect.y2;
-
-          float u1 = (x1 - ox) / width;
-          float v1 = (y1 - oy) / height;
-          float u2 = (x2 - ox) / width;
-          float v2 = (y2 - oy) / height;
-
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<V>(x1, y1, x2, y2, u1, v1, u2, v2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<V>(rect, u1, v1, u2, v2), batch);
         }
       };
     }
