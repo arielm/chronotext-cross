@@ -28,7 +28,7 @@ void Sketch::setup()
 
   matrix.push();
   matrix.scale(0.333f);
-  draw::Texture<>(textureBatches[0]).fillFromCenter(matrix);
+  draw::Texture<>(textureBatches[0]).fillFromCenter(matrix, 0, 0);
   matrix.pop();
 
   matrix.translate(0, 0, 10);
