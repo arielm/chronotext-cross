@@ -13,30 +13,30 @@ void Sketch::setup()
   // ---
 
   textureBatches[0].setShader(textureShader);
+  textureBatches[0].setShaderColor(1, 1, 1, 1);
   textureBatches[0].setTexture(textures[0]);
 
   textureBatches[1].setShader(textureAlphaShader);
+  textureBatches[1].setShaderColor(1, 0.5f, 0, 1);
   textureBatches[1].setTexture(textures[1]);
 
   textureBatches[2].setShader(textureShader);
+  textureBatches[2].setShaderColor(1, 1, 1, 1);
   textureBatches[2].setTexture(textures[2]);
 
   Matrix matrix;
 
   matrix.push();
   matrix.scale(0.333f);
-  draw::Texture<UV|RGBA>(textureBatches[0]).fillFromCenter(matrix, glm::vec4(1, 1, 0.5f, 1));
+  draw::Texture<>(textureBatches[0]).fillFromCenter(matrix, 0, 0);
   matrix.pop();
 
   matrix.translate(0, 0, 5);
-  draw::Texture<UV|RGBA>(textureBatches[1]).fillInRect(matrix, math::Rectf(-200, -150, 400, 300), glm::vec4(1, 0.5f, 0, 1));
+  draw::Texture<>(textureBatches[1]).fillInRect(matrix, math::Rectf(-200, -150, 400, 300));
 
   matrix.translate(0, 0, 5);
   matrix.scale(0.75f);
-  draw::Texture<UV|RGBA>(textureBatches[2]).fillFromCenter(matrix, glm::vec4(1, 1, 1, 1), 100, 100);
-
-  matrix.translate(0, 0, 10);
-  draw::Texture<UV|RGBA>(textureBatches[2]).fillFromCenter(matrix, glm::vec4(1, 0, 0, 0.25f), 100, 100);
+  draw::Texture<>(textureBatches[2]).fillFromCenter(matrix, 100, 100);
 
   // ---
 
