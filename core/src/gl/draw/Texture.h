@@ -49,6 +49,62 @@ namespace chr
         }
 
         template<int Orientation=GL_CCW>
+        void fill(float x = 0, float y = 0)
+        {
+          float x2 = x + batch.texture.innerWidth;
+          float y2 = y + batch.texture.innerHeight;
+
+          float u1 = batch.texture.u1;
+          float v1 = batch.texture.v1;
+          float u2 = batch.texture.u2;
+          float v2 = batch.texture.v2;
+
+          batch.addVertex( x,  y, 0, u1, v1);
+          batch.addVertex( x, y2, 0, u1, v2);
+          batch.addVertex(x2, y2, 0, u2, v2);
+          batch.addVertex(x2,  y, 0, u2, v1);
+
+          if (Orientation == GL_CCW)
+          {
+            batch.addIndices(0, 1, 2, 2, 3, 0);
+          }
+          else
+          {
+            batch.addIndices(0, 3, 2, 2, 1, 0);
+          }
+
+          batch.incrementIndices(4);
+        }
+
+        template<int Orientation=GL_CCW>
+        void fill(const glm::vec4 &color, float x = 0, float y = 0)
+        {
+          float x2 = x + batch.texture.innerWidth;
+          float y2 = y + batch.texture.innerHeight;
+
+          float u1 = batch.texture.u1;
+          float v1 = batch.texture.v1;
+          float u2 = batch.texture.u2;
+          float v2 = batch.texture.v2;
+
+          batch.addVertex( x,  y, 0, u1, v1, color);
+          batch.addVertex( x, y2, 0, u1, v2, color);
+          batch.addVertex(x2, y2, 0, u2, v2, color);
+          batch.addVertex(x2,  y, 0, u2, v1, color);
+
+          if (Orientation == GL_CCW)
+          {
+            batch.addIndices(0, 1, 2, 2, 3, 0);
+          }
+          else
+          {
+            batch.addIndices(0, 3, 2, 2, 1, 0);
+          }
+
+          batch.incrementIndices(4);
+        }
+
+        template<int Orientation=GL_CCW>
         inline void fillFromCenter(Matrix &matrix, float x = 0, float y = 0)
         {
           fill<Orientation>(matrix, x - batch.texture.innerWidth * 0.5f, y - batch.texture.innerHeight * 0.5f);
