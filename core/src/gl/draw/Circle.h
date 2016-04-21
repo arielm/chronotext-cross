@@ -20,23 +20,42 @@ namespace chr
         batch(batch)
         {}
 
-        template<int Orientation=GL_CCW>
-        void fill(Matrix &matrix, float x, float y, float r, float a0 = 0, float a1 = TWO_PI, float dd = 8) const
+        Circle& setRadius(float radius)
         {
-          float aa = fabsf(a1 - a0);
-          int n = ceilf(aa * r / dd) + 1;
+          r = radius;
+          return *this;
+        }
+
+        Circle& setArc(float a1, float a2)
+        {
+          this->a1 = a1;
+          this->a2 = a2;
+          return *this;
+        }
+
+        Circle& setSegmentLength(float length)
+        {
+          segmentLength = length;
+          return *this;
+        }
+
+        template<int Orientation=GL_CCW, typename... Args>
+        void fill(Matrix &matrix, float x, float y, Args&&... args) const
+        {
+          float aa = fabsf(a2 - a1);
+          int n = ceilf(aa * r / segmentLength) + 1;
 
           // TODO: batch.reserve(n + 1);
 
-          batch.addVertex(matrix.transformPoint(x, y));
+          batch.addVertex(matrix.transformPoint(x, y), std::forward<Args>(args)...);
 
           for (int i = 0; i < n; i++)
           {
-            float d = fmin(aa, i * dd / r);
-            float xx = x + sinf(a0 + d) * r;
-            float yy = y + cosf(a0 + d) * r;
+            float d = fmin(aa, i * segmentLength / r);
+            float xx = x + sinf(a1 + d) * r;
+            float yy = y + cosf(a1 + d) * r;
 
-            batch.addVertex(matrix.transformPoint(xx, yy));
+            batch.addVertex(matrix.transformPoint(xx, yy), std::forward<Args>(args)...);
 
             if (i < n - 1)
             {
@@ -54,39 +73,11 @@ namespace chr
           batch.incrementIndices(n + 1);
         }
 
-        template<int Orientation=GL_CCW>
-        void fill(float x, float y, float r, float a0 = 0, float a1 = TWO_PI, float dd = 8) const
-        {
-          float aa = fabsf(a1 - a0);
-          int n = ceilf(aa * r / dd) + 1;
-
-          // TODO: batch.reserve(n + 1);
-
-          batch.addVertex(x, y);
-
-          for (int i = 0; i < n; i++)
-          {
-            float d = fmin(aa, i * dd / r);
-            float xx = x + sinf(a0 + d) * r;
-            float yy = y + cosf(a0 + d) * r;
-
-            batch.addVertex(xx, yy);
-
-            if (i < n)
-            {
-              if (Orientation == GL_CCW)
-              {
-                batch.addIndices(i + 1, 0, i + 2);
-              }
-              else
-              {
-                batch.addIndices(0, i + 1, i + 2);
-              }
-            }
-          }
-          
-          batch.incrementIndices(n + 1);
-        }
+      protected:
+        float r = 1;
+        float a1 = 0;
+        float a2 = TWO_PI;
+        float segmentLength = 8;
       };
     }
   }
