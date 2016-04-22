@@ -41,7 +41,7 @@ public:
 
 protected:
   chr::gl::Texture texture;
-  chr::gl::IndexedVertexBatch<chr::gl::UV> textureBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> textureBatch;
   chr::gl::TextureAlphaShader textureAlphaShader;
 
   float scale;

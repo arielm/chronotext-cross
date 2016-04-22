@@ -40,17 +40,17 @@ void Sketch::setup()
   matrix.push()
     .translate(200, 100)
     .rotateZ(30 * D2R);
-  draw::Rect<RGBA>(colorBatch).fill(matrix, math::Rectf(-200, -150, 300, 150), glm::vec4(1, 1, 0.5f, 1));
+  draw::Rect<XYZ.RGBA>(colorBatch).fill(matrix, math::Rectf(-200, -150, 300, 150), glm::vec4(1, 1, 0.5f, 1));
   matrix.pop();
 
-  draw::Circle<RGBA>(colorBatch)
+  draw::Circle<XYZ.RGBA>(colorBatch)
     .setRadius(100)
     .fill(matrix, 0, 0, glm::vec4(1, 0.5f, 0, 1));
 
   matrix.push()
     .scale(0.5f)
     .rotateZ(-15 * D2R);
-  draw::Texture<UV|RGBA>(textureBatch).fillFromCenter(matrix, 0, 0, glm::vec4(1, 1, 1, 1));
+  draw::Texture<XYZ.UV.RGBA>(textureBatch).fillFromCenter(matrix, 0, 0, glm::vec4(1, 1, 1, 1));
   matrix.pop();
 
   // ---

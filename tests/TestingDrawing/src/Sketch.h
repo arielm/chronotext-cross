@@ -17,9 +17,9 @@ public:
 
 protected:
   chr::gl::Texture texture;
-  chr::gl::IndexedVertexBatch<chr::gl::UV|chr::gl::RGBA> textureBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV.RGBA> textureBatch;
   chr::gl::TextureAlphaShader textureAlphaShader;
 
-  chr::gl::IndexedVertexBatch<chr::gl::RGBA> colorBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> colorBatch;
   chr::gl::TextureAlphaShader colorShader;
 };

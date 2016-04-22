@@ -2,7 +2,7 @@
 #include "Sketch.h"
 
 #include "gl/Matrix.h"
-#include "gl/geom/TextureRect.h"
+#include "gl/draw/Texture.h"
 
 using namespace std;
 using namespace chr;
@@ -65,7 +65,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   matrix.translate(position);
   matrix.scale(radius / DOT_RADIUS_PIXELS);
 
-  geom::TextureRect<UV>(textureBatch).drawFromCenter(matrix);
+  draw::Texture<XYZ.UV>(textureBatch).fillFromCenter(matrix, 0, 0);
 }
 
 void Sketch::initTextures()
