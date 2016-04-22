@@ -69,7 +69,7 @@ namespace chr
         }
 
         template<int Orientation=GL_CCW>
-        void fillInRect(Matrix &matrix, const math::Rectf &rect, float ox = 0, float oy = 0)
+        void fillRect(Matrix &matrix, const math::Rectf &rect, float ox = 0, float oy = 0)
         {
           float width = batch.texture.innerWidth;
           float height = batch.texture.innerHeight;

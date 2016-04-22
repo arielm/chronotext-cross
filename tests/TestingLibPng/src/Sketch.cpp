@@ -5,6 +5,7 @@
 using namespace std;
 using namespace chr;
 using namespace gl;
+using namespace math;
 
 void Sketch::setup()
 {
@@ -32,7 +33,7 @@ void Sketch::setup()
   matrix.pop();
 
   matrix.translate(0, 0, 5);
-  draw::Texture<>(textureBatches[1]).fillInRect(matrix, math::Rectf(-200, -150, 400, 300));
+  draw::Texture<>(textureBatches[1]).fillRect(matrix, Rectf(-200, -150, 400, 300));
 
   matrix.translate(0, 0, 5);
   matrix.scale(0.75f);

@@ -7,6 +7,7 @@
 using namespace std;
 using namespace chr;
 using namespace gl;
+using namespace math;
 
 void Sketch::setup()
 {
@@ -40,7 +41,7 @@ void Sketch::setup()
   matrix.push()
     .translate(200, 100)
     .rotateZ(30 * D2R);
-  draw::Rect<XYZ.RGBA>(colorBatch).fill(matrix, math::Rectf(-200, -150, 300, 150), glm::vec4(1, 1, 0.5f, 1));
+  draw::Rect<XYZ.RGBA>(colorBatch).fill(matrix, Rectf(-200, -150, 300, 150), glm::vec4(1, 1, 0.5f, 1));
   matrix.pop();
 
   draw::Circle<XYZ.RGBA>(colorBatch)
