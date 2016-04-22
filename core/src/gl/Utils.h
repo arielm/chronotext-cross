@@ -24,6 +24,6 @@ namespace chr
     template<int Primitive = GL_TRIANGLE_STRIP, int Orientation = GL_CCW, int Type>
     void addTransformedQuad(const glm::mat4 &matrix, const Quad<Type> &quad, std::vector<Vertex<Type>> &output);
 
-    bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
+    bool clip(Quad<XYZ.UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
   }
 }

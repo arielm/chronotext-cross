@@ -6,19 +6,49 @@ namespace chr
 {
   namespace gl
   {
-    enum VertexType
+    enum
     {
-      UV = 1,
-      N = 2,
-      RGBA = 4
+      _XYZ = 0,
+      _UV = 1,
+      _RGBA = 2,
+      _N = 4
     };
+
+    struct xyz
+    {
+      xyz() = default;
+
+      constexpr operator const int() const { return _XYZ; }
+
+      struct uv
+      {
+        constexpr operator const int() const { return _XYZ|_UV; }
+
+        struct rgba
+        {
+          constexpr operator const int() const { return _XYZ|_UV|_RGBA; }
+        };
+
+        rgba RGBA;
+      };
+
+      struct rgba
+      {
+        constexpr operator const int() const { return _XYZ|_RGBA; }
+      };
+
+      uv UV;
+      rgba RGBA;
+    };
+
+    static constexpr xyz XYZ = {};
 
     // ---
 
-    template<int T = 0> struct Vertex
+    template<int T = XYZ> struct Vertex
     {};
 
-    template<> struct Vertex<0>
+    template<> struct Vertex<XYZ>
     {
       union
       {
@@ -46,7 +76,7 @@ namespace chr
       {}
     };
 
-    template<> struct Vertex<UV> : Vertex<>
+    template<> struct Vertex<XYZ.UV> : Vertex<XYZ>
     {
       union
       {
@@ -82,7 +112,7 @@ namespace chr
       {}
     };
 
-    template<> struct Vertex<RGBA> : Vertex<>
+    template<> struct Vertex<XYZ.RGBA> : Vertex<>
     {
       union
       {
@@ -110,7 +140,7 @@ namespace chr
       {}
     };
 
-    template<> struct Vertex<UV|RGBA> : Vertex<UV>
+    template<> struct Vertex<XYZ.UV.RGBA> : Vertex<XYZ.UV>
     {
       union
       {
@@ -127,19 +157,19 @@ namespace chr
 
       Vertex(float x, float y, float z, float u, float v, const glm::vec4 &color)
       :
-      Vertex<UV>(x, y, z, u, v),
+      Vertex<XYZ.UV>(x, y, z, u, v),
       color(color)
       {}
 
       Vertex(const glm::vec3 &position, float u, float v, const glm::vec4 &color)
       :
-      Vertex<UV>(position, u, v),
+      Vertex<XYZ.UV>(position, u, v),
       color(color)
       {}
 
       Vertex(const glm::vec3 &position, const glm::vec2 &coords, const glm::vec4 &color)
       :
-      Vertex<UV>(position, coords),
+      Vertex<XYZ.UV>(position, coords),
       color(color)
       {}
     };

@@ -9,7 +9,7 @@ namespace chr
   {
     namespace draw
     {
-      template<int V = UV, typename I = GLushort>
+      template<int V = XYZ.UV, typename I = GLushort>
       class Texture
       {
       public:

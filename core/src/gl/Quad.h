@@ -7,10 +7,10 @@ namespace chr
 {
   namespace gl
   {
-    template<int T = 0> struct Quad
+    template<int T = XYZ> struct Quad
     {};
 
-    template<> struct Quad<0>
+    template<> struct Quad<XYZ>
     {
       union
       {
@@ -58,7 +58,7 @@ namespace chr
       {}
     };
 
-    template<> struct Quad<UV> : Quad<>
+    template<> struct Quad<XYZ.UV> : Quad<>
     {
       union
       {
@@ -116,7 +116,7 @@ namespace chr
       {}
     };
 
-    template<> struct Quad<RGBA> : Quad<>
+    template<> struct Quad<XYZ.RGBA> : Quad<>
     {
       union
       {
@@ -150,7 +150,7 @@ namespace chr
       {}
     };
 
-    template<> struct Quad<UV|RGBA> : Quad<UV>
+    template<> struct Quad<XYZ.UV.RGBA> : Quad<XYZ.UV>
     {
       union
       {
@@ -167,25 +167,25 @@ namespace chr
 
       Quad(float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2, const glm::vec4 &color)
       :
-      Quad<UV>(x1, y1, x2, y2, u1, v1, u2, v2),
+      Quad<XYZ.UV>(x1, y1, x2, y2, u1, v1, u2, v2),
       color(color)
       {}
 
       Quad(const math::Rectf &rect, float u1, float v1, float u2, float v2, const glm::vec4 &color)
       :
-      Quad<UV>(rect, u1, v1, u2, v2),
+      Quad<XYZ.UV>(rect, u1, v1, u2, v2),
       color(color)
       {}
 
       Quad(const math::Rectf &rect, const glm::vec2 &coords1, const glm::vec2 &coords2, const glm::vec4 &color)
       :
-      Quad<UV>(rect, coords1, coords2),
+      Quad<XYZ.UV>(rect, coords1, coords2),
       color(color)
       {}
 
       Quad(const glm::vec2 &position1, const glm::vec2 &position2, const glm::vec2 &coords1, const glm::vec2 &coords2, const glm::vec4 &color)
       :
-      Quad<UV>(position1, position2, coords1, coords2),
+      Quad<XYZ.UV>(position1, position2, coords1, coords2),
       color(color)
       {}
     };

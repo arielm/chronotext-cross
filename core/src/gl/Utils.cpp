@@ -173,7 +173,7 @@ namespace chr
       return glm::vec3(x, y, z);
     }
 
-    bool clip(Quad<UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor)
+    bool clip(Quad<XYZ.UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor)
     {
       if ((quad.x1 > clipRect.x2 ) || (quad.x2 < clipRect.x1) || (quad.y1 > clipRect.y2) || (quad.y2 < clipRect.y1))
       {

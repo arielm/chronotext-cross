@@ -9,7 +9,7 @@ namespace chr
   {
     namespace draw
     {
-      template<int V = 0, typename I = GLushort>
+      template<int V = XYZ, typename I = GLushort>
       class Rect
       {
       public:
