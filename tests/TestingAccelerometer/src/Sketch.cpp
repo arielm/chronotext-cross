@@ -70,11 +70,10 @@ void Sketch::accelerated(AccelEvent event)
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
   Matrix matrix;
-  matrix.translate(position);
-  matrix.scale(radius / DOT_RADIUS_PIXELS);
+  matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
 
   textureBatch.clear();
-  draw::Texture<XYZ.UV>(textureBatch).fillFromCenter(matrix, 0, 0);
+  draw::Texture<>(textureBatch).fillFromCenter(matrix, 0, 0);
   textureBatch.flush();
 }
 
