@@ -259,14 +259,14 @@ namespace chr
         static int usageCounter;
       };
 
-//      template<>
-//      struct TypeTraits<Vertex<N>>
-//      {
-//        static constexpr size_t typeIndex = TypeIndex::VERTEX_N;
-//        static constexpr GLenum target = GL_ARRAY_BUFFER;
-//
-//        static int usageCounter;
-//      };
+      template<>
+      struct TypeTraits<Vertex<XYZ.N>>
+      {
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_N;
+        static constexpr GLenum target = GL_ARRAY_BUFFER;
+
+        static int usageCounter;
+      };
 
       template<>
       struct TypeTraits<Vertex<XYZ.UV.RGBA>>
@@ -277,33 +277,33 @@ namespace chr
         static int usageCounter;
       };
 
-//      template<>
-//      struct TypeTraits<Vertex<XYZ.UV.N>>
-//      {
-//        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_N;
-//        static constexpr GLenum target = GL_ARRAY_BUFFER;
-//
-//        static int usageCounter;
-//      };
-//
-//      template<>
-//      struct TypeTraits<Vertex<XYZ.RGBA.N>>
-//      {
-//        static constexpr size_t typeIndex = TypeIndex::VERTEX_RGBA_N;
-//        static constexpr GLenum target = GL_ARRAY_BUFFER;
-//
-//        static int usageCounter;
-//      };
-//
-//      template<>
-//      struct TypeTraits<Vertex<UV.RGBA.N>>
-//      {
-//      public:
-//        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_RGBA_N;
-//        static constexpr GLenum target = GL_ARRAY_BUFFER;
-//
-//        static int usageCounter;
-//      };
+      template<>
+      struct TypeTraits<Vertex<XYZ.UV.N>>
+      {
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_N;
+        static constexpr GLenum target = GL_ARRAY_BUFFER;
+
+        static int usageCounter;
+      };
+
+      template<>
+      struct TypeTraits<Vertex<XYZ.RGBA.N>>
+      {
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_RGBA_N;
+        static constexpr GLenum target = GL_ARRAY_BUFFER;
+
+        static int usageCounter;
+      };
+
+      template<>
+      struct TypeTraits<Vertex<XYZ.UV.RGBA.N>>
+      {
+      public:
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_RGBA_N;
+        static constexpr GLenum target = GL_ARRAY_BUFFER;
+
+        static int usageCounter;
+      };
 
       template<>
       struct TypeTraits<glm::vec2>

@@ -27,18 +27,44 @@ namespace chr
         struct rgba
         {
           constexpr operator const int() const { return _XYZ|_UV|_RGBA; }
+
+          struct n
+          {
+            constexpr operator const int() const { return _XYZ|_UV|_RGBA|_N; }
+          };
+
+          n N;
+        };
+
+        struct n
+        {
+          constexpr operator const int() const { return _XYZ|_UV|_N; }
         };
 
         rgba RGBA;
+        n N;
       };
 
       struct rgba
       {
         constexpr operator const int() const { return _XYZ|_RGBA; }
+
+        struct n
+        {
+          constexpr operator const int() const { return _XYZ|_RGBA|_N; }
+        };
+
+        n N;
+      };
+
+      struct n
+      {
+        constexpr operator const int() const { return _XYZ|_N; }
       };
 
       uv UV;
       rgba RGBA;
+      n N;
     };
 
     static constexpr xyz XYZ = {};
