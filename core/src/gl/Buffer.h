@@ -11,13 +11,13 @@ namespace chr
       enum TypeIndex : size_t
       {
         VERTEX,
-        VERTEX_UV,
-        VERTEX_RGBA,
         VERTEX_N,
+        VERTEX_N_UV,
+        VERTEX_N_RGBA,
+        VERTEX_N_UV_RGBA,
+        VERTEX_UV,
         VERTEX_UV_RGBA,
-        VERTEX_UV_N,
-        VERTEX_RGBA_N,
-        VERTEX_UV_RGBA_N,
+        VERTEX_RGBA,
         VEC2,
         VEC3,
         VEC4,
@@ -278,28 +278,28 @@ namespace chr
       };
 
       template<>
-      struct TypeTraits<Vertex<XYZ.UV.N>>
+      struct TypeTraits<Vertex<XYZ.N.UV>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_N;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_N_UV;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
       };
 
       template<>
-      struct TypeTraits<Vertex<XYZ.RGBA.N>>
+      struct TypeTraits<Vertex<XYZ.N.RGBA>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_RGBA_N;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_N_RGBA;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
       };
 
       template<>
-      struct TypeTraits<Vertex<XYZ.UV.RGBA.N>>
+      struct TypeTraits<Vertex<XYZ.N.UV.RGBA>>
       {
       public:
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_RGBA_N;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_N_UV_RGBA;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;

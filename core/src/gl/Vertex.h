@@ -9,9 +9,9 @@ namespace chr
     enum
     {
       _XYZ = 0,
-      _UV = 1,
-      _RGBA = 2,
-      _N = 4
+      _N = 1,
+      _UV = 2,
+      _RGBA = 4
     };
 
     struct xyz
@@ -20,6 +20,31 @@ namespace chr
 
       constexpr operator const int() const { return _XYZ; }
 
+      struct n
+      {
+        constexpr operator const int() const { return _XYZ|_N; }
+
+        struct uv
+        {
+          constexpr operator const int() const { return _XYZ|_N|_UV; }
+
+          struct rgba
+          {
+            constexpr operator const int() const { return _XYZ|_N|_UV|_RGBA; }
+          };
+
+          rgba RGBA;
+        };
+
+        struct rgba
+        {
+          constexpr operator const int() const { return _XYZ|_N|_RGBA; }
+        };
+
+        uv UV;
+        rgba RGBA;
+      };
+
       struct uv
       {
         constexpr operator const int() const { return _XYZ|_UV; }
@@ -27,44 +52,19 @@ namespace chr
         struct rgba
         {
           constexpr operator const int() const { return _XYZ|_UV|_RGBA; }
-
-          struct n
-          {
-            constexpr operator const int() const { return _XYZ|_UV|_RGBA|_N; }
-          };
-
-          n N;
-        };
-
-        struct n
-        {
-          constexpr operator const int() const { return _XYZ|_UV|_N; }
         };
 
         rgba RGBA;
-        n N;
       };
 
       struct rgba
       {
         constexpr operator const int() const { return _XYZ|_RGBA; }
-
-        struct n
-        {
-          constexpr operator const int() const { return _XYZ|_RGBA|_N; }
-        };
-
-        n N;
       };
 
-      struct n
-      {
-        constexpr operator const int() const { return _XYZ|_N; }
-      };
-
+      n N;
       uv UV;
       rgba RGBA;
-      n N;
     };
 
     static constexpr xyz XYZ = {};
@@ -187,15 +187,94 @@ namespace chr
       color(color)
       {}
 
-      Vertex(const glm::vec3 &position, float u, float v, const glm::vec4 &color)
-      :
-      Vertex<XYZ.UV>(position, u, v),
-      color(color)
-      {}
-
       Vertex(const glm::vec3 &position, const glm::vec2 &coords, const glm::vec4 &color)
       :
       Vertex<XYZ.UV>(position, coords),
+      color(color)
+      {}
+    };
+
+    template<> struct Vertex<XYZ.N> : Vertex<>
+    {
+      union
+      {
+        glm::vec3 normal;
+
+        struct
+        {
+          float nx, ny, nz;
+        };
+      };
+
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z, const glm::vec3 &normal)
+      :
+      Vertex<>(x, y, z),
+      normal(normal)
+      {}
+
+      Vertex(const glm::vec3 &position, const glm::vec3 &normal)
+      :
+      Vertex<>(position),
+      normal(normal)
+      {}
+    };
+
+    template<> struct Vertex<XYZ.N.UV> : Vertex<XYZ.N>
+    {
+      union
+      {
+        glm::vec2 coords;
+
+        struct
+        {
+          float u, v;
+        };
+      };
+
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z, const glm::vec3 &normal, float u, float v)
+      :
+      Vertex<XYZ.N>(x, y, z, normal),
+      u(u),
+      v(v)
+      {}
+
+      Vertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &coords)
+      :
+      Vertex<XYZ.N>(position, normal),
+      coords(coords)
+      {}
+    };
+
+    template<> struct Vertex<XYZ.N.UV.RGBA> : Vertex<XYZ.N.UV>
+    {
+      union
+      {
+        glm::vec4 color;
+
+        struct
+        {
+          float r, g, b, a;
+        };
+      };
+
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z, const glm::vec3 &normal, float u, float v, const glm::vec4 &color)
+      :
+      Vertex<XYZ.N.UV>(x, y, z, normal, u, v),
+      color(color)
+      {}
+
+      Vertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &coords, const glm::vec4 &color)
+      :
+      Vertex<XYZ.N.UV>(position, normal, coords),
       color(color)
       {}
     };
