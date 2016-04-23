@@ -9,54 +9,41 @@ namespace chr
   {
     namespace draw
     {
-      template<int V = XYZ, typename I = GLushort>
       class Rect
       {
       public:
-        IndexedVertexBatch<V,I> &batch;
-
-        Rect(IndexedVertexBatch<V,I> &batch)
-        :
-        batch(batch)
-        {}
-
-        template<int Orientation=GL_CCW, typename... Args>
-        inline void fill(Matrix &matrix, float x1, float y1, float x2, float y2, Args&&... args) const
+        Rect& setColor(const glm::vec4 &color)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<V>(x1, y1, x2, y2, std::forward<Args>(args)...), batch);
+          this->color = color;
+          return *this;
         }
 
-        template<int Orientation=GL_CCW, typename... Args>
-        inline void fill(Matrix &matrix, const math::Rectf &rect, Args&&... args) const
+        Rect& setColor(float r, float g, float b, float a)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, Orientation>(Quad<V>(rect, std::forward<Args>(args)...), batch);
+          color = { r, g, b, a };
+          return *this;
         }
 
-        template<int Orientation=GL_CCW, typename... Args>
-        void fill(float x1, float y1, float x2, float y2, Args&&... args) const
-        {
-          batch.addVertex(x1, y1, 0, std::forward<Args>(args)...);
-          batch.addVertex(x1, y2, 0, std::forward<Args>(args)...);
-          batch.addVertex(x2, y2, 0, std::forward<Args>(args)...);
-          batch.addVertex(x2, y1, 0, std::forward<Args>(args)...);
+        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const;
 
-          if (Orientation == GL_CCW)
-          {
-            batch.addIndices(0, 1, 2, 2, 3, 0);
-          }
-          else
-          {
-            batch.addIndices(0, 3, 2, 2, 1, 0);
-          }
-          
-          batch.incrementIndices(4);
-        }
-
-        template<int Orientation=GL_CCW, typename... Args>
-        inline void fill(const math::Rectf &rect, Args&&... args) const
+        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        inline void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, const math::Rectf &rect) const
         {
-          fill<Orientation>(rect.x1, rect.y1, rect.x2, rect.y2, std::forward<Args>(args)...);
-        }
+          fill<Orientation>(batch, matrix, rect.x1, rect.y1, rect.x2, rect.y2);
+        };
+
+        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        void fill(IndexedVertexBatch<V,I> &batch, float x1, float y1, float x2, float y2) const;
+
+        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        inline void fill(IndexedVertexBatch<V,I> &batch, const math::Rectf &rect) const
+        {
+          fill<Orientation>(batch, rect.x1, rect.y1, rect.x2, rect.y2);
+        };
+
+      protected:
+        glm::vec4 color;
       };
     }
   }

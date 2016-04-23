@@ -41,7 +41,9 @@ void Sketch::setup()
   matrix.push()
     .translate(200, 100)
     .rotateZ(30 * D2R);
-  draw::Rect<XYZ.RGBA>(colorBatch).fill(matrix, Rectf(-200, -150, 300, 150), glm::vec4(1, 1, 0.5f, 1));
+  draw::Rect()
+    .setColor(1, 1, 0.5f, 1)
+    .fill(colorBatch, matrix, Rectf(-200, -150, 300, 150));
   matrix.pop();
 
   draw::Circle<XYZ.RGBA>(colorBatch)
