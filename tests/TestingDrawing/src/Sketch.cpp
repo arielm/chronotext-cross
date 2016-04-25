@@ -25,9 +25,7 @@ void Sketch::setup()
   glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, 0.0f, windowInfo.size.y);
 
   Matrix modelViewMatrix;
-
-  modelViewMatrix.translate(windowInfo.size.x / 2, windowInfo.size.y / 2)
-    .scale(1, -1);
+  modelViewMatrix.translate(windowInfo.size / 2.0f).scale(1, -1);
 
   glm::mat4 mvpMatrix = modelViewMatrix * projectionMatrix;
 

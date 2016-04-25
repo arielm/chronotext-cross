@@ -2,7 +2,7 @@
 
 #include "cross/Context.h"
 #include "gl/Batch.h"
-#include "gl/TextureAlphaShader.h"
+#include "gl/shaders/TextureAlphaShader.h"
 
 struct Particle
 {
@@ -42,7 +42,7 @@ public:
 protected:
   chr::gl::Texture texture;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> textureBatch;
-  chr::gl::TextureAlphaShader textureAlphaShader;
+  chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 
   float scale;
   glm::mat4 projectionMatrix;

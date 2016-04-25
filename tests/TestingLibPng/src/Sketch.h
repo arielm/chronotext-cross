@@ -2,8 +2,8 @@
 
 #include "cross/Context.h"
 #include "gl/Batch.h"
-#include "gl/TextureShader.h"
-#include "gl/TextureAlphaShader.h"
+#include "gl/shaders/TextureShader.h"
+#include "gl/shaders/TextureAlphaShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -19,6 +19,6 @@ protected:
   chr::gl::Texture textures[3];
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> textureBatches[3];
 
-  chr::gl::TextureShader textureShader;
-  chr::gl::TextureAlphaShader textureAlphaShader;
+  chr::gl::shaders::TextureShader textureShader;
+  chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 };
