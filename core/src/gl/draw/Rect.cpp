@@ -8,6 +8,18 @@ namespace chr
   {
     namespace draw
     {
+      Rect& Rect::setColor(const glm::vec4 &color)
+      {
+        this->color = color;
+        return *this;
+      }
+
+      Rect& Rect::setColor(float r, float g, float b, float a)
+      {
+        color = { r, g, b, a };
+        return *this;
+      }
+
       template <>
       void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
       {

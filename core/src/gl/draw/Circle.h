@@ -13,36 +13,12 @@ namespace chr
       class Circle
       {
       public:
-        Circle& setColor(const glm::vec4 &color)
-        {
-          this->color = color;
-          return *this;
-        }
+        Circle& setColor(const glm::vec4 &color);
+        Circle& setColor(float r, float g, float b, float a);
 
-        Circle& setColor(float r, float g, float b, float a)
-        {
-          color = { r, g, b, a };
-          return *this;
-        }
-
-        Circle& setRadius(float radius)
-        {
-          r = radius;
-          return *this;
-        }
-
-        Circle& setArc(float a1, float a2)
-        {
-          this->a1 = a1;
-          this->a2 = a2;
-          return *this;
-        }
-
-        Circle& setSegmentLength(float length)
-        {
-          segmentLength = length;
-          return *this;
-        }
+        Circle& setRadius(float radius);
+        Circle& setArc(float a1, float a2);
+        Circle& setSegmentLength(float length);
 
         template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
         void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;

@@ -12,17 +12,8 @@ namespace chr
       class Rect
       {
       public:
-        Rect& setColor(const glm::vec4 &color)
-        {
-          this->color = color;
-          return *this;
-        }
-
-        Rect& setColor(float r, float g, float b, float a)
-        {
-          color = { r, g, b, a };
-          return *this;
-        }
+        Rect& setColor(const glm::vec4 &color);
+        Rect& setColor(float r, float g, float b, float a);
 
         template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
         void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const;

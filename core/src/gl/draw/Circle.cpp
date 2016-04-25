@@ -6,6 +6,37 @@ namespace chr
   {
     namespace draw
     {
+      Circle& Circle::setColor(const glm::vec4 &color)
+      {
+        this->color = color;
+        return *this;
+      }
+
+      Circle& Circle::setColor(float r, float g, float b, float a)
+      {
+        color = { r, g, b, a };
+        return *this;
+      }
+
+      Circle& Circle::setRadius(float radius)
+      {
+        r = radius;
+        return *this;
+      }
+
+      Circle& Circle::setArc(float a1, float a2)
+      {
+        this->a1 = a1;
+        this->a2 = a2;
+        return *this;
+      }
+
+      Circle& Circle::setSegmentLength(float length)
+      {
+        segmentLength = length;
+        return *this;
+      }
+
       template <>
       void Circle::fill<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
