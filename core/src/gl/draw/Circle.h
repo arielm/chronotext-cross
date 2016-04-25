@@ -2,6 +2,7 @@
 
 #include "gl/Batch.h"
 #include "gl/Matrix.h"
+#include "math/Utils.h"
 
 namespace chr
 {
@@ -9,16 +10,20 @@ namespace chr
   {
     namespace draw
     {
-      template<int V = XYZ, typename I = GLushort>
       class Circle
       {
       public:
-        IndexedVertexBatch<V,I> &batch;
+        Circle& setColor(const glm::vec4 &color)
+        {
+          this->color = color;
+          return *this;
+        }
 
-        Circle(IndexedVertexBatch<V,I> &batch)
-        :
-        batch(batch)
-        {}
+        Circle& setColor(float r, float g, float b, float a)
+        {
+          color = { r, g, b, a };
+          return *this;
+        }
 
         Circle& setRadius(float radius)
         {
@@ -39,41 +44,12 @@ namespace chr
           return *this;
         }
 
-        template<int Orientation=GL_CCW, typename... Args>
-        void fill(Matrix &matrix, float x, float y, Args&&... args) const
-        {
-          float aa = fabsf(a2 - a1);
-          int n = ceilf(aa * r / segmentLength) + 1;
-
-          // TODO: batch.reserve(n + 1);
-
-          batch.addVertex(matrix.transformPoint(x, y), std::forward<Args>(args)...);
-
-          for (int i = 0; i < n; i++)
-          {
-            float d = fmin(aa, i * segmentLength / r);
-            float xx = x + sinf(a1 + d) * r;
-            float yy = y + cosf(a1 + d) * r;
-
-            batch.addVertex(matrix.transformPoint(xx, yy), std::forward<Args>(args)...);
-
-            if (i < n - 1)
-            {
-              if (Orientation == GL_CCW)
-              {
-                batch.addIndices(0, i + 1, i + 2);
-              }
-              else
-              {
-                batch.addIndices(i + 1, 0, i + 2);
-              }
-            }
-          }
-
-          batch.incrementIndices(n + 1);
-        }
+        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;
 
       protected:
+        glm::vec4 color;
+
         float r = 1;
         float a1 = 0;
         float a2 = TWO_PI;
