@@ -8,10 +8,10 @@ namespace chr
   {
     enum
     {
-      _XYZ = 0,
-      _N = 1,
-      _UV = 2,
-      _RGBA = 4
+      _XYZ = 1,
+      _N = 2,
+      _UV = 4,
+      _RGBA = 8
     };
 
     struct xyz
@@ -67,7 +67,25 @@ namespace chr
       rgba RGBA;
     };
 
+    struct n
+    {
+      constexpr operator const int() const { return _N; }
+    };
+
+    struct uv
+    {
+      constexpr operator const int() const { return _UV; }
+    };
+
+    struct rgba
+    {
+      constexpr operator const int() const { return _RGBA; }
+    };
+
     static constexpr xyz XYZ = {};
+    static constexpr n N = {};
+    static constexpr uv UV = {};
+    static constexpr rgba RGBA = {};
 
     // ---
 
@@ -275,6 +293,90 @@ namespace chr
       Vertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &coords, const glm::vec4 &color)
       :
       Vertex<XYZ.N.UV>(position, normal, coords),
+      color(color)
+      {}
+    };
+
+    template<> struct Vertex<N>
+    {
+      union
+      {
+        glm::vec3 normal;
+
+        struct
+        {
+          float nx, ny, nz;
+        };
+      };
+
+      Vertex()
+      {}
+
+      Vertex(float nx, float ny, float nz)
+      :
+      nx(nx),
+      ny(ny),
+      nz(nz)
+      {}
+
+      Vertex(const glm::vec3 &normal)
+      :
+      normal(normal)
+      {}
+    };
+
+    template<> struct Vertex<UV>
+    {
+      union
+      {
+        glm::vec2 coords;
+
+        struct
+        {
+          float u, v;
+        };
+      };
+
+      Vertex()
+      {}
+
+      Vertex(float u, float v)
+      :
+      u(u),
+      v(v)
+      {}
+
+      Vertex(const glm::vec2 &coords)
+      :
+      coords(coords)
+      {}
+    };
+
+    template<> struct Vertex<RGBA>
+    {
+      union
+      {
+        glm::vec4 color;
+
+        struct
+        {
+          float r, g, b, a;
+        };
+      };
+
+      Vertex()
+      {}
+
+      Vertex(float r, float g, float b, float a)
+      :
+      r(r),
+      g(g),
+      b(b),
+      a(a)
+      {}
+
+      Vertex(const glm::vec4 &color)
+      :
       color(color)
       {}
     };

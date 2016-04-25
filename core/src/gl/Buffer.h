@@ -10,17 +10,17 @@ namespace chr
     {
       enum TypeIndex : size_t
       {
-        VERTEX,
+        VERTEX_XYZ,
+        VERTEX_XYZ_N,
+        VERTEX_XYZ_N_UV,
+        VERTEX_XYZ_N_RGBA,
+        VERTEX_XYZ_N_UV_RGBA,
+        VERTEX_XYZ_UV,
+        VERTEX_XYZ_UV_RGBA,
+        VERTEX_XYZ_RGBA,
         VERTEX_N,
-        VERTEX_N_UV,
-        VERTEX_N_RGBA,
-        VERTEX_N_UV_RGBA,
         VERTEX_UV,
-        VERTEX_UV_RGBA,
         VERTEX_RGBA,
-        VEC2,
-        VEC3,
-        VEC4,
         GLUSHORT,
         GLUINT,
       };
@@ -235,7 +235,7 @@ namespace chr
       template<>
       struct TypeTraits<Vertex<XYZ>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
@@ -244,7 +244,7 @@ namespace chr
       template<>
       struct TypeTraits<Vertex<XYZ.UV>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ_UV;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
@@ -253,7 +253,7 @@ namespace chr
       template<>
       struct TypeTraits<Vertex<XYZ.RGBA>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_RGBA;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ_RGBA;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
@@ -262,7 +262,7 @@ namespace chr
       template<>
       struct TypeTraits<Vertex<XYZ.N>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_N;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ_N;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
@@ -271,7 +271,7 @@ namespace chr
       template<>
       struct TypeTraits<Vertex<XYZ.UV.RGBA>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV_RGBA;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ_UV_RGBA;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
@@ -280,7 +280,7 @@ namespace chr
       template<>
       struct TypeTraits<Vertex<XYZ.N.UV>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_N_UV;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ_N_UV;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
@@ -289,7 +289,7 @@ namespace chr
       template<>
       struct TypeTraits<Vertex<XYZ.N.RGBA>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_N_RGBA;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ_N_RGBA;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
@@ -299,34 +299,34 @@ namespace chr
       struct TypeTraits<Vertex<XYZ.N.UV.RGBA>>
       {
       public:
-        static constexpr size_t typeIndex = TypeIndex::VERTEX_N_UV_RGBA;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_XYZ_N_UV_RGBA;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
       };
 
       template<>
-      struct TypeTraits<glm::vec2>
+      struct TypeTraits<Vertex<N>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VEC2;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_N;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
       };
 
       template<>
-      struct TypeTraits<glm::vec3>
+      struct TypeTraits<Vertex<UV>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VEC3;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_UV;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
       };
 
       template<>
-      struct TypeTraits<glm::vec4>
+      struct TypeTraits<Vertex<RGBA>>
       {
-        static constexpr size_t typeIndex = TypeIndex::VEC4;
+        static constexpr size_t typeIndex = TypeIndex::VERTEX_RGBA;
         static constexpr GLenum target = GL_ARRAY_BUFFER;
 
         static int usageCounter;
