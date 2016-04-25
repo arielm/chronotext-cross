@@ -71,6 +71,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/gl/Buffer.cpp"
   "${CROSS_ROOT}/src/gl/draw/Circle.cpp"
   "${CROSS_ROOT}/src/gl/draw/Rect.cpp"
+  "${CROSS_ROOT}/src/gl/draw/Texture.cpp"
   "${CROSS_ROOT}/src/math/Utils.cpp"
   "${CROSS_ROOT}/src/math/Rect.cpp"
   "${CROSS_ROOT}/src/image/Utils.cpp"

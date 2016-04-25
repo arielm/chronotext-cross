@@ -29,15 +29,15 @@ void Sketch::setup()
 
   matrix.push();
   matrix.scale(0.333f);
-  draw::Texture<>(textureBatches[0]).fillFromCenter(matrix, 0, 0);
+  draw::Texture().fillFromCenter(textureBatches[0], matrix);
   matrix.pop();
 
   matrix.translate(0, 0, 10);
-  draw::Texture<>(textureBatches[1]).fillRect(matrix, Rectf(-200, -150, 400, 300));
+  draw::Texture().fillRect(textureBatches[1], matrix, Rectf(-200, -150, 400, 300));
 
   matrix.translate(0, 0, 10);
   matrix.scale(0.5f);
-  draw::Texture<>(textureBatches[2]).fillFromCenter(matrix, 100, 100);
+  draw::Texture().fillFromCenter(textureBatches[2], matrix, 100, 100);
 
   // ---
 

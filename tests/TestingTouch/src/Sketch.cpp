@@ -64,7 +64,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   Matrix matrix;
   matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
 
-  draw::Texture<>(textureBatch).fillFromCenter(matrix, 0, 0);
+  draw::Texture().fillFromCenter(textureBatch, matrix);
 }
 
 void Sketch::initTextures()

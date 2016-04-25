@@ -54,7 +54,9 @@ void Sketch::setup()
   matrix.push()
     .scale(0.5f)
     .rotateZ(-15 * D2R);
-  draw::Texture<XYZ.UV.RGBA>(textureBatch).fillFromCenter(matrix, 0, 0, glm::vec4(1, 1, 1, 1));
+  draw::Texture()
+    .setColor(1, 1, 1, 1)
+    .fillFromCenter(textureBatch, matrix, 0, 0);
   matrix.pop();
 
   // ---
