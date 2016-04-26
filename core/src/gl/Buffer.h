@@ -36,6 +36,7 @@ namespace chr
         size_t allocatedSize;
         int useCount;
         GLuint vboId;
+        bool uploadRequired = true;
       };
     }
 
@@ -134,7 +135,7 @@ namespace chr
         }
         else if (element->storage.size() > element->allocatedSize)
         {
-          uploadRequired = true;
+          element->uploadRequired = true;
           element->allocatedSize = 0;
 
           glDeleteBuffers(1, &element->vboId);
@@ -154,10 +155,10 @@ namespace chr
             break;
         }
 
-        if (forceUpload || uploadRequired)
+        if (forceUpload || element->uploadRequired)
         {
           upload();
-          uploadRequired = false;
+          element->uploadRequired = false;
         }
       }
 
@@ -194,7 +195,7 @@ namespace chr
 
       void requestUpload()
       {
-        uploadRequired = true;
+        element->uploadRequired = true;
       }
 
       template<typename... Args>
@@ -202,9 +203,6 @@ namespace chr
       {
         storage.emplace_back(std::forward<Args>(args)...);
       }
-
-    protected:
-      bool uploadRequired = true;
 
       void upload()
       {
