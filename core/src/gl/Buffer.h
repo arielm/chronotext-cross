@@ -177,17 +177,17 @@ namespace chr
         }
       }
 
-      void draw(GLenum primitive)
+      void draw(GLenum primitive, size_t count = 0)
       {
         switch (typeIndex)
         {
           case buffer::GLUSHORT:
           case buffer::GLUINT:
-            glDrawElements(primitive, storage.size(), (typeIndex == buffer::GLUSHORT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, 0);
+            glDrawElements(primitive, count ? count : storage.size(), (typeIndex == buffer::GLUSHORT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, 0);
             break;
 
           default:
-            glDrawArrays(primitive, 0, storage.size());
+            glDrawArrays(primitive, 0, count ? count : storage.size());
             break;
         }
       }
