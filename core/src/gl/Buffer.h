@@ -132,6 +132,14 @@ namespace chr
         {
           glGenBuffers(1, &element->vboId);
         }
+        else if (element->storage.size() > element->allocatedSize)
+        {
+          uploadRequired = true;
+          element->allocatedSize = 0;
+
+          glDeleteBuffers(1, &element->vboId);
+          glGenBuffers(1, &element->vboId);
+        }
 
         switch (typeIndex)
         {

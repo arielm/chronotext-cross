@@ -20,7 +20,7 @@ namespace chr
       virtual bool empty() const = 0;
     };
 
-    template<int V = 0>
+    template<int V = XYZ>
     class VertexBatch : public Batch
     {
     public:
@@ -291,7 +291,7 @@ namespace chr
       }
     };
 
-    template<int V = 0, typename I = GLushort>
+    template<int V = XYZ, typename I = GLushort>
     class IndexedVertexBatch : public VertexBatch<V>
     {
     public:
