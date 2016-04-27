@@ -49,14 +49,17 @@ namespace chr
 
       int id;
       buffer::Element<T> *element;
-      std::vector<T> &storage;
       GLenum usage;
+
+      buffer::Element<T>* operator->()
+      {
+        return element;
+      }
 
       Buffer(GLenum usage = GL_DYNAMIC_DRAW)
       :
       id(buffer::TypeTraits<T>::usageCounter++),
       element(new buffer::Element<T>()),
-      storage(element->storage),
       usage(usage)
       {
         element->useCount++;
@@ -66,7 +69,6 @@ namespace chr
       :
       id(other.id),
       element(other.element),
-      storage(other.storage),
       usage(other.usage)
       {
         element->useCount++;
@@ -76,9 +78,8 @@ namespace chr
       {
         if (this != &other)
         {
-          element = other.element;
           id = other.id;
-          storage = other.storage;
+          element = other.element;
           usage = other.usage;
 
           element->useCount++;
@@ -104,22 +105,22 @@ namespace chr
 
       void clear()
       {
-        storage.clear();
+        element->storage.clear();
       }
 
       void reserve(size_t n)
       {
-        storage.reserve(n);
+        element->storage.reserve(n);
       }
 
       size_t size() const
       {
-        return storage.size();
+        return element->storage.size();
       }
 
       bool empty() const
       {
-        return storage.empty();
+        return element->storage.empty();
       }
 
       int useCount() const
@@ -184,11 +185,11 @@ namespace chr
         {
           case buffer::GLUSHORT:
           case buffer::GLUINT:
-            glDrawElements(primitive, count ? count : storage.size(), (typeIndex == buffer::GLUSHORT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, 0);
+            glDrawElements(primitive, count ? count : element->storage.size(), (typeIndex == buffer::GLUSHORT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, 0);
             break;
 
           default:
-            glDrawArrays(primitive, 0, count ? count : storage.size());
+            glDrawArrays(primitive, 0, count ? count : element->storage.size());
             break;
         }
       }
@@ -201,7 +202,7 @@ namespace chr
       template<typename... Args>
       inline void add(Args&&... args)
       {
-        storage.emplace_back(std::forward<Args>(args)...);
+        element->storage.emplace_back(std::forward<Args>(args)...);
       }
 
       void upload()
@@ -213,7 +214,7 @@ namespace chr
             if (element->allocatedSize == 0)
             {
               element->allocatedSize = element->storage.size();
-              glBufferData(target, element->storage.size() * sizeof(T), storage.data(), GL_STATIC_DRAW);
+              glBufferData(target, element->storage.size() * sizeof(T), element->storage.data(), GL_STATIC_DRAW);
             }
           }
           break;
@@ -227,7 +228,7 @@ namespace chr
               glBufferData(target, element->storage.size() * sizeof(T), nullptr, GL_DYNAMIC_DRAW);
             }
 
-            glBufferSubData(target, 0, element->storage.size() * sizeof(T), storage.data());
+            glBufferSubData(target, 0, element->storage.size() * sizeof(T), element->storage.data());
           }
           break;
         }
