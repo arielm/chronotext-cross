@@ -12,8 +12,6 @@ namespace chr
     {
     public:
       Batch() = default;
-      Batch(const Batch &other) = delete;
-      Batch& operator=(const Batch &other) = delete;
 
       virtual void bind() = 0;
       virtual void clear() = 0;
@@ -56,8 +54,6 @@ namespace chr
       vertexBuffer(vertexBuffer),
       Batch()
       {}
-
-      inline std::vector<Vertex<V>>& vertices() const { return vertexBuffer.storage; }
 
       inline void setShaderUniform(const std::string &name, int v0) { uniformi[name] = { v0 }; }
       inline void setShaderUniform(const std::string &name, int v0, int v1) { uniformi[name] = { v0, v1 }; }
@@ -175,7 +171,7 @@ namespace chr
       template<typename... Args>
       inline void addVertex(Args&&... args)
       {
-        vertexBuffer.storage.emplace_back(std::forward<Args>(args)...);
+        vertexBuffer->storage.emplace_back(std::forward<Args>(args)...);
       }
 
     protected:
@@ -318,7 +314,7 @@ namespace chr
       {
         for (I offset : {args...})
         {
-          indexBuffer.storage.emplace_back(index + offset);
+          indexBuffer->storage.emplace_back(index + offset);
         }
       }
 
