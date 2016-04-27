@@ -55,7 +55,10 @@ namespace chr
     u2(other.u2),
     v2(other.v2)
     {
-      element->useCount++;
+      if (element)
+      {
+        element->useCount++;
+      }
     }
 
     Texture& Texture::operator=(const Texture &other)
@@ -74,7 +77,10 @@ namespace chr
         u2 = other.u2;
         v2 = other.v2;
 
-        element->useCount++;
+        if (element)
+        {
+          element->useCount++;
+        }
       }
 
       return *this;
