@@ -14,8 +14,6 @@ namespace chr
       {
         PROPERTY_SHADER_MATRIX,
         PROPERTY_SHADER_COLOR,
-        PROPERTY_GL_ENABLE,
-        PROPERTY_GL_DISABLE,
         PROPERTY_GL_DEPTH_MASK,
         PROPERTY_GL_DEPTH_FUNC,
         PROPERTY_GL_BLEND_FUNC,
@@ -78,6 +76,8 @@ namespace chr
       std::map<int, std::vector<unsigned int>> propui;
       std::map<int, std::vector<float>> propf;
       std::map<int, glm::mat4> propm;
+
+      std::map<int, bool> enabled;
     };
   }
 }

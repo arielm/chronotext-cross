@@ -35,12 +35,12 @@ namespace chr
 
     void State::glEnable(GLenum cap)
     {
-      propui[PROPERTY_GL_ENABLE] = {cap};
+      enabled[cap] = {true};
     }
 
     void State::glDisable(GLenum cap)
     {
-      propui[PROPERTY_GL_DISABLE] = {cap};
+      enabled[cap] = {false};
     }
 
     void State::glDepthMask(bool flag)
@@ -105,18 +105,22 @@ namespace chr
 
         // ---
 
+        for (auto it = enabled.begin(); it != enabled.end(); ++it)
+        {
+          if (it->second)
+          {
+            ::glEnable(it->first);
+          }
+          else
+          {
+            ::glDisable(it->first);
+          }
+        }
+
         for (auto it = propui.begin(); it != propui.end(); ++it)
         {
           switch (it->first)
           {
-            case PROPERTY_GL_ENABLE:
-              ::glEnable(it->second[0]);
-              break;
-
-            case PROPERTY_GL_DISABLE:
-              ::glDisable(it->second[0]);
-              break;
-
             case PROPERTY_GL_DEPTH_MASK:
               ::glDepthMask(it->second[0]);
               break;
