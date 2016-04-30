@@ -89,15 +89,4 @@ void Sketch::initTextures()
                       .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
                       .setMipmap(true)
                       .setWrap(GL_REPEAT, GL_REPEAT));
-
-  // ---
-
-  #if defined(CHR_PLATFORM_EMSCRIPTEN)
-    emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
-    emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "WEBKIT_EXT_texture_filter_anisotropic");
-  #endif
-
-  GLfloat maxAnisotropy;
-  glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
 }

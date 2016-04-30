@@ -17,6 +17,7 @@ public:
 
 protected:
   chr::gl::Texture textures[3];
+  chr::gl::State states[3];
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> textureBatches[3];
 
   chr::gl::shaders::TextureShader textureShader;

@@ -1,5 +1,4 @@
 #include "Sketch.h"
-
 #include "gl/draw/Texture.h"
 
 using namespace std;
@@ -13,31 +12,31 @@ void Sketch::setup()
 
   // ---
 
-  textureBatches[0].setShader(textureShader);
-  textureBatches[0].setShaderColor(1, 1, 1, 1);
-  textureBatches[0].setTexture(textures[0]);
+  states[0].setShader(textureShader);
+  states[0].setShaderColor(1, 1, 1, 1);
+  states[0].setTexture(textures[0]);
 
-  textureBatches[1].setShader(textureAlphaShader);
-  textureBatches[1].setShaderColor(1, 0.5f, 0, 1);
-  textureBatches[1].setTexture(textures[1]);
+  states[1].setShader(textureAlphaShader);
+  states[1].setShaderColor(1, 0.5f, 0, 1);
+  states[1].setTexture(textures[1]);
 
-  textureBatches[2].setShader(textureShader);
-  textureBatches[2].setShaderColor(1, 1, 1, 1);
-  textureBatches[2].setTexture(textures[2]);
+  states[2].setShader(textureShader);
+  states[2].setShaderColor(1, 1, 1, 1);
+  states[2].setTexture(textures[2]);
 
   Matrix matrix;
 
   matrix.push();
   matrix.scale(0.333f);
-  draw::Texture().fillFromCenter(textureBatches[0], matrix);
+  draw::Texture(textures[0]).fillFromCenter(textureBatches[0], matrix);
   matrix.pop();
 
   matrix.translate(0, 0, 5);
-  draw::Texture().fillRect(textureBatches[1], matrix, Rectf(-200, -150, 400, 300));
+  draw::Texture(textures[1]).fillRect(textureBatches[1], matrix, Rectf(-200, -150, 400, 300));
 
   matrix.translate(0, 0, 5);
   matrix.scale(0.75f);
-  draw::Texture().fillFromCenter(textureBatches[2], matrix, 100, 100);
+  draw::Texture(textures[2]).fillFromCenter(textureBatches[2], matrix, 100, 100);
 
   // ---
 
@@ -55,40 +54,45 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.size.x / windowInfo.size.y, 0.1f, 1000.0f);
+  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
-  glm::mat4 modelViewMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1, -1, 1)); // SCALE
-  modelViewMatrix = glm::translate(modelViewMatrix, glm::vec3(0, 0, -300)); // DISTANCE
-  modelViewMatrix = glm::rotate(modelViewMatrix, 15 * D2R, glm::vec3(1, 0, 0)); // ELEVATION
-  modelViewMatrix = glm::rotate(modelViewMatrix, (float) getElapsedSeconds(), glm::vec3(0, 1, 0)); // AZIMUTH
+  Matrix modelViewMatrix;
+  modelViewMatrix
+    .scale(1, -1, 1)
+    .translate(0, 0, -300)
+    .rotateX(15 * D2R)
+    .rotateY(getElapsedSeconds());
 
-  glm::mat4 mvpMatrix = projectionMatrix * modelViewMatrix;
+  glm::mat4 mvpMatrix = modelViewMatrix * projectionMatrix;
 
   // ---
 
-  textureBatches[0].setShaderMatrix(mvpMatrix);
-  textureBatches[1].setShaderMatrix(mvpMatrix);
-  textureBatches[2].setShaderMatrix(mvpMatrix);
+  states[0].setShaderMatrix(mvpMatrix);
+  states[1].setShaderMatrix(mvpMatrix);
+  states[2].setShaderMatrix(mvpMatrix);
 
-  textureBatches[0].flush();
-  textureBatches[1].flush();
-  textureBatches[2].flush();
+  states[0].apply();
+  textureBatches[0].flush(states[0]);
+
+  states[1].apply();
+  textureBatches[1].flush(states[1]);
+
+  states[2].apply();
+  textureBatches[2].flush(states[2]);
 }
 
 void Sketch::initTextures()
 {
-  textures[0] = Texture(Texture::Request("6980491_UN1_800_MASK.png").setFlags(image::FLAGS_POT));
-  textures[1] = Texture(Texture::Request("lys_32.png").setFlags(image::FLAGS_TRANSLUCENT_INVERSE).setMipmap(true).setWrap(GL_REPEAT, GL_REPEAT));
-  textures[2] = Texture(Texture::Request("expo67.png"));
+  textures[0] = Texture(Texture::Request("6980491_UN1_800_MASK.png")
+    .setFlags(image::FLAGS_POT)
+    .setAnisotropy(true));
 
-  // ---
+  textures[1] = Texture(Texture::Request("lys_32.png")
+    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
+    .setMipmap(true)
+    .setAnisotropy(true)
+    .setWrap(GL_REPEAT, GL_REPEAT));
 
-  #if defined(CHR_PLATFORM_EMSCRIPTEN)
-    emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
-    emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "WEBKIT_EXT_texture_filter_anisotropic");
-  #endif
-
-  GLfloat maxAnisotropy;
-  glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &maxAnisotropy);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, maxAnisotropy);
+  textures[2] = Texture(Texture::Request("expo67.png")
+    .setAnisotropy(true));
 }
