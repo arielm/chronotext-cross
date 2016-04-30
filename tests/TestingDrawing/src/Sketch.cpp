@@ -15,22 +15,25 @@ void Sketch::setup()
 
   // ---
 
-  textureBatch.setShader(textureAlphaShader);
-  textureBatch.setTexture(texture);
-
-  colorBatch.setShader(colorShader);
-
-  // ---
-
   glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, 0.0f, windowInfo.size.y);
 
   Matrix modelViewMatrix;
-  modelViewMatrix.translate(windowInfo.size / 2.0f).scale(1, -1);
+  modelViewMatrix
+    .translate(windowInfo.size / 2.0f)
+    .scale(1, -1);
 
   glm::mat4 mvpMatrix = modelViewMatrix * projectionMatrix;
 
-  colorBatch.setShaderMatrix(mvpMatrix);
-  textureBatch.setShaderMatrix(mvpMatrix);
+  // ---
+
+  textureState
+    .setShader(textureAlphaShader)
+    .setTexture(texture)
+    .setShaderMatrix(mvpMatrix);
+
+  colorState
+    .setShader(colorShader)
+    .setShaderMatrix(mvpMatrix);
 
   // ---
 
@@ -52,7 +55,7 @@ void Sketch::setup()
   matrix.push()
     .scale(0.5f)
     .rotateZ(-15 * D2R);
-  draw::Texture()
+  draw::Texture(texture)
     .setColor(1, 1, 1, 1)
     .fillFromCenter(textureBatch, matrix, 0, 0);
   matrix.pop();
@@ -73,8 +76,11 @@ void Sketch::draw()
 
   // ---
 
-  colorBatch.flush();
-  textureBatch.flush();
+  colorState.apply();
+  colorBatch.flush(colorState);
+
+  textureState.apply();
+  textureBatch.flush(textureState);
 }
 
 void Sketch::initTextures()

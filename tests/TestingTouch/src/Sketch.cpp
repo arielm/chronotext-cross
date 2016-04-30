@@ -1,6 +1,5 @@
 
 #include "Sketch.h"
-
 #include "gl/Matrix.h"
 #include "gl/draw/Texture.h"
 
@@ -14,14 +13,15 @@ static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 void Sketch::setup()
 {
   scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
-  projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
 
   initTextures();
 
-  textureBatch.setShader(textureAlphaShader);
-  textureBatch.setShaderColor(1, 1, 1, 1);
-  textureBatch.setShaderMatrix(projectionMatrix);
-  textureBatch.setTexture(texture);
+  textureState
+    .setShader(textureAlphaShader)
+    .setShaderColor(1, 1, 1, 1)
+    .setShaderMatrix(projectionMatrix)
+    .setTexture(texture);
 
   // ---
 
@@ -45,7 +45,9 @@ void Sketch::draw()
     drawDot(it->second, scale * DOT_RADIUS_DP);
   }
 
-  textureBatch.flush();
+  textureState.apply();
+  textureBatch.flush(textureState);
+
   touchPositions.clear();
 }
 
@@ -64,7 +66,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   Matrix matrix;
   matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
 
-  draw::Texture().fillFromCenter(textureBatch, matrix);
+  draw::Texture(texture).fillFromCenter(textureBatch, matrix);
 }
 
 void Sketch::initTextures()

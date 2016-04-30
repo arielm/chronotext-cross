@@ -41,11 +41,11 @@ public:
 
 protected:
   chr::gl::Texture texture;
+  chr::gl::State textureState;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> textureBatch;
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 
   float scale;
-  glm::mat4 projectionMatrix;
 
   glm::vec2 acceleration;
   Particle particle;

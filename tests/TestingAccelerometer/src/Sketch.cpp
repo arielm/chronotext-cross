@@ -17,15 +17,16 @@ static constexpr float DT = 1.0f;
 void Sketch::setup()
 {
   scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
-  projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
   particle = Particle(windowInfo.size * 0.5f, scale * DOT_RADIUS_DP);
 
   initTextures();
 
-  textureBatch.setShader(textureAlphaShader);
-  textureBatch.setShaderColor(1, 1, 1, 1);
-  textureBatch.setShaderMatrix(projectionMatrix);
-  textureBatch.setTexture(texture);
+  textureState
+    .setShader(textureAlphaShader)
+    .setShaderColor(1, 1, 1, 1)
+    .setShaderMatrix(projectionMatrix)
+    .setTexture(texture);
 
   // ---
 
@@ -59,7 +60,14 @@ void Sketch::draw()
   glClearColor(0, 0, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
+  // ---
+
+  textureBatch.clear();
+
   drawDot(particle.position, particle.radius);
+
+  textureState.apply();
+  textureBatch.flush(textureState);
 }
 
 void Sketch::accelerated(AccelEvent event)
@@ -72,9 +80,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   Matrix matrix;
   matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
 
-  textureBatch.clear();
-  draw::Texture().fillFromCenter(textureBatch, matrix);
-  textureBatch.flush();
+  draw::Texture(texture).fillFromCenter(textureBatch, matrix);
 }
 
 // ---
