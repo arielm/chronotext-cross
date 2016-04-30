@@ -4,78 +4,92 @@ namespace chr
 {
   namespace gl
   {
-    void State::setTexture(const Texture &texture)
+    State& State::setTexture(const Texture &texture)
     {
       this->texture = texture;
       hasTexture = true;
+      return *this;
     }
 
-    void State::setShader(const ShaderProgram &shader)
+    State& State::setShader(const ShaderProgram &shader)
     {
       this->shader = shader;
       hasShader = true;
+      return *this;
     }
 
-    void State::setShaderMatrix(const glm::mat4 &matrix)
+    State& State::setShaderMatrix(const glm::mat4 &matrix)
     {
       propm[PROPERTY_SHADER_MATRIX] = matrix;
+      return *this;
     }
 
-    void State::setShaderColor(const glm::vec4 &color)
+    State& State::setShaderColor(const glm::vec4 &color)
     {
       propf[PROPERTY_SHADER_COLOR] = {color.r, color.g, color.b, color.a};
+      return *this;
     }
 
-    void State::setShaderColor(float r, float g, float b, float a)
+    State& State::setShaderColor(float r, float g, float b, float a)
     {
       propf[PROPERTY_SHADER_COLOR] = {r, g, b, a};
+      return *this;
     }
 
     // ---
 
-    void State::glEnable(GLenum cap)
+    State& State::glEnable(GLenum cap)
     {
       enabled[cap] = {true};
+      return *this;
     }
 
-    void State::glDisable(GLenum cap)
+    State& State::glDisable(GLenum cap)
     {
       enabled[cap] = {false};
+      return *this;
     }
 
-    void State::glDepthMask(bool flag)
+    State& State::glDepthMask(bool flag)
     {
       propui[PROPERTY_GL_DEPTH_MASK] = {flag};
+      return *this;
     }
 
-    void State::glDepthFunc(GLenum func)
+    State& State::glDepthFunc(GLenum func)
     {
       propui[PROPERTY_GL_DEPTH_FUNC] = {func};
+      return *this;
     }
 
-    void State::glBlendFunc(GLenum sfactor, GLenum dfactor)
+    State& State::glBlendFunc(GLenum sfactor, GLenum dfactor)
     {
       propui[PROPERTY_GL_BLEND_FUNC] = {sfactor, dfactor};
+      return *this;
     }
 
-    void State::glCullFace(GLenum mode)
+    State& State::glCullFace(GLenum mode)
     {
       propui[PROPERTY_GL_CULL_FACE] = {mode};
+      return *this;
     }
 
-    void State::glFrontFace(GLenum mode)
+    State& State::glFrontFace(GLenum mode)
     {
       propui[PROPERTY_GL_FRONT_FACE] = {mode};
+      return *this;
     }
 
-    void State::glLineWidth(float width)
+    State& State::glLineWidth(float width)
     {
       propf[PROPERTY_GL_LINE_WIDTH] = {width};
+      return *this;
     }
 
-    void State::glPolygonOffset(GLfloat factor, GLfloat units)
+    State& State::glPolygonOffset(GLfloat factor, GLfloat units)
     {
       propf[PROPERTY_GL_POLYGON_OFFSET] = {factor, units};
+      return *this;
     }
 
     // ---

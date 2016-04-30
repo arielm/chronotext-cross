@@ -28,41 +28,41 @@ namespace chr
 
       State() = default;
 
-      inline void setShaderUniform(const std::string &name, int v0) { uniformi[name] = { v0 }; }
-      inline void setShaderUniform(const std::string &name, int v0, int v1) { uniformi[name] = { v0, v1 }; }
-      inline void setShaderUniform(const std::string &name, int v0, int v1, int v2) { uniformi[name] = { v0, v1, v2 }; }
-      inline void setShaderUniform(const std::string &name, int v0, int v1, int v2, int v3) { uniformi[name] = { v0, v1, v2, v3 }; }
+      inline State& setShaderUniform(const std::string &name, int v0) { uniformi[name] = { v0 }; return *this; }
+      inline State& setShaderUniform(const std::string &name, int v0, int v1) { uniformi[name] = { v0, v1 }; return *this; }
+      inline State& setShaderUniform(const std::string &name, int v0, int v1, int v2) { uniformi[name] = { v0, v1, v2 }; return *this; }
+      inline State& setShaderUniform(const std::string &name, int v0, int v1, int v2, int v3) { uniformi[name] = { v0, v1, v2, v3 }; return *this; }
 
-      inline void setShaderUniform(const std::string &name, const glm::ivec2 &v) { uniformi[name] = { v[0], v[1] }; }
-      inline void setShaderUniform(const std::string &name, const glm::ivec3 &v) { uniformi[name] = { v[0], v[1], v[2] }; }
-      inline void setShaderUniform(const std::string &name, const glm::ivec4 &v) { uniformi[name] = { v[0], v[1], v[2], v[3] }; }
+      inline State& setShaderUniform(const std::string &name, const glm::ivec2 &v) { uniformi[name] = { v[0], v[1] }; return *this; }
+      inline State& setShaderUniform(const std::string &name, const glm::ivec3 &v) { uniformi[name] = { v[0], v[1], v[2] }; return *this; }
+      inline State& setShaderUniform(const std::string &name, const glm::ivec4 &v) { uniformi[name] = { v[0], v[1], v[2], v[3] }; return *this; }
 
-      inline void setShaderUniform(const std::string &name, float v0) { uniformf[name] = { v0 }; }
-      inline void setShaderUniform(const std::string &name, float v0, float v1) { uniformf[name] = { v0, v1 }; }
-      inline void setShaderUniform(const std::string &name, float v0, float v1, float v2) { uniformf[name] = { v0, v1, v2 }; }
-      inline void setShaderUniform(const std::string &name, float v0, float v1, float v2, float v3) { uniformf[name] = { v0, v1, v2, v3 }; }
+      inline State& setShaderUniform(const std::string &name, float v0) { uniformf[name] = { v0 }; return *this; }
+      inline State& setShaderUniform(const std::string &name, float v0, float v1) { uniformf[name] = { v0, v1 }; return *this; }
+      inline State& setShaderUniform(const std::string &name, float v0, float v1, float v2) { uniformf[name] = { v0, v1, v2 }; return *this; }
+      inline State& setShaderUniform(const std::string &name, float v0, float v1, float v2, float v3) { uniformf[name] = { v0, v1, v2, v3 }; return *this; }
 
-      inline void setShaderUniform(const std::string &name, const glm::vec2 &v) { uniformf[name] = { v[0], v[1] }; }
-      inline void setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = { v[0], v[1], v[2] }; }
-      inline void setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = { v[0], v[1], v[2], v[3] }; }
+      inline State& setShaderUniform(const std::string &name, const glm::vec2 &v) { uniformf[name] = { v[0], v[1] }; return *this; }
+      inline State& setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = { v[0], v[1], v[2] }; return *this; }
+      inline State& setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = { v[0], v[1], v[2], v[3] }; return *this; }
 
       // ---
 
-      void setTexture(const Texture &texture);
-      void setShader(const ShaderProgram &shader);
-      void setShaderMatrix(const glm::mat4 &matrix);
-      void setShaderColor(const glm::vec4 &color);
-      void setShaderColor(float r, float g, float b, float a);
+      State& setTexture(const Texture &texture);
+      State& setShader(const ShaderProgram &shader);
+      State& setShaderMatrix(const glm::mat4 &matrix);
+      State& setShaderColor(const glm::vec4 &color);
+      State& setShaderColor(float r, float g, float b, float a);
 
-      void glEnable(GLenum cap);
-      void glDisable(GLenum cap);
-      void glDepthMask(bool flag);
-      void glDepthFunc(GLenum func);
-      void glBlendFunc(GLenum sfactor, GLenum dfactor);
-      void glCullFace(GLenum mode);
-      void glFrontFace(GLenum mode);
-      void glLineWidth(float width);
-      void glPolygonOffset(GLfloat factor, GLfloat units);
+      State& glEnable(GLenum cap);
+      State& glDisable(GLenum cap);
+      State& glDepthMask(bool flag);
+      State& glDepthFunc(GLenum func);
+      State& glBlendFunc(GLenum sfactor, GLenum dfactor);
+      State& glCullFace(GLenum mode);
+      State& glFrontFace(GLenum mode);
+      State& glLineWidth(float width);
+      State& glPolygonOffset(GLfloat factor, GLfloat units);
 
       void apply();
 
