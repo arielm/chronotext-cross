@@ -106,15 +106,38 @@ namespace chr
       {
         GLuint textureId;
         GLenum format;
-        int width, height;
-        int innerWidth, innerHeight;
-        float u1, v1;
-        float u2, v2;
+
+        union
+        {
+          glm::vec2 size;
+          struct { float width, height; };
+        };
+
+        union
+        {
+          glm::vec2 innerSize;
+          struct { float innerWidth, innerHeight; };
+        };
+
+        union
+        {
+          glm::vec2 coords1;
+          struct { float u1, v1; };
+        };
+
+        union
+        {
+          glm::vec2 coords2;
+          struct { float u2, v2; };
+        };
+
+        Response()
+        {}
       };
 
       // ---
 
-      Texture() = default;
+      Texture();
       Texture(const Response &response);
       Texture(const Request &request);
       Texture(const MaskedRequest &request);
@@ -127,10 +150,31 @@ namespace chr
       texture::Element *element = nullptr;
 
       GLenum format;
-      int width, height;
-      int innerWidth, innerHeight;
-      float u1, v1;
-      float u2, v2;
+      GLuint textureId;
+
+      union
+      {
+        glm::vec2 size;
+        struct { float width, height; };
+      };
+
+      union
+      {
+        glm::vec2 innerSize;
+        struct { float innerWidth, innerHeight; };
+      };
+
+      union
+      {
+        glm::vec2 coords1;
+        struct { float u1, v1; };
+      };
+
+      union
+      {
+        glm::vec2 coords2;
+        struct { float u2, v2; };
+      };
 
       bool bind();
       void unbind();

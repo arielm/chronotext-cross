@@ -7,19 +7,18 @@ namespace chr
   {
     int Texture ::usageCounter = 0;
 
+    Texture::Texture()
+    {}
+
     Texture::Texture(const Response &response)
     :
     id(usageCounter++),
     element(new texture::Element()),
     format(response.format),
-    width(response.width),
-    height(response.height),
-    innerWidth(response.innerWidth),
-    innerHeight(response.innerHeight),
-    u1(response.u1),
-    v1(response.v1),
-    u2(response.u2),
-    v2(response.v2)
+    size(response.size),
+    innerSize(response.innerSize),
+    coords1(response.coords1),
+    coords2(response.coords2)
     {
       element->textureId = response.textureId;
       element->useCount++;
@@ -46,14 +45,10 @@ namespace chr
     id(other.id),
     element(other.element),
     format(other.format),
-    width(other.width),
-    height(other.height),
-    innerWidth(other.innerWidth),
-    innerHeight(other.innerHeight),
-    u1(other.u1),
-    v1(other.v1),
-    u2(other.u2),
-    v2(other.v2)
+    size(other.size),
+    innerSize(other.innerSize),
+    coords1(other.coords1),
+    coords2(other.coords2)
     {
       if (element)
       {
@@ -68,14 +63,10 @@ namespace chr
         id = other.id;
         element = other.element;
         format = other.format;
-        width = other.width;
-        height = other.height;
-        innerWidth = other.innerWidth;
-        innerHeight = other.innerHeight;
-        u1 = other.u1;
-        v1 = other.v1;
-        u2 = other.u2;
-        v2 = other.v2;
+        size = other.size;
+        innerSize = other.innerSize;
+        coords1 = other.coords1;
+        coords2 = other.coords2;
 
         if (element)
         {
