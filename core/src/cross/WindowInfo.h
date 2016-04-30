@@ -16,7 +16,12 @@ namespace chr
 {
     struct WindowInfo
     {
-        glm::vec2 size;
+        union
+        {
+          glm::vec2 size;
+          struct { float width, height; };
+        };
+
         int aaSamples;
         int depthBits;
 
@@ -46,7 +51,7 @@ namespace chr
         
         glm::vec4 bounds() const
         {
-            return glm::vec4(0, 0, size.x, size.y);
+            return glm::vec4(0, 0, width, height);
         }
 
         glm::vec2 center() const
@@ -56,14 +61,14 @@ namespace chr
         
         float aspectRatio() const
         {
-            return (size.y > 0) ? (size.x / float(size.y)) : 0;
+            return (size.y > 0) ? (width / height) : 0;
         }
         
         friend std::ostream& operator<<(std::ostream &lhs, const WindowInfo &rhs)
         {
             lhs
             << "{"
-            << "size: [" << rhs.size.x << ", " << rhs.size.y << "]"
+            << "size: [" << rhs.width << ", " << rhs.height << "]"
             << ", anti-aliasing samples: " << rhs.aaSamples
             << ", depth-bits: " << rhs.depthBits
             << "}";
