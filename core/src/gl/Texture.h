@@ -16,26 +16,29 @@ namespace chr
       };
     }
 
+//    relativePath(relativePath),
+//      imageFlags(image::FLAGS_NONE),
+//      useMipmap(false),
+//      wrapS(GL_CLAMP_TO_EDGE),
+//      wrapT(GL_CLAMP_TO_EDGE)
+
     class Texture
     {
     public:
       struct Request
       {
         fs::path relativePath;
-        int imageFlags;
-        bool useMipmap;
-        GLenum wrapS;
-        GLenum wrapT;
+        int imageFlags = image::FLAGS_NONE;
+        bool useMipmap = false;
+        bool useAnisotropy = false;
+        GLenum wrapS = GL_CLAMP_TO_EDGE;
+        GLenum wrapT = GL_CLAMP_TO_EDGE;
 
         Request() = default;
 
         Request(const fs::path &relativePath)
         :
-        relativePath(relativePath),
-        imageFlags(image::FLAGS_NONE),
-        useMipmap(false),
-        wrapS(GL_CLAMP_TO_EDGE),
-        wrapT(GL_CLAMP_TO_EDGE)
+        relativePath(relativePath)
         {}
 
         Request& setFlags(int flags = image::FLAGS_NONE)
@@ -47,6 +50,12 @@ namespace chr
         Request& setMipmap(bool mipmap)
         {
           useMipmap = mipmap;
+          return *this;
+        }
+
+        Request& setAnisotropy(bool anisotropy)
+        {
+          useAnisotropy = anisotropy;
           return *this;
         }
 
@@ -62,23 +71,19 @@ namespace chr
       {
         fs::path imageRelativePath;
         fs::path maskRelativePath;
-        int imageFlags;
-        int maskFlags;
-        bool useMipmap;
-        GLenum wrapS;
-        GLenum wrapT;
+        int imageFlags = image::FLAGS_NONE;
+        int maskFlags = image::FLAGS_NONE;
+        bool useMipmap = false;
+        bool useAnisotropy = false;
+        GLenum wrapS = GL_CLAMP_TO_EDGE;
+        GLenum wrapT = GL_CLAMP_TO_EDGE;
 
         MaskedRequest() = default;
 
         MaskedRequest(const fs::path &imageRelativePath, const fs::path &maskRelativePath)
         :
         imageRelativePath(imageRelativePath),
-        maskRelativePath(maskRelativePath),
-        imageFlags(image::FLAGS_NONE),
-        maskFlags(image::FLAGS_NONE),
-        useMipmap(false),
-        wrapS(GL_CLAMP_TO_EDGE),
-        wrapT(GL_CLAMP_TO_EDGE)
+        maskRelativePath(maskRelativePath)
         {}
 
         MaskedRequest& setFlags(int imageFlags = image::FLAGS_NONE, int maskFlags = image::FLAGS_NONE)
@@ -91,6 +96,12 @@ namespace chr
         MaskedRequest& setMipmap(bool mipmap)
         {
           useMipmap = mipmap;
+          return *this;
+        }
+
+        MaskedRequest& setAnisotropy(bool anisotropy)
+        {
+          useAnisotropy = anisotropy;
           return *this;
         }
 

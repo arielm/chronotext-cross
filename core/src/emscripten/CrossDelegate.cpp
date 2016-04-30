@@ -1,10 +1,3 @@
-/*
- * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
- *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
- * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
- */
 
 #include "emscripten/CrossDelegate.h"
 #include "cross/Context.h"
@@ -38,15 +31,15 @@ namespace chr
             int targetWidth;
             int targetHeight;
 
-            if (initInfo.windowInfo.size.x * initInfo.windowInfo.size.y == 0)
+            if (initInfo.windowInfo.width * initInfo.windowInfo.height == 0)
             {
                 targetWidth = EM_ASM_INT_V("return window.innerWidth");
                 targetHeight = EM_ASM_INT_V("return window.innerHeight");
             }
             else
             {
-                targetWidth = initInfo.windowInfo.size.x;
-                targetHeight = initInfo.windowInfo.size.y;
+                targetWidth = initInfo.windowInfo.width;
+                targetHeight = initInfo.windowInfo.height;
             }
 
             setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples);
@@ -67,6 +60,11 @@ namespace chr
 
             EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
             emscripten_webgl_make_context_current(ctx);
+
+            // ---
+
+            emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
+            emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "WEBKIT_EXT_texture_filter_anisotropic");
 
             // ---
 
