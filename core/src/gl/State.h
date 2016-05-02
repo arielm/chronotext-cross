@@ -1,7 +1,6 @@
 #pragma once
 
 #include "gl/ShaderProgram.h"
-#include "gl/Texture.h"
 
 namespace chr
 {
@@ -12,8 +11,6 @@ namespace chr
     public:
       enum
       {
-        PROPERTY_SHADER_MATRIX,
-        PROPERTY_SHADER_COLOR,
         PROPERTY_GL_DEPTH_MASK,
         PROPERTY_GL_DEPTH_FUNC,
         PROPERTY_GL_BLEND_FUNC,
@@ -23,8 +20,14 @@ namespace chr
         PROPERTY_GL_POLYGON_OFFSET
       };
 
-      Texture texture;
       ShaderProgram shader;
+      bool hasShader = false;
+
+      glm::mat4 matrix;
+      bool hasMatrix = false;
+
+      glm::vec4 color;
+      bool hasColor = false;
 
       State() = default;
 
@@ -48,7 +51,6 @@ namespace chr
 
       // ---
 
-      State& setTexture(const Texture &texture);
       State& setShader(const ShaderProgram &shader);
       State& setShaderMatrix(const glm::mat4 &matrix);
       State& setShaderColor(const glm::vec4 &color);
@@ -67,15 +69,11 @@ namespace chr
       void apply();
 
     protected:
-      bool hasTexture = false;
-      bool hasShader = false;
-
       std::map <std::string, std::vector<int>> uniformi;
       std::map <std::string, std::vector<float>> uniformf;
 
       std::map<int, std::vector<unsigned int>> propui;
       std::map<int, std::vector<float>> propf;
-      std::map<int, glm::mat4> propm;
 
       std::map<int, bool> enabled;
     };

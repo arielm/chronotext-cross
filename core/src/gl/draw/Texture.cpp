@@ -8,11 +8,6 @@ namespace chr
   {
     namespace draw
     {
-      Texture::Texture(gl::Texture &texture)
-      :
-      texture(texture)
-      {}
-      
       Texture& Texture::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -30,13 +25,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(x, y, x2, y2, u1, v1, u2, v2), batch);
       }
@@ -44,13 +39,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(x, y, x2, y2, u1, v1, u2, v2), batch);
       }
@@ -58,13 +53,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(x, y, x2, y2, u1, v1, u2, v2, color), batch);
       }
@@ -72,13 +67,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(x, y, x2, y2, u1, v1, u2, v2, color), batch);
       }
@@ -88,13 +83,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         batch.addVertex( x,  y, 0, u1, v1);
         batch.addVertex( x, y2, 0, u1, v2);
@@ -108,13 +103,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         batch.addVertex( x,  y, 0, u1, v1);
         batch.addVertex( x, y2, 0, u1, v2);
@@ -128,13 +123,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         batch.addVertex( x,  y, 0, u1, v1, color);
         batch.addVertex( x, y2, 0, u1, v2, color);
@@ -148,13 +143,13 @@ namespace chr
       template <>
       void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
       {
-        float x2 = x + texture.innerWidth;
-        float y2 = y + texture.innerHeight;
+        float x2 = x + batch.texture.innerWidth;
+        float y2 = y + batch.texture.innerHeight;
 
-        float u1 = texture.u1;
-        float v1 = texture.v1;
-        float u2 = texture.u2;
-        float v2 = texture.v2;
+        float u1 = batch.texture.u1;
+        float v1 = batch.texture.v1;
+        float u2 = batch.texture.u2;
+        float v2 = batch.texture.v2;
 
         batch.addVertex( x,  y, 0, u1, v1, color);
         batch.addVertex( x, y2, 0, u1, v2, color);
@@ -170,8 +165,8 @@ namespace chr
       template <>
       void Texture::fillRect<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, const Rectf &rect, float ox, float oy)
       {
-        float width = texture.innerWidth;
-        float height = texture.innerHeight;
+        float width = batch.texture.innerWidth;
+        float height = batch.texture.innerHeight;
 
         float u1 = (rect.x1 - ox) / width;
         float v1 = (rect.y1 - oy) / height;
@@ -184,8 +179,8 @@ namespace chr
       template <>
       void Texture::fillRect<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, const Rectf &rect, float ox, float oy)
       {
-        float width = texture.innerWidth;
-        float height = texture.innerHeight;
+        float width = batch.texture.innerWidth;
+        float height = batch.texture.innerHeight;
 
         float u1 = (rect.x1 - ox) / width;
         float v1 = (rect.y1 - oy) / height;

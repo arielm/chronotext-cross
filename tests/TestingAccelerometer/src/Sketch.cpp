@@ -17,7 +17,7 @@ static constexpr float DT = 1.0f;
 void Sketch::setup()
 {
   scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
   particle = Particle(windowInfo.size * 0.5f, scale * DOT_RADIUS_DP);
 
   initTextures();
@@ -25,8 +25,9 @@ void Sketch::setup()
   textureState
     .setShader(textureAlphaShader)
     .setShaderColor(1, 1, 1, 1)
-    .setShaderMatrix(projectionMatrix)
-    .setTexture(texture);
+    .setShaderMatrix(projectionMatrix);
+
+  textureBatch.setTexture(texture);
 
   // ---
 
@@ -80,7 +81,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   Matrix matrix;
   matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
 
-  draw::Texture(texture).fillFromCenter(textureBatch, matrix);
+  draw::Texture().fillFromCenter(textureBatch, matrix);
 }
 
 // ---
@@ -99,7 +100,7 @@ void Sketch::verlet()
 
 void Sketch::satisfyConstraints()
 {
-  math::Rectf bounds(particle.radius, particle.radius, windowInfo.size.x - particle.radius * 2, windowInfo.size.y - particle.radius * 2);
+  math::Rectf bounds(particle.radius, particle.radius, windowInfo.width - particle.radius * 2, windowInfo.height - particle.radius * 2);
   auto velocity = particle.position - particle.previousPosition;
 
   if (particle.position.x < bounds.x1)

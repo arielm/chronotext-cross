@@ -4,13 +4,6 @@ namespace chr
 {
   namespace gl
   {
-    State& State::setTexture(const Texture &texture)
-    {
-      this->texture = texture;
-      hasTexture = true;
-      return *this;
-    }
-
     State& State::setShader(const ShaderProgram &shader)
     {
       this->shader = shader;
@@ -20,19 +13,22 @@ namespace chr
 
     State& State::setShaderMatrix(const glm::mat4 &matrix)
     {
-      propm[PROPERTY_SHADER_MATRIX] = matrix;
+      this->matrix = matrix;
+      hasMatrix = true;
       return *this;
     }
 
     State& State::setShaderColor(const glm::vec4 &color)
     {
-      propf[PROPERTY_SHADER_COLOR] = {color.r, color.g, color.b, color.a};
+      this->color = color;
+      hasColor = true;
       return *this;
     }
 
     State& State::setShaderColor(float r, float g, float b, float a)
     {
-      propf[PROPERTY_SHADER_COLOR] = {r, g, b, a};
+      color = { r, g, b, a };
+      hasColor = true;
       return *this;
     }
 
@@ -100,12 +96,15 @@ namespace chr
       {
         shader.bind();
 
-        if (hasTexture)
+        if (hasColor)
         {
-          texture.bind();
+          shader.applyColor(color);
         }
 
-        // ---
+        if (hasMatrix)
+        {
+          shader.applyMatrix(matrix);
+        }
 
         for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
         {
@@ -116,73 +115,57 @@ namespace chr
         {
           shader.applyUniform(it->first, it->second);
         }
+      }
 
-        // ---
-
-        for (auto it = enabled.begin(); it != enabled.end(); ++it)
+      for (auto it = enabled.begin(); it != enabled.end(); ++it)
+      {
+        if (it->second)
         {
-          if (it->second)
-          {
-            ::glEnable(it->first);
-          }
-          else
-          {
-            ::glDisable(it->first);
-          }
+          ::glEnable(it->first);
         }
-
-        for (auto it = propui.begin(); it != propui.end(); ++it)
+        else
         {
-          switch (it->first)
-          {
-            case PROPERTY_GL_DEPTH_MASK:
-              ::glDepthMask(it->second[0]);
-              break;
-
-            case PROPERTY_GL_DEPTH_FUNC:
-              ::glDepthFunc(it->second[0]);
-              break;
-
-            case PROPERTY_GL_BLEND_FUNC:
-              ::glBlendFunc(it->second[0], it->second[1]);
-              break;
-
-            case PROPERTY_GL_CULL_FACE:
-              ::glCullFace(it->second[0]);
-              break;
-
-            case PROPERTY_GL_FRONT_FACE:
-              ::glFrontFace(it->second[0]);
-              break;
-
-            case PROPERTY_GL_POLYGON_OFFSET:
-              ::glPolygonOffset(it->second[0], it->second[1]);
-              break;
-          }
+          ::glDisable(it->first);
         }
+      }
 
-        for (auto it = propf.begin(); it != propf.end(); ++it)
+      for (auto it = propui.begin(); it != propui.end(); ++it)
+      {
+        switch (it->first)
         {
-          switch (it->first)
-          {
-            case PROPERTY_SHADER_COLOR:
-              glVertexAttrib4fv(shader.element->colorLocation, it->second.data());
-              break;
+          case PROPERTY_GL_DEPTH_MASK:
+            ::glDepthMask(it->second[0]);
+            break;
 
-            case PROPERTY_GL_LINE_WIDTH:
-              ::glLineWidth(it->second[0]);
-              break;
-          }
+          case PROPERTY_GL_DEPTH_FUNC:
+            ::glDepthFunc(it->second[0]);
+            break;
+
+          case PROPERTY_GL_BLEND_FUNC:
+            ::glBlendFunc(it->second[0], it->second[1]);
+            break;
+
+          case PROPERTY_GL_CULL_FACE:
+            ::glCullFace(it->second[0]);
+            break;
+
+          case PROPERTY_GL_FRONT_FACE:
+            ::glFrontFace(it->second[0]);
+            break;
+
+          case PROPERTY_GL_POLYGON_OFFSET:
+            ::glPolygonOffset(it->second[0], it->second[1]);
+            break;
         }
+      }
 
-        for (auto it = propm.begin(); it != propm.end(); ++it)
+      for (auto it = propf.begin(); it != propf.end(); ++it)
+      {
+        switch (it->first)
         {
-          switch (it->first)
-          {
-            case PROPERTY_SHADER_MATRIX:
-              glUniformMatrix4fv(shader.element->matrixLocation, 1, GL_FALSE, glm::value_ptr(it->second));
-              break;
-          }
+          case PROPERTY_GL_LINE_WIDTH:
+            ::glLineWidth(it->second[0]);
+            break;
         }
       }
     }

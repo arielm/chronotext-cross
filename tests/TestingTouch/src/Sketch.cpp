@@ -13,15 +13,16 @@ static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 void Sketch::setup()
 {
   scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, windowInfo.size.y, 0.0f);
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
 
   initTextures();
 
   textureState
     .setShader(textureAlphaShader)
     .setShaderColor(1, 1, 1, 1)
-    .setShaderMatrix(projectionMatrix)
-    .setTexture(texture);
+    .setShaderMatrix(projectionMatrix);
+
+  textureBatch.setTexture(texture);
 
   // ---
 
@@ -66,7 +67,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
   Matrix matrix;
   matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
 
-  draw::Texture(texture).fillFromCenter(textureBatch, matrix);
+  draw::Texture().fillFromCenter(textureBatch, matrix);
 }
 
 void Sketch::initTextures()

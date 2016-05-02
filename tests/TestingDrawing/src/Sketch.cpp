@@ -15,25 +15,23 @@ void Sketch::setup()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.size.x, 0.0f, windowInfo.size.y);
+  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
 
   Matrix modelViewMatrix;
   modelViewMatrix
     .translate(windowInfo.size / 2.0f)
     .scale(1, -1);
 
-  glm::mat4 mvpMatrix = modelViewMatrix * projectionMatrix;
+  state.setShaderMatrix(modelViewMatrix * projectionMatrix);
 
   // ---
 
-  textureState
+  textureBatch
     .setShader(textureAlphaShader)
-    .setTexture(texture)
-    .setShaderMatrix(mvpMatrix);
+    .setTexture(texture);
 
-  colorState
-    .setShader(colorShader)
-    .setShaderMatrix(mvpMatrix);
+  colorBatch
+    .setShader(colorShader);
 
   // ---
 
@@ -55,7 +53,7 @@ void Sketch::setup()
   matrix.push()
     .scale(0.5f)
     .rotateZ(-15 * D2R);
-  draw::Texture(texture)
+  draw::Texture()
     .setColor(1, 1, 1, 1)
     .fillFromCenter(textureBatch, matrix, 0, 0);
   matrix.pop();
@@ -76,17 +74,15 @@ void Sketch::draw()
 
   // ---
 
-  colorState.apply();
-  colorBatch.flush(colorState);
-
-  textureState.apply();
-  textureBatch.flush(textureState);
+  state.apply();
+  colorBatch.flush(state);
+  textureBatch.flush(state);
 }
 
 void Sketch::initTextures()
 {
   texture = Texture(Texture::Request("lys_32.png")
-                      .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-                      .setMipmap(true)
-                      .setWrap(GL_REPEAT, GL_REPEAT));
+    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
+    .setMipmap(true)
+    .setWrap(GL_REPEAT, GL_REPEAT));
 }

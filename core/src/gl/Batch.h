@@ -2,6 +2,7 @@
 
 #include "gl/Buffer.h"
 #include "gl/State.h"
+#include "gl/Texture.h"
 
 namespace chr
 {
@@ -23,6 +24,18 @@ namespace chr
     public:
       GLenum primitive;
       Buffer<Vertex<V>> vertexBuffer;
+
+      ShaderProgram shader;
+      bool hasShader;
+
+      glm::mat4 matrix;
+      bool hasMatrix = false;
+
+      glm::vec4 color;
+      bool hasColor = false;
+
+      Texture texture;
+      bool hasTexture = false;
 
       VertexBatch(GLenum primitive = GL_TRIANGLE_STRIP)
       :
@@ -52,14 +65,42 @@ namespace chr
 
       void flush(State &state)
       {
-        apply(state.shader);
-        bind(state.shader);
+        if (hasTexture)
+        {
+          texture.bind();
+        }
+
+        if (hasShader)
+        {
+          shader.bind();
+          apply(shader, state);
+          bind(shader);
+        }
+        else
+        {
+          apply(state.shader, state);
+          bind(state.shader);
+        }
       }
 
       template<typename... Args>
       inline void addVertex(Args&&... args)
       {
         vertexBuffer->storage.emplace_back(std::forward<Args>(args)...);
+      }
+
+      VertexBatch& setShader(const ShaderProgram &shader)
+      {
+        this->shader = shader;
+        hasShader = true;
+        return *this;
+      }
+
+      VertexBatch& setShaderMatrix(const glm::mat4 &matrix)
+      {
+        this->matrix = matrix;
+        hasMatrix = true;
+        return *this;
       }
 
       VertexBatch& setShaderColor(const glm::vec4 &color)
@@ -73,6 +114,13 @@ namespace chr
       {
         color = { r, g, b, a };
         hasColor = true;
+        return *this;
+      }
+
+      VertexBatch& setTexture(const Texture &texture)
+      {
+        this->texture = texture;
+        hasTexture = true;
         return *this;
       }
 
@@ -97,17 +145,27 @@ namespace chr
       inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = { v[0], v[1], v[2], v[3] }; return *this; }
 
     protected:
-      glm::vec4 color;
-      bool hasColor = false;
-
       std::map <std::string, std::vector<int>> uniformi;
       std::map <std::string, std::vector<float>> uniformf;
 
-      void apply(ShaderProgram &shader)
+      void apply(ShaderProgram &shader, State &state)
       {
         if (hasColor)
         {
           shader.applyColor(color);
+        }
+        else if (state.hasColor)
+        {
+          shader.applyColor(state.color);
+        }
+
+        if (hasMatrix)
+        {
+          shader.applyMatrix(matrix);
+        }
+        else if (state.hasMatrix)
+        {
+          shader.applyMatrix(state.matrix);
         }
 
         for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
@@ -185,6 +243,11 @@ namespace chr
 
       void bind(ShaderProgram &shader) override
       {
+        if (VertexBatch<V>::hasTexture)
+        {
+          VertexBatch<V>::texture.bind();
+        }
+
         VertexBatch<V>::vertexBuffer.bind(shader);
         indexBuffer.bind(shader);
         indexBuffer.draw(VertexBatch<V>::primitive);

@@ -12,31 +12,33 @@ void Sketch::setup()
 
   // ---
 
-  states[0].setShader(textureShader);
-  states[0].setShaderColor(1, 1, 1, 1);
-  states[0].setTexture(textures[0]);
+  textureBatches[0].setShader(textureShader);
+  textureBatches[0].setShaderColor(1, 1, 1, 1);
+  textureBatches[0].setTexture(textures[0]);
 
-  states[1].setShader(textureAlphaShader);
-  states[1].setShaderColor(1, 0.5f, 0, 1);
-  states[1].setTexture(textures[1]);
+  textureBatches[1].setShader(textureAlphaShader);
+  textureBatches[1].setShaderColor(1, 0.5f, 0, 1);
+  textureBatches[1].setTexture(textures[1]);
 
-  states[2].setShader(textureShader);
-  states[2].setShaderColor(1, 1, 1, 1);
-  states[2].setTexture(textures[2]);
+  textureBatches[2].setShader(textureShader);
+  textureBatches[2].setShaderColor(1, 1, 1, 1);
+  textureBatches[2].setTexture(textures[2]);
+
+  // ---
 
   Matrix matrix;
 
   matrix.push();
   matrix.scale(0.333f);
-  draw::Texture(textures[0]).fillFromCenter(textureBatches[0], matrix);
+  draw::Texture().fillFromCenter(textureBatches[0], matrix);
   matrix.pop();
 
   matrix.translate(0, 0, 5);
-  draw::Texture(textures[1]).fillRect(textureBatches[1], matrix, Rectf(-200, -150, 400, 300));
+  draw::Texture().fillRect(textureBatches[1], matrix, Rectf(-200, -150, 400, 300));
 
   matrix.translate(0, 0, 5);
   matrix.scale(0.75f);
-  draw::Texture(textures[2]).fillFromCenter(textureBatches[2], matrix, 100, 100);
+  draw::Texture().fillFromCenter(textureBatches[2], matrix, 100, 100);
 
   // ---
 
@@ -67,18 +69,14 @@ void Sketch::draw()
 
   // ---
 
-  states[0].setShaderMatrix(mvpMatrix);
-  states[1].setShaderMatrix(mvpMatrix);
-  states[2].setShaderMatrix(mvpMatrix);
+  State state;
+  state
+    .setShaderMatrix(mvpMatrix)
+    .apply();
 
-  states[0].apply();
-  textureBatches[0].flush(states[0]);
-
-  states[1].apply();
-  textureBatches[1].flush(states[1]);
-
-  states[2].apply();
-  textureBatches[2].flush(states[2]);
+  textureBatches[0].flush(state);
+  textureBatches[1].flush(state);
+  textureBatches[2].flush(state);
 }
 
 void Sketch::initTextures()
