@@ -23,5 +23,5 @@ protected:
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> colorBatch;
-  chr::gl::shaders::TextureAlphaShader colorShader;
+  chr::gl::shaders::ColorShader colorShader;
 };
