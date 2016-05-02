@@ -7,6 +7,7 @@
 class Sketch : public chr::CrossSketch
 {
 public:
+  Sketch();
   virtual ~Sketch() {}
 
   void setup() final;
@@ -15,6 +16,8 @@ public:
 protected:
   chr::gl::State state;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> colorBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.RGBA> faceBatch;
+  chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
+
   chr::gl::shaders::ColorShader colorShader;
 };

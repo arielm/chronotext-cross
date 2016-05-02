@@ -471,5 +471,39 @@ namespace chr
       output.addIndices(0, 3, 2, 2, 1, 0);
       output.incrementIndices(4);
     }
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CCW>(const Quad<XYZ.N.RGBA> &quad, IndexedVertexBatch<XYZ.N.RGBA, GLushort> &output) const
+    {
+      TRANSFORM_QUAD_HEADER
+
+      auto normalMatrix = glm::inverseTranspose(glm::mat3(m)); // XXX: NON-OPTIMAL
+      auto transformedNormal = glm::normalize(normalMatrix * quad.normal);
+
+      output.addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color); // x1, y1
+      output.addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color); // x1, y2
+      output.addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal, quad.color); // x2, y2
+      output.addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal, quad.color); // x2, y1
+
+      output.addIndices(0, 1, 2, 2, 3, 0);
+      output.incrementIndices(4);
+    }
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CW>(const Quad<XYZ.N.RGBA> &quad, IndexedVertexBatch<XYZ.N.RGBA, GLushort> &output) const
+    {
+      TRANSFORM_QUAD_HEADER
+
+      auto normalMatrix = glm::inverseTranspose(glm::mat3(m)); // XXX: NON-OPTIMAL
+      auto transformedNormal = glm::normalize(normalMatrix * quad.normal);
+
+      output.addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color); // x1, y1
+      output.addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color); // x1, y2
+      output.addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal, quad.color); // x2, y2
+      output.addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal, quad.color); // x2, y1
+
+      output.addIndices(0, 3, 2, 2, 1, 0);
+      output.incrementIndices(4);
+    }
   }
 }

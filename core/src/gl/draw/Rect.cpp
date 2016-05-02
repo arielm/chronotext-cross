@@ -44,6 +44,18 @@ namespace chr
         matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(x1, y1, x2, y2, color), batch);
       }
 
+      template <>
+      void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
+      {
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(x1, y1, x2, y2, glm::vec3(0, 0, +1), color), batch);
+      }
+
+      template <>
+      void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
+      {
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(x1, y1, x2, y2, glm::vec3(0, 0, -1), color), batch);
+      }
+
       // ---
 
       template <>
