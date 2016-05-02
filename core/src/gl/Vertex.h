@@ -269,6 +269,34 @@ namespace chr
       {}
     };
 
+    template<> struct Vertex<XYZ.N.RGBA> : Vertex<XYZ.N>
+    {
+      union
+      {
+        glm::vec4 color;
+
+        struct
+        {
+          float r, g, b, a;
+        };
+      };
+
+      Vertex()
+      {}
+
+      Vertex(float x, float y, float z, const glm::vec3 &normal, const glm::vec4 &color)
+      :
+      Vertex<XYZ.N>(x, y, z, normal),
+      color(color)
+      {}
+
+      Vertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec4 &color)
+      :
+      Vertex<XYZ.N>(position, normal),
+      color(color)
+      {}
+    };
+
     template<> struct Vertex<XYZ.N.UV.RGBA> : Vertex<XYZ.N.UV>
     {
       union

@@ -282,6 +282,40 @@ namespace chr
       {}
     };
 
+    template<> struct Quad<XYZ.N.RGBA> : Quad<XYZ.N>
+    {
+      union
+      {
+        glm::vec4 color;
+
+        struct
+        {
+          float r, g, b, a;
+        };
+      };
+
+      Quad()
+      {}
+
+      Quad(float x1, float y1, float x2, float y2, const glm::vec3 &normal, const glm::vec4 &color)
+      :
+      Quad<XYZ.N>(x1, y1, x2, y2, normal),
+      color(color)
+      {}
+
+      Quad(const math::Rectf &rect, const glm::vec3 &normal, const glm::vec4 &color)
+      :
+      Quad<XYZ.N>(rect, normal),
+      color(color)
+      {}
+
+      Quad(const glm::vec2 &position1, const glm::vec2 &position2, const glm::vec3 &normal, const glm::vec4 &color)
+      :
+      Quad<XYZ.N>(position1, position2, normal),
+      color(color)
+      {}
+    };
+
     template<> struct Quad<XYZ.N.UV.RGBA> : Quad<XYZ.N.UV>
     {
       union
