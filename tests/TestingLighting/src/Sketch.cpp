@@ -15,17 +15,55 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
+
   matrix
-    .translate(50, 100)
-    .rotateZ(30 * D2R);
+    .translate(0, 0, 50)
+    .translate(-50, -50, 0)
+    .push();
   draw::Rect()
-    .setColor(1, 1, 0.5f, 1)
-    .fill(colorBatch, matrix, Rectf(-100, -100, +100, +100));
+    .setColor(1, 1, 1, 1)
+    .fill(colorBatch, matrix, Rectf(0, 0, 100, 100));
+
+  matrix
+    .translate(100, 0, 0)
+    .rotateY(90 * D2R);
+  draw::Rect()
+    .setColor(1, 0.5f, 0, 1)
+    .fill(colorBatch, matrix, Rectf(0, 0, 100, 100));
+
+  matrix
+    .translate(100, 0, 0)
+    .rotateY(90 * D2R);
+  draw::Rect()
+    .setColor(1, 0, 0, 1)
+    .fill(colorBatch, matrix, Rectf(0, 0, 100, 100));
+
+  matrix
+    .translate(100, 0, 0)
+    .rotateY(90 * D2R);
+  draw::Rect()
+    .setColor(1, 1, 0, 1)
+    .fill(colorBatch, matrix, Rectf(0, 0, 100, 100));
+
+  matrix
+    .translate(0, 100, 0)
+    .rotateX(-90 * D2R);
+  draw::Rect()
+    .setColor(0, 0, 0, 1)
+    .fill(colorBatch, matrix, Rectf(0, 0, 100, 100));
+
+  matrix
+    .pop()
+    .rotateX(-90 * D2R);
+  draw::Rect()
+    .setColor(0.25f, 0.25f, 0.25f, 1)
+    .fill<GL_CW>(colorBatch, matrix, Rectf(0, 0, 100, 100));
 
   // ---
 
-  glDisable(GL_DEPTH_TEST);
-  glDepthMask(GL_FALSE);
+  glEnable(GL_DEPTH_TEST);
+  glDepthMask(GL_TRUE);
+  glEnable(GL_CULL_FACE);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -34,7 +72,7 @@ void Sketch::setup()
 void Sketch::draw()
 {
   glClearColor(0.5f, 0.5f, 0.5f, 1);
-  glClear(GL_COLOR_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // ---
 
@@ -44,8 +82,9 @@ void Sketch::draw()
   modelViewMatrix
     .scale(1, -1, 1)
     .translate(0, 0, -300)
-    .rotateX(15 * D2R)
-    .rotateY(getElapsedSeconds());
+    .rotateX(20 * D2R)
+    .rotateY(clock()->getTime())
+    .rotateZ(clock()->getTime() * 0.25f);
 
   state
     .setShaderMatrix(modelViewMatrix * projectionMatrix)

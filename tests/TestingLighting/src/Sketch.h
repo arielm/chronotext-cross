@@ -12,8 +12,6 @@ public:
   void setup() final;
   void draw() final;
 
-  void initTextures();
-
 protected:
   chr::gl::State state;
 
