@@ -31,24 +31,9 @@ namespace chr
     m(matrix)
     {}
 
-    Matrix::Matrix(const glm::mat3x3 &matrix)
+    Matrix::Matrix(const glm::mat3 &matrix)
     :
-    m00(matrix[0][0]),
-    m10(matrix[0][1]),
-    m20(matrix[0][2]),
-    m30(0),
-    m01(matrix[1][0]),
-    m11(matrix[1][1]),
-    m21(matrix[1][2]),
-    m31(0),
-    m02(0),
-    m12(0),
-    m22(1),
-    m32(0),
-    m03(matrix[2][0]),
-    m13(matrix[2][1]),
-    m23(0),
-    m33(matrix[2][2])
+    m(matrix)
     {}
 
     Matrix& Matrix::load(const Matrix &matrix)
@@ -63,28 +48,9 @@ namespace chr
       return *this;
     }
     
-    Matrix& Matrix::load(const glm::mat3x3 &matrix)
+    Matrix& Matrix::load(const glm::mat3 &matrix)
     {
-      m[0][0] = matrix[0][0];
-      m[0][1] = matrix[0][1];
-      m[0][2] = matrix[0][2];
-      m[0][3] = 0;
-
-      m[1][0] = matrix[1][0];
-      m[1][1] = matrix[1][1];
-      m[1][2] = matrix[1][2];
-      m[1][3] = 0;
-
-      m[2][0] = 0;
-      m[2][1] = 0;
-      m[2][2] = 1;
-      m[2][3] = 0;
-
-      m[3][0] = matrix[2][0];
-      m[3][1] = matrix[2][1];
-      m[3][2] = 0;
-      m[3][3] = matrix[2][2];
-      
+      m = glm::mat4(matrix);
       return *this;
     }
 
@@ -316,6 +282,46 @@ namespace chr
         x * m20 + y * m21 + z * m22 + m23);
     }
 
+    glm::vec3 Matrix::transformNormal(float x, float y, float z) const
+    {
+      float determinant =
+        +m00 * (m11 * m22 - m21 * m12)
+        -m01 * (m10 * m22 - m12 * m20)
+        +m02 * (m10 * m21 - m11 * m20);
+
+      if (determinant == 0)
+      {
+        return glm::zero<glm::vec3>();
+      }
+      else if (determinant == 1)
+      {
+        return glm::normalize(
+          glm::vec3(
+            x * m00 + y * m01 + z * m02,
+            x * m10 + y * m11 + z * m12,
+            x * m20 + y * m21 + z * m22));
+      }
+      else
+      {
+        float M00 = +(m11 * m22 - m21 * m12);
+        float M10 = -(m01 * m22 - m02 * m21);
+        float M20 = +(m01 * m12 - m02 * m11);
+        float M01 = -(m10 * m22 - m12 * m20);
+        float M11 = +(m00 * m22 - m02 * m20);
+        float M21 = -(m00 * m12 - m10 * m02);
+        float M02 = +(m10 * m21 - m20 * m11);
+        float M12 = -(m00 * m21 - m20 * m01);
+        float M22 = +(m00 * m11 - m10 * m01);
+
+        return glm::normalize(
+          glm::vec3(
+            x * M00 + y * M01 + z * M02,
+            x * M10 + y * M11 + z * M12,
+            x * M20 + y * M21 + z * M22)
+            / determinant);
+      }
+    }
+
     #define TRANSFORM_QUAD_HEADER \
       float x100 = quad.x1 * m00 + m03; \
       float x110 = quad.x1 * m10 + m13; \
@@ -477,8 +483,7 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      auto normalMatrix = glm::inverseTranspose(glm::mat3(m)); // XXX: NON-OPTIMAL
-      auto transformedNormal = glm::normalize(normalMatrix * quad.normal);
+      const auto &transformedNormal = transformNormal(quad.normal);
 
       output.addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color); // x1, y1
       output.addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color); // x1, y2
@@ -494,8 +499,7 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      auto normalMatrix = glm::inverseTranspose(glm::mat3(m)); // XXX: NON-OPTIMAL
-      auto transformedNormal = glm::normalize(normalMatrix * quad.normal);
+      const auto &transformedNormal = transformNormal(quad.normal);
 
       output.addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color); // x1, y1
       output.addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color); // x1, y2
