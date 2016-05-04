@@ -266,6 +266,40 @@ namespace chr
       return glm::quat_cast(m);
     }
 
+    float Matrix::getDeterminant3x3() const
+    {
+      return
+        +m00 * (m11 * m22 - m21 * m12)
+        -m01 * (m10 * m22 - m12 * m20)
+        +m02 * (m10 * m21 - m11 * m20);
+    }
+
+    glm::mat4 Matrix::getNormalMatrix() const
+    {
+      glm::mat4 M;
+
+      float determinant = getDeterminant3x3();
+
+      if (determinant == 1)
+      {
+        M = m;
+      }
+      else if (determinant != 0)
+      {
+        M[0][0] = +(m11 * m22 - m21 * m12) / determinant;
+        M[0][1] = -(m01 * m22 - m02 * m21) / determinant;
+        M[0][2] = +(m01 * m12 - m02 * m11) / determinant;
+        M[1][0] = -(m10 * m22 - m12 * m20) / determinant;
+        M[1][1] = +(m00 * m22 - m02 * m20) / determinant;
+        M[1][2] = -(m00 * m12 - m10 * m02) / determinant;
+        M[2][0] = +(m10 * m21 - m20 * m11) / determinant;
+        M[2][1] = -(m00 * m21 - m20 * m01) / determinant;
+        M[2][2] = +(m00 * m11 - m10 * m01) / determinant;
+      }
+
+      return M;
+    }
+
     glm::vec3 Matrix::transformPoint(float x, float y) const
     {
       return glm::vec3(
@@ -284,10 +318,7 @@ namespace chr
 
     glm::vec3 Matrix::transformNormal(float x, float y, float z) const
     {
-      float determinant =
-        +m00 * (m11 * m22 - m21 * m12)
-        -m01 * (m10 * m22 - m12 * m20)
-        +m02 * (m10 * m21 - m11 * m20);
+      float determinant = getDeterminant3x3();
 
       if (determinant == 0)
       {
