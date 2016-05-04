@@ -70,6 +70,7 @@ namespace chr
       State& glPolygonOffset(GLfloat factor, GLfloat units);
 
       void apply();
+      void apply(ShaderProgram &shader);
 
     protected:
       std::map <std::string, std::vector<int>> uniformi;

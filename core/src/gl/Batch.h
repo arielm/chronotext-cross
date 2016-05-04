@@ -73,12 +73,13 @@ namespace chr
         if (hasShader)
         {
           shader.bind();
-          apply(shader, state);
+          apply(shader);
+          state.apply(shader);
           bind(shader);
         }
         else
         {
-          apply(state.shader, state);
+          apply(state.shader);
           bind(state.shader);
         }
       }
@@ -153,24 +154,16 @@ namespace chr
       std::map <std::string, glm::mat3> uniformm3;
       std::map <std::string, glm::mat4> uniformm4;
 
-      void apply(ShaderProgram &shader, State &state)
+      void apply(ShaderProgram &shader)
       {
         if (hasColor)
         {
           shader.applyColor(color);
         }
-        else if (state.hasColor)
-        {
-          shader.applyColor(state.color);
-        }
 
         if (hasMatrix)
         {
           shader.applyMatrix(matrix);
-        }
-        else if (state.hasMatrix)
-        {
-          shader.applyMatrix(state.matrix);
         }
 
         for (auto it = uniformi.begin(); it != uniformi.end(); ++it)

@@ -95,36 +95,7 @@ namespace chr
       if (hasShader)
       {
         shader.bind();
-
-        if (hasColor)
-        {
-          shader.applyColor(color);
-        }
-
-        if (hasMatrix)
-        {
-          shader.applyMatrix(matrix);
-        }
-
-        for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
-        {
-          shader.applyUniform(it->first, it->second);
-        }
-
-        for (auto it = uniformf.begin(); it != uniformf.end(); ++it)
-        {
-          shader.applyUniform(it->first, it->second);
-        }
-
-        for (auto it = uniformm3.begin(); it != uniformm3.end(); ++it)
-        {
-          shader.applyUniform(it->first, it->second);
-        }
-
-        for (auto it = uniformm4.begin(); it != uniformm4.end(); ++it)
-        {
-          shader.applyUniform(it->first, it->second);
-        }
+        apply(shader);
       }
 
       for (auto it = enabled.begin(); it != enabled.end(); ++it)
@@ -177,6 +148,39 @@ namespace chr
             ::glLineWidth(it->second[0]);
             break;
         }
+      }
+    }
+
+    void State::apply(ShaderProgram &shader)
+    {
+      if (hasColor)
+      {
+        shader.applyColor(color);
+      }
+
+      if (hasMatrix)
+      {
+        shader.applyMatrix(matrix);
+      }
+
+      for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
+      {
+        shader.applyUniform(it->first, it->second);
+      }
+
+      for (auto it = uniformf.begin(); it != uniformf.end(); ++it)
+      {
+        shader.applyUniform(it->first, it->second);
+      }
+
+      for (auto it = uniformm3.begin(); it != uniformm3.end(); ++it)
+      {
+        shader.applyUniform(it->first, it->second);
+      }
+
+      for (auto it = uniformm4.begin(); it != uniformm4.end(); ++it)
+      {
+        shader.applyUniform(it->first, it->second);
       }
     }
   }
