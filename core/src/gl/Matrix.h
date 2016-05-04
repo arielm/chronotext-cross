@@ -50,23 +50,21 @@ namespace chr
 
       Matrix& setToIdentity();
 
-      inline Matrix& setTranslation(const glm::vec2 &t) { return setTranslation(t.x, t.y, 0); }
+      inline Matrix& setTranslation(const glm::vec2 &t) { return setTranslation(t.x, t.y); }
       inline Matrix& setTranslation(const glm::vec3 &t) { return setTranslation(t.x, t.y, t.z); }
       Matrix& setTranslation(float x, float y, float z = 0);
 
-      inline Matrix& translate(const glm::vec2 &t) { return translate(t.x, t.y, 0); }
+      inline Matrix& translate(const glm::vec2 &t) { return translate(t.x, t.y); }
       inline Matrix& translate(const glm::vec3 &t) { return translate(t.x, t.y, t.z); }
       Matrix& translate(float x, float y, float z = 0);
 
-      inline Matrix& scale(const glm::vec2 &s) { return scale(s.x, s.y); }
-      inline Matrix& scale(const glm::vec3 &s) { return scale(s.x, s.y, s.z); }
       inline Matrix& scale(float s) { return scale(s, s, s); }
-      Matrix& scale(float x, float y, float z = 1);
+      inline Matrix& scale(const glm::vec3 &s) { return scale(s.x, s.y, s.z); }
+      Matrix& scale(float x, float y, float z);
 
       Matrix& rotateX(float a);
       Matrix& rotateY(float a);
       Matrix& rotateZ(float a);
-      Matrix& rotateXY(float sx, float sy);
 
       template<int T = 1>
       Matrix& applyQuat(const glm::quat &q);

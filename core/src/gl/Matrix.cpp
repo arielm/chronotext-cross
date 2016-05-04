@@ -208,45 +208,6 @@ namespace chr
       return *this;
     }
 
-    Matrix& Matrix::rotateXY(float sx, float sy)
-    {
-      float cx = sqrtf(1.0f - sx * sx);
-      float cy = sqrtf(1.0f - sy * sy);
-      
-      float cxy = cx + cy;
-      
-      float r00 = m00 * cy - m02 * sy;
-      float r01 = m01 * cx + m02 * sx;
-      float r02 = m00 * sy + m02 * cxy - m01 * sx;
-      
-      float r10 = m10 * cy - m12 * sy;
-      float r11 = m11 * cx + m12 * sx;
-      float r12 = m10 * sy + m12 * cxy - m11 * sx;
-      
-      float r20 = m20 * cy - m22 * sy;
-      float r21 = m21 * cx + m22 * sx;
-      float r22 = m20 * sy + m22 * cxy - m21 * sx;
-      
-      float r30 = m30 * cy - m32 * sy;
-      float r31 = m31 * cx + m32 * sx;
-      float r32 = m30 * sy + m32 * cxy - m31 * sx;
-      
-      m00 = r00;
-      m01 = r01;
-      m02 = r02;
-      m10 = r10;
-      m11 = r11;
-      m12 = r12;
-      m20 = r20;
-      m21 = r21;
-      m22 = r22;
-      m30 = r30;
-      m31 = r31;
-      m32 = r32;
-
-      return *this;
-    }
-
     template <>
     Matrix& Matrix::applyQuat<+1>(const glm::quat &q)
     {
