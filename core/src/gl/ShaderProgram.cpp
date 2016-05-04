@@ -78,11 +78,6 @@ namespace chr
       }
     }
 
-    void ShaderProgram::applyMatrix(const glm::mat4 &matrix)
-    {
-      glUniformMatrix4fv(element->matrixLocation, 1, GL_FALSE, &matrix[0][0]);
-    }
-
     void ShaderProgram::applyColor(float r, float g, float b, float a)
     {
       glVertexAttrib4f(element->colorLocation, r, g, b, a);
@@ -91,6 +86,18 @@ namespace chr
     void ShaderProgram::applyColor(const glm::vec4 &color)
     {
       glVertexAttrib4fv(element->colorLocation, &color[0]);
+    }
+
+    template <>
+    void ShaderProgram::applyMatrix<MVP>(const glm::mat4 &matrix)
+    {
+      glUniformMatrix4fv(element->mvpMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
+    }
+
+    template <>
+    void ShaderProgram::applyMatrix<NORMAL>(const glm::mat4 &matrix)
+    {
+      glUniformMatrix4fv(element->normalMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
     }
 
     void ShaderProgram::applyUniform(const string &name, const vector<int> &v)
@@ -145,7 +152,8 @@ namespace chr
         {
           tie(element->programId, element->vertexShaderId, element->fragmentShaderId) = ShaderHelper::loadProgram(element->vertexShaderSource, element->fragmentShaderSource);
 
-          element->matrixLocation = glGetUniformLocation(element->programId, "u_matrix");
+          element->mvpMatrixLocation = glGetUniformLocation(element->programId, "u_mvp_matrix");
+          element->normalMatrixLocation = glGetUniformLocation(element->programId, "u_normal_matrix");
           element->positionLocation = glGetAttribLocation(element->programId, "a_position");
           element->colorLocation = glGetAttribLocation(element->programId, "a_color");
           element->normalLocation = glGetAttribLocation(element->programId, "a_normal");

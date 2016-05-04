@@ -58,9 +58,10 @@ namespace chr
       inline Matrix& translate(const glm::vec3 &t) { return translate(t.x, t.y, t.z); }
       Matrix& translate(float x, float y, float z = 0);
 
-      inline Matrix& scale(float s) { return scale(s, s, s); }
+      inline Matrix& scale(const glm::vec2 &s) { return scale(s.x, s.y); }
       inline Matrix& scale(const glm::vec3 &s) { return scale(s.x, s.y, s.z); }
-      Matrix& scale(float x, float y, float z);
+      inline Matrix& scale(float s) { return scale(s, s, s); }
+      Matrix& scale(float x, float y, float z = 1);
 
       Matrix& rotateX(float a);
       Matrix& rotateY(float a);

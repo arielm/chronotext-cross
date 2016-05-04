@@ -28,11 +28,11 @@ namespace chr
       ShaderProgram shader;
       bool hasShader;
 
-      glm::mat4 matrix;
-      bool hasMatrix = false;
-
       glm::vec4 color;
       bool hasColor = false;
+
+      glm::mat4 matrices[2];
+      bool hasMatrix[2] = { false, false };
 
       Texture texture;
       bool hasTexture = false;
@@ -73,8 +73,8 @@ namespace chr
         if (hasShader)
         {
           shader.bind();
-          apply(shader);
           state.apply(shader);
+          apply(shader);
           bind(shader);
         }
         else
@@ -97,13 +97,6 @@ namespace chr
         return *this;
       }
 
-      VertexBatch& setShaderMatrix(const glm::mat4 &matrix)
-      {
-        this->matrix = matrix;
-        hasMatrix = true;
-        return *this;
-      }
-
       VertexBatch& setShaderColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -115,6 +108,14 @@ namespace chr
       {
         color = { r, g, b, a };
         hasColor = true;
+        return *this;
+      }
+
+      template<int T = MVP>
+      VertexBatch& setShaderMatrix(const glm::mat4 &matrix)
+      {
+        matrices[T] = matrix;
+        hasMatrix[T] = true;
         return *this;
       }
 
@@ -161,9 +162,14 @@ namespace chr
           shader.applyColor(color);
         }
 
-        if (hasMatrix)
+        if (hasMatrix[MVP])
         {
-          shader.applyMatrix(matrix);
+          shader.applyMatrix<MVP>(matrices[MVP]);
+        }
+
+        if (hasMatrix[NORMAL])
+        {
+          shader.applyMatrix<NORMAL>(matrices[NORMAL]);
         }
 
         for (auto it = uniformi.begin(); it != uniformi.end(); ++it)

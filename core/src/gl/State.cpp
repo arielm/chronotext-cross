@@ -11,13 +11,6 @@ namespace chr
       return *this;
     }
 
-    State& State::setShaderMatrix(const glm::mat4 &matrix)
-    {
-      this->matrix = matrix;
-      hasMatrix = true;
-      return *this;
-    }
-
     State& State::setShaderColor(const glm::vec4 &color)
     {
       this->color = color;
@@ -158,9 +151,14 @@ namespace chr
         shader.applyColor(color);
       }
 
-      if (hasMatrix)
+      if (hasMatrix[MVP])
       {
-        shader.applyMatrix(matrix);
+        shader.applyMatrix<MVP>(matrices[MVP]);
+      }
+
+      if (hasMatrix[NORMAL])
+      {
+        shader.applyMatrix<NORMAL>(matrices[NORMAL]);
       }
 
       for (auto it = uniformi.begin(); it != uniformi.end(); ++it)

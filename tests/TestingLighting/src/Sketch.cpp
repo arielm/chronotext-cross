@@ -21,7 +21,12 @@ void Sketch::setup()
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
-  faceBatch.setShader(shader);
+  faceBatch
+    .setShader(shader)
+    .setShaderUniform("u_ambient_color", 0.3f, 0.3f, 0.3f)
+    .setShaderUniform("u_diffuse_color", 1.0f, 1.0f, 1.0f)
+    .setShaderUniform("u_light_dir", 0.0f, 0.0f, 1.0f);
+
   normalBatch.setShader(colorShader);
 
   // ---
@@ -109,13 +114,10 @@ void Sketch::draw()
   // ---
 
   faceBatch
-    .setShaderUniform("u_n_matrix", mvMatrix.getNormalMatrix())
-    .setShaderUniform("u_ambient_color", 0.3f, 0.3f, 0.3f)
-    .setShaderUniform("u_diffuse_color", 1.0f, 1.0f, 1.0f)
-    .setShaderUniform("u_light_dir", 0.0f, 0.0f, 1.0f);
+    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix());
 
   state
-    .setShaderMatrix(mvMatrix * pMatrix)
+    .setShaderMatrix<MVP>(mvMatrix * pMatrix)
     .apply();
 
   faceBatch.flush(state);

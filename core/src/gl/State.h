@@ -23,11 +23,11 @@ namespace chr
       ShaderProgram shader;
       bool hasShader = false;
 
-      glm::mat4 matrix;
-      bool hasMatrix = false;
-
       glm::vec4 color;
       bool hasColor = false;
+
+      glm::mat4 matrices[2];
+      bool hasMatrix[2] = { false, false };
 
       State() = default;
 
@@ -55,9 +55,16 @@ namespace chr
       // ---
 
       State& setShader(const ShaderProgram &shader);
-      State& setShaderMatrix(const glm::mat4 &matrix);
       State& setShaderColor(const glm::vec4 &color);
       State& setShaderColor(float r, float g, float b, float a);
+
+      template<int T = MVP>
+      State& setShaderMatrix(const glm::mat4 &matrix)
+      {
+        matrices[T] = matrix;
+        hasMatrix[T] = true;
+        return *this;
+      }
 
       State& glEnable(GLenum cap);
       State& glDisable(GLenum cap);

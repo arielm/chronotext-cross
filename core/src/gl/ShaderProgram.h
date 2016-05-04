@@ -9,6 +9,12 @@ namespace chr
 {
   namespace gl
   {
+    enum
+    {
+      MVP = 0,
+      NORMAL = 1,
+    };
+
     namespace shader
     {
       struct Element
@@ -21,7 +27,8 @@ namespace chr
         GLuint vertexShaderId;
         GLuint fragmentShaderId;
 
-        GLuint matrixLocation;
+        GLuint mvpMatrixLocation;
+        GLuint normalMatrixLocation;
         GLuint positionLocation;
         GLuint colorLocation;
         GLuint normalLocation;
@@ -51,9 +58,11 @@ namespace chr
 
       GLuint getUniformLocation(const std::string &name);
 
-      void applyMatrix(const glm::mat4 &matrix);
       void applyColor(float r, float g, float b, float a);
       void applyColor(const glm::vec4 &color);
+
+      template<int T = MVP>
+      void applyMatrix(const glm::mat4 &matrix);
 
       void applyUniform(const std::string &name, const std::vector<int> &v);
       void applyUniform(const std::string &name, const std::vector<float> &v);
