@@ -18,9 +18,11 @@ shader("SimpleLightingShader.vert", "SimpleLightingShader.frag")
 void Sketch::setup()
 {
   state
-    .setShader(shader)
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
+
+  faceBatch.setShader(shader);
+  normalBatch.setShader(colorShader);
 
   // ---
 
@@ -94,10 +96,10 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  glm::mat4 pMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
-  Matrix modelViewMatrix;
-  modelViewMatrix
+  Matrix mvMatrix;
+  mvMatrix
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateX(20 * D2R)
@@ -106,8 +108,11 @@ void Sketch::draw()
 
   // ---
 
+  faceBatch
+    .setShaderUniform("u_n_matrix", mvMatrix.getNormalMatrix());
+
   state
-    .setShaderMatrix(modelViewMatrix * projectionMatrix)
+    .setShaderMatrix(mvMatrix * pMatrix)
     .apply();
 
   faceBatch.flush(state);

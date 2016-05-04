@@ -2,6 +2,7 @@
 
 #include "cross/Context.h"
 #include "gl/Batch.h"
+#include "gl/shaders/ColorShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -19,4 +20,5 @@ protected:
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 
   chr::gl::ShaderProgram shader;
+  chr::gl::shaders::ColorShader colorShader;
 };
