@@ -144,9 +144,14 @@ namespace chr
       inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = { v[0], v[1], v[2] }; return *this; }
       inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = { v[0], v[1], v[2], v[3] }; return *this; }
 
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::mat3 &m) { uniformm3[name] = m; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::mat4 &m) { uniformm4[name] = m; return *this; }
+
     protected:
       std::map <std::string, std::vector<int>> uniformi;
       std::map <std::string, std::vector<float>> uniformf;
+      std::map <std::string, glm::mat3> uniformm3;
+      std::map <std::string, glm::mat4> uniformm4;
 
       void apply(ShaderProgram &shader, State &state)
       {
@@ -174,6 +179,16 @@ namespace chr
         }
 
         for (auto it = uniformf.begin(); it != uniformf.end(); ++it)
+        {
+          shader.applyUniform(it->first, it->second);
+        }
+
+        for (auto it = uniformm3.begin(); it != uniformm3.end(); ++it)
+        {
+          shader.applyUniform(it->first, it->second);
+        }
+
+        for (auto it = uniformm4.begin(); it != uniformm4.end(); ++it)
         {
           shader.applyUniform(it->first, it->second);
         }

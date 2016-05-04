@@ -55,6 +55,9 @@ namespace chr
       void applyColor(float r, float g, float b, float a);
       void applyColor(const glm::vec4 &color);
 
+      void applyUniform(const std::string &name, const std::vector<int> &v);
+      void applyUniform(const std::string &name, const std::vector<float> &v);
+
       inline void applyUniform(const std::string &name, int v0) { glUniform1i(getUniformLocation(name), v0); }
       inline void applyUniform(const std::string &name, int v0, int v1) { glUniform2i(getUniformLocation(name), v0, v1); }
       inline void applyUniform(const std::string &name, int v0, int v1, int v2) { glUniform3i(getUniformLocation(name), v0, v1, v2); }
@@ -69,50 +72,8 @@ namespace chr
       inline void applyUniform(const std::string &name, const glm::vec2 &v) { glUniform2fv(getUniformLocation(name), 1, &v[0]); }
       inline void applyUniform(const std::string &name, const glm::vec3 &v) { glUniform3fv(getUniformLocation(name), 1, &v[0]); }
       inline void applyUniform(const std::string &name, const glm::vec4 &v) { glUniform4fv(getUniformLocation(name), 1, &v[0]); }
-
-      void applyUniform(const std::string &name, const std::vector<int> &v)
-      {
-        switch (v.size())
-        {
-          case 1:
-            glUniform1iv(getUniformLocation(name), 1, v.data());
-            break;
-
-          case 2:
-            glUniform2iv(getUniformLocation(name), 1, v.data());
-            break;
-
-          case 3:
-            glUniform3iv(getUniformLocation(name), 1, v.data());
-            break;
-
-          case 4:
-            glUniform4iv(getUniformLocation(name), 1, v.data());
-            break;
-        }
-      }
-
-      void applyUniform(const std::string &name, const std::vector<float> &v)
-      {
-        switch (v.size())
-        {
-          case 1:
-            glUniform1fv(getUniformLocation(name), 1, v.data());
-            break;
-
-          case 2:
-            glUniform2fv(getUniformLocation(name), 1, v.data());
-            break;
-
-          case 3:
-            glUniform3fv(getUniformLocation(name), 1, v.data());
-            break;
-
-          case 4:
-            glUniform4fv(getUniformLocation(name), 1, v.data());
-            break;
-        }
-      }
+      inline void applyUniform(const std::string &name, const glm::mat3 &m) { glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, &m[0][0]); }
+      inline void applyUniform(const std::string &name, const glm::mat4 &m) { glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &m[0][0]); }
 
     protected:
       static int usageCounter;

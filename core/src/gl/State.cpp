@@ -115,6 +115,16 @@ namespace chr
         {
           shader.applyUniform(it->first, it->second);
         }
+
+        for (auto it = uniformm3.begin(); it != uniformm3.end(); ++it)
+        {
+          shader.applyUniform(it->first, it->second);
+        }
+
+        for (auto it = uniformm4.begin(); it != uniformm4.end(); ++it)
+        {
+          shader.applyUniform(it->first, it->second);
+        }
       }
 
       for (auto it = enabled.begin(); it != enabled.end(); ++it)

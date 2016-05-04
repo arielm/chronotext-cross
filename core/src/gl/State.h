@@ -49,6 +49,9 @@ namespace chr
       inline State& setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = { v[0], v[1], v[2] }; return *this; }
       inline State& setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = { v[0], v[1], v[2], v[3] }; return *this; }
 
+      inline State& setShaderUniform(const std::string &name, const glm::mat3 &m) { uniformm3[name] = m; return *this; }
+      inline State& setShaderUniform(const std::string &name, const glm::mat4 &m) { uniformm4[name] = m; return *this; }
+
       // ---
 
       State& setShader(const ShaderProgram &shader);
@@ -71,6 +74,8 @@ namespace chr
     protected:
       std::map <std::string, std::vector<int>> uniformi;
       std::map <std::string, std::vector<float>> uniformf;
+      std::map <std::string, glm::mat3> uniformm3;
+      std::map <std::string, glm::mat4> uniformm4;
 
       std::map<int, std::vector<unsigned int>> propui;
       std::map<int, std::vector<float>> propf;

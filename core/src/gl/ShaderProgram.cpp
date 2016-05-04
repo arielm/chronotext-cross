@@ -93,6 +93,50 @@ namespace chr
       glVertexAttrib4fv(element->colorLocation, &color[0]);
     }
 
+    void ShaderProgram::applyUniform(const string &name, const vector<int> &v)
+    {
+      switch (v.size())
+      {
+        case 1:
+          glUniform1iv(getUniformLocation(name), 1, v.data());
+          break;
+
+        case 2:
+          glUniform2iv(getUniformLocation(name), 1, v.data());
+          break;
+
+        case 3:
+          glUniform3iv(getUniformLocation(name), 1, v.data());
+          break;
+
+        case 4:
+          glUniform4iv(getUniformLocation(name), 1, v.data());
+          break;
+      }
+    }
+
+    void ShaderProgram::applyUniform(const string &name, const vector<float> &v)
+    {
+      switch (v.size())
+      {
+        case 1:
+          glUniform1fv(getUniformLocation(name), 1, v.data());
+          break;
+
+        case 2:
+          glUniform2fv(getUniformLocation(name), 1, v.data());
+          break;
+
+        case 3:
+          glUniform3fv(getUniformLocation(name), 1, v.data());
+          break;
+
+        case 4:
+          glUniform4fv(getUniformLocation(name), 1, v.data());
+          break;
+      }
+    }
+
     bool ShaderProgram::load()
     {
       if (!element->programId)
