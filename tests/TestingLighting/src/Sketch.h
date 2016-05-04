@@ -2,7 +2,6 @@
 
 #include "cross/Context.h"
 #include "gl/Batch.h"
-#include "gl/shaders/ColorShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -19,5 +18,5 @@ protected:
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.RGBA> faceBatch;
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 
-  chr::gl::shaders::ColorShader colorShader;
+  chr::gl::ShaderProgram shader;
 };

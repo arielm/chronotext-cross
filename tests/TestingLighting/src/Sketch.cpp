@@ -11,13 +11,14 @@ using namespace math;
 Sketch::Sketch()
 :
 faceBatch(GL_TRIANGLES),
-normalBatch(GL_LINES)
+normalBatch(GL_LINES),
+shader("SimpleLightingShader.vert", "SimpleLightingShader.frag")
 {}
 
 void Sketch::setup()
 {
   state
-    .setShader(colorShader)
+    .setShader(shader)
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
