@@ -151,9 +151,19 @@ namespace chr
         shader.applyColor(color);
       }
 
+      if (hasMatrix[MV])
+      {
+        shader.applyMatrix<MV>(matrices[MV]);
+      }
+
       if (hasMatrix[MVP])
       {
         shader.applyMatrix<MVP>(matrices[MVP]);
+      }
+
+      if (hasMatrix[PROJECTION])
+      {
+        shader.applyMatrix<PROJECTION>(matrices[PROJECTION]);
       }
 
       if (hasMatrix[NORMAL])

@@ -101,7 +101,7 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 pMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix
@@ -114,11 +114,14 @@ void Sketch::draw()
   // ---
 
   faceBatch
+    .setShaderMatrix<MV>(mvMatrix)
+    .setShaderMatrix<PROJECTION>(projectionMatrix)
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix());
 
-  state
-    .setShaderMatrix<MVP>(mvMatrix * pMatrix)
-    .apply();
+  normalBatch
+    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix);
+
+  state.apply();
 
   faceBatch.flush(state);
   normalBatch.flush(state);

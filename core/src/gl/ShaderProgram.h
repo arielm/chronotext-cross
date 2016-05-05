@@ -11,8 +11,10 @@ namespace chr
   {
     enum
     {
-      MVP = 0,
-      NORMAL = 1,
+      MV = 0,
+      MVP = 1,
+      PROJECTION = 2,
+      NORMAL = 3,
     };
 
     namespace shader
@@ -27,7 +29,9 @@ namespace chr
         GLuint vertexShaderId;
         GLuint fragmentShaderId;
 
+        GLuint mvMatrixLocation;
         GLuint mvpMatrixLocation;
+        GLuint projectionMatrixLocation;
         GLuint normalMatrixLocation;
         GLuint positionLocation;
         GLuint colorLocation;
