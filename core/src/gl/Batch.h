@@ -26,7 +26,7 @@ namespace chr
       Buffer<Vertex<V>> vertexBuffer;
 
       ShaderProgram shader;
-      bool hasShader;
+      bool hasShader = false;
 
       glm::vec4 color;
       bool hasColor = false;
