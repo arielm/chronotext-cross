@@ -23,9 +23,10 @@ void Sketch::setup()
 
   faceBatch
     .setShader(shader)
-    .setShaderUniform("u_ambient_color", 0.3f, 0.3f, 0.3f)
-    .setShaderUniform("u_diffuse_color", 1.0f, 1.0f, 1.0f)
-    .setShaderUniform("u_light_dir", 0.0f, 0.0f, 1.0f);
+    .setShaderUniform("u_ambient_color", 0.25f, 0.25f, 0.25f)
+    .setShaderUniform("u_diffuse_color", 0.5f, 0.5f, 0.5f)
+    .setShaderUniform("u_specular_color", 1.0f, 1.0f, 0.0f)
+    .setShaderUniform("u_shininess", 1.0f);
 
   normalBatch.setShader(colorShader);
 
@@ -66,7 +67,7 @@ void Sketch::setup()
     .translate(0, 100, 0)
     .rotateX(-90 * D2R);
   draw::Rect()
-    .setColor(0, 0, 0, 1)
+    .setColor(0.5f, 1.0f, 0.5f, 1)
     .fill(faceBatch, matrix, Rectf(0, 0, 100, 100));
 
   matrix
@@ -107,19 +108,19 @@ void Sketch::draw()
   mvMatrix
     .scale(1, -1, 1)
     .translate(0, 0, -300)
-    .rotateX(20 * D2R)
     .rotateY(clock()->getTime())
     .rotateZ(clock()->getTime() * 0.25f);
 
   // ---
 
+  normalBatch
+    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix);
+
   faceBatch
     .setShaderMatrix<MV>(mvMatrix)
     .setShaderMatrix<PROJECTION>(projectionMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix());
-
-  normalBatch
-    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix);
+    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .setShaderUniform("u_light_position", 0, 0, 0);
 
   state.apply();
 
