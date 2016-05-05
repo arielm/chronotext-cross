@@ -69,7 +69,7 @@ namespace chr
       void applyColor(float r, float g, float b, float a);
       void applyColor(const glm::vec4 &color);
 
-      template<int T>
+      template<int T = MVP>
       void applyMatrix(const glm::mat4 &matrix);
 
       template<int T>

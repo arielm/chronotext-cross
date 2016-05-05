@@ -114,7 +114,7 @@ namespace chr
         return *this;
       }
 
-      template<int T = NORMAL>
+      template<int T>
       VertexBatch& setShaderMatrix(const glm::mat3 &matrix)
       {
         matrices3[T] = matrix;
@@ -122,7 +122,7 @@ namespace chr
         return *this;
       }
 
-      template<int T>
+      template<int T = MVP>
       VertexBatch& setShaderMatrix(const glm::mat4 &matrix)
       {
         matrices4[T] = matrix;

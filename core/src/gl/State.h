@@ -61,7 +61,7 @@ namespace chr
       State& setShaderColor(const glm::vec4 &color);
       State& setShaderColor(float r, float g, float b, float a);
 
-      template<int T = NORMAL>
+      template<int T>
       State& setShaderMatrix(const glm::mat3 &matrix)
       {
         matrices3[T] = matrix;
@@ -69,7 +69,7 @@ namespace chr
         return *this;
       }
 
-      template<int T>
+      template<int T = MVP>
       State& setShaderMatrix(const glm::mat4 &matrix)
       {
         matrices4[T] = matrix;
