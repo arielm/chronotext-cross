@@ -21,13 +21,7 @@ void Sketch::setup()
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
-  faceBatch
-    .setShader(shader)
-    .setShaderUniform("u_ambient_color", 0.25f, 0.25f, 0.25f)
-    .setShaderUniform("u_diffuse_color", 0.5f, 0.5f, 0.5f)
-    .setShaderUniform("u_specular_color", 1.0f, 1.0f, 0.0f)
-    .setShaderUniform("u_shininess", 1.0f);
-
+  faceBatch.setShader(shader);
   normalBatch.setShader(colorShader);
 
   // ---
