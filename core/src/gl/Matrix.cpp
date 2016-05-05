@@ -235,15 +235,15 @@ namespace chr
         +m02 * (m10 * m21 - m11 * m20);
     }
 
-    glm::mat4 Matrix::getNormalMatrix() const
+    glm::mat3 Matrix::getNormalMatrix() const
     {
-      glm::mat4 M;
+      glm::mat3 M;
 
       float determinant = getDeterminant3x3();
 
       if (determinant == 1)
       {
-        M = m;
+        M = glm::mat3(m);
       }
       else if (determinant != 0)
       {

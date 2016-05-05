@@ -107,9 +107,9 @@ namespace chr
     }
 
     template <>
-    void ShaderProgram::applyMatrix<NORMAL>(const glm::mat4 &matrix)
+    void ShaderProgram::applyMatrix<NORMAL>(const glm::mat3 &matrix)
     {
-      glUniformMatrix4fv(element->normalMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
+      glUniformMatrix3fv(element->normalMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
     }
 
     void ShaderProgram::applyUniform(const string &name, const vector<int> &v)

@@ -73,7 +73,7 @@ namespace chr
       glm::quat getQuat() const;
 
       float getDeterminant3x3() const;
-      glm::mat4 getNormalMatrix() const;
+      glm::mat3 getNormalMatrix() const;
 
       inline glm::vec3 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec3 transformPoint(float x, float y) const;

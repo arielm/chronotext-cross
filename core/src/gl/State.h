@@ -26,8 +26,11 @@ namespace chr
       glm::vec4 color;
       bool hasColor = false;
 
-      glm::mat4 matrices[4];
-      bool hasMatrix[4] = { false, false, false, false };
+      glm::mat3 matrices3[1];
+      bool hasMatrix3[1] = { false };
+
+      glm::mat4 matrices4[3];
+      bool hasMatrix4[3] = { false, false, false };
 
       State() = default;
 
@@ -58,19 +61,27 @@ namespace chr
       State& setShaderColor(const glm::vec4 &color);
       State& setShaderColor(float r, float g, float b, float a);
 
-      template<int T = MVP>
-      State& setShaderMatrix(const glm::mat4 &matrix)
+      template<int T = NORMAL>
+      State& setShaderMatrix(const glm::mat3 &matrix)
       {
-        matrices[T] = matrix;
-        hasMatrix[T] = true;
+        matrices3[T] = matrix;
+        hasMatrix3[T] = true;
         return *this;
       }
 
-      template<int T = MVP>
+      template<int T>
+      State& setShaderMatrix(const glm::mat4 &matrix)
+      {
+        matrices4[T] = matrix;
+        hasMatrix4[T] = true;
+        return *this;
+      }
+
+      template<int T = MV>
       State& setShaderMatrix(float *values)
       {
-        matrices[T] = glm::make_mat4(values);
-        hasMatrix[T] = true;
+        matrices4[T] = glm::make_mat4(values);
+        hasMatrix4[T] = true;
         return *this;
       }
 

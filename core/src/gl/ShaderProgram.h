@@ -13,8 +13,12 @@ namespace chr
     {
       MV = 0,
       MVP = 1,
-      PROJECTION = 2,
-      NORMAL = 3,
+      PROJECTION = 2
+    };
+
+    enum
+    {
+      NORMAL = 0
     };
 
     namespace shader
@@ -65,8 +69,11 @@ namespace chr
       void applyColor(float r, float g, float b, float a);
       void applyColor(const glm::vec4 &color);
 
-      template<int T = MVP>
+      template<int T>
       void applyMatrix(const glm::mat4 &matrix);
+
+      template<int T>
+      void applyMatrix(const glm::mat3 &matrix);
 
       void applyUniform(const std::string &name, const std::vector<int> &v);
       void applyUniform(const std::string &name, const std::vector<float> &v);

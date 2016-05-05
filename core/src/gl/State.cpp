@@ -151,24 +151,24 @@ namespace chr
         shader.applyColor(color);
       }
 
-      if (hasMatrix[MV])
+      if (hasMatrix4[MV])
       {
-        shader.applyMatrix<MV>(matrices[MV]);
+        shader.applyMatrix<MV>(matrices4[MV]);
       }
 
-      if (hasMatrix[MVP])
+      if (hasMatrix4[MVP])
       {
-        shader.applyMatrix<MVP>(matrices[MVP]);
+        shader.applyMatrix<MVP>(matrices4[MVP]);
       }
 
-      if (hasMatrix[PROJECTION])
+      if (hasMatrix4[PROJECTION])
       {
-        shader.applyMatrix<PROJECTION>(matrices[PROJECTION]);
+        shader.applyMatrix<PROJECTION>(matrices4[PROJECTION]);
       }
 
-      if (hasMatrix[NORMAL])
+      if (hasMatrix3[NORMAL])
       {
-        shader.applyMatrix<NORMAL>(matrices[NORMAL]);
+        shader.applyMatrix<NORMAL>(matrices3[NORMAL]);
       }
 
       for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
