@@ -74,6 +74,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/gl/draw/Rect.cpp"
   "${CROSS_ROOT}/src/gl/draw/Texture.cpp"
   "${CROSS_ROOT}/src/gl/shaders/ColorShader.cpp"
+  "${CROSS_ROOT}/src/gl/shaders/LambertShader.cpp"
   "${CROSS_ROOT}/src/gl/shaders/TextureAlphaShader.cpp"
   "${CROSS_ROOT}/src/gl/shaders/TextureShader.cpp"
   "${CROSS_ROOT}/src/math/Utils.cpp"

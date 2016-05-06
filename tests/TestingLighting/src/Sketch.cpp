@@ -12,8 +12,7 @@ Sketch::Sketch()
 :
 faceBatch(GL_TRIANGLES),
 normalBatch(GL_LINES),
-phongShader("PhongShader.vert", "PhongShader.frag"),
-lambertShader("LambertShader.vert", "LambertShader.frag")
+phongShader("PhongShader.vert", "PhongShader.frag")
 {}
 
 void Sketch::setup()

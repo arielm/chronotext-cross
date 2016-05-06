@@ -3,6 +3,7 @@
 #include "cross/Context.h"
 #include "gl/Batch.h"
 #include "gl/shaders/ColorShader.h"
+#include "gl/shaders/LambertShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -23,7 +24,7 @@ protected:
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 
   chr::gl::ShaderProgram phongShader;
-  chr::gl::ShaderProgram lambertShader;
+  chr::gl::shaders::LambertShader lambertShader;
   chr::gl::shaders::ColorShader colorShader;
 
   bool pressed = false;
