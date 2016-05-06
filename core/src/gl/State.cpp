@@ -4,24 +4,65 @@ namespace chr
 {
   namespace gl
   {
+    int State::usageCounter = 0;
+
+    State::State()
+    :
+    id(usageCounter++),
+    element(new state::Element())
+    {
+      element->useCount++;
+    }
+
+    State::State(const State &other)
+    :
+    id(other.id),
+    element(other.element)
+    {
+      element->useCount++;
+    }
+
+    State& State::operator=(const State &other)
+    {
+      if (this != &other)
+      {
+        id = other.id;
+        element = other.element;
+
+        element->useCount++;
+      }
+
+      return *this;
+    }
+
+    State::~State()
+    {
+      element->useCount--;
+
+      if (element->useCount == 0)
+      {
+        delete element;
+      }
+    }
+
     State& State::setShader(const ShaderProgram &shader)
     {
-      this->shader = shader;
-      hasShader = true;
+      element->shader = shader;
+      element->hasShader = true;
       return *this;
     }
 
     State& State::setShaderColor(const glm::vec4 &color)
     {
-      this->color = color;
-      hasColor = true;
+      element->color = color;
+      element->hasColor = true;
       return *this;
     }
 
     State& State::setShaderColor(float r, float g, float b, float a)
     {
-      color = { r, g, b, a };
-      hasColor = true;
+      element->color = { r, g, b, a };
+      element->hasColor = true;
       return *this;
     }
 
@@ -29,61 +70,61 @@ namespace chr
 
     State& State::glEnable(GLenum cap)
     {
-      enabled[cap] = {true};
+      element->enabled[cap] = {true};
       return *this;
     }
 
     State& State::glDisable(GLenum cap)
     {
-      enabled[cap] = {false};
+      element->enabled[cap] = {false};
       return *this;
     }
 
     State& State::glDepthMask(bool flag)
     {
-      propui[PROPERTY_GL_DEPTH_MASK] = {flag};
+      element->propui[PROPERTY_GL_DEPTH_MASK] = {flag};
       return *this;
     }
 
     State& State::glDepthFunc(GLenum func)
     {
-      propui[PROPERTY_GL_DEPTH_FUNC] = {func};
+      element->propui[PROPERTY_GL_DEPTH_FUNC] = {func};
       return *this;
     }
 
     State& State::glBlendFunc(GLenum sfactor, GLenum dfactor)
     {
-      propui[PROPERTY_GL_BLEND_FUNC] = {sfactor, dfactor};
+      element->propui[PROPERTY_GL_BLEND_FUNC] = {sfactor, dfactor};
       return *this;
     }
 
     State& State::glCullFace(GLenum mode)
     {
-      propui[PROPERTY_GL_CULL_FACE] = {mode};
+      element->propui[PROPERTY_GL_CULL_FACE] = {mode};
       return *this;
     }
 
     State& State::glFrontFace(GLenum mode)
     {
-      propui[PROPERTY_GL_FRONT_FACE] = {mode};
+      element->propui[PROPERTY_GL_FRONT_FACE] = {mode};
       return *this;
     }
 
     State& State::glLineWidth(float width)
     {
-      propf[PROPERTY_GL_LINE_WIDTH] = {width};
+      element->propf[PROPERTY_GL_LINE_WIDTH] = {width};
       return *this;
     }
 
     State& State::glPointSize(float size)
     {
-      propf[PROPERTY_GL_POINT_SIZE] = {size};
+      element->propf[PROPERTY_GL_POINT_SIZE] = {size};
       return *this;
     }
 
     State& State::glPolygonOffset(GLfloat factor, GLfloat units)
     {
-      propf[PROPERTY_GL_POLYGON_OFFSET] = {factor, units};
+      element->propf[PROPERTY_GL_POLYGON_OFFSET] = {factor, units};
       return *this;
     }
 
@@ -91,13 +132,13 @@ namespace chr
 
     void State::apply()
     {
-      if (hasShader)
+      if (element->hasShader)
       {
-        shader.bind();
-        apply(shader);
+        element->shader.bind();
+        apply(element->shader);
       }
 
-      for (auto it = enabled.begin(); it != enabled.end(); ++it)
+      for (auto it = element->enabled.begin(); it != element->enabled.end(); ++it)
       {
         if (it->second)
         {
@@ -109,7 +150,7 @@ namespace chr
         }
       }
 
-      for (auto it = propui.begin(); it != propui.end(); ++it)
+      for (auto it = element->propui.begin(); it != element->propui.end(); ++it)
       {
         switch (it->first)
         {
@@ -139,7 +180,7 @@ namespace chr
         }
       }
 
-      for (auto it = propf.begin(); it != propf.end(); ++it)
+      for (auto it = element->propf.begin(); it != element->propf.end(); ++it)
       {
         switch (it->first)
         {
@@ -156,47 +197,47 @@ namespace chr
 
     void State::apply(ShaderProgram &shader)
     {
-      if (hasColor)
+      if (element->hasColor)
       {
-        shader.applyColor(color);
+        shader.applyColor(element->color);
       }
 
-      if (hasMatrix4[MV])
+      if (element->hasMatrix4[MV])
       {
-        shader.applyMatrix<MV>(matrices4[MV]);
+        shader.applyMatrix<MV>(element->matrices4[MV]);
       }
 
-      if (hasMatrix4[MVP])
+      if (element->hasMatrix4[MVP])
       {
-        shader.applyMatrix<MVP>(matrices4[MVP]);
+        shader.applyMatrix<MVP>(element->matrices4[MVP]);
       }
 
-      if (hasMatrix4[PROJECTION])
+      if (element->hasMatrix4[PROJECTION])
       {
-        shader.applyMatrix<PROJECTION>(matrices4[PROJECTION]);
+        shader.applyMatrix<PROJECTION>(element->matrices4[PROJECTION]);
       }
 
-      if (hasMatrix3[NORMAL])
+      if (element->hasMatrix3[NORMAL])
       {
-        shader.applyMatrix<NORMAL>(matrices3[NORMAL]);
+        shader.applyMatrix<NORMAL>(element->matrices3[NORMAL]);
       }
 
-      for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
-      {
-        shader.applyUniform(it->first, it->second);
-      }
-
-      for (auto it = uniformf.begin(); it != uniformf.end(); ++it)
+      for (auto it = element->uniformi.begin(); it != element->uniformi.end(); ++it)
       {
         shader.applyUniform(it->first, it->second);
       }
 
-      for (auto it = uniformm3.begin(); it != uniformm3.end(); ++it)
+      for (auto it = element->uniformf.begin(); it != element->uniformf.end(); ++it)
       {
         shader.applyUniform(it->first, it->second);
       }
 
-      for (auto it = uniformm4.begin(); it != uniformm4.end(); ++it)
+      for (auto it = element->uniformm3.begin(); it != element->uniformm3.end(); ++it)
+      {
+        shader.applyUniform(it->first, it->second);
+      }
+
+      for (auto it = element->uniformm4.begin(); it != element->uniformm4.end(); ++it)
       {
         shader.applyUniform(it->first, it->second);
       }
