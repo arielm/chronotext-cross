@@ -82,8 +82,8 @@ namespace chr
         }
         else
         {
-          apply(state.shader);
-          bind(state.shader);
+          apply(state.element->shader);
+          bind(state.element->shader);
         }
       }
 

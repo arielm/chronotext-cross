@@ -25,10 +25,11 @@ namespace chr
     {
       struct Element
       {
+        int useCount = 0;
+
         std::string vertexShaderSource;
         std::string fragmentShaderSource;
 
-        int useCount;
         GLuint programId;
         GLuint vertexShaderId;
         GLuint fragmentShaderId;

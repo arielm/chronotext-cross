@@ -11,16 +11,10 @@ namespace chr
     {
       struct Element
       {
-        int useCount;
+        int useCount = 0;
         GLuint textureId;
       };
     }
-
-//    relativePath(relativePath),
-//      imageFlags(image::FLAGS_NONE),
-//      useMipmap(false),
-//      wrapS(GL_CLAMP_TO_EDGE),
-//      wrapT(GL_CLAMP_TO_EDGE)
 
     class Texture
     {

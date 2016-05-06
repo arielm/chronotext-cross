@@ -32,9 +32,9 @@ namespace chr
       template<class T>
       struct Element
       {
+        int useCount = 0;
         std::vector<T> storage;
         size_t allocatedSize;
-        int useCount;
         GLuint vboId;
         bool uploadRequired = true;
       };
