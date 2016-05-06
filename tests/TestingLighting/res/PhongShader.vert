@@ -9,7 +9,6 @@ uniform mat3 u_normal_matrix;
 varying vec3 v_position;
 varying vec3 v_normal;
 varying vec4 v_color;
-varying vec3 v_light_position;
 
 void main()
 {

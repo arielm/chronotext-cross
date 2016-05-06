@@ -12,7 +12,8 @@ Sketch::Sketch()
 :
 faceBatch(GL_TRIANGLES),
 normalBatch(GL_LINES),
-phongShader("PhongShader.vert", "PhongShader.frag")
+phongShader("PhongShader.vert", "PhongShader.frag"),
+lambertShader("LambertShader.vert", "LambertShader.frag")
 {}
 
 void Sketch::setup()
@@ -21,7 +22,6 @@ void Sketch::setup()
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
-  faceBatch.setShader(phongShader);
   normalBatch.setShader(colorShader);
 
   // ---
@@ -105,18 +105,41 @@ void Sketch::draw()
     .rotateY(clock()->getTime())
     .rotateZ(clock()->getTime() * 0.25f);
 
+  auto mvpMatrix = mvMatrix * projectionMatrix;
+
   // ---
-
-  normalBatch
-    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix);
-
-  faceBatch
-    .setShaderMatrix<MV>(mvMatrix)
-    .setShaderMatrix<PROJECTION>(projectionMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix());
 
   state.apply();
 
-  faceBatch.flush();
-  normalBatch.flush();
+  if (pressed)
+  {
+    faceBatch
+      .setShader(phongShader)
+      .setShaderMatrix<MV>(mvMatrix)
+      .setShaderMatrix<PROJECTION>(projectionMatrix);
+  }
+  else
+  {
+    faceBatch
+      .setShader(lambertShader)
+      .setShaderMatrix<MVP>(mvpMatrix);
+  }
+
+  faceBatch
+    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .flush();
+
+  normalBatch
+    .setShaderMatrix<MVP>(mvpMatrix)
+    .flush();
+}
+
+void Sketch::addTouch(int index, float x, float y)
+{
+  pressed = true;
+}
+
+void Sketch::removeTouch(int index, float x, float y)
+{
+  pressed = false;
 }

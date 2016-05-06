@@ -13,6 +13,9 @@ public:
   void setup() final;
   void draw() final;
 
+  void addTouch(int index, float x, float y) final;
+  void removeTouch(int index, float x, float y) final;
+
 protected:
   chr::gl::State state;
 
@@ -20,5 +23,8 @@ protected:
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 
   chr::gl::ShaderProgram phongShader;
+  chr::gl::ShaderProgram lambertShader;
   chr::gl::shaders::ColorShader colorShader;
+
+  bool pressed = false;
 };
