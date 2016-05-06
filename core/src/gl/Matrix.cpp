@@ -363,13 +363,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1)
+        .addVertex(TRANSFORM_QUAD_X1_Y2)
+        .addVertex(TRANSFORM_QUAD_X2_Y2)
+        .addVertex(TRANSFORM_QUAD_X2_Y1);
 
-      output.addIndices(0, 1, 2, 2, 3, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 1, 2, 2, 3, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -377,13 +379,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1)
+        .addVertex(TRANSFORM_QUAD_X1_Y2)
+        .addVertex(TRANSFORM_QUAD_X2_Y2)
+        .addVertex(TRANSFORM_QUAD_X2_Y1);
 
-      output.addIndices(0, 3, 2, 2, 1, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 3, 2, 2, 1, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -391,13 +395,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1);
 
-      output.addIndices(0, 1, 2, 2, 3, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 1, 2, 2, 3, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -405,13 +411,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1);
 
-      output.addIndices(0, 3, 2, 2, 1, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 3, 2, 2, 1, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -419,13 +427,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, quad.color); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, quad.color); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, quad.color); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, quad.color); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, quad.color)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, quad.color);
 
-      output.addIndices(0, 1, 2, 2, 3, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 1, 2, 2, 3, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -433,13 +443,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, quad.color); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, quad.color); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, quad.color); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, quad.color); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, quad.color)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, quad.color);
 
-      output.addIndices(0, 3, 2, 2, 1, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 3, 2, 2, 1, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -447,13 +459,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1, quad.color); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2, quad.color); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2, quad.color); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1, quad.color); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1, quad.color)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1, quad.color);
 
-      output.addIndices(0, 1, 2, 2, 3, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 1, 2, 2, 3, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -461,13 +475,15 @@ namespace chr
     {
       TRANSFORM_QUAD_HEADER
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1, quad.color); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2, quad.color); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2, quad.color); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1, quad.color); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, quad.u1, quad.v1, quad.color)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, quad.u1, quad.v2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, quad.u2, quad.v2, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, quad.u2, quad.v1, quad.color);
 
-      output.addIndices(0, 3, 2, 2, 1, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 3, 2, 2, 1, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -477,13 +493,15 @@ namespace chr
 
       const auto &transformedNormal = transformNormal(quad.normal);
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal, quad.color); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal, quad.color); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal, quad.color);
 
-      output.addIndices(0, 1, 2, 2, 3, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 1, 2, 2, 3, 0)
+        .incrementIndices(4);
     }
 
     template <>
@@ -493,13 +511,15 @@ namespace chr
 
       const auto &transformedNormal = transformNormal(quad.normal);
 
-      output.addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color); // x1, y1
-      output.addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color); // x1, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal, quad.color); // x2, y2
-      output.addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal, quad.color); // x2, y1
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal, quad.color)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal, quad.color)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal, quad.color);
 
-      output.addIndices(0, 3, 2, 2, 1, 0);
-      output.incrementIndices(4);
+      output
+        .addIndices(0, 3, 2, 2, 1, 0)
+        .incrementIndices(4);
     }
   }
 }

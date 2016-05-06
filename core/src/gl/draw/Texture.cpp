@@ -91,13 +91,15 @@ namespace chr
         float u2 = batch.texture.u2;
         float v2 = batch.texture.v2;
 
-        batch.addVertex( x,  y, 0, u1, v1);
-        batch.addVertex( x, y2, 0, u1, v2);
-        batch.addVertex(x2, y2, 0, u2, v2);
-        batch.addVertex(x2,  y, 0, u2, v1);
+        batch
+          .addVertex( x,  y, 0, u1, v1)
+          .addVertex( x, y2, 0, u1, v2)
+          .addVertex(x2, y2, 0, u2, v2)
+          .addVertex(x2,  y, 0, u2, v1);
 
-        batch.addIndices(0, 1, 2, 2, 3, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 1, 2, 2, 3, 0)
+          .incrementIndices(4);
       }
 
       template <>
@@ -111,13 +113,15 @@ namespace chr
         float u2 = batch.texture.u2;
         float v2 = batch.texture.v2;
 
-        batch.addVertex( x,  y, 0, u1, v1);
-        batch.addVertex( x, y2, 0, u1, v2);
-        batch.addVertex(x2, y2, 0, u2, v2);
-        batch.addVertex(x2,  y, 0, u2, v1);
+        batch
+          .addVertex( x,  y, 0, u1, v1)
+          .addVertex( x, y2, 0, u1, v2)
+          .addVertex(x2, y2, 0, u2, v2)
+          .addVertex(x2,  y, 0, u2, v1);
 
-        batch.addIndices(0, 3, 2, 2, 1, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 3, 2, 2, 1, 0)
+          .incrementIndices(4);
       }
 
       template <>
@@ -131,13 +135,15 @@ namespace chr
         float u2 = batch.texture.u2;
         float v2 = batch.texture.v2;
 
-        batch.addVertex( x,  y, 0, u1, v1, color);
-        batch.addVertex( x, y2, 0, u1, v2, color);
-        batch.addVertex(x2, y2, 0, u2, v2, color);
-        batch.addVertex(x2,  y, 0, u2, v1, color);
+        batch
+          .addVertex( x,  y, 0, u1, v1, color)
+          .addVertex( x, y2, 0, u1, v2, color)
+          .addVertex(x2, y2, 0, u2, v2, color)
+          .addVertex(x2,  y, 0, u2, v1, color);
 
-        batch.addIndices(0, 1, 2, 2, 3, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 1, 2, 2, 3, 0)
+          .incrementIndices(4);
       }
 
       template <>
@@ -151,13 +157,15 @@ namespace chr
         float u2 = batch.texture.u2;
         float v2 = batch.texture.v2;
 
-        batch.addVertex( x,  y, 0, u1, v1, color);
-        batch.addVertex( x, y2, 0, u1, v2, color);
-        batch.addVertex(x2, y2, 0, u2, v2, color);
-        batch.addVertex(x2,  y, 0, u2, v1, color);
+        batch
+          .addVertex( x,  y, 0, u1, v1, color)
+          .addVertex( x, y2, 0, u1, v2, color)
+          .addVertex(x2, y2, 0, u2, v2, color)
+          .addVertex(x2,  y, 0, u2, v1, color);
 
-        batch.addIndices(0, 3, 2, 2, 1, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 3, 2, 2, 1, 0)
+          .incrementIndices(4);
       }
 
       // ---

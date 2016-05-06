@@ -61,49 +61,57 @@ namespace chr
       template <>
       void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, float x1, float y1, float x2, float y2) const
       {
-        batch.addVertex(x1, y1);
-        batch.addVertex(x1, y2);
-        batch.addVertex(x2, y2);
-        batch.addVertex(x2, y1);
+        batch
+          .addVertex(x1, y1)
+          .addVertex(x1, y2)
+          .addVertex(x2, y2)
+          .addVertex(x2, y1);
 
-        batch.addIndices(0, 1, 2, 2, 3, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 1, 2, 2, 3, 0)
+          .incrementIndices(4);
       }
 
       template <>
       void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch, float x1, float y1, float x2, float y2) const
       {
-        batch.addVertex(x1, y1);
-        batch.addVertex(x1, y2);
-        batch.addVertex(x2, y2);
-        batch.addVertex(x2, y1);
+        batch
+          .addVertex(x1, y1)
+          .addVertex(x1, y2)
+          .addVertex(x2, y2)
+          .addVertex(x2, y1);
 
-        batch.addIndices(0, 3, 2, 2, 1, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 3, 2, 2, 1, 0)
+          .incrementIndices(4);
       }
 
       template <>
       void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, float x1, float y1, float x2, float y2) const
       {
-        batch.addVertex(x1, y1, 0, color);
-        batch.addVertex(x1, y2, 0, color);
-        batch.addVertex(x2, y2, 0, color);
-        batch.addVertex(x2, y1, 0, color);
+        batch
+          .addVertex(x1, y1, 0, color)
+          .addVertex(x1, y2, 0, color)
+          .addVertex(x2, y2, 0, color)
+          .addVertex(x2, y1, 0, color);
 
-        batch.addIndices(0, 1, 2, 2, 3, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 1, 2, 2, 3, 0)
+          .incrementIndices(4);
       }
 
       template <>
       void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, float x1, float y1, float x2, float y2) const
       {
-        batch.addVertex(x1, y1, 0, color);
-        batch.addVertex(x1, y2, 0, color);
-        batch.addVertex(x2, y2, 0, color);
-        batch.addVertex(x2, y1, 0, color);
+        batch
+          .addVertex(x1, y1, 0, color)
+          .addVertex(x1, y2, 0, color)
+          .addVertex(x2, y2, 0, color)
+          .addVertex(x2, y1, 0, color);
 
-        batch.addIndices(0, 3, 2, 2, 1, 0);
-        batch.incrementIndices(4);
+        batch
+          .addIndices(0, 3, 2, 2, 1, 0)
+          .incrementIndices(4);
       }
     }
   }

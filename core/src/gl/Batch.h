@@ -88,9 +88,10 @@ namespace chr
       }
 
       template<typename... Args>
-      inline void addVertex(Args&&... args)
+      inline VertexBatch& addVertex(Args&&... args)
       {
         vertexBuffer->storage.emplace_back(std::forward<Args>(args)...);
+        return *this;
       }
 
       VertexBatch& setShader(const ShaderProgram &shader)
@@ -253,17 +254,20 @@ namespace chr
       {}
 
       template<typename... Args>
-      inline void addIndices(Args&&... args)
+      inline IndexedVertexBatch& addIndices(Args&&... args)
       {
         for (I offset : {args...})
         {
           indexBuffer->storage.emplace_back(index + offset);
         }
+
+        return *this;
       }
 
-      inline void incrementIndices(I increment)
+      inline IndexedVertexBatch& incrementIndices(I increment)
       {
         index += increment;
+        return *this;
       }
 
       void clear() override
