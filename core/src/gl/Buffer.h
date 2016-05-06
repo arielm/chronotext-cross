@@ -51,7 +51,7 @@ namespace chr
       buffer::Element<T> *element;
       GLenum usage;
 
-      buffer::Element<T>* operator->()
+      buffer::Element<T>* operator-> () const
       {
         return element;
       }

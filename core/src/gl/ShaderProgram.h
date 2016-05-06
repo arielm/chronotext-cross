@@ -61,6 +61,11 @@ namespace chr
 
       ~ShaderProgram();
 
+      shader::Element* operator-> () const
+      {
+        return element;
+      }
+
       bool bind();
       void unbind();
       void unload();

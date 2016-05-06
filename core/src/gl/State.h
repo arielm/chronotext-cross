@@ -64,7 +64,7 @@ namespace chr
 
       ~State();
 
-      state::Element* operator-> ()
+      state::Element* operator-> () const
       {
         return element;
       }

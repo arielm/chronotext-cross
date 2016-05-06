@@ -117,75 +117,75 @@ namespace chr
     template <>
     void ShaderHelper::bindAttributes<Vertex<XYZ>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->positionLocation);
-      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader->positionLocation);
+      glVertexAttribPointer(shader->positionLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<XYZ.UV>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->positionLocation);
-      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV>), 0);
+      glEnableVertexAttribArray(shader->positionLocation);
+      glVertexAttribPointer(shader->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV>), 0);
 
-      glEnableVertexAttribArray(shader.element->coordLocation);
-      glVertexAttribPointer(shader.element->coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV>), (GLvoid *) sizeof(Vertex<>));
+      glEnableVertexAttribArray(shader->coordLocation);
+      glVertexAttribPointer(shader->coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV>), (GLvoid *) sizeof(Vertex<>));
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<XYZ.RGBA>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->positionLocation);
-      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.RGBA>), 0);
+      glEnableVertexAttribArray(shader->positionLocation);
+      glVertexAttribPointer(shader->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.RGBA>), 0);
 
-      glEnableVertexAttribArray(shader.element->colorLocation);
-      glVertexAttribPointer(shader.element->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.RGBA>), (GLvoid *) sizeof(Vertex<XYZ>));
+      glEnableVertexAttribArray(shader->colorLocation);
+      glVertexAttribPointer(shader->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.RGBA>), (GLvoid *) sizeof(Vertex<XYZ>));
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<XYZ.N.RGBA>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->positionLocation);
-      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N.RGBA>), 0);
+      glEnableVertexAttribArray(shader->positionLocation);
+      glVertexAttribPointer(shader->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N.RGBA>), 0);
 
-      glEnableVertexAttribArray(shader.element->normalLocation);
-      glVertexAttribPointer(shader.element->normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N.RGBA>), (GLvoid *) sizeof(Vertex<>));
+      glEnableVertexAttribArray(shader->normalLocation);
+      glVertexAttribPointer(shader->normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N.RGBA>), (GLvoid *) sizeof(Vertex<>));
 
-      glEnableVertexAttribArray(shader.element->colorLocation);
-      glVertexAttribPointer(shader.element->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N.RGBA>), (GLvoid *) sizeof(Vertex<XYZ.N>));
+      glEnableVertexAttribArray(shader->colorLocation);
+      glVertexAttribPointer(shader->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N.RGBA>), (GLvoid *) sizeof(Vertex<XYZ.N>));
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<XYZ.UV.RGBA>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->positionLocation);
-      glVertexAttribPointer(shader.element->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV.RGBA>), 0);
+      glEnableVertexAttribArray(shader->positionLocation);
+      glVertexAttribPointer(shader->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV.RGBA>), 0);
 
-      glEnableVertexAttribArray(shader.element->coordLocation);
-      glVertexAttribPointer(shader.element->coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV.RGBA>), (GLvoid *) sizeof(Vertex<>));
+      glEnableVertexAttribArray(shader->coordLocation);
+      glVertexAttribPointer(shader->coordLocation, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV.RGBA>), (GLvoid *) sizeof(Vertex<>));
 
-      glEnableVertexAttribArray(shader.element->colorLocation);
-      glVertexAttribPointer(shader.element->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV.RGBA>), (GLvoid *) sizeof(Vertex<XYZ.UV>));
+      glEnableVertexAttribArray(shader->colorLocation);
+      glVertexAttribPointer(shader->colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.UV.RGBA>), (GLvoid *) sizeof(Vertex<XYZ.UV>));
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<N>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->normalLocation);
-      glVertexAttribPointer(shader.element->normalLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader->normalLocation);
+      glVertexAttribPointer(shader->normalLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<UV>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->coordLocation);
-      glVertexAttribPointer(shader.element->coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader->coordLocation);
+      glVertexAttribPointer(shader->coordLocation, 2, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     template <>
     void ShaderHelper::bindAttributes<Vertex<RGBA>>(const ShaderProgram &shader)
     {
-      glEnableVertexAttribArray(shader.element->colorLocation);
-      glVertexAttribPointer(shader.element->colorLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(shader->colorLocation);
+      glVertexAttribPointer(shader->colorLocation, 4, GL_FLOAT, GL_FALSE, 0, 0);
     }
 
     // ---
@@ -193,55 +193,55 @@ namespace chr
     template <>
     void ShaderHelper::unbindAttributes<Vertex<XYZ>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->positionLocation);
+      glDisableVertexAttribArray(shader->positionLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<XYZ.UV>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->positionLocation);
-      glDisableVertexAttribArray(shader.element->coordLocation);
+      glDisableVertexAttribArray(shader->positionLocation);
+      glDisableVertexAttribArray(shader->coordLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<XYZ.RGBA>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->positionLocation);
-      glDisableVertexAttribArray(shader.element->colorLocation);
+      glDisableVertexAttribArray(shader->positionLocation);
+      glDisableVertexAttribArray(shader->colorLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<XYZ.N.RGBA>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->positionLocation);
-      glDisableVertexAttribArray(shader.element->normalLocation);
-      glDisableVertexAttribArray(shader.element->colorLocation);
+      glDisableVertexAttribArray(shader->positionLocation);
+      glDisableVertexAttribArray(shader->normalLocation);
+      glDisableVertexAttribArray(shader->colorLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<XYZ.UV.RGBA>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->positionLocation);
-      glDisableVertexAttribArray(shader.element->coordLocation);
-      glDisableVertexAttribArray(shader.element->colorLocation);
+      glDisableVertexAttribArray(shader->positionLocation);
+      glDisableVertexAttribArray(shader->coordLocation);
+      glDisableVertexAttribArray(shader->colorLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<N>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->normalLocation);
+      glDisableVertexAttribArray(shader->normalLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<UV>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->coordLocation);
+      glDisableVertexAttribArray(shader->coordLocation);
     }
 
     template <>
     void ShaderHelper::unbindAttributes<Vertex<RGBA>>(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader.element->colorLocation);
+      glDisableVertexAttribArray(shader->colorLocation);
     }
   }
 }
