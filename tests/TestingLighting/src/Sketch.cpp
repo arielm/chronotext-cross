@@ -12,7 +12,7 @@ Sketch::Sketch()
 :
 faceBatch(GL_TRIANGLES),
 normalBatch(GL_LINES),
-shader("PhongShader.vert", "PhongShader.frag")
+phongShader("PhongShader.vert", "PhongShader.frag")
 {}
 
 void Sketch::setup()
@@ -21,7 +21,7 @@ void Sketch::setup()
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
-  faceBatch.setShader(shader);
+  faceBatch.setShader(phongShader);
   normalBatch.setShader(colorShader);
 
   // ---
@@ -113,8 +113,7 @@ void Sketch::draw()
   faceBatch
     .setShaderMatrix<MV>(mvMatrix)
     .setShaderMatrix<PROJECTION>(projectionMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
-    .setShaderUniform("u_light_position", 0, 0, 0);
+    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix());
 
   state.apply();
 

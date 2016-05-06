@@ -1,7 +1,6 @@
 attribute vec3 a_position;
 attribute vec3 a_normal;
 attribute vec4 a_color;
-uniform vec3 u_light_position;
 
 uniform mat4 u_mv_matrix;
 uniform mat4 u_projection_matrix;
@@ -19,7 +18,6 @@ void main()
   v_position = transformedPosition.xyz;
   v_normal = u_normal_matrix * a_normal;
   v_color = a_color;
-  v_light_position = u_light_position;
 
   gl_Position = u_projection_matrix * transformedPosition;
 }
