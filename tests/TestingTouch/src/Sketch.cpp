@@ -47,7 +47,7 @@ void Sketch::draw()
   }
 
   textureState.apply();
-  textureBatch.flush(textureState);
+  textureBatch.flush();
 
   touchPositions.clear();
 }

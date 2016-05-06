@@ -118,6 +118,6 @@ void Sketch::draw()
 
   state.apply();
 
-  faceBatch.flush(state);
-  normalBatch.flush(state);
+  faceBatch.flush();
+  normalBatch.flush();
 }

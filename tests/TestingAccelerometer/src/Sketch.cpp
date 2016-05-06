@@ -68,7 +68,7 @@ void Sketch::draw()
   drawDot(particle.position, particle.radius);
 
   textureState.apply();
-  textureBatch.flush(textureState);
+  textureBatch.flush();
 }
 
 void Sketch::accelerated(AccelEvent event)

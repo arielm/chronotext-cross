@@ -6,7 +6,12 @@ namespace chr
   {
     int State::usageCounter = 0;
 
-    State::State()
+    namespace state
+    {
+      State current;
+    }
+
+      State::State()
     :
     id(usageCounter++),
     element(new state::Element())
@@ -193,6 +198,8 @@ namespace chr
             break;
         }
       }
+
+      state::current = *this;
     }
 
     void State::apply(ShaderProgram &shader)

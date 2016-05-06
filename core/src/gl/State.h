@@ -6,8 +6,12 @@ namespace chr
 {
   namespace gl
   {
+    class State;
+
     namespace state
     {
+      extern State current;
+
       struct Element
       {
         int useCount = 0;
@@ -59,6 +63,11 @@ namespace chr
       State& operator=(const State &other);
 
       ~State();
+
+      state::Element* operator-> ()
+      {
+        return element;
+      }
 
       inline State& setShaderUniform(const std::string &name, int v0) { element->uniformi[name] = { v0 }; return *this; }
       inline State& setShaderUniform(const std::string &name, int v0, int v1) { element->uniformi[name] = { v0, v1 }; return *this; }

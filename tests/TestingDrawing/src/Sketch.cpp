@@ -75,8 +75,8 @@ void Sketch::draw()
   // ---
 
   state.apply();
-  colorBatch.flush(state);
-  textureBatch.flush(state);
+  colorBatch.flush();
+  textureBatch.flush();
 }
 
 void Sketch::initTextures()

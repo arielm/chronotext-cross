@@ -66,7 +66,7 @@ namespace chr
         return vertexBuffer.empty();
       }
 
-      void flush(State &state)
+      void flush()
       {
         if (hasTexture)
         {
@@ -76,14 +76,14 @@ namespace chr
         if (hasShader)
         {
           shader.bind();
-          state.apply(shader);
+          state::current.apply(shader);
           apply(shader);
           bind(shader);
         }
         else
         {
-          apply(state.element->shader);
-          bind(state.element->shader);
+          apply(state::current->shader);
+          bind(state::current->shader);
         }
       }
 

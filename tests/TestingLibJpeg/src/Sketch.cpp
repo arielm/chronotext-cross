@@ -64,20 +64,15 @@ void Sketch::draw()
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateX(15 * D2R)
-    .rotateY(getElapsedSeconds());
-
-  glm::mat4 mvpMatrix = modelViewMatrix * projectionMatrix;
+    .rotateY(clock()->getTime());
 
   // ---
 
-  State state;
-  state
-    .setShaderMatrix(mvpMatrix)
-    .apply();
+  State().setShaderMatrix(modelViewMatrix * projectionMatrix).apply();
 
-  textureBatches[0].flush(state);
-  textureBatches[1].flush(state);
-  textureBatches[2].flush(state);
+  textureBatches[0].flush();
+  textureBatches[1].flush();
+  textureBatches[2].flush();
 }
 
 void Sketch::initTextures()
