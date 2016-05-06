@@ -75,6 +75,12 @@ namespace chr
       return *this;
     }
 
+    State& State::glPointSize(float size)
+    {
+      propf[PROPERTY_GL_POINT_SIZE] = {size};
+      return *this;
+    }
+
     State& State::glPolygonOffset(GLfloat factor, GLfloat units)
     {
       propf[PROPERTY_GL_POLYGON_OFFSET] = {factor, units};
@@ -139,6 +145,10 @@ namespace chr
         {
           case PROPERTY_GL_LINE_WIDTH:
             ::glLineWidth(it->second[0]);
+            break;
+
+          case PROPERTY_GL_POINT_SIZE:
+            ::glPointSize(it->second[0]);
             break;
         }
       }

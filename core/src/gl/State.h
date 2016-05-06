@@ -17,6 +17,7 @@ namespace chr
         PROPERTY_GL_CULL_FACE,
         PROPERTY_GL_FRONT_FACE,
         PROPERTY_GL_LINE_WIDTH,
+        PROPERTY_GL_POINT_SIZE,
         PROPERTY_GL_POLYGON_OFFSET
       };
 
@@ -93,6 +94,7 @@ namespace chr
       State& glCullFace(GLenum mode);
       State& glFrontFace(GLenum mode);
       State& glLineWidth(float width);
+      State& glPointSize(float size);
       State& glPolygonOffset(GLfloat factor, GLfloat units);
 
       void apply();
