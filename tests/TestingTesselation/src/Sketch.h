@@ -22,6 +22,4 @@ protected:
 
   chr::gl::shaders::LambertShader lambertShader;
   chr::gl::shaders::ColorShader colorShader;
-
-  bool pressed = false;
 };

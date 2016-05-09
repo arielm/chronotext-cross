@@ -1,9 +1,6 @@
 #include "Sketch.h"
 
-#include "gl/draw/Texture.h"
-#include "gl/draw/Rect.h"
-
-#include "tesselator.h"
+#include "Triangulator.h"
 
 using namespace std;
 using namespace chr;
@@ -28,18 +25,21 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
-
   matrix.translate(-50, -50, 0);
-  draw::Rect()
-    .setColor(1, 0.5f, 0, 1)
-    .fill(faceBatch, matrix, Rectf(0, 0, 100, 100));
+
+  Triangulator triangulator;
+  triangulator
+    .add(Rectf(0, 0, 100, 100))
+    .add(Rectf(10, 10, 80, 80))
+    .process(faceBatch, matrix, glm::vec4(1, 0.5f, 0, 1));
 
   // ---
 
   for (auto &vertex : faceBatch.vertexBuffer->storage)
   {
-    normalBatch.addVertex(vertex.position);
-    normalBatch.addVertex(vertex.position + vertex.normal * 10.0f);
+    normalBatch
+      .addVertex(vertex.position)
+      .addVertex(vertex.position + vertex.normal * 10.0f);
   }
 
   // ---
