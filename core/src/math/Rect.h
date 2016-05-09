@@ -22,6 +22,11 @@ namespace chr
       float width() const;
       float height() const;
       glm::vec2 size() const;
+
+      glm::vec2 x1y1() const;
+      glm::vec2 x2y1() const;
+      glm::vec2 x2y2() const;
+      glm::vec2 x1y2() const;
     };
   }
 }

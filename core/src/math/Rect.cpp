@@ -35,5 +35,25 @@ namespace chr
 		{
 			return glm::vec2(x2 - x1, y2 - y1);
 		}
+
+		glm::vec2 Rectf::x1y1() const
+		{
+			return glm::vec2(x1, y1);
+		}
+
+		glm::vec2 Rectf::x2y1() const
+		{
+			return glm::vec2(x2, y1);
+		}
+
+		glm::vec2 Rectf::x2y2() const
+		{
+			return glm::vec2(x2, y2);
+		}
+
+		glm::vec2 Rectf::x1y2() const
+		{
+			return glm::vec2(x1, y2);
+		}
 	}
 }
