@@ -253,6 +253,11 @@ namespace chr
       VertexBatch<V>(primitive, vertexBuffer)
       {}
 
+      inline IndexedVertexBatch& addIndex(I offset)
+      {
+        indexBuffer->storage.emplace_back(index + offset);
+      }
+
       template<typename... Args>
       inline IndexedVertexBatch& addIndices(Args&&... args)
       {
@@ -268,6 +273,11 @@ namespace chr
       {
         index += increment;
         return *this;
+      }
+
+      inline I getIndex() const
+      {
+        return index;
       }
 
       void clear() override

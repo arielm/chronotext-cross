@@ -10,8 +10,7 @@ using namespace math;
 Sketch::Sketch()
 :
 faceBatch(GL_TRIANGLES),
-normalBatch(GL_LINES),
-contourBatch(GL_LINES)
+normalBatch(GL_LINES)
 {}
 
 void Sketch::setup()
@@ -22,7 +21,6 @@ void Sketch::setup()
 
   faceBatch.setShader(lambertShader);
   normalBatch.setShader(colorShader);
-  contourBatch.setShader(colorShader);
 
   // ---
 
@@ -34,32 +32,13 @@ void Sketch::setup()
     .add(Rectf(0, 0, 100, 100))
     .add(Rectf(10, 10, 80, 80));
 
-  /*
-   * MUST TAKE PLACE BEFORE Triangulator::process()
-   */
-  auto contours = triangulator.getContourSegments();
-
   triangulator
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
-    .process(faceBatch, matrix);
+    .extrude(faceBatch, matrix, -150);
 
-  // ---
-
-  for (auto &contour : contours)
-  {
-    for (auto &segment : contour)
-    {
-      contourBatch
-        .addVertex(matrix.transformPoint(segment.p1))
-        .addVertex(matrix.transformPoint(segment.p2));
-
-      auto middle = (segment.p1 + segment.p2) * 0.5f;
-
-      normalBatch
-        .addVertex(matrix.transformPoint(middle))
-        .addVertex(matrix.transformPoint(middle + segment.tangeant * 10.0f));
-    }
-  }
+//  triangulator
+//    .setColor(1.0f, 0.5f, 0.0f, 1.0f)
+//    .process(faceBatch, matrix);
 
   // ---
 
@@ -110,9 +89,4 @@ void Sketch::draw()
   normalBatch
     .setShaderMatrix<MVP>(mvpMatrix)
     .flush();
-
-  contourBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .flush();
-
 }

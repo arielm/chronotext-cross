@@ -123,6 +123,72 @@ namespace chr
     process(batch, matrix, normal, color);
   }
 
+  template <>
+  void Triangulator::extrude(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix, float distance)
+  {
+    auto contours = getContourSegments();
+
+    for (auto &contour : contours)
+    {
+      for (auto &segment : contour)
+      {
+        auto normal = matrix.transformNormal(glm::vec3(segment.tangeant, 0));
+
+        batch
+          .addVertex(matrix.transformPoint(segment.p1), normal, color)
+          .addVertex(matrix.transformPoint(segment.p2), normal, color)
+          .addVertex(matrix.transformPoint(glm::vec3(segment.p2, distance)), normal, color)
+          .addVertex(matrix.transformPoint(glm::vec3(segment.p1, distance)), normal, color);
+
+        batch
+          .addIndices(0, 3, 2, 2, 1, 0)
+          .incrementIndices(4);
+      }
+    }
+
+    // ---
+
+    tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
+
+    auto vertices = (glm::vec2*)tessGetVertices(tess);
+    auto vertexCount = tessGetVertexCount(tess);
+
+    auto indices = (int*)tessGetElements(tess);
+    auto indexCount =  tessGetElementCount(tess) * 3;
+
+    // ---
+
+    auto normal1 = matrix.transformNormal(0, 0, +1);
+
+    for (int i = 0; i < vertexCount; i++)
+    {
+      batch.addVertex(matrix.transformPoint(vertices[i]), normal1, color);
+    }
+
+    for (int i = 0; i < indexCount; i++)
+    {
+      batch.addIndex(indices[i]);
+    }
+
+    batch.incrementIndices(vertexCount);
+
+    // ---
+
+    auto normal2 = matrix.transformNormal(0, 0, -1);
+
+    for (int i = 0; i < vertexCount; i++)
+    {
+      batch.addVertex(matrix.transformPoint(glm::vec3(vertices[i], distance)), normal2, color);
+    }
+
+    for (int i = 0; i < indexCount; i += 3)
+    {
+      batch.addIndices(indices[i + 2], indices[i + 1], indices[i + 0]);
+    }
+
+    batch.incrementIndices(vertexCount);
+  }
+
   vector<vector<Triangulator::Segment>> Triangulator::getContourSegments() const
   {
     vector<vector<Segment>> contours;

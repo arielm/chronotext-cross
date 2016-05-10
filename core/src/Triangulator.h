@@ -6,6 +6,8 @@
 
 #include "tesselator.h"
 
+#include "Log.h"
+
 namespace chr
 {
   class Triangulator
@@ -42,6 +44,9 @@ namespace chr
     template<int V = gl::XYZ>
     void process(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix);
 
+    template<int V = gl::XYZ>
+    void extrude(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, float distance);
+
     std::vector<std::vector<Segment>> getContourSegments() const;
 
   protected:
@@ -76,11 +81,14 @@ namespace chr
 
       auto &batchIndices = batch.indexBuffer->storage;
       batchIndices.reserve(batchIndices.size() + indexCount);
+      int index = batch.getIndex();
 
       for (int i = 0; i < indexCount; i++)
       {
-        batchIndices.emplace_back(indices[i]);
+        batchIndices.emplace_back(index + indices[i]);
       }
+
+      batch.incrementIndices(indexCount);
     };
   };
 }
