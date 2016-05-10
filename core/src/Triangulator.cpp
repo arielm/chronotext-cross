@@ -123,7 +123,7 @@ namespace chr
     process(batch, matrix, normal, color);
   }
 
-  vector<vector<glm::vec2>> Triangulator::getContours()
+  vector<vector<glm::vec2>> Triangulator::getConvertedContours()
   {
     vector<vector<glm::vec2>> contours;
 
@@ -139,7 +139,7 @@ namespace chr
       const auto count = elements[(i << 1) + 1];
 
       contours.emplace_back(vertices + base, vertices + base + count);
-      tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count); // NOT WORKING
+      tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count); // ADDING THE CONTOURS BACK
     }
 
     return contours;

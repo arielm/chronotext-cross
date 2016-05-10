@@ -34,10 +34,11 @@ void Sketch::setup()
     .add(Rectf(0, 0, 100, 100))
     .add(Rectf(10, 10, 80, 80));
 
-  auto contours = triangulator.getContours();
-//  triangulator.add(contours); // NOT WORKING
+  auto contours = triangulator.getConvertedContours();
 
-  triangulator.process(faceBatch, matrix);
+  triangulator
+    .setColor(1.0f, 0.5f, 0.0f, 1.0f)
+    .process(faceBatch, matrix);
 
   // ---
 
