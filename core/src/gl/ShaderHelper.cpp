@@ -122,6 +122,16 @@ namespace chr
     }
 
     template <>
+    void ShaderHelper::bindAttributes<Vertex<XYZ.N>>(const ShaderProgram &shader)
+    {
+      glEnableVertexAttribArray(shader->positionLocation);
+      glVertexAttribPointer(shader->positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N>), 0);
+
+      glEnableVertexAttribArray(shader->normalLocation);
+      glVertexAttribPointer(shader->normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex<XYZ.N>), (GLvoid *) sizeof(Vertex<>));
+    }
+
+    template <>
     void ShaderHelper::bindAttributes<Vertex<XYZ.UV>>(const ShaderProgram &shader)
     {
       glEnableVertexAttribArray(shader->positionLocation);
@@ -194,6 +204,13 @@ namespace chr
     void ShaderHelper::unbindAttributes<Vertex<XYZ>>(const ShaderProgram &shader)
     {
       glDisableVertexAttribArray(shader->positionLocation);
+    }
+
+    template <>
+    void ShaderHelper::unbindAttributes<Vertex<XYZ.N>>(const ShaderProgram &shader)
+    {
+      glDisableVertexAttribArray(shader->positionLocation);
+      glDisableVertexAttribArray(shader->normalLocation);
     }
 
     template <>
