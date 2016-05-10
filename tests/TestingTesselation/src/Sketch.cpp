@@ -31,7 +31,8 @@ void Sketch::setup()
   triangulator
     .add(Rectf(0, 0, 100, 100))
     .add(Rectf(10, 10, 80, 80))
-    .process(faceBatch, matrix, glm::vec4(1, 0.5f, 0, 1));
+    .setColor(1, 0.5f, 0, 1)
+    .process(faceBatch, matrix);
 
   // ---
 

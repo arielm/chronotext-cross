@@ -35,6 +35,24 @@ namespace chr
     tessDeleteTess(tess);
   }
 
+  Triangulator& Triangulator::setWindingRule(int windingRule)
+  {
+    this->windingRule = windingRule;
+    return *this;
+  }
+
+  Triangulator& Triangulator::setColor(const glm::vec4 &color)
+  {
+    this->color = color;
+    return *this;
+  }
+
+  Triangulator& Triangulator::setColor(float r, float g, float b, float a)
+  {
+    color = { r, g, b, a };
+    return *this;
+  }
+
   template <>
   Triangulator& Triangulator::add<GL_CCW>(const Rectf &rect)
   {
@@ -74,75 +92,32 @@ namespace chr
   Triangulator& Triangulator::add(const vector<glm::vec2> &polygon)
   {
     tessAddContour(tess, 2, polygon.data(), sizeof(glm::vec2), polygon.size());
-
     return *this;
   }
 
-  Triangulator& Triangulator::process(IndexedVertexBatch<XYZ> &batch, Matrix &matrix, int windingRule)
+  template <>
+  void Triangulator::process(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
   {
-    tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
-
-    // ---
-
-    auto vertices = (glm::vec2*)tessGetVertices(tess);
-    auto vertexCount = tessGetVertexCount(tess);
-
-    auto &batchVertices = batch.vertexBuffer->storage;
-    batchVertices.reserve(batchVertices.size() + vertexCount);
-
-    for (int i = 0; i < vertexCount; i++)
-    {
-      batchVertices.emplace_back(matrix.transformPoint(vertices[i]));
-    }
-
-    // ---
-
-    auto indices = (int*)tessGetElements(tess);
-    auto indexCount =  tessGetElementCount(tess) * 3;
-
-    auto &batchIndices = batch.indexBuffer->storage;
-    batchIndices.reserve(batchIndices.size() + indexCount);
-
-    for (int i = 0; i < indexCount; i++)
-    {
-      batchIndices.emplace_back(indices[i]);
-    }
-
-    return *this;
+    process(batch, matrix);
   }
 
-  Triangulator& Triangulator::process(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix, const glm::vec4 &color, int windingRule)
+  template <>
+  void Triangulator::process(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
   {
-    tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
-
-    // ---
-
-    auto vertices = (glm::vec2*)tessGetVertices(tess);
-    auto vertexCount = tessGetVertexCount(tess);
-
-    auto &batchVertices = batch.vertexBuffer->storage;
-    batchVertices.reserve(batchVertices.size() + vertexCount);
-
     auto normal = matrix.transformNormal(0, 0, 1);
+    process(batch, matrix, normal);
+  }
 
-    for (int i = 0; i < vertexCount; i++)
-    {
-      batchVertices.emplace_back(matrix.transformPoint(vertices[i]), normal, color);
-    }
+  template <>
+  void Triangulator::process(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix)
+  {
+    process(batch, matrix, color);
+  }
 
-    // ---
-
-    auto indices = (int*)tessGetElements(tess);
-    auto indexCount =  tessGetElementCount(tess) * 3;
-
-    auto &batchIndices = batch.indexBuffer->storage;
-    batchIndices.reserve(batchIndices.size() + indexCount);
-
-    for (int i = 0; i < indexCount; i++)
-    {
-      batchIndices.emplace_back(indices[i]);
-    }
-
-    return *this;
+  template <>
+  void Triangulator::process(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
+  {
+    auto normal = matrix.transformNormal(0, 0, 1);
+    process(batch, matrix, normal, color);
   }
 }
