@@ -11,6 +11,20 @@ namespace chr
   class Triangulator
   {
   public:
+    struct Segment
+    {
+      glm::vec2 p1;
+      glm::vec2 p2;
+      glm::vec2 tangeant;
+
+      Segment(const glm::vec2 &p1, const glm::vec2 &p2, glm::vec2 &tangeant)
+      :
+      p1(p1),
+      p2(p2),
+      tangeant(tangeant)
+      {}
+    };
+
     Triangulator();
     ~Triangulator();
 
@@ -28,7 +42,7 @@ namespace chr
     template<int V = gl::XYZ>
     void process(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix);
 
-    std::vector<std::vector<glm::vec2>> getConvertedContours();
+    std::vector<std::vector<Segment>> getContourSegments() const;
 
   protected:
     TESStesselator *tess;

@@ -81,7 +81,7 @@ namespace chr
     return *this;
   }
 
-  Triangulator& Triangulator::add(const vector<std::vector<glm::vec2>> &polygons)
+  Triangulator& Triangulator::add(const vector<vector<glm::vec2>> &polygons)
   {
     for (auto &polygon : polygons)
     {
@@ -123,9 +123,9 @@ namespace chr
     process(batch, matrix, normal, color);
   }
 
-  vector<vector<glm::vec2>> Triangulator::getConvertedContours()
+  vector<vector<Triangulator::Segment>> Triangulator::getContourSegments() const
   {
-    vector<vector<glm::vec2>> contours;
+    vector<vector<Segment>> contours;
 
     tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
@@ -138,8 +138,21 @@ namespace chr
       const auto base = elements[i << 1];
       const auto count = elements[(i << 1) + 1];
 
-      contours.emplace_back(vertices + base, vertices + base + count);
-      tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count); // ADDING THE CONTOURS BACK
+      contours.emplace_back();
+
+      for (int j = 0; j < count; j++)
+      {
+        auto &p0 = vertices[base + j];
+        auto &p1 = vertices[base + (j + 1) % count];
+        auto tangeant = glm::normalize(p1 - p0).yx() * glm::vec2(-1, +1);
+
+        contours.back().emplace_back(p0, p1, tangeant);
+      }
+
+      /*
+       * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
+       */
+      tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
     }
 
     return contours;

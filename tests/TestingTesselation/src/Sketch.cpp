@@ -34,7 +34,10 @@ void Sketch::setup()
     .add(Rectf(0, 0, 100, 100))
     .add(Rectf(10, 10, 80, 80));
 
-  auto contours = triangulator.getConvertedContours();
+  /*
+   * MUST TAKE PLACE BEFORE Triangulator::process()
+   */
+  auto contours = triangulator.getContourSegments();
 
   triangulator
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
@@ -42,25 +45,19 @@ void Sketch::setup()
 
   // ---
 
-  for (auto &poly : contours)
+  for (auto &contour : contours)
   {
-    int count = poly.size();
-
-    for (int i = 0; i < count; i++)
+    for (auto &segment : contour)
     {
-      auto &v0 = poly[i];
-      auto &v1 = poly[(i + 1) % count];
-
       contourBatch
-        .addVertex(matrix.transformPoint(v0))
-        .addVertex(matrix.transformPoint(v1));
+        .addVertex(matrix.transformPoint(segment.p1))
+        .addVertex(matrix.transformPoint(segment.p2));
 
-      auto middle = (v0 + v1) * 0.5f;
-      auto n = glm::normalize(v1 - v0).yx() * glm::vec2(-1, +1);
+      auto middle = (segment.p1 + segment.p2) * 0.5f;
 
       normalBatch
         .addVertex(matrix.transformPoint(middle))
-        .addVertex(matrix.transformPoint(middle + n * 10.0f));
+        .addVertex(matrix.transformPoint(middle + segment.tangeant * 10.0f));
     }
   }
 
