@@ -25,20 +25,28 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
-  matrix.translate(-50, -50, 0);
+  matrix
+    .push()
+    .translate(-50, -50, 75);
 
-  Triangulator triangulator;
-  triangulator
-    .add(Rectf(0, 0, 100, 100))
-    .add(Rectf(10, 10, 80, 80));
-
-  triangulator
+  Triangulator triangulator1;
+  triangulator1
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
+    .add(Rectf(0, 0, 100, 100))
+    .add(Rectf(10, 10, 80, 80))
     .extrude(faceBatch, matrix, -150);
 
-//  triangulator
-//    .setColor(1.0f, 0.5f, 0.0f, 1.0f)
-//    .process(faceBatch, matrix);
+  matrix
+    .pop()
+    .translate(100, -50);
+
+  Triangulator triangulator2;
+  triangulator2
+    .setFrontFace(GL_CW)
+    .setColor(0.5f, 1.0f, 0.0f, 1.0f)
+    .add({ {0, 0}, {0, 100}, {100, 100} })
+    .add({ {10, 10}, {10, 90}, {90, 90} })
+    .stamp(faceBatch, matrix);
 
   // ---
 

@@ -31,6 +31,7 @@ namespace chr
     ~Triangulator();
 
     Triangulator& setWindingRule(int windingRule);
+    Triangulator& setFrontFace(GLenum mode);
 
     Triangulator& setColor(const glm::vec4 &color);
     Triangulator& setColor(float r, float g, float b, float a);
@@ -42,7 +43,7 @@ namespace chr
     Triangulator& add(const std::vector<glm::vec2> &polygon);
 
     template<int V = gl::XYZ>
-    void process(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix);
+    void stamp(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix);
 
     template<int V = gl::XYZ>
     void extrude(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, float distance);
@@ -54,41 +55,40 @@ namespace chr
     int allocated = 0;
 
     int windingRule = TESS_WINDING_ODD;
+    GLenum frontFace = GL_CCW;
     glm::vec4 color;
 
     template<int V = gl::XYZ, typename... Args>
-    void process(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, Args&&... args)
+    void stamp(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, Args&&... args)
     {
       tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
-
-      // ---
 
       auto vertices = (glm::vec2*)tessGetVertices(tess);
       auto vertexCount = tessGetVertexCount(tess);
 
-      auto &batchVertices = batch.vertexBuffer->storage;
-      batchVertices.reserve(batchVertices.size() + vertexCount);
+      auto indices = (int*)tessGetElements(tess);
+      auto indexCount =  tessGetElementCount(tess) * 3;
+
+      // ---
 
       for (int i = 0; i < vertexCount; i++)
       {
-        batchVertices.emplace_back(matrix.transformPoint(vertices[i]), std::forward<Args>(args)...);
+        batch.addVertex(matrix.transformPoint(vertices[i]), std::forward<Args>(args)...);
       }
 
       // ---
 
-      auto indices = (int*)tessGetElements(tess);
-      auto indexCount =  tessGetElementCount(tess) * 3;
+      bool CW = (frontFace == GL_CW);
 
-      auto &batchIndices = batch.indexBuffer->storage;
-      batchIndices.reserve(batchIndices.size() + indexCount);
-      int index = batch.getIndex();
-
-      for (int i = 0; i < indexCount; i++)
+      for (int i = 0; i < indexCount; i += 3)
       {
-        batchIndices.emplace_back(index + indices[i]);
+        batch.addIndices(
+          indices[i + (CW ? 2 : 0)],
+          indices[i + 1],
+          indices[i + (CW ? 0 : 2)]);
       }
 
-      batch.incrementIndices(indexCount);
+      batch.incrementIndices(vertexCount);
     };
   };
 }
