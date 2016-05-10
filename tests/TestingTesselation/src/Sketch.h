@@ -19,6 +19,7 @@ protected:
 
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.RGBA> faceBatch;
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
+  chr::gl::VertexBatch<chr::gl::XYZ> contourBatch;
 
   chr::gl::shaders::LambertShader lambertShader;
   chr::gl::shaders::ColorShader colorShader;

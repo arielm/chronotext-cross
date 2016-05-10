@@ -1,5 +1,7 @@
 #include "Triangulator.h"
 
+#include "Log.h"
+
 using namespace std;
 using namespace chr::gl;
 using namespace chr::math;
@@ -119,5 +121,26 @@ namespace chr
   {
     auto normal = matrix.transformNormal(0, 0, 1);
     process(batch, matrix, normal, color);
+  }
+
+  vector<vector<glm::vec2>> Triangulator::getContours()
+  {
+    vector<vector<glm::vec2>> contours;
+
+    tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
+
+    const auto vertices = (glm::vec2*)tessGetVertices(tess);
+    const auto elements = tessGetElements(tess);
+    auto elementCount = tessGetElementCount(tess);
+
+    for (auto i = 0; i < elementCount; i++)
+    {
+      const auto base = elements[i << 1];
+      const auto count = elements[(i << 1) + 1];
+
+      contours.emplace_back(vertices + base, vertices + base + count);
+    }
+
+    return contours;
   }
 }

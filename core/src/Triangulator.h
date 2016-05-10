@@ -28,6 +28,8 @@ namespace chr
     template<int V = gl::XYZ>
     void process(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix);
 
+    std::vector<std::vector<glm::vec2>> getContours();
+
   protected:
     TESStesselator *tess;
     int allocated = 0;
