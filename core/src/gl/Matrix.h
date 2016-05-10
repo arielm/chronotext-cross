@@ -48,11 +48,11 @@ namespace chr
       Matrix& push();
       Matrix& pop();
 
-      Matrix& setToIdentity();
+      Matrix& setIdentity();
 
-      inline Matrix& setTranslation(const glm::vec2 &t) { return setTranslation(t.x, t.y); }
-      inline Matrix& setTranslation(const glm::vec3 &t) { return setTranslation(t.x, t.y, t.z); }
-      Matrix& setTranslation(float x, float y, float z = 0);
+      inline Matrix& setTranslate(const glm::vec2 &t) { return setTranslate(t.x, t.y); }
+      inline Matrix& setTranslate(const glm::vec3 &t) { return setTranslate(t.x, t.y, t.z); }
+      Matrix& setTranslate(float x, float y, float z = 0);
 
       inline Matrix& translate(const glm::vec2 &t) { return translate(t.x, t.y); }
       inline Matrix& translate(const glm::vec3 &t) { return translate(t.x, t.y, t.z); }

@@ -71,7 +71,7 @@ namespace chr
       return *this;
     }
 
-    Matrix& Matrix::setToIdentity()
+    Matrix& Matrix::setIdentity()
     {
       m00 = m11 = m22 = m33 = 1.0f;
       m01 = m02 = m03 = m10 = m12 = m13 = m20 = m21 = m23 = m30 = m31 = m32 = 0.0f;
@@ -79,7 +79,7 @@ namespace chr
       return *this;
     }
 
-    Matrix& Matrix::setTranslation(float x, float y, float z)
+    Matrix& Matrix::setTranslate(float x, float y, float z)
     {
       m00 = m11 = m22 = m33 = 1.0f;
       m01 = m02 = m10 = m12 = m20 = m21 = m30 = m31 = m32 = 0.0f;
