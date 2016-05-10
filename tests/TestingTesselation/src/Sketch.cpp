@@ -30,19 +30,16 @@ void Sketch::setup()
   matrix.translate(-50, -50, 0);
 
   Triangulator triangulator;
-
   triangulator
     .add(Rectf(0, 0, 100, 100))
-    .add(Rectf(10, 10, 80, 80))
-    .setColor(1, 0.5f, 0, 1)
-    .process(faceBatch, matrix);
+    .add(Rectf(10, 10, 80, 80));
+
+  auto contours = triangulator.getContours();
+//  triangulator.add(contours); // NOT WORKING
+
+  triangulator.process(faceBatch, matrix);
 
   // ---
-
-  auto contours = triangulator
-    .add(Rectf(0, 0, 100, 100))
-    .add(Rectf(10, 10, 80, 80))
-    .getContours();
 
   for (auto &poly : contours)
   {

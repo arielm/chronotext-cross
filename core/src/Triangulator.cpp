@@ -139,6 +139,7 @@ namespace chr
       const auto count = elements[(i << 1) + 1];
 
       contours.emplace_back(vertices + base, vertices + base + count);
+      tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count); // NOT WORKING
     }
 
     return contours;
