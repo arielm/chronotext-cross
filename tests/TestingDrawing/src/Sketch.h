@@ -29,5 +29,7 @@ protected:
   chr::gl::shaders::ColorShader colorShader;
 
   static void shapeToBatch(const std::vector<glm::vec2> &shape, chr::gl::IndexedVertexBatch<chr::gl::XYZ> &batch, chr::gl::Matrix &matrix);
-  static std::vector<glm::vec2> starShape(float outerRadius);
+
+  static std::vector<glm::vec2> fivePointedStarShape(float outerRadius, float innerRadiusRatio =  0.38196601125f);
+  static std::vector<glm::vec2> equilateralTriangleShape(float a);
 };

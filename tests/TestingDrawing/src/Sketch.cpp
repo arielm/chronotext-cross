@@ -70,13 +70,24 @@ void Sketch::setup()
     .fillFromCenter(textureBatch, matrix, 0, 0);
   matrix.pop();
 
-  Triangulator triangulator;
-  triangulator
+  Triangulator triangulator1;
+  triangulator1
     .setColor(1, 0.25f, 0.25f, 1)
-    .add(starShape(100))
+    .add(fivePointedStarShape(100))
     .stamp(fillBatch, matrix);
 
-  shapeToBatch(starShape(100), strokeBatch, matrix);
+  shapeToBatch(fivePointedStarShape(100), strokeBatch, matrix);
+
+  matrix
+    .translate(-200, 50)
+    .rotateZ(30 * D2R);
+
+  Triangulator triangulator2;
+  triangulator2
+    .setColor(0.25f, 1, 0, 1)
+    .add(equilateralTriangleShape(150))
+    .add(equilateralTriangleShape(120))
+    .stamp(fillBatch, matrix);
 
   // ---
 
@@ -122,12 +133,16 @@ void Sketch::shapeToBatch(const vector<glm::vec2> &shape, IndexedVertexBatch<XYZ
     batch.addIndices(i, (i + 1) % size);
   }
 
-  batch.incrementIndices(size * 2);
+  batch.incrementIndices(size);
 }
 
-vector<glm::vec2> Sketch::starShape(float outerRadius)
+vector<glm::vec2> Sketch::fivePointedStarShape(float outerRadius, float innerRadiusRatio)
 {
-  constexpr float innerRadiusRatio =  0.38196601125f; // (3 - sqrt(5)) / 2
+  /*
+   * THE DEFAULT INNER-RADIUS-RATIO IS EQUAL TO (3 - sqrt(5)) / 2
+   * AS WELL AS 1 / (phi ^ 2), WHERE phi IS THE GOLDEN RATIO
+   */
+
   float innerRadius = outerRadius * innerRadiusRatio;
 
   vector<glm::vec2> points;
@@ -139,12 +154,26 @@ vector<glm::vec2> Sketch::starShape(float outerRadius)
      * DRAWING IN CCW ORDER
      */
 
-    float outerAngle = -i * 360 / 5.0f;
-    float innerAngle = outerAngle - 360 / 10.0f;
+    float outerAngle = -i * TWO_PI / 5.0f;
+    float innerAngle = outerAngle - TWO_PI / 10.0f;
 
-    points.emplace_back(+sinf(outerAngle * D2R) * outerRadius, -cosf(outerAngle * D2R) * outerRadius);
-    points.emplace_back(+sinf(innerAngle * D2R) * innerRadius, -cosf(innerAngle * D2R) * innerRadius);
+    points.emplace_back(+sinf(outerAngle) * outerRadius, -cosf(outerAngle) * outerRadius);
+    points.emplace_back(+sinf(innerAngle) * innerRadius, -cosf(innerAngle) * innerRadius);
   }
+
+  return points;
+}
+
+vector<glm::vec2> Sketch::equilateralTriangleShape(float a)
+{
+  float h = sqrtf(3) * a / 2; // ALTITUDE FROM ANY SIDE
+
+  vector<glm::vec2> points;
+  points.reserve(3);
+
+  points.emplace_back(0, -h * 2 / 3);
+  points.emplace_back(-a / 2, h / 3);
+  points.emplace_back(+a / 2, h / 3);
 
   return points;
 }
