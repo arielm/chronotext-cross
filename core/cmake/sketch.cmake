@@ -2,6 +2,8 @@ set(GLFW_ROOT "$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}")
 set(GLM_ROOT "$ENV{CROSS_PATH}/deps/glm/dist")
 set(JPEG_ROOT "$ENV{CROSS_PATH}/deps/libjpeg-turbo")
 set(PNG_ROOT "$ENV{CROSS_PATH}/deps/libpng/dist/${PLATFORM}")
+set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/deps/libtess2/dist/${PLATFORM}")
+
 
 # ---
 
@@ -19,14 +21,19 @@ set(JPEG_LIBRARY "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
 set(PNG_INCLUDE_DIRS "${PNG_ROOT}/include")
 set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
 
+set(LIBTESS2_INCLUDE_DIR "${LIBTESS2_ROOT}/include")
+set(LIBTESS2_LIBRARY "${LIBTESS2_ROOT}/lib/libtess2.a")
+
 list(APPEND INCLUDE_DIRS
   ${JPEG_INCLUDE_DIR}
   ${PNG_INCLUDE_DIRS}
+  ${LIBTESS2_INCLUDE_DIR}
 )
 
 list(APPEND LIBRARIES
   ${JPEG_LIBRARY}
   ${PNG_LIBRARIES}
+  ${LIBTESS2_LIBRARY}
 )
 
 # ---

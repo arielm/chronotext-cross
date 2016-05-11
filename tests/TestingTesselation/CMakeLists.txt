@@ -4,20 +4,12 @@ project(TestingTesselation)
 
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
 
-#
-# XXX
-#
-set(LIBTESS2_INCLUDE_DIR "${LIBTESS2_ROOT}/include")
-set(LIBTESS2_LIBRARY "${LIBTESS2_ROOT}/lib/libtess2.a")
-
 set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}
-  ${LIBTESS2_INCLUDE_DIR}
 )
 
 set(LIBRARIES
   ${Boost_LIBRARIES}
-  ${LIBTESS2_LIBRARY}
 )
 
 set(SRC_FILES

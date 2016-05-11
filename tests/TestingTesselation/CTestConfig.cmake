@@ -34,7 +34,6 @@ endif()
 
 list(APPEND ARGS
   "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
-  "-DLIBTESS2_ROOT=$ENV{CROSS_PATH}/deps/libtess2/dist/${PLATFORM}"
 )
 
 include("${CROSS_ROOT}/cmake/platforms.cmake")

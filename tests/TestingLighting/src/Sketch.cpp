@@ -74,8 +74,9 @@ void Sketch::setup()
 
   for (auto &vertex : faceBatch.vertexBuffer->storage)
   {
-    normalBatch.addVertex(vertex.position);
-    normalBatch.addVertex(vertex.position + vertex.normal * 10.0f);
+    normalBatch
+      .addVertex(vertex.position)
+      .addVertex(vertex.position + vertex.normal * 10.0f);
   }
 
   // ---
