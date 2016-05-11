@@ -2,7 +2,6 @@
 
 #include "cross/Context.h"
 #include "gl/Batch.h"
-#include <gl/Matrix.h>
 #include "gl/shaders/ColorShader.h"
 #include "gl/shaders/TextureAlphaShader.h"
 
@@ -27,7 +26,4 @@ protected:
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> fillBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ> strokeBatch;
   chr::gl::shaders::ColorShader colorShader;
-
-  static std::vector<glm::vec2> fivePointedStarShape(float outerRadius, float innerRadiusRatio =  0.38196601125f);
-  static std::vector<glm::vec2> equilateralTriangleShape(float a);
 };

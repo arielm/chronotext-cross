@@ -2,6 +2,9 @@
 
 #include "gl/Triangulator.h"
 #include "math/MatrixAffine.h"
+#include "shape/Rect.h"
+#include "shape/EquilateralTriangle.h"
+#include "shape/Circle.h"
 
 using namespace std;
 using namespace chr;
@@ -38,15 +41,14 @@ void Sketch::setup()
   triangulator1
     .setContourCapture(Triangulator::CAPTURE_ALL)
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
-    .add(affine.transformRect(-50, -50, 100, 100));
+    .add(affine.transformPoints(shape::Rect().setSize(100, 100).get()));
 
   affine
-    .push()
     .scale(0.75f)
     .rotate(15 * D2R);
 
   triangulator1
-    .add(affine.transformRect(-50, -50, 100, 100))
+    .add(affine.transformPoints(shape::Rect().setSize(100, 100).get()))
     .extrude(fillBatch, matrix, -150);
 
   triangulator1.exportContours(strokeBatch, matrix);
@@ -58,20 +60,40 @@ void Sketch::setup()
     .translate(0, 0, -25);
 
   affine
-    .pop()
-    .translate(100,0);
+    .setIdentity()
+    .translate(100, 0)
+    .rotate(90 * D2R);
 
   Triangulator triangulator2;
   triangulator2
     .setFrontFace(GL_CW)
     .setColor(0.5f, 1.0f, 0.0f, 1.0f)
-    .add(affine.transformPoints({ {-50, -50}, {-50, 50}, {50, 50} }));
+    .add(affine.transformPoints(shape::EquilateralTriangle().setSideLength(100).get()));
 
   affine.scale(0.75f);
 
   triangulator2
-    .add(affine.transformPoints({ {-50, -50}, {-50, 50}, {50, 50} }))
+    .add(affine.transformPoints(shape::EquilateralTriangle().setSideLength(100).get()))
     .stamp(fillBatch, matrix);
+
+  //
+
+  matrix
+    .rotateX(90 * D2R)
+    .translate(0, 0, 150);
+
+  affine.setIdentity();
+
+  Triangulator triangulator3;
+  triangulator3
+    .setColor(1.0f, 0.0f, 0.0f, 1.0f)
+    .add(affine.transformPoints(shape::Circle().setRadius(50).get()));
+
+  affine.scale(0.8f);
+
+  triangulator3
+    .add(affine.transformPoints(shape::Circle().setRadius(50).get()))
+    .extrude(fillBatch, matrix, -75);
 
   // ---
 
@@ -79,7 +101,7 @@ void Sketch::setup()
   {
     normalBatch
       .addVertex(vertex.position)
-      .addVertex(vertex.position + vertex.normal * 10.0f);
+      .addVertex(vertex.position + vertex.normal * 5.0f);
   }
 
   // ---
