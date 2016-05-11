@@ -1,16 +1,22 @@
 #include "Sketch.h"
 
-#include "gl/draw/Texture.h"
 #include "gl/draw/Rect.h"
+#include "gl/Triangulator.h"
+#include "math/MatrixAffine.h"
+#include "shape/Circle.h"
 
 using namespace std;
 using namespace chr;
 using namespace gl;
 using namespace math;
 
+static bool showNormals = false;
+static bool showTube = true;
+static bool showCube = false;
+
 Sketch::Sketch()
 :
-faceBatch(GL_TRIANGLES),
+fillBatch(GL_TRIANGLES),
 normalBatch(GL_LINES),
 phongShader("PhongShader.vert", "PhongShader.frag")
 {}
@@ -26,57 +32,79 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
+  MatrixAffine affine;
 
-  matrix
-    .translate(0, 0, 50)
-    .translate(-50, -50, 0)
-    .push();
-  draw::Rect()
-    .setColor(0.75f, 0.75f, 0.75f, 1)
-    .fill(faceBatch, matrix, Rectf(0, 0, 100, 100));
+  if (showTube)
+  {
+    matrix.translate(0, 0, 50);
 
-  matrix
-    .translate(100, 0, 0)
-    .rotateY(90 * D2R);
-  draw::Rect()
-    .setColor(1, 0.5f, 0, 1)
-    .fill(faceBatch, matrix, Rectf(0, 0, 100, 100));
+    Triangulator triangulator;
+    triangulator
+      .setColor(1.0f, 0.0f, 0.0f, 1.0f)
+      .add(shape::Circle().setRadius(50).get());
 
-  matrix
-    .translate(100, 0, 0)
-    .rotateY(90 * D2R);
-  draw::Rect()
-    .setColor(1, 0, 0, 1)
-    .fill(faceBatch, matrix, Rectf(0, 0, 100, 100));
+    affine.scale(0.8f);
 
-  matrix
-    .translate(100, 0, 0)
-    .rotateY(90 * D2R);
-  draw::Rect()
-    .setColor(1, 1, 0, 1)
-    .fill(faceBatch, matrix, Rectf(0, 0, 100, 100));
+    triangulator
+      .add(affine.transformPoints(shape::Circle().setRadius(50).get()))
+      .extrude(fillBatch, matrix, -100);
+  }
+  else if (showCube)
+  {
+    matrix
+      .translate(0, 0, 50)
+      .translate(-50, -50, 0)
+      .push();
+    draw::Rect()
+      .setColor(0.75f, 0.75f, 0.75f, 1)
+      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
 
-  matrix
-    .translate(0, 100, 0)
-    .rotateX(-90 * D2R);
-  draw::Rect()
-    .setColor(0.5f, 1.0f, 0.5f, 1)
-    .fill(faceBatch, matrix, Rectf(0, 0, 100, 100));
+    matrix
+      .translate(100, 0, 0)
+      .rotateY(90 * D2R);
+    draw::Rect()
+      .setColor(1, 0.5f, 0, 1)
+      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
 
-  matrix
-    .pop()
-    .rotateX(-90 * D2R);
-  draw::Rect()
-    .setColor(0.25f, 0.25f, 0.25f, 1)
-    .fill<GL_CW>(faceBatch, matrix, Rectf(0, 0, 100, 100));
+    matrix
+      .translate(100, 0, 0)
+      .rotateY(90 * D2R);
+    draw::Rect()
+      .setColor(1, 0, 0, 1)
+      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+
+    matrix
+      .translate(100, 0, 0)
+      .rotateY(90 * D2R);
+    draw::Rect()
+      .setColor(1, 1, 0, 1)
+      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+
+    matrix
+      .translate(0, 100, 0)
+      .rotateX(-90 * D2R);
+    draw::Rect()
+      .setColor(0.5f, 1.0f, 0.5f, 1)
+      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+
+    matrix
+      .pop()
+      .rotateX(-90 * D2R);
+    draw::Rect()
+      .setColor(0.25f, 0.25f, 0.25f, 1)
+      .fill<GL_CW>(fillBatch, matrix, Rectf(0, 0, 100, 100));
+  }
 
   // ---
 
-  for (auto &vertex : faceBatch.vertexBuffer->storage)
+  if (showNormals)
   {
-    normalBatch
-      .addVertex(vertex.position)
-      .addVertex(vertex.position + vertex.normal * 10.0f);
+    for (auto &vertex : fillBatch.vertexBuffer->storage)
+    {
+      normalBatch
+        .addVertex(vertex.position)
+        .addVertex(vertex.position + vertex.normal * 5.0f);
+    }
   }
 
   // ---
@@ -113,19 +141,19 @@ void Sketch::draw()
 
   if (pressed)
   {
-    faceBatch
+    fillBatch
       .setShader(phongShader)
       .setShaderMatrix<MV>(mvMatrix)
       .setShaderMatrix<PROJECTION>(projectionMatrix);
   }
   else
   {
-    faceBatch
+    fillBatch
       .setShader(lambertShader)
       .setShaderMatrix<MVP>(mvpMatrix);
   }
 
-  faceBatch
+  fillBatch
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .flush();
 
