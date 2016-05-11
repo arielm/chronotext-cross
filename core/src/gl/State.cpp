@@ -194,7 +194,9 @@ namespace chr
             break;
 
           case PROPERTY_GL_POINT_SIZE:
-            ::glPointSize(it->second[0]);
+            #ifdef CHR_PLATFORM_DESKTOP
+              ::glPointSize(it->second[0]);
+            #endif
             break;
         }
       }
