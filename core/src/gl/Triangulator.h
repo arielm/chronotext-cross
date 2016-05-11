@@ -70,10 +70,13 @@ namespace chr
 
       int contourCapture = CAPTURE_NONE;
       std::vector<std::vector<glm::vec2>> contours;
+      float extrudedDistance = 0;
 
       template<int V = XYZ, typename... Args>
       void performStamp(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
       {
+        extrudedDistance = 0;
+
         if (contourCapture)
         {
           tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
@@ -140,6 +143,7 @@ namespace chr
       template<int V = XYZ, typename... Args>
       void performExtrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
+        extrudedDistance = distance;
         bool sign = (distance > 0);
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
@@ -148,15 +152,32 @@ namespace chr
         auto elements = tessGetElements(tess);
         auto elementCount = tessGetElementCount(tess);
 
+        if (contourCapture)
+        {
+          contours.clear();
+          contours.reserve(elementCount);
+        }
+
         for (auto i = 0; i < elementCount; i++)
         {
           const auto base = elements[i << 1];
           const auto count = elements[(i << 1) + 1];
 
+          if (contourCapture)
+          {
+            contours.emplace_back();
+            contours.back().reserve(count);
+          }
+
           for (int j = 0; j < count; j++)
           {
             auto &p0 = vertices[base + j];
             auto &p1 = vertices[base + (j + 1) % count];
+
+            if (contourCapture)
+            {
+              contours.back().emplace_back(vertices[base + j]);
+            }
 
             batch
               .addVertex(matrix.transformPoint(p0), std::forward<Args>(args)...)
@@ -230,6 +251,7 @@ namespace chr
       template<int V = XYZ, typename... Args>
       void performExtrudeWithNormals(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
+        extrudedDistance = distance;
         bool sign = (distance > 0);
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
@@ -238,18 +260,35 @@ namespace chr
         auto elements = tessGetElements(tess);
         auto elementCount = tessGetElementCount(tess);
 
+        if (contourCapture)
+        {
+          contours.clear();
+          contours.reserve(elementCount);
+        }
+
         for (auto i = 0; i < elementCount; i++)
         {
           const auto base = elements[i << 1];
           const auto count = elements[(i << 1) + 1];
 
+          if (contourCapture)
+          {
+            contours.emplace_back();
+            contours.back().reserve(count);
+          }
+
           for (int j = 0; j < count; j++)
           {
             auto &p0 = vertices[base + j];
             auto &p1 = vertices[base + (j + 1) % count];
-            auto tangeant = glm::normalize(p1 - p0).yx() * glm::vec2(-1, +1);
 
+            auto tangeant = glm::normalize(p1 - p0).yx() * glm::vec2(-1, +1);
             auto normal = matrix.transformNormal(glm::vec3(tangeant, 0));
+
+            if (contourCapture)
+            {
+              contours.back().emplace_back(vertices[base + j]);
+            }
 
             batch
               .addVertex(matrix.transformPoint(p0), normal, std::forward<Args>(args)...)

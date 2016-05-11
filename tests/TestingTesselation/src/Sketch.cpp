@@ -10,7 +10,8 @@ using namespace math;
 
 Sketch::Sketch()
 :
-faceBatch(GL_TRIANGLES),
+fillBatch(GL_TRIANGLES),
+strokeBatch(GL_LINES),
 normalBatch(GL_LINES)
 {}
 
@@ -20,7 +21,8 @@ void Sketch::setup()
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
-  faceBatch.setShader(lambertShader);
+  fillBatch.setShader(lambertShader);
+  strokeBatch.setShader(colorShader);
   normalBatch.setShader(colorShader);
 
   // ---
@@ -34,6 +36,7 @@ void Sketch::setup()
 
   Triangulator triangulator1;
   triangulator1
+    .setContourCapture(Triangulator::CAPTURE_ALL)
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
     .add(affine.transformRect(-50, -50, 100, 100));
 
@@ -44,7 +47,9 @@ void Sketch::setup()
 
   triangulator1
     .add(affine.transformRect(-50, -50, 100, 100))
-    .extrude(faceBatch, matrix, -150);
+    .extrude(fillBatch, matrix, -150);
+
+  triangulator1.exportContours(strokeBatch, matrix);
 
   //
 
@@ -66,11 +71,11 @@ void Sketch::setup()
 
   triangulator2
     .add(affine.transformPoints({ {-50, -50}, {-50, 50}, {50, 50} }))
-    .stamp(faceBatch, matrix);
+    .stamp(fillBatch, matrix);
 
   // ---
 
-  for (auto &vertex : faceBatch.vertexBuffer->storage)
+  for (auto &vertex : fillBatch.vertexBuffer->storage)
   {
     normalBatch
       .addVertex(vertex.position)
@@ -81,7 +86,6 @@ void Sketch::setup()
 
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
-  glDepthMask(GL_TRUE);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -90,6 +94,7 @@ void Sketch::setup()
 void Sketch::draw()
 {
   glClearColor(0.5f, 0.5f, 0.5f, 1);
+  glDepthMask(GL_TRUE);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // ---
@@ -107,11 +112,21 @@ void Sketch::draw()
 
   // ---
 
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(4, 1);
+
   state.apply();
 
-  faceBatch
+  fillBatch
     .setShaderMatrix<MVP>(mvpMatrix)
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .flush();
+
+  glDepthMask(GL_FALSE);
+  glDisable(GL_POLYGON_OFFSET_FILL);
+
+  strokeBatch
+    .setShaderMatrix<MVP>(mvpMatrix)
     .flush();
 
   normalBatch

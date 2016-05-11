@@ -68,21 +68,68 @@ namespace chr
 
     void Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const
     {
-      for (const auto &contour : contours)
+      if (contourCapture & CAPTURE_FRONT)
       {
-        for (const auto &point : contour)
+        for (const auto &contour : contours)
         {
-          batch.addVertex(matrix.transformPoint(point));
+          for (const auto &point : contour)
+          {
+            batch.addVertex(matrix.transformPoint(point));
+          }
+
+          int size = contour.size();
+
+          for (int i = 0; i < size; i++)
+          {
+            batch.addIndices(i, (i + 1) % size);
+          }
+
+          batch.incrementIndices(size);
+        }
+      }
+
+      if (extrudedDistance != 0)
+      {
+        if (contourCapture & CAPTURE_BACK)
+        {
+          for (const auto &contour : contours)
+          {
+            for (const auto &point : contour)
+            {
+              batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+            }
+
+            int size = contour.size();
+
+            for (int i = 0; i < size; i++)
+            {
+              batch.addIndices(i, (i + 1) % size);
+            }
+
+            batch.incrementIndices(size);
+          }
         }
 
-        int size = contour.size();
-
-        for (int i = 0; i < size; i++)
+        if (contourCapture & CAPTURE_HEIGHT)
         {
-          batch.addIndices(i, (i + 1) % size);
-        }
+          for (const auto &contour : contours)
+          {
+            for (const auto &point : contour)
+            {
+              batch.addVertex(matrix.transformPoint(point));
+              batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+            }
 
-        batch.incrementIndices(size);
+            int size2 = contour.size() * 2;
+
+            for (int i = 0; i < size2; i++)
+            {
+              batch.addIndices(i);
+            }
+
+            batch.incrementIndices(size2);
+          }
+        }
       }
     }
 

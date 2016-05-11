@@ -17,7 +17,8 @@ public:
 protected:
   chr::gl::State state;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.RGBA> faceBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.RGBA> fillBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ> strokeBatch;
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 
   chr::gl::shaders::LambertShader lambertShader;
