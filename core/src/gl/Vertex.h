@@ -8,29 +8,29 @@ namespace chr
   {
     enum
     {
-      _XYZ = 1,
-      _N = 2,
-      _UV = 4,
-      _RGBA = 8
+      XYZ_ = 1,
+      N_ = 2,
+      UV_ = 4,
+      RGBA_ = 8
     };
 
     struct xyz
     {
       xyz() = default;
 
-      constexpr operator const int() const { return _XYZ; }
+      constexpr operator const int() const { return XYZ_; }
 
       struct n
       {
-        constexpr operator const int() const { return _XYZ|_N; }
+        constexpr operator const int() const { return XYZ_|N_; }
 
         struct uv
         {
-          constexpr operator const int() const { return _XYZ|_N|_UV; }
+          constexpr operator const int() const { return XYZ_|N_|UV_; }
 
           struct rgba
           {
-            constexpr operator const int() const { return _XYZ|_N|_UV|_RGBA; }
+            constexpr operator const int() const { return XYZ_|N_|UV_|RGBA_; }
           };
 
           rgba RGBA;
@@ -38,7 +38,7 @@ namespace chr
 
         struct rgba
         {
-          constexpr operator const int() const { return _XYZ|_N|_RGBA; }
+          constexpr operator const int() const { return XYZ_|N_|RGBA_; }
         };
 
         uv UV;
@@ -47,11 +47,11 @@ namespace chr
 
       struct uv
       {
-        constexpr operator const int() const { return _XYZ|_UV; }
+        constexpr operator const int() const { return XYZ_|UV_; }
 
         struct rgba
         {
-          constexpr operator const int() const { return _XYZ|_UV|_RGBA; }
+          constexpr operator const int() const { return XYZ_|UV_|RGBA_; }
         };
 
         rgba RGBA;
@@ -59,7 +59,7 @@ namespace chr
 
       struct rgba
       {
-        constexpr operator const int() const { return _XYZ|_RGBA; }
+        constexpr operator const int() const { return XYZ_|RGBA_; }
       };
 
       n N;
@@ -69,17 +69,17 @@ namespace chr
 
     struct n
     {
-      constexpr operator const int() const { return _N; }
+      constexpr operator const int() const { return N_; }
     };
 
     struct uv
     {
-      constexpr operator const int() const { return _UV; }
+      constexpr operator const int() const { return UV_; }
     };
 
     struct rgba
     {
-      constexpr operator const int() const { return _RGBA; }
+      constexpr operator const int() const { return RGBA_; }
     };
 
     static constexpr xyz XYZ = {};
