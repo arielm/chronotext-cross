@@ -1,7 +1,7 @@
 #pragma once
 
 #include "image/Utils.h"
-#include "gl/gl.h"
+#include "gl.h"
 
 namespace chr
 {

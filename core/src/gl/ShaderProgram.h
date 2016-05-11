@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gl/gl.h"
+#include "gl.h"
 
 #include <map>
 #include <experimental/string_view>
