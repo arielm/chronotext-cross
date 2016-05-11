@@ -72,11 +72,12 @@ void Sketch::setup()
 
   Triangulator triangulator1;
   triangulator1
+    .setContourCapture(Triangulator::CAPTURE_FRONT)
     .setColor(1, 0.25f, 0.25f, 1)
     .add(fivePointedStarShape(100))
     .stamp(fillBatch, matrix);
 
-  shapeToBatch(fivePointedStarShape(100), strokeBatch, matrix);
+  triangulator1.exportContours(strokeBatch, matrix);
 
   matrix
     .translate(-200, 50)
@@ -84,10 +85,13 @@ void Sketch::setup()
 
   Triangulator triangulator2;
   triangulator2
+    .setContourCapture(Triangulator::CAPTURE_FRONT)
     .setColor(0.25f, 1, 0, 1)
     .add(equilateralTriangleShape(150))
     .add(equilateralTriangleShape(120))
     .stamp(fillBatch, matrix);
+
+  triangulator2.exportContours(strokeBatch, matrix);
 
   // ---
 
@@ -117,23 +121,6 @@ void Sketch::initTextures()
     .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
     .setMipmap(true)
     .setWrap(GL_REPEAT, GL_REPEAT));
-}
-
-void Sketch::shapeToBatch(const vector<glm::vec2> &shape, IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
-{
-  for (const auto &point : shape)
-  {
-    batch.addVertex(matrix.transformPoint(point));
-  }
-
-  int size = shape.size();
-
-  for (int i = 0; i < size; i++)
-  {
-    batch.addIndices(i, (i + 1) % size);
-  }
-
-  batch.incrementIndices(size);
 }
 
 vector<glm::vec2> Sketch::fivePointedStarShape(float outerRadius, float innerRadiusRatio)

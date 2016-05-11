@@ -60,6 +60,32 @@ namespace chr
       return *this;
     }
 
+    Triangulator& Triangulator::setContourCapture(int contourCapture)
+    {
+      this->contourCapture = contourCapture;
+      return *this;
+    }
+
+    void Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const
+    {
+      for (const auto &contour : contours)
+      {
+        for (const auto &point : contour)
+        {
+          batch.addVertex(matrix.transformPoint(point));
+        }
+
+        int size = contour.size();
+
+        for (int i = 0; i < size; i++)
+        {
+          batch.addIndices(i, (i + 1) % size);
+        }
+
+        batch.incrementIndices(size);
+      }
+    }
+
     template <>
     Triangulator& Triangulator::add<GL_CCW>(const Rectf &rect)
     {

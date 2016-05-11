@@ -13,6 +13,15 @@ namespace chr
     class Triangulator
     {
     public:
+      enum
+      {
+        CAPTURE_NONE = 0,
+        CAPTURE_FRONT = 1,
+        CAPTURE_BACK = 2,
+        CAPTURE_HEIGHT = 4,
+        CAPTURE_ALL = 7
+      };
+
       struct Segment
       {
         glm::vec2 p1;
@@ -36,17 +45,20 @@ namespace chr
       Triangulator& setColor(const glm::vec4 &color);
       Triangulator& setColor(float r, float g, float b, float a);
 
+      Triangulator& setContourCapture(int contourCapture);
+      void exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const;
+
       template<int Orientation = GL_CCW>
       Triangulator& add(const math::Rectf &rect);
 
       Triangulator& add(const std::vector<std::vector<glm::vec2>> &polygons);
       Triangulator& add(const std::vector<glm::vec2> &polygon);
 
-      template<int V = gl::XYZ>
-      void stamp(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix);
+      template<int V = XYZ>
+      void stamp(IndexedVertexBatch<V> &batch, Matrix &matrix);
 
-      template<int V = gl::XYZ>
-      void extrude(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, float distance);
+      template<int V = XYZ>
+      void extrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance);
 
     protected:
       TESStesselator *tess;
@@ -56,9 +68,45 @@ namespace chr
       GLenum frontFace = GL_CCW;
       glm::vec4 color;
 
-      template<int V = gl::XYZ, typename... Args>
-      void performStamp(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, Args&&... args)
+      int contourCapture = CAPTURE_NONE;
+      std::vector<std::vector<glm::vec2>> contours;
+
+      template<int V = XYZ, typename... Args>
+      void performStamp(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
       {
+        if (contourCapture)
+        {
+          tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
+
+          auto vertices = (glm::vec2*)tessGetVertices(tess);
+          auto elements = tessGetElements(tess);
+          auto elementCount = tessGetElementCount(tess);
+
+          contours.clear();
+          contours.reserve(elementCount);
+
+          for (auto i = 0; i < elementCount; i++)
+          {
+            const auto base = elements[i << 1];
+            const auto count = elements[(i << 1) + 1];
+
+            contours.emplace_back();
+            contours.back().reserve(count);
+
+            for (int j = 0; j < count; j++)
+            {
+              contours.back().emplace_back(vertices[base + j]);
+            }
+
+            /*
+             * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
+             */
+            tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
+          }
+        }
+
+        // ---
+
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
         // ---
@@ -89,8 +137,8 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = gl::XYZ, typename... Args>
-      void performExtrude(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, float distance, Args&&... args)
+      template<int V = XYZ, typename... Args>
+      void performExtrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         bool sign = (distance > 0);
 
@@ -179,8 +227,8 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = gl::XYZ, typename... Args>
-      void performExtrudeWithNormals(gl::IndexedVertexBatch<V> &batch, gl::Matrix &matrix, float distance, Args&&... args)
+      template<int V = XYZ, typename... Args>
+      void performExtrudeWithNormals(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         bool sign = (distance > 0);
 
