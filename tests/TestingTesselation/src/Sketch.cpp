@@ -1,6 +1,6 @@
 #include "Sketch.h"
 
-#include "Triangulator.h"
+#include "gl/Triangulator.h"
 #include "math/MatrixAffine.h"
 
 using namespace std;
