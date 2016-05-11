@@ -125,5 +125,18 @@ namespace chr
 
       return output;
     }
+
+    vector<glm::vec2> MatrixAffine::transformPoints(const vector<glm::vec2> &points)
+    {
+      vector<glm::vec2> output;
+      output.reserve(points.size());
+
+      for (const auto &point : points)
+      {
+        output.emplace_back(transformPoint(point));
+      }
+
+      return output;
+    }
   }
 }

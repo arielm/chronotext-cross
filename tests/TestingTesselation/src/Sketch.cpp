@@ -1,6 +1,7 @@
 #include "Sketch.h"
 
 #include "Triangulator.h"
+#include "math/MatrixAffine.h"
 
 using namespace std;
 using namespace chr;
@@ -24,28 +25,47 @@ void Sketch::setup()
 
   // ---
 
+  MatrixAffine affine;
   Matrix matrix;
+
   matrix
     .push()
-    .translate(-50, -50, 75);
+    .translate(0, 0, 75);
 
   Triangulator triangulator1;
   triangulator1
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
-    .add(Rectf(0, 0, 100, 100))
-    .add(Rectf(10, 10, 80, 80))
+    .add(affine.transformRect(-50, -50, 100, 100));
+
+  affine
+    .push()
+    .scale(0.75f)
+    .rotate(15 * D2R);
+
+  triangulator1
+    .add(affine.transformRect(-50, -50, 100, 100))
     .extrude(faceBatch, matrix, -150);
+
+  //
 
   matrix
     .pop()
-    .translate(100, -50);
+    .translate(0, 0, -25);
+
+  affine
+    .pop()
+    .translate(100,0);
 
   Triangulator triangulator2;
   triangulator2
     .setFrontFace(GL_CW)
     .setColor(0.5f, 1.0f, 0.0f, 1.0f)
-    .add({ {0, 0}, {0, 100}, {100, 100} })
-    .add({ {10, 10}, {10, 90}, {90, 90} })
+    .add(affine.transformPoints({ {-50, -50}, {-50, 50}, {50, 50} }));
+
+  affine.scale(0.75f);
+
+  triangulator2
+    .add(affine.transformPoints({ {-50, -50}, {-50, 50}, {50, 50} }))
     .stamp(faceBatch, matrix);
 
   // ---

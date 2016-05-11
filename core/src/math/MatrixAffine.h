@@ -54,7 +54,10 @@ namespace chr
       inline glm::vec2 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec2 transformPoint(float x, float y) const;
 
+      inline std::vector<glm::vec2> transformRect(float left, float top, float width, float height) const { return transformRect(Rectf(left, top, width, height)); }
       std::vector<glm::vec2> transformRect(const Rectf &rect) const;
+
+      std::vector<glm::vec2> transformPoints(const std::vector<glm::vec2> &points);
 
     protected:
       std::vector<Values> stack;
