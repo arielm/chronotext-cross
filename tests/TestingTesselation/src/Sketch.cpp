@@ -30,25 +30,27 @@ void Sketch::setup()
 
   // ---
 
-  MatrixAffine affine;
   Matrix matrix;
+  MatrixAffine affine;
 
-  matrix
-    .push()
-    .translate(0, 0, 75);
+  matrix.translate(0, 0, 75);
+
+  vector<vector<glm::vec2>> polygons1;
+  auto rect = shape::Rect().setSize(100, 100);
+  polygons1
+    .emplace_back(rect.get());
+  polygons1
+    .emplace_back(
+      affine
+        .scale(0.75f)
+        .rotate(15 * D2R)
+        .transformPoints(rect.get()));
 
   Triangulator triangulator1;
   triangulator1
     .setContourCapture(Triangulator::CAPTURE_ALL)
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
-    .add(affine.transformPoints(shape::Rect().setSize(100, 100).get()));
-
-  affine
-    .scale(0.75f)
-    .rotate(15 * D2R);
-
-  triangulator1
-    .add(affine.transformPoints(shape::Rect().setSize(100, 100).get()))
+    .add(polygons1)
     .extrude(fillBatch, matrix, -150);
 
   triangulator1.exportContours(strokeBatch, matrix);
@@ -56,7 +58,7 @@ void Sketch::setup()
   //
 
   matrix
-    .pop()
+    .setIdentity()
     .translate(0, 0, -25);
 
   affine
@@ -64,16 +66,23 @@ void Sketch::setup()
     .translate(100, 0)
     .rotate(90 * D2R);
 
+  vector<vector<glm::vec2>> polygons2;
+  auto triangle = shape::EquilateralTriangle().setSideLength(100);
+  polygons2
+    .emplace_back(
+      affine
+        .transformPoints(triangle.get()));
+  polygons2
+    .emplace_back(
+      affine
+        .scale(0.75f)
+        .transformPoints(triangle.get()));
+
   Triangulator triangulator2;
   triangulator2
     .setFrontFace(GL_CW)
     .setColor(0.5f, 1.0f, 0.0f, 1.0f)
-    .add(affine.transformPoints(shape::EquilateralTriangle().setSideLength(100).get()));
-
-  affine.scale(0.75f);
-
-  triangulator2
-    .add(affine.transformPoints(shape::EquilateralTriangle().setSideLength(100).get()))
+    .add(polygons2)
     .stamp(fillBatch, matrix);
 
   //
@@ -84,15 +93,22 @@ void Sketch::setup()
 
   affine.setIdentity();
 
+  vector<vector<glm::vec2>> polygons3;
+  auto circle = shape::Circle().setRadius(50);
+  polygons3
+    .emplace_back(
+      affine
+        .transformPoints(circle.get()));
+  polygons3
+    .emplace_back(
+      affine
+        .scale(0.8f)
+        .transformPoints(circle.get()));
+
   Triangulator triangulator3;
   triangulator3
     .setColor(1.0f, 0.0f, 0.0f, 1.0f)
-    .add(affine.transformPoints(shape::Circle().setRadius(50).get()));
-
-  affine.scale(0.8f);
-
-  triangulator3
-    .add(affine.transformPoints(shape::Circle().setRadius(50).get()))
+    .add(polygons3)
     .extrude(fillBatch, matrix, -75);
 
   // ---

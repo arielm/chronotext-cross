@@ -32,21 +32,19 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
-  MatrixAffine affine;
 
   if (showTube)
   {
+    vector<vector<glm::vec2>> polygons;
+    polygons.emplace_back(shape::Circle().setRadius(50).get());
+    polygons.emplace_back(shape::Circle().setRadius(40).get());
+
     matrix.translate(0, 0, 50);
 
     Triangulator triangulator;
     triangulator
       .setColor(1.0f, 0.0f, 0.0f, 1.0f)
-      .add(shape::Circle().setRadius(50).get());
-
-    affine.scale(0.8f);
-
-    triangulator
-      .add(affine.transformPoints(shape::Circle().setRadius(50).get()))
+      .add(polygons)
       .extrude(fillBatch, matrix, -100);
   }
   else if (showCube)
