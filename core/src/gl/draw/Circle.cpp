@@ -38,7 +38,7 @@ namespace chr
       }
 
       template <>
-      void Circle::fill<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x, float y) const
+      void Circle::append<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
         float aa = fabsf(a2 - a1);
         int n = ceilf(aa * r / segmentLength) + 1;
@@ -63,7 +63,7 @@ namespace chr
       }
 
       template <>
-      void Circle::fill<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x, float y) const
+      void Circle::append<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
         float aa = fabsf(a2 - a1);
         int n = ceilf(aa * r / segmentLength) + 1;
@@ -88,7 +88,7 @@ namespace chr
       }
 
       template <>
-      void Circle::fill<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
+      void Circle::append<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
         float aa = fabsf(a2 - a1);
         int n = ceilf(aa * r / segmentLength) + 1;
@@ -113,7 +113,7 @@ namespace chr
       }
 
       template <>
-      void Circle::fill<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
+      void Circle::append<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
         float aa = fabsf(a2 - a1);
         int n = ceilf(aa * r / segmentLength) + 1;

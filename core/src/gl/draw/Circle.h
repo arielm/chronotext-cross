@@ -21,7 +21,7 @@ namespace chr
         Circle& setSegmentLength(float length);
 
         template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
-        void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;
+        void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;
 
       protected:
         glm::vec4 color;

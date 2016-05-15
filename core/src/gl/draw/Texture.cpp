@@ -1,5 +1,6 @@
 #include "gl/draw/Texture.h"
 
+using namespace std;
 using namespace chr::math;
 
 namespace chr
@@ -8,6 +9,54 @@ namespace chr
   {
     namespace draw
     {
+      Texture& Texture::setBounds(const math::Rectf &bounds)
+      {
+        this->bounds = bounds;
+        hasBounds = true;
+
+        return *this;
+      }
+
+      Texture& Texture::setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight)
+      {
+        bounds = Rectf(upperLeft, lowerRight);
+        hasBounds = true;
+
+        return *this;
+      }
+
+      Texture& Texture::setBounds(float left, float top, float width, float height)
+      {
+        bounds = Rectf(left, top, width, height);
+        hasBounds = true;
+
+        return *this;
+      }
+
+      Texture& Texture::setAnchor(const glm::vec2 &anchor)
+      {
+        this->anchor = anchor;
+        return *this;
+      }
+
+      Texture& Texture::setAnchor(float x, float y)
+      {
+        anchor = glm::vec2(x, y);
+        return *this;
+      }
+
+      Texture& Texture::setOffset(const glm::vec2 &offset)
+      {
+        this->offset = anchor;
+        return *this;
+      }
+
+      Texture& Texture::setOffset(float x, float y)
+      {
+        offset = glm::vec2(x, y);
+        return *this;
+      }
+
       Texture& Texture::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -23,179 +72,147 @@ namespace chr
       // ---
 
       template <>
-      void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
+      void Texture::append<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(x, y, x2, y2, u1, v1, u2, v2), batch);
-      }
-
-      template <>
-      void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
-      {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(x, y, x2, y2, u1, v1, u2, v2), batch);
-      }
-
-      template <>
-      void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
-      {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(x, y, x2, y2, u1, v1, u2, v2, color), batch);
-      }
-
-      template <>
-      void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
-      {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(x, y, x2, y2, u1, v1, u2, v2, color), batch);
-      }
-
-      // ---
-
-      template <>
-      void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
-      {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        batch
-          .addVertex( x,  y, 0, u1, v1)
-          .addVertex( x, y2, 0, u1, v2)
-          .addVertex(x2, y2, 0, u2, v2)
-          .addVertex(x2,  y, 0, u2, v1);
-
-        batch
-          .addIndices(0, 1, 2, 2, 3, 0)
-          .incrementIndices(4);
-      }
-
-      template <>
-      void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
-      {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        batch
-          .addVertex( x,  y, 0, u1, v1)
-          .addVertex( x, y2, 0, u1, v2)
-          .addVertex(x2, y2, 0, u2, v2)
-          .addVertex(x2,  y, 0, u2, v1);
-
-        batch
-          .addIndices(0, 3, 2, 2, 1, 0)
-          .incrementIndices(4);
-      }
-
-      template <>
-      void Texture::fill<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
-      {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        batch
-          .addVertex( x,  y, 0, u1, v1, color)
-          .addVertex( x, y2, 0, u1, v2, color)
-          .addVertex(x2, y2, 0, u2, v2, color)
-          .addVertex(x2,  y, 0, u2, v1, color);
-
-        batch
-          .addIndices(0, 1, 2, 2, 3, 0)
-          .incrementIndices(4);
-      }
-
-      template <>
-      void Texture::fill<GL_CW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
-      {
-        float x2 = x + batch.texture.innerWidth;
-        float y2 = y + batch.texture.innerHeight;
-
-        float u1 = batch.texture.u1;
-        float v1 = batch.texture.v1;
-        float u2 = batch.texture.u2;
-        float v2 = batch.texture.v2;
-
-        batch
-          .addVertex( x,  y, 0, u1, v1, color)
-          .addVertex( x, y2, 0, u1, v2, color)
-          .addVertex(x2, y2, 0, u2, v2, color)
-          .addVertex(x2,  y, 0, u2, v1, color);
-
-        batch
-          .addIndices(0, 3, 2, 2, 1, 0)
-          .incrementIndices(4);
-      }
-
-      // ---
-
-      template <>
-      void Texture::fillRect<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, const Rectf &rect, float ox, float oy)
-      {
-        float width = batch.texture.innerWidth;
-        float height = batch.texture.innerHeight;
-
-        float u1 = (rect.x1 - ox) / width;
-        float v1 = (rect.y1 - oy) / height;
-        float u2 = (rect.x2 - ox) / width;
-        float v2 = (rect.y2 - oy) / height;
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
 
         matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(rect, u1, v1, u2, v2), batch);
       }
 
       template <>
-      void Texture::fillRect<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, const Rectf &rect, float ox, float oy)
+      void Texture::append<GL_CW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        float width = batch.texture.innerWidth;
-        float height = batch.texture.innerHeight;
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
 
-        float u1 = (rect.x1 - ox) / width;
-        float v1 = (rect.y1 - oy) / height;
-        float u2 = (rect.x2 - ox) / width;
-        float v2 = (rect.y2 - oy) / height;
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(rect, u1, v1, u2, v2), batch);
+      }
+
+      template <>
+      void Texture::append<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
+      {
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
 
         matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(rect, u1, v1, u2, v2, color), batch);
+      }
+
+      template <>
+      void Texture::append<GL_CW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
+      {
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(rect, u1, v1, u2, v2, color), batch);
+      }
+
+      // ---
+
+      template <>
+      void Texture::append<GL_CCW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
+      {
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+
+        batch
+          .addVertex(rect.x1, rect.y1, 0, u1, v1)
+          .addVertex(rect.x1, rect.y2, 0, u1, v2)
+          .addVertex(rect.x2, rect.y2, 0, u2, v2)
+          .addVertex(rect.x2, rect.y1, 0, u2, v1);
+
+        batch
+          .addIndices(0, 1, 2, 2, 3, 0)
+          .incrementIndices(4);
+      }
+
+      template <>
+      void Texture::append<GL_CW>(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
+      {
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+
+        batch
+          .addVertex(rect.x1, rect.y1, 0, u1, v1)
+          .addVertex(rect.x1, rect.y2, 0, u1, v2)
+          .addVertex(rect.x2, rect.y2, 0, u2, v2)
+          .addVertex(rect.x2, rect.y1, 0, u2, v1);
+
+        batch
+          .addIndices(0, 3, 2, 2, 1, 0)
+          .incrementIndices(4);
+      }
+
+      template <>
+      void Texture::append<GL_CCW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
+      {
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+
+        batch
+          .addVertex(rect.x1, rect.y1, 0, u1, v1, color)
+          .addVertex(rect.x1, rect.y2, 0, u1, v2, color)
+          .addVertex(rect.x2, rect.y2, 0, u2, v2, color)
+          .addVertex(rect.x2, rect.y1, 0, u2, v1, color);
+
+        batch
+          .addIndices(0, 1, 2, 2, 3, 0)
+          .incrementIndices(4);
+      }
+
+      template <>
+      void Texture::append<GL_CW>(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
+      {
+        Rectf rect;
+        float u1, v1, u2, v2;
+        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+
+        batch
+          .addVertex(rect.x1, rect.y1, 0, u1, v1, color)
+          .addVertex(rect.x1, rect.y2, 0, u1, v2, color)
+          .addVertex(rect.x2, rect.y2, 0, u2, v2, color)
+          .addVertex(rect.x2, rect.y1, 0, u2, v1, color);
+
+        batch
+          .addIndices(0, 3, 2, 2, 1, 0)
+          .incrementIndices(4);
+      }
+
+      tuple<Rectf, float, float, float, float> Texture::computeTexturedQuad(const gl::Texture &texture, float x, float y) const
+      {
+        Rectf rect;
+        float u1, v1, u2, v2;
+
+        float width = texture.innerWidth;
+        float height = texture.innerHeight;
+
+        if (hasBounds)
+        {
+          rect = bounds;
+
+          u1 = (rect.x1 - offset.x) / width;
+          v1 = (rect.y1 - offset.y) / height;
+          u2 = (rect.x2 - offset.x) / width;
+          v2 = (rect.y2 - offset.y) / height;
+        }
+        else
+        {
+          rect = Rectf(x - width * anchor.x, y - height * anchor.y, width, height);
+
+          u1 = texture.u1;
+          v1 = texture.v1;
+          u2 = texture.u2;
+          v2 = texture.v2;
+        }
+
+        return make_tuple(rect, u1, v1, u2, v2);
       }
     }
   }
