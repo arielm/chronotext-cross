@@ -1,0 +1,57 @@
+cmake_minimum_required (VERSION 3.2.2)
+
+project(TestingCGAL)
+
+find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
+find_package(GTest REQUIRED)
+
+set(CGAL_INCLUDE_DIRS
+  "${CGAL_ROOT}/include"
+  "${CGAL_ROOT}/src/Boolean_set_operations_2/include"
+  "${CGAL_ROOT}/src/Number_types/include"
+  "${CGAL_ROOT}/src/Kernel_23/include"
+  "${CGAL_ROOT}/src/Cartesian_Kernel/include"
+  "${CGAL_ROOT}/src/Filtered_Kernel/include"
+  "${CGAL_ROOT}/src/Installation/include"
+  "${CGAL_ROOT}/src/STL_Extension/include"
+  "${CGAL_ROOT}/src/Profiling_tools/include"
+  "${CGAL_ROOT}/src/Stream_support/include"
+  "${CGAL_ROOT}/src/Algebraic_foundations/include"
+  "${CGAL_ROOT}/src/Interval_support/include"
+  "${CGAL_ROOT}/src/Modular_arithmetic/include"
+  "${CGAL_ROOT}/src/Conic_2/include"
+  "${CGAL_ROOT}/src/Distance_2/include"
+  "${CGAL_ROOT}/src/Distance_3/include"
+  "${CGAL_ROOT}/src/Intersections_2/include"
+  "${CGAL_ROOT}/src/Intersections_3/include"
+  "${CGAL_ROOT}/src/Homogeneous_kernel/include"
+  "${CGAL_ROOT}/src/Kernel_d/include"
+  "${CGAL_ROOT}/src/Arithmetic_kernel/include"
+  "${CGAL_ROOT}/src/Arrangement_on_surface_2/include"
+  "${CGAL_ROOT}/src/Circulator/include"
+  "${CGAL_ROOT}/src/HalfEdgeDS/include"
+  "${CGAL_ROOT}/src/sweep_line_2/include"
+  "${CGAL_ROOT}/src/Hash_map/include"
+  "${CGAL_ROOT}/src/Union_find/include"
+  "${CGAL_ROOT}/src/Polygon/include"
+)
+set(CGAL_LIBRARY "${CGAL_ROOT}/lib/libCGAL.a")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCGAL_HAS_NO_THREADS")
+
+set(INCLUDE_DIRS
+  ${Boost_INCLUDE_DIRS}
+  ${GTEST_INCLUDE_DIRS}
+  ${CGAL_INCLUDE_DIRS}
+)
+
+set(LIBRARIES
+  ${Boost_LIBRARIES}
+  ${GTEST_BOTH_LIBRARIES}
+  ${CGAL_LIBRARY}
+)
+
+set(SRC_FILES
+  src/main.cpp
+)
+
+include("${CROSS_ROOT}/cmake/test.cmake")
