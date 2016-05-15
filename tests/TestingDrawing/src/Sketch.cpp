@@ -56,20 +56,22 @@ void Sketch::setup()
     .rotateZ(30 * D2R);
   draw::Rect()
     .setColor(1, 1, 0.5f, 1)
-    .fill(fillBatch, matrix, Rectf(-200, -150, 300, 150));
+    .setBounds(-200, -150, 300, 150)
+    .append(fillBatch, matrix);
   matrix.pop();
 
   draw::Circle()
     .setColor(1, 0.5f, 0, 1)
     .setRadius(100)
-    .fill(fillBatch, matrix);
+    .append(fillBatch, matrix);
 
   matrix.push()
     .scale(0.5f)
     .rotateZ(-15 * D2R);
   draw::Texture()
     .setColor(1, 1, 1, 1)
-    .fillFromCenter(textureBatch, matrix, 0, 0);
+    .setAnchor(0.5f, 0.5f)
+    .append(textureBatch, matrix);
   matrix.pop();
 
   Triangulator triangulator1;
@@ -89,8 +91,8 @@ void Sketch::setup()
   triangulator2
     .setContourCapture(Triangulator::CAPTURE_FRONT)
     .setColor(0.25f, 1, 0, 1)
-    .add(shape::EquilateralTriangle().setSideLength(150).get())
-    .add(shape::EquilateralTriangle().setSideLength(120).get())
+    .add(shape::EquilateralTriangle().setSideLength(150).append())
+    .add(shape::EquilateralTriangle().setSideLength(120).append())
     .stamp(fillBatch, matrix);
 
   triangulator2.exportContours(strokeBatch, matrix);

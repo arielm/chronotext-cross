@@ -55,42 +55,42 @@ void Sketch::setup()
       .push();
     draw::Rect()
       .setColor(0.75f, 0.75f, 0.75f, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
 
     matrix
       .translate(100, 0, 0)
       .rotateY(90 * D2R);
     draw::Rect()
       .setColor(1, 0.5f, 0, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
 
     matrix
       .translate(100, 0, 0)
       .rotateY(90 * D2R);
     draw::Rect()
       .setColor(1, 0, 0, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
 
     matrix
       .translate(100, 0, 0)
       .rotateY(90 * D2R);
     draw::Rect()
       .setColor(1, 1, 0, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
 
     matrix
       .translate(0, 100, 0)
       .rotateX(-90 * D2R);
     draw::Rect()
       .setColor(0.5f, 1.0f, 0.5f, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
 
     matrix
       .pop()
       .rotateX(-90 * D2R);
     draw::Rect()
       .setColor(0.25f, 0.25f, 0.25f, 1)
-      .fill<GL_CW>(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .append<GL_CW>(fillBatch, matrix, Rectf(0, 0, 100, 100));
   }
 
   // ---

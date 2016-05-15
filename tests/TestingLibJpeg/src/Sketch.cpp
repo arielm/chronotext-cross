@@ -29,17 +29,26 @@ void Sketch::setup()
 
   Matrix matrix;
 
-  matrix.push();
-  matrix.scale(0.333f);
-  draw::Texture().fillFromCenter(textureBatches[0], matrix);
-  matrix.pop();
+  matrix
+    .push()
+    .scale(0.333f);
+  draw::Texture()
+    .setAnchor(0.5f, 0.5f)
+    .append(textureBatches[0], matrix);
 
-  matrix.translate(0, 0, 5);
-  draw::Texture().fillRect(textureBatches[1], matrix, Rectf(-200, -150, 400, 300));
+  matrix
+    .pop()
+    .translate(0, 0, 5);
+  draw::Texture()
+    .setBounds(-200, -150, 400, 300)
+    .append(textureBatches[1], matrix);
 
-  matrix.translate(0, 0, 5);
-  matrix.scale(0.75f);
-  draw::Texture().fillFromCenter(textureBatches[2], matrix, 100, 100);
+  matrix
+    .translate(0, 0, 5)
+    .scale(0.75f);
+  draw::Texture()
+    .setAnchor(0.5f, 0.5f)
+    .append(textureBatches[2], matrix, 100, 100);
 
   // ---
 
@@ -68,7 +77,9 @@ void Sketch::draw()
 
   // ---
 
-  State().setShaderMatrix(modelViewMatrix * projectionMatrix).apply();
+  State()
+    .setShaderMatrix(modelViewMatrix * projectionMatrix)
+    .apply();
 
   textureBatches[0].flush();
   textureBatches[1].flush();

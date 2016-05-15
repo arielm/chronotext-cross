@@ -79,9 +79,13 @@ void Sketch::accelerated(AccelEvent event)
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
   Matrix matrix;
-  matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
+  matrix
+    .translate(position)
+    .scale(radius / DOT_RADIUS_PIXELS);
 
-  draw::Texture().fillFromCenter(textureBatch, matrix);
+  draw::Texture()
+    .setAnchor(0.5f, 0.5f)
+    .append(textureBatch, matrix);
 }
 
 // ---
