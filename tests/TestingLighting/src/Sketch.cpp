@@ -36,8 +36,8 @@ void Sketch::setup()
   if (showTube)
   {
     vector<vector<glm::vec2>> polygons;
-    polygons.emplace_back(shape::Circle().setRadius(50).get());
-    polygons.emplace_back(shape::Circle().setRadius(40).get());
+    polygons.emplace_back(shape::Circle().setRadius(50).append());
+    polygons.emplace_back(shape::Circle().setRadius(40).append());
 
     matrix.translate(0, 0, 50);
 

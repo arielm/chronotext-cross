@@ -38,13 +38,13 @@ void Sketch::setup()
   vector<vector<glm::vec2>> polygons1;
   auto rect = shape::Rect().setSize(100, 100);
   polygons1
-    .emplace_back(rect.get());
+    .emplace_back(rect.append());
   polygons1
     .emplace_back(
       affine
         .scale(0.75f)
         .rotate(15 * D2R)
-        .transformPoints(rect.get()));
+        .transformPoints(rect.append()));
 
   Triangulator triangulator1;
   triangulator1
@@ -71,12 +71,12 @@ void Sketch::setup()
   polygons2
     .emplace_back(
       affine
-        .transformPoints(triangle.get()));
+        .transformPoints(triangle.append()));
   polygons2
     .emplace_back(
       affine
         .scale(0.75f)
-        .transformPoints(triangle.get()));
+        .transformPoints(triangle.append()));
 
   Triangulator triangulator2;
   triangulator2
@@ -98,12 +98,12 @@ void Sketch::setup()
   polygons3
     .emplace_back(
       affine
-        .transformPoints(circle.get()));
+        .transformPoints(circle.append()));
   polygons3
     .emplace_back(
       affine
         .scale(0.8f)
-        .transformPoints(circle.get()));
+        .transformPoints(circle.append()));
 
   Triangulator triangulator3;
   triangulator3

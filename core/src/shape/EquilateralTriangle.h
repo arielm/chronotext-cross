@@ -15,16 +15,18 @@ namespace chr
         return *this;
       }
 
-      std::vector<glm::vec2> get() const
+      inline std::vector<glm::vec2> get(const glm::vec2 &xy) const { return append(xy.x, xy.y); }
+
+      std::vector<glm::vec2> append(float x = 0, float y = 0) const
       {
         float h = sqrtf(3) * a / 2; // ALTITUDE FROM ANY SIDE
 
         std::vector<glm::vec2> output;
         output.reserve(3);
 
-        output.emplace_back(0, -h * 2 / 3);
-        output.emplace_back(-a / 2, h / 3);
-        output.emplace_back(+a / 2, h / 3);
+        output.emplace_back(x, y - h * 2 / 3);
+        output.emplace_back(x - a / 2, y + h / 3);
+        output.emplace_back(x + a / 2, y + h / 3);
 
         return output;
       }
