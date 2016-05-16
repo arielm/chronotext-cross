@@ -13,6 +13,7 @@ namespace chr
       {
       public:
         Cube& setSize(float size);
+        Cube& setFrontFace(GLenum mode);
 
         Cube& setColor(const glm::vec4 &color);
         Cube& setColor(float r, float g, float b, float a);
@@ -31,6 +32,7 @@ namespace chr
 
       protected:
         float size = 1;
+        GLenum frontFace = GL_CCW;
 
         glm::vec4 color = glm::vec4(1, 1, 1, 1);
         std::array<glm::vec4, 6> colors;
