@@ -121,7 +121,7 @@ namespace chr
         return *this;
       }
 
-      VertexBatch& clearColor()
+      VertexBatch& clearShaderColor()
       {
         hasColor = false;
         return *this;
