@@ -178,10 +178,6 @@ namespace chr
           case PROPERTY_GL_FRONT_FACE:
             ::glFrontFace(it->second[0]);
             break;
-
-          case PROPERTY_GL_POLYGON_OFFSET:
-            ::glPolygonOffset(it->second[0], it->second[1]);
-            break;
         }
       }
 
@@ -189,6 +185,10 @@ namespace chr
       {
         switch (it->first)
         {
+          case PROPERTY_GL_POLYGON_OFFSET:
+            ::glPolygonOffset(it->second[0], it->second[1]);
+            break;
+
           case PROPERTY_GL_LINE_WIDTH:
             ::glLineWidth(it->second[0]);
             break;
