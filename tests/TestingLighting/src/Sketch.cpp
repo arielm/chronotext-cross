@@ -49,7 +49,7 @@ void Sketch::setup()
   else if (showCube)
   {
     draw::Cube()
-      .setSize(50)
+      .setSize(100)
       .setColors(
         glm::vec4(0.75f, 0.75f, 0.75f, 1),
         glm::vec4(1, 0, 0, 1),

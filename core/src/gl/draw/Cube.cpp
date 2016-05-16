@@ -8,7 +8,7 @@ namespace chr
   {
     namespace draw
     {
-      Cube& Cube::setSize(const glm::vec3 &size)
+      Cube& Cube::setSize(float size)
       {
         this->size = size;
         return *this;
@@ -29,47 +29,49 @@ namespace chr
       template <>
       void Cube::append(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
       {
+        float unit = size * 0.5f;
+
         // FRONT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z))
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z))
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z))
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z));
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit))
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit))
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit))
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit));
 
         // BACK
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z))
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z))
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z))
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z));
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit))
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit))
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit))
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit));
 
         // TOP
         batch
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z))
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z))
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z))
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z));
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit))
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit))
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit))
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit));
 
         // BOTTOM
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z))
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z))
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z))
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z));
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit))
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit))
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit))
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit));
 
         // RIGHT
         batch
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z))
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z))
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z))
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z));
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit))
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit))
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit))
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit));
 
         // LEFT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z))
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z))
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z))
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z));
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit))
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit))
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit))
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit));
 
         // ---
 
@@ -86,6 +88,8 @@ namespace chr
       template <>
       void Cube::append(IndexedVertexBatch<XYZ.N, GLushort> &batch, Matrix &matrix) const
       {
+        float unit = size * 0.5f;
+
         auto normal0 = matrix.transformNormal( 0,  0, +1);
         auto normal1 = matrix.transformNormal( 0,  0, -1);
         auto normal2 = matrix.transformNormal( 0, +1,  0);
@@ -95,45 +99,45 @@ namespace chr
 
         // FRONT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), normal0)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), normal0)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), normal0)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), normal0);
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), normal0)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), normal0)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), normal0)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), normal0);
 
         // BACK
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), normal1)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), normal1)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), normal1)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), normal1);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), normal1)
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), normal1)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), normal1)
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), normal1);
 
         // TOP
         batch
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), normal2)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), normal2)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), normal2)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), normal2);
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), normal2)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), normal2)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), normal2)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), normal2);
 
         // BOTTOM
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), normal3)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), normal3)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), normal3)
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), normal3);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), normal3)
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), normal3)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), normal3)
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), normal3);
 
         // RIGHT
         batch
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), normal4)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), normal4)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), normal4)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), normal4);
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), normal4)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), normal4)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), normal4)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), normal4);
 
         // LEFT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), normal5)
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), normal5)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), normal5)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), normal5);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), normal5)
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), normal5)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), normal5)
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), normal5);
 
         // ---
 
@@ -150,6 +154,8 @@ namespace chr
       template <>
       void Cube::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
       {
+        float unit = size * 0.5f;
+
         auto color0 = getFaceColor(0);
         auto color1 = getFaceColor(1);
         auto color2 = getFaceColor(2);
@@ -159,45 +165,45 @@ namespace chr
 
         // FRONT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), color0)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), color0)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), color0)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), color0);
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), color0)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), color0)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), color0)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), color0);
 
         // BACK
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), color1)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), color1)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), color1)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), color1);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), color1)
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), color1)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), color1)
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), color1);
 
         // TOP
         batch
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), color2)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), color2)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), color2)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), color2);
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), color2)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), color2)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), color2)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), color2);
 
         // BOTTOM
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), color3)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), color3)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), color3)
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), color3);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), color3)
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), color3)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), color3)
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), color3);
 
         // RIGHT
         batch
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), color4)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), color4)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), color4)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), color4);
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), color4)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), color4)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), color4)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), color4);
 
         // LEFT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), color5)
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), color5)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), color5)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), color5);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), color5)
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), color5)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), color5)
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), color5);
 
         // ---
 
@@ -214,6 +220,8 @@ namespace chr
       template <>
       void Cube::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
       {
+        float unit = size * 0.5f;
+        
         auto normal0 = matrix.transformNormal( 0,  0, +1);
         auto normal1 = matrix.transformNormal( 0,  0, -1);
         auto normal2 = matrix.transformNormal( 0, +1,  0);
@@ -230,45 +238,45 @@ namespace chr
 
         // FRONT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), normal0, color0)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), normal0, color0)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), normal0, color0)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), normal0, color0);
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), normal0, color0)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), normal0, color0)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), normal0, color0)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), normal0, color0);
 
         // BACK
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), normal1, color1)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), normal1, color1)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), normal1, color1)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), normal1, color1);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), normal1, color1)
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), normal1, color1)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), normal1, color1)
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), normal1, color1);
 
         // TOP
         batch
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), normal2, color2)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), normal2, color2)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), normal2, color2)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), normal2, color2);
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), normal2, color2)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), normal2, color2)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), normal2, color2)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), normal2, color2);
 
         // BOTTOM
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), normal3, color3)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), normal3, color3)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), normal3, color3)
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), normal3, color3);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), normal3, color3)
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), normal3, color3)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), normal3, color3)
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), normal3, color3);
 
         // RIGHT
         batch
-          .addVertex(matrix.transformPoint(+size.x, -size.y, -size.z), normal4, color4)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, -size.z), normal4, color4)
-          .addVertex(matrix.transformPoint(+size.x, +size.y, +size.z), normal4, color4)
-          .addVertex(matrix.transformPoint(+size.x, -size.y, +size.z), normal4, color4);
+          .addVertex(matrix.transformPoint(+unit, -unit, -unit), normal4, color4)
+          .addVertex(matrix.transformPoint(+unit, +unit, -unit), normal4, color4)
+          .addVertex(matrix.transformPoint(+unit, +unit, +unit), normal4, color4)
+          .addVertex(matrix.transformPoint(+unit, -unit, +unit), normal4, color4);
 
         // LEFT
         batch
-          .addVertex(matrix.transformPoint(-size.x, -size.y, -size.z), normal5, color5)
-          .addVertex(matrix.transformPoint(-size.x, -size.y, +size.z), normal5, color5)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, +size.z), normal5, color5)
-          .addVertex(matrix.transformPoint(-size.x, +size.y, -size.z), normal5, color5);
+          .addVertex(matrix.transformPoint(-unit, -unit, -unit), normal5, color5)
+          .addVertex(matrix.transformPoint(-unit, -unit, +unit), normal5, color5)
+          .addVertex(matrix.transformPoint(-unit, +unit, +unit), normal5, color5)
+          .addVertex(matrix.transformPoint(-unit, +unit, -unit), normal5, color5);
 
         // ---
 

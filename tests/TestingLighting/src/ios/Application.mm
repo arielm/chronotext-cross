@@ -11,7 +11,7 @@
     @{
         GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES2),
         GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskLandscape),
-        GLViewControllerDepthFormatKey: @(GLKViewDrawableDepthFormatNone),
+        GLViewControllerDepthFormatKey: @(GLKViewDrawableDepthFormat24),
     };
 
     window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
