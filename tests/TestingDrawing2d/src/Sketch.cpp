@@ -40,7 +40,10 @@ void Sketch::setup()
     .setShader(textureAlphaShader)
     .setTexture(texture);
 
-  fillBatch
+  backgroundBatch
+    .setShader(colorShader);
+
+  foregroundBatch
     .setShader(colorShader);
 
   strokeBatch
@@ -54,32 +57,25 @@ void Sketch::setup()
   matrix.push()
     .translate(200, 100)
     .rotateZ(30 * D2R);
+  textureMatrix.load(matrix);
+
   draw::Rect()
     .setColor(1, 1, 0.5f, 1)
     .setBounds(-200, -150, 300, 150)
-    .append(fillBatch, matrix);
+    .append(backgroundBatch, matrix);
   matrix.pop();
 
   draw::Circle()
     .setColor(1, 0.5f, 0, 1)
     .setRadius(100)
-    .append(fillBatch, matrix);
-
-  matrix.push()
-    .scale(0.5f)
-    .rotateZ(-15 * D2R);
-  draw::Texture()
-    .setColor(1, 1, 1, 1)
-    .setAnchor(0.5f, 0.5f)
-    .append(textureBatch, matrix);
-  matrix.pop();
+    .append(foregroundBatch, matrix);
 
   Triangulator triangulator1;
   triangulator1
     .setContourCapture(Triangulator::CAPTURE_FRONT)
     .setColor(1, 0.25f, 0.25f, 1)
     .add(shape::FivePointedStar().setOuterRadius(100).get())
-    .stamp(fillBatch, matrix);
+    .stamp(foregroundBatch, matrix);
 
   triangulator1.exportContours(strokeBatch, matrix);
 
@@ -93,7 +89,7 @@ void Sketch::setup()
     .setColor(0.25f, 1, 0, 1)
     .add(shape::EquilateralTriangle().setSideLength(150).append())
     .add(shape::EquilateralTriangle().setSideLength(120).append())
-    .stamp(fillBatch, matrix);
+    .stamp(foregroundBatch, matrix);
 
   triangulator2.exportContours(strokeBatch, matrix);
 
@@ -113,9 +109,21 @@ void Sketch::draw()
 
   // ---
 
+  textureBatch.clear();
+
+  draw::Texture()
+    .setColor(0, 0, 0, 0.667f)
+    .setBounds(-200, -150, 300, 150)
+    .setOffset(0, clock()->getTime() * 20)
+    .append(textureBatch, textureMatrix);
+
+  // ---
+
   state.apply();
-  fillBatch.flush();
+
+  backgroundBatch.flush();
   textureBatch.flush();
+  foregroundBatch.flush();
   strokeBatch.flush();
 }
 
