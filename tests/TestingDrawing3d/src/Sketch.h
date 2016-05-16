@@ -18,8 +18,8 @@ public:
 protected:
   chr::gl::State state;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N> lightedBatch;
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> texturedBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> lightenBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> flatBatch;
 
   chr::gl::shaders::ColorShader colorShader;
   chr::gl::shaders::LambertShader lambertShader;

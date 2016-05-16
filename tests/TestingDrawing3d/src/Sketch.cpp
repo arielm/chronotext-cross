@@ -15,17 +15,11 @@ void Sketch::setup()
 
   // ---
 
-  lightedBatch
-    .setShader(lambertShader)
-    .setShaderColor(0.25f, 0.25f, 0.25f, 1);
-
-  // ---
-
   Matrix matrix;
 
   draw::Cube()
     .setSize(100)
-    .append(lightedBatch, matrix);
+    .append(lightenBatch, matrix);
 
   matrix
     .push()
@@ -33,7 +27,7 @@ void Sketch::setup()
 
   draw::Cube()
     .setSize(50)
-    .append(texturedBatch, matrix);
+    .append(flatBatch, matrix);
 
   matrix
     .pop()
@@ -41,13 +35,12 @@ void Sketch::setup()
 
   draw::Cube()
     .setSize(50)
-    .append(texturedBatch, matrix);
+    .append(flatBatch, matrix);
 
   // ---
 
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
-  glDepthMask(GL_TRUE);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -82,9 +75,12 @@ void Sketch::draw()
   glEnable(GL_POLYGON_OFFSET_FILL);
   glPolygonOffset(2, 1);
 
-  lightedBatch.flush();
+  lightenBatch
+    .setShader(lambertShader)
+    .setShaderColor(0.25f, 0.25f, 0.25f, 1)
+    .flush();
 
-  texturedBatch
+  flatBatch
     .setShader(colorShader)
     .setShaderColor(1, 0.25f, 0, 1)
     .flush();
@@ -92,9 +88,14 @@ void Sketch::draw()
   glDepthMask(GL_FALSE);
   glDisable(GL_POLYGON_OFFSET_FILL);
 
-  texturedBatch
+  lightenBatch
     .setShader(textureAlphaShader)
-    .setShaderColor(1, 1, 1, 0.85f)
+    .setShaderColor(1, 1, 1, 0.5f)
+    .flush();
+
+  flatBatch
+    .setShader(textureAlphaShader)
+    .setShaderColor(1, 1, 1, 1)
     .flush();
 }
 

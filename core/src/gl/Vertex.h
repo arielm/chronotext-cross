@@ -262,6 +262,13 @@ namespace chr
       v(v)
       {}
 
+      Vertex(const glm::vec3 &position, const glm::vec3 &normal, float u, float v)
+      :
+      Vertex<XYZ.N>(position, normal),
+      u(u),
+      v(v)
+      {}
+
       Vertex(const glm::vec3 &position, const glm::vec3 &normal, const glm::vec2 &coords)
       :
       Vertex<XYZ.N>(position, normal),
@@ -315,6 +322,12 @@ namespace chr
       Vertex(float x, float y, float z, const glm::vec3 &normal, float u, float v, const glm::vec4 &color)
       :
       Vertex<XYZ.N.UV>(x, y, z, normal, u, v),
+      color(color)
+      {}
+
+      Vertex(const glm::vec3 &position, const glm::vec3 &normal, float u, float v, const glm::vec4 &color)
+      :
+      Vertex<XYZ.N.UV>(position, normal, u, v),
       color(color)
       {}
 
