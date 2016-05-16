@@ -15,8 +15,6 @@ public:
   void setup() final;
   void draw() final;
 
-  void initTextures();
-
 protected:
   chr::gl::State state;
 
@@ -30,4 +28,6 @@ protected:
   chr::gl::Texture texture;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV.RGBA> textureBatch;
   chr::gl::Matrix textureMatrix;
+
+  void initTextures();
 };

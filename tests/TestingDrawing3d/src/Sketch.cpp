@@ -7,13 +7,15 @@ using namespace chr;
 using namespace gl;
 
 Sketch::Sketch()
-:
-xyzBatch(GL_TRIANGLES)
 {}
 
 void Sketch::setup()
 {
-  xyzBatch
+  initTextures();
+
+  // ---
+
+  lightedBatch
     .setShader(lambertShader)
     .setShaderColor(0.25f, 0.25f, 0.25f, 1);
 
@@ -23,7 +25,23 @@ void Sketch::setup()
 
   draw::Cube()
     .setSize(100)
-    .append(xyzBatch, matrix);
+    .append(lightedBatch, matrix);
+
+  matrix
+    .push()
+    .translate(50, 0, 0);
+
+  draw::Cube()
+    .setSize(50)
+    .append(texturedBatch, matrix);
+
+  matrix
+    .pop()
+    .translate(-50, 0, 0);
+
+  draw::Cube()
+    .setSize(50)
+    .append(texturedBatch, matrix);
 
   // ---
 
@@ -38,6 +56,7 @@ void Sketch::setup()
 void Sketch::draw()
 {
   glClearColor(0.5f, 0.5f, 0.5f, 1);
+  glDepthMask(GL_TRUE);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // ---
@@ -60,5 +79,30 @@ void Sketch::draw()
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();
 
-  xyzBatch.flush();
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(2, 1);
+
+  lightedBatch.flush();
+
+  texturedBatch
+    .setShader(colorShader)
+    .setShaderColor(1, 0.25f, 0, 1)
+    .flush();
+
+  glDepthMask(GL_FALSE);
+  glDisable(GL_POLYGON_OFFSET_FILL);
+
+  texturedBatch
+    .setShader(textureAlphaShader)
+    .setShaderColor(1, 1, 1, 0.85f)
+    .flush();
+}
+
+void Sketch::initTextures()
+{
+  texture = Texture(Texture::Request("lys_32.png")
+    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
+    .setMipmap(true)
+    .setWrap(GL_REPEAT, GL_REPEAT)
+    .setAnisotropy(true));
 }
