@@ -289,6 +289,7 @@ namespace chr
       inline IndexedVertexBatch& addIndex(I offset)
       {
         indexBuffer->storage.emplace_back(index + offset);
+        return *this;
       }
 
       template<typename... Args>
