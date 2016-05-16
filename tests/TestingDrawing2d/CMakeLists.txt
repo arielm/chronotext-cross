@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.2.2)
 
-project(TestingDrawing)
+project(TestingDrawing2d)
 
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
 
