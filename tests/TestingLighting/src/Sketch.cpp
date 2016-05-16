@@ -2,7 +2,6 @@
 
 #include "gl/draw/Rect.h"
 #include "gl/Triangulator.h"
-#include "math/MatrixAffine.h"
 #include "shape/Circle.h"
 
 using namespace std;
@@ -11,8 +10,8 @@ using namespace gl;
 using namespace math;
 
 static bool showNormals = false;
-static bool showTube = true;
-static bool showCube = false;
+static bool showTube = false;
+static bool showCube = true;
 
 Sketch::Sketch()
 :
@@ -55,42 +54,48 @@ void Sketch::setup()
       .push();
     draw::Rect()
       .setColor(0.75f, 0.75f, 0.75f, 1)
-      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .setBounds(0, 0, 100, 100)
+      .append(fillBatch, matrix);
 
     matrix
       .translate(100, 0, 0)
       .rotateY(90 * D2R);
     draw::Rect()
       .setColor(1, 0.5f, 0, 1)
-      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .setBounds(0, 0, 100, 100)
+      .append(fillBatch, matrix);
 
     matrix
       .translate(100, 0, 0)
       .rotateY(90 * D2R);
     draw::Rect()
       .setColor(1, 0, 0, 1)
-      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .setBounds(0, 0, 100, 100)
+      .append(fillBatch, matrix);
 
     matrix
       .translate(100, 0, 0)
       .rotateY(90 * D2R);
     draw::Rect()
       .setColor(1, 1, 0, 1)
-      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .setBounds(0, 0, 100, 100)
+      .append(fillBatch, matrix);
 
     matrix
       .translate(0, 100, 0)
       .rotateX(-90 * D2R);
     draw::Rect()
       .setColor(0.5f, 1.0f, 0.5f, 1)
-      .append(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .setBounds(0, 0, 100, 100)
+      .append(fillBatch, matrix);
 
     matrix
       .pop()
       .rotateX(-90 * D2R);
     draw::Rect()
       .setColor(0.25f, 0.25f, 0.25f, 1)
-      .append<GL_CW>(fillBatch, matrix, Rectf(0, 0, 100, 100));
+      .setBounds(0, 0, 100, 100)
+      .append<GL_CW>(fillBatch, matrix);
   }
 
   // ---

@@ -41,37 +41,37 @@ namespace chr
       template <>
       void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(bounds.x1, bounds.y1, bounds.x2, bounds.y2), batch);
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(bounds), batch);
       }
 
       template <>
       void Rect::append<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ>(bounds.x1, bounds.y1, bounds.x2, bounds.y2), batch);
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ>(bounds), batch);
       }
 
       template <>
       void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.RGBA>(bounds.x1, bounds.y1, bounds.x2, bounds.y2, color), batch);
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.RGBA>(bounds, color), batch);
       }
 
       template <>
       void Rect::append<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(bounds.x1, bounds.y1, bounds.x2, bounds.y2, color), batch);
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(bounds, color), batch);
       }
 
       template <>
       void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(bounds.x1, bounds.y1, bounds.x2, bounds.y2, glm::vec3(0, 0, +1), color), batch);
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
       }
 
       template <>
       void Rect::append<GL_CW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(bounds.x1, bounds.y1, bounds.x2, bounds.y2, glm::vec3(0, 0, -1), color), batch);
+        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, -1), color), batch);
       }
 
       // ---
