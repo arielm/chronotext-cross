@@ -12,6 +12,8 @@ namespace chr
       class Rect
       {
       public:
+        Rect& setFrontFace(GLenum mode);
+
         Rect& setBounds(const math::Rectf &bounds);
         Rect& setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight);
         Rect& setBounds(float left, float top, float width, float height);
@@ -19,15 +21,16 @@ namespace chr
         Rect& setColor(const glm::vec4 &color);
         Rect& setColor(float r, float g, float b, float a);
 
-        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLushort>
         void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix) const;
 
-        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLushort>
         void append(IndexedVertexBatch<V,I> &batch) const;
 
       protected:
-        glm::vec4 color;
+        GLenum frontFace = GL_CCW;
         math::Rectf bounds;
+        glm::vec4 color;
       };
     }
   }

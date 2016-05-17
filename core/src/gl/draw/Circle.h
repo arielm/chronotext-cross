@@ -13,6 +13,8 @@ namespace chr
       class Circle
       {
       public:
+        Circle& setFrontFace(GLenum mode);
+
         Circle& setColor(const glm::vec4 &color);
         Circle& setColor(float r, float g, float b, float a);
 
@@ -20,10 +22,11 @@ namespace chr
         Circle& setArc(float a1, float a2);
         Circle& setSegmentLength(float length);
 
-        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLushort>
         void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;
 
       protected:
+        GLenum frontFace = GL_CCW;
         glm::vec4 color;
 
         float r = 1;

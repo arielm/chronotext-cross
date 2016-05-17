@@ -8,6 +8,12 @@ namespace chr
   {
     namespace draw
     {
+      Rect& Rect::setFrontFace(GLenum mode)
+      {
+        frontFace = mode;
+        return *this;
+      }
+
       Rect& Rect::setBounds(const math::Rectf &bounds)
       {
         this->bounds = bounds;
@@ -39,45 +45,48 @@ namespace chr
       }
 
       template <>
-      void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(bounds), batch);
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ>(bounds), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(bounds), batch);
+        }
       }
 
       template <>
-      void Rect::append<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ>(bounds), batch);
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(bounds, color), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.RGBA>(bounds, color), batch);
+        }
       }
 
       template <>
-      void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.RGBA>(bounds, color), batch);
-      }
-
-      template <>
-      void Rect::append<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
-      {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(bounds, color), batch);
-      }
-
-      template <>
-      void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
-      {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
-      }
-
-      template <>
-      void Rect::append<GL_CW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
-      {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, -1), color), batch);
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
+        }
       }
 
       // ---
 
       template <>
-      void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch) const
+      void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch) const
       {
         batch
           .addVertex(bounds.x1, bounds.y1)
@@ -85,27 +94,20 @@ namespace chr
           .addVertex(bounds.x2, bounds.y2)
           .addVertex(bounds.x2, bounds.y1);
 
-        batch
-          .addIndices(0, 1, 2, 2, 3, 0)
-          .incrementIndices(4);
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
+
+        batch.incrementIndices(4);
       }
 
       template <>
-      void Rect::append<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch) const
-      {
-        batch
-          .addVertex(bounds.x1, bounds.y1)
-          .addVertex(bounds.x1, bounds.y2)
-          .addVertex(bounds.x2, bounds.y2)
-          .addVertex(bounds.x2, bounds.y1);
-
-        batch
-          .addIndices(0, 3, 2, 2, 1, 0)
-          .incrementIndices(4);
-      }
-
-      template <>
-      void Rect::append<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch) const
+      void Rect::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch) const
       {
         batch
           .addVertex(bounds.x1, bounds.y1, 0, color)
@@ -113,23 +115,16 @@ namespace chr
           .addVertex(bounds.x2, bounds.y2, 0, color)
           .addVertex(bounds.x2, bounds.y1, 0, color);
 
-        batch
-          .addIndices(0, 1, 2, 2, 3, 0)
-          .incrementIndices(4);
-      }
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
 
-      template <>
-      void Rect::append<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch) const
-      {
-        batch
-          .addVertex(bounds.x1, bounds.y1, 0, color)
-          .addVertex(bounds.x1, bounds.y2, 0, color)
-          .addVertex(bounds.x2, bounds.y2, 0, color)
-          .addVertex(bounds.x2, bounds.y1, 0, color);
-
-        batch
-          .addIndices(0, 3, 2, 2, 1, 0)
-          .incrementIndices(4);
+        batch.incrementIndices(4);
       }
     }
   }
