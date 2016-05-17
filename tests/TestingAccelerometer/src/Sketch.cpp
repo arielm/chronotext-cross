@@ -1,8 +1,7 @@
-
 #include "Sketch.h"
 
 #include "gl/Matrix.h"
-#include "gl/draw/Texture.h"
+#include "gl/draw/Sprite.h"
 
 using namespace std;
 using namespace chr;
@@ -83,7 +82,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
     .translate(position)
     .scale(radius / DOT_RADIUS_PIXELS);
 
-  draw::Texture()
+  draw::Sprite()
     .setAnchor(0.5f, 0.5f)
     .append(textureBatch, matrix);
 }

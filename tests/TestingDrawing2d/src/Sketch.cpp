@@ -1,6 +1,5 @@
 #include "Sketch.h"
 
-#include "gl/draw/Texture.h"
 #include "gl/draw/Rect.h"
 #include "gl/draw/Circle.h"
 #include "gl/Triangulator.h"
@@ -111,11 +110,11 @@ void Sketch::draw()
 
   textureBatch.clear();
 
-  draw::Texture()
+  draw::Rect()
     .setColor(0, 0, 0, 0.667f)
     .setBounds(-200, -150, 300, 150)
-    .setScale(0.5f)
-    .setOffset(0, clock()->getTime() * 20)
+    .setTextureScale(0.5f)
+    .setTextureOffset(0, clock()->getTime() * 20)
     .append(textureBatch, textureMatrix);
 
   // ---
