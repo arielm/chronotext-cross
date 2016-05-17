@@ -33,7 +33,7 @@ namespace chr
         glm::vec2 anchor;
         glm::vec4 color = { 1, 1, 1, 1 };
 
-        std::tuple<math::Rectf, glm::vec2, glm::vec2> getTexturedQuad(const gl::Texture &texture, float x, float y) const;
+        std::tuple<math::Rectf, glm::vec2, glm::vec2> getTextureQuad(const gl::Texture &texture, float x, float y) const;
       };
     }
   }

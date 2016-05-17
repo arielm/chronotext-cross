@@ -39,7 +39,7 @@ namespace chr
         float textureScale = 1;
         glm::vec4 color = { 1, 1, 1, 1 };
 
-        std::tuple<glm::vec2, glm::vec2> getTextureCoords(const gl::Texture &texture) const;
+        std::pair<glm::vec2, glm::vec2> getTextureCoords(const gl::Texture &texture) const;
       };
     }
   }

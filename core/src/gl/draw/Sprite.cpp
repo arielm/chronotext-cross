@@ -44,34 +44,34 @@ namespace chr
       template <>
       void Sprite::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        Rectf rect;
+        Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(rect, coords1, coords2) = getTexturedQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
 
         if (frontFace == GL_CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(rect, coords1, coords2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(rect, coords1, coords2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
         }
       }
 
       template <>
       void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
-        Rectf rect;
+        Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(rect, coords1, coords2) = getTexturedQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
 
         if (frontFace == GL_CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(rect, coords1, coords2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(rect, coords1, coords2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
         }
       }
 
@@ -80,15 +80,15 @@ namespace chr
       template <>
       void Sprite::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
       {
-        Rectf rect;
+        Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(rect, coords1, coords2) = getTexturedQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
 
         batch
-          .addVertex(rect.x1, rect.y1, 0, coords1.x, coords1.y)
-          .addVertex(rect.x1, rect.y2, 0, coords1.x, coords2.y)
-          .addVertex(rect.x2, rect.y2, 0, coords2.x, coords2.y)
-          .addVertex(rect.x2, rect.y1, 0, coords2.x, coords1.y);
+          .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y)
+          .addVertex(bounds.x1, bounds.y2, 0, coords1.x, coords2.y)
+          .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y)
+          .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y);
 
         if (frontFace == GL_CW)
         {
@@ -105,15 +105,15 @@ namespace chr
       template <>
       void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
       {
-        Rectf rect;
+        Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(rect, coords1, coords2) = getTexturedQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
 
         batch
-          .addVertex(rect.x1, rect.y1, 0, coords1.x, coords1.y, color)
-          .addVertex(rect.x1, rect.y2, 0, coords1.x, coords2.y, color)
-          .addVertex(rect.x2, rect.y2, 0, coords2.x, coords2.y, color)
-          .addVertex(rect.x2, rect.y1, 0, coords2.x, coords1.y, color);
+          .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y, color)
+          .addVertex(bounds.x1, bounds.y2, 0, coords1.x, coords2.y, color)
+          .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y, color)
+          .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y, color);
 
         if (frontFace == GL_CW)
         {
@@ -127,16 +127,16 @@ namespace chr
         batch.incrementIndices(4);
       }
 
-      tuple<Rectf, glm::vec2, glm::vec2> Sprite::getTexturedQuad(const Texture &texture, float x, float y) const
+      tuple<Rectf, glm::vec2, glm::vec2> Sprite::getTextureQuad(const Texture &texture, float x, float y) const
       {
         float width = texture.innerWidth;
         float height = texture.innerHeight;
-        Rectf rect = Rectf(x - width * anchor.x, y - height * anchor.y, width, height);
+        Rectf bounds(x - width * anchor.x, y - height * anchor.y, width, height);
 
         glm::vec2 coords1 = texture.coords1;
         glm::vec2  coords2 = texture.coords2;
 
-        return make_tuple(rect, coords1, coords2);
+        return make_tuple(bounds, coords1, coords2);
       }
     }
   }

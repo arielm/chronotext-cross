@@ -228,14 +228,14 @@ namespace chr
 
       // ---
 
-      tuple<glm::vec2, glm::vec2> Rect::getTextureCoords(const Texture &texture) const
+      pair<glm::vec2, glm::vec2> Rect::getTextureCoords(const Texture &texture) const
       {
         auto scaledSize = texture.innerSize * textureScale;
 
         glm::vec2 coords1 = (bounds.x1y1() - textureOffset) / scaledSize;
         glm::vec2 coords2 = (bounds.x2y2() - textureOffset) / scaledSize;
 
-        return make_tuple(coords1, coords2);
+        return make_pair(coords1, coords2);
       }
     }
   }
