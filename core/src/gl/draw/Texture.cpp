@@ -63,6 +63,12 @@ namespace chr
         return *this;
       }
 
+      Texture& Texture::setScale(float scale)
+      {
+        this->scale = scale;
+        return *this;
+      }
+
       Texture& Texture::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -81,16 +87,16 @@ namespace chr
       void Texture::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
         Rectf rect;
-        float u1, v1, u2, v2;
-        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+        glm::vec2 coords1, coords2;
+        tie(rect, coords1, coords2) = computeTexturedQuad(batch.texture, x, y);
 
         if (frontFace == GL_CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(rect, u1, v1, u2, v2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(rect, coords1, coords2), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(rect, u1, v1, u2, v2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(rect, coords1, coords2), batch);
         }
       }
 
@@ -98,16 +104,16 @@ namespace chr
       void Texture::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
       {
         Rectf rect;
-        float u1, v1, u2, v2;
-        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+        glm::vec2 coords1, coords2;
+        tie(rect, coords1, coords2) = computeTexturedQuad(batch.texture, x, y);
 
         if (frontFace == GL_CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(rect, u1, v1, u2, v2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(rect, coords1, coords2, color), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(rect, u1, v1, u2, v2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(rect, coords1, coords2, color), batch);
         }
       }
 
@@ -117,14 +123,14 @@ namespace chr
       void Texture::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
       {
         Rectf rect;
-        float u1, v1, u2, v2;
-        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+        glm::vec2 coords1, coords2;
+        tie(rect, coords1, coords2) = computeTexturedQuad(batch.texture, x, y);
 
         batch
-          .addVertex(rect.x1, rect.y1, 0, u1, v1)
-          .addVertex(rect.x1, rect.y2, 0, u1, v2)
-          .addVertex(rect.x2, rect.y2, 0, u2, v2)
-          .addVertex(rect.x2, rect.y1, 0, u2, v1);
+          .addVertex(rect.x1, rect.y1, 0, coords1.x, coords1.y)
+          .addVertex(rect.x1, rect.y2, 0, coords1.x, coords2.y)
+          .addVertex(rect.x2, rect.y2, 0, coords2.x, coords2.y)
+          .addVertex(rect.x2, rect.y1, 0, coords2.x, coords1.y);
 
         if (frontFace == GL_CW)
         {
@@ -142,14 +148,14 @@ namespace chr
       void Texture::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
       {
         Rectf rect;
-        float u1, v1, u2, v2;
-        tie(rect, u1, v1, u2, v2) = computeTexturedQuad(batch.texture, x, y);
+        glm::vec2 coords1, coords2;
+        tie(rect, coords1, coords2) = computeTexturedQuad(batch.texture, x, y);
 
         batch
-          .addVertex(rect.x1, rect.y1, 0, u1, v1, color)
-          .addVertex(rect.x1, rect.y2, 0, u1, v2, color)
-          .addVertex(rect.x2, rect.y2, 0, u2, v2, color)
-          .addVertex(rect.x2, rect.y1, 0, u2, v1, color);
+          .addVertex(rect.x1, rect.y1, 0, coords1.x, coords1.y, color)
+          .addVertex(rect.x1, rect.y2, 0, coords1.x, coords2.y, color)
+          .addVertex(rect.x2, rect.y2, 0, coords2.x, coords2.y, color)
+          .addVertex(rect.x2, rect.y1, 0, coords2.x, coords1.y, color);
 
         if (frontFace == GL_CW)
         {
@@ -163,34 +169,30 @@ namespace chr
         batch.incrementIndices(4);
       }
 
-      tuple<Rectf, float, float, float, float> Texture::computeTexturedQuad(const gl::Texture &texture, float x, float y) const
+      tuple<Rectf, glm::vec2, glm::vec2> Texture::computeTexturedQuad(const gl::Texture &texture, float x, float y) const
       {
         Rectf rect;
-        float u1, v1, u2, v2;
-
-        float width = texture.innerWidth;
-        float height = texture.innerHeight;
+        glm::vec2 coords1, coords2;
 
         if (hasBounds)
         {
           rect = bounds;
+          auto scaledSize = texture.innerSize * scale;
 
-          u1 = (rect.x1 - offset.x) / width;
-          v1 = (rect.y1 - offset.y) / height;
-          u2 = (rect.x2 - offset.x) / width;
-          v2 = (rect.y2 - offset.y) / height;
+          coords1 = (rect.x1y1() - offset) / scaledSize;
+          coords2 = (rect.x2y2() - offset) / scaledSize;
         }
         else
         {
+          float width = texture.innerWidth * scale;
+          float height = texture.innerHeight * scale;
           rect = Rectf(x - width * anchor.x, y - height * anchor.y, width, height);
 
-          u1 = texture.u1;
-          v1 = texture.v1;
-          u2 = texture.u2;
-          v2 = texture.v2;
+          coords1 = texture.coords1;
+          coords2 = texture.coords2;
         }
 
-        return make_tuple(rect, u1, v1, u2, v2);
+        return make_tuple(rect, coords1, coords2);
       }
     }
   }

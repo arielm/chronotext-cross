@@ -26,6 +26,8 @@ namespace chr
         Texture& setOffset(const glm::vec2 &offset);
         Texture& setOffset(float x, float y);
 
+        Texture& setScale(float scale);
+
         Texture& setColor(const glm::vec4 &color);
         Texture& setColor(float r, float g, float b, float a);
 
@@ -39,12 +41,14 @@ namespace chr
         GLenum frontFace = GL_CCW;
         glm::vec4 color;
         glm::vec2 anchor;
+
         glm::vec2 offset;
+        float scale = 1;
 
         math::Rectf bounds;
         bool hasBounds;
 
-        std::tuple<math::Rectf, float, float, float, float> computeTexturedQuad(const gl::Texture &texture, float x, float y) const;
+        std::tuple<math::Rectf, glm::vec2, glm::vec2> computeTexturedQuad(const gl::Texture &texture, float x, float y) const;
       };
     }
   }

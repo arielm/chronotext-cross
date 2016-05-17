@@ -114,6 +114,7 @@ void Sketch::draw()
   draw::Texture()
     .setColor(0, 0, 0, 0.667f)
     .setBounds(-200, -150, 300, 150)
+    .setScale(0.5f)
     .setOffset(0, clock()->getTime() * 20)
     .append(textureBatch, textureMatrix);
 
