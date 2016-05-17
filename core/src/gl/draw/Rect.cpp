@@ -1,5 +1,6 @@
 #include "gl/draw/Rect.h"
 
+using namespace std;
 using namespace chr::math;
 
 namespace chr
@@ -32,6 +33,24 @@ namespace chr
         return *this;
       }
 
+      Rect& Rect::setTextureOffset(const glm::vec2 &offset)
+      {
+        textureOffset = offset;
+        return *this;
+      }
+
+      Rect& Rect::setTextureOffset(float x, float y)
+      {
+        textureOffset = glm::vec2(x, y);
+        return *this;
+      }
+
+      Rect& Rect::setTextureScale(float scale)
+      {
+        textureScale = scale;
+        return *this;
+      }
+
       Rect& Rect::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -54,6 +73,22 @@ namespace chr
         else
         {
           matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(bounds), batch);
+        }
+      }
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix) const
+      {
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
+
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
         }
       }
 
@@ -83,6 +118,22 @@ namespace chr
         }
       }
 
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix) const
+      {
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
+
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
+        }
+      }
+
       // ---
 
       template <>
@@ -93,6 +144,30 @@ namespace chr
           .addVertex(bounds.x1, bounds.y2)
           .addVertex(bounds.x2, bounds.y2)
           .addVertex(bounds.x2, bounds.y1);
+
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
+
+        batch.incrementIndices(4);
+      }
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch) const
+      {
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
+
+        batch
+          .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y)
+          .addVertex(bounds.x1, bounds.y2, 0, coords1.x, coords2.y)
+          .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y)
+          .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y);
 
         if (frontFace == GL_CW)
         {
@@ -125,6 +200,42 @@ namespace chr
         }
 
         batch.incrementIndices(4);
+      }
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch) const
+      {
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
+
+        batch
+          .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y, color)
+          .addVertex(bounds.x1, bounds.y2, 0, coords1.x, coords2.y, color)
+          .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y, color)
+          .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y, color);
+
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
+
+        batch.incrementIndices(4);
+      }
+
+      // ---
+
+      tuple<glm::vec2, glm::vec2> Rect::getTextureCoords(const Texture &texture) const
+      {
+        auto scaledSize = texture.innerSize * textureScale;
+
+        glm::vec2 coords1 = (bounds.x1y1() - textureOffset) / scaledSize;
+        glm::vec2 coords2 = (bounds.x2y2() - textureOffset) / scaledSize;
+
+        return make_tuple(coords1, coords2);
       }
     }
   }

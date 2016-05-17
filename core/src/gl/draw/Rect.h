@@ -18,6 +18,11 @@ namespace chr
         Rect& setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight);
         Rect& setBounds(float left, float top, float width, float height);
 
+        Rect& setTextureOffset(const glm::vec2 &offset);
+        Rect& setTextureOffset(float x, float y);
+
+        Rect& setTextureScale(float scale);
+
         Rect& setColor(const glm::vec4 &color);
         Rect& setColor(float r, float g, float b, float a);
 
@@ -30,7 +35,11 @@ namespace chr
       protected:
         GLenum frontFace = GL_CCW;
         math::Rectf bounds;
-        glm::vec4 color;
+        glm::vec2 textureOffset;
+        float textureScale = 1;
+        glm::vec4 color = { 1, 1, 1, 1 };
+
+        std::tuple<glm::vec2, glm::vec2> getTextureCoords(const gl::Texture &texture) const;
       };
     }
   }

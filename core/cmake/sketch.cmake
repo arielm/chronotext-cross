@@ -80,7 +80,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/gl/Triangulator.cpp"
   "${CROSS_ROOT}/src/gl/draw/Circle.cpp"
   "${CROSS_ROOT}/src/gl/draw/Rect.cpp"
-  "${CROSS_ROOT}/src/gl/draw/Texture.cpp"
+  "${CROSS_ROOT}/src/gl/draw/Sprite.cpp"
   "${CROSS_ROOT}/src/gl/draw/Cube.cpp"
   "${CROSS_ROOT}/src/gl/shaders/ColorShader.cpp"
   "${CROSS_ROOT}/src/gl/shaders/LambertShader.cpp"
