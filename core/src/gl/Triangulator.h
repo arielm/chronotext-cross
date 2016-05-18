@@ -42,6 +42,10 @@ namespace chr
       Triangulator& setWindingRule(int windingRule);
       Triangulator& setFrontFace(GLenum mode);
 
+      Triangulator& setTextureOffset(const glm::vec2 &offset);
+      Triangulator& setTextureOffset(float x, float y);
+      Triangulator& setTextureScale(float scale);
+
       Triangulator& setColor(const glm::vec4 &color);
       Triangulator& setColor(float r, float g, float b, float a);
 
@@ -66,11 +70,17 @@ namespace chr
 
       int windingRule = TESS_WINDING_ODD;
       GLenum frontFace = GL_CCW;
-      glm::vec4 color;
+      glm::vec2 textureOffset;
+      float textureScale = 1;
+      glm::vec4 color = { 1, 1, 1, 1 };
 
       int contourCapture = CAPTURE_NONE;
       std::vector<std::vector<glm::vec2>> contours;
       float extrudedDistance = 0;
+
+      void captureContours();
+
+      glm::vec2 getTextureCoords(const gl::Texture &texture, const glm::vec2 &xy) const;
 
       template<int V = XYZ, typename... Args>
       void performStamp(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
@@ -79,33 +89,7 @@ namespace chr
 
         if (contourCapture)
         {
-          tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
-
-          auto vertices = (glm::vec2*)tessGetVertices(tess);
-          auto elements = tessGetElements(tess);
-          auto elementCount = tessGetElementCount(tess);
-
-          contours.clear();
-          contours.reserve(elementCount);
-
-          for (auto i = 0; i < elementCount; i++)
-          {
-            const auto base = elements[i << 1];
-            const auto count = elements[(i << 1) + 1];
-
-            contours.emplace_back();
-            contours.back().reserve(count);
-
-            for (int j = 0; j < count; j++)
-            {
-              contours.back().emplace_back(vertices[base + j]);
-            }
-
-            /*
-             * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
-             */
-            tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
-          }
+          captureContours();
         }
 
         // ---
@@ -120,6 +104,48 @@ namespace chr
         for (int i = 0; i < vertexCount; i++)
         {
           batch.addVertex(matrix.transformPoint(vertices[i]), std::forward<Args>(args)...);
+        }
+
+        // ---
+
+        auto indices = (int*)tessGetElements(tess);
+        auto indexCount =  tessGetElementCount(tess) * 3;
+
+        bool CW = (frontFace == GL_CW);
+
+        for (int i = 0; i < indexCount; i += 3)
+        {
+          batch.addIndices(
+            indices[i + (CW ? 2 : 0)],
+            indices[i + 1],
+            indices[i + (CW ? 0 : 2)]);
+        }
+
+        batch.incrementIndices(vertexCount);
+      }
+
+      template<int V = XYZ, typename... Args>
+      void performStampWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
+      {
+        extrudedDistance = 0;
+
+        if (contourCapture)
+        {
+          captureContours();
+        }
+
+        // ---
+
+        tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
+
+        // ---
+
+        auto vertices = (glm::vec2*)tessGetVertices(tess);
+        auto vertexCount = tessGetVertexCount(tess);
+
+        for (int i = 0; i < vertexCount; i++)
+        {
+          batch.addVertex(matrix.transformPoint(vertices[i]), getTextureCoords(batch.texture, vertices[i]), std::forward<Args>(args)...);
         }
 
         // ---
