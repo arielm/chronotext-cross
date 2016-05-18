@@ -239,14 +239,14 @@ namespace chr
     template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
     {
-      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      auto normal = matrix.transformNormal(0, 0, 1);
       performStamp(batch, matrix, normal);
     }
 
     template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
     {
-      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      auto normal = matrix.transformNormal(0, 0, 1);
       performStampWithNormalsAndTexture(batch, matrix, normal);
     }
 
@@ -265,7 +265,7 @@ namespace chr
     template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
     {
-      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      auto normal = matrix.transformNormal(0, 0, 1);
       performStamp(batch, matrix, normal, color);
     }
 
@@ -278,7 +278,7 @@ namespace chr
     template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
     {
-      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      auto normal = matrix.transformNormal(0, 0, 1);
       performStampWithNormalsAndTexture(batch, matrix, normal, color);
     }
 
