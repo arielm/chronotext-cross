@@ -1,7 +1,5 @@
 #include "gl/Triangulator.h"
 
-#include "Log.h"
-
 using namespace std;
 using namespace chr::math;
 
@@ -246,6 +244,13 @@ namespace chr
     }
 
     template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
+    {
+      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      performStampWithNormalsAndTexture(batch, matrix, normal);
+    }
+
+    template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix)
     {
       performStampWithTexture(batch, matrix);
@@ -270,6 +275,13 @@ namespace chr
       performStampWithTexture(batch, matrix, color);
     }
 
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
+    {
+      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      performStampWithNormalsAndTexture(batch, matrix, normal, color);
+    }
+
     // ---
 
     template <>
@@ -291,11 +303,38 @@ namespace chr
     }
 
     template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithTexture(batch, matrix, distance);
+      }
+    }
+
+    template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithNormalsAndTexture(batch, matrix, distance);
+      }
+    }
+
+    template <>
     void Triangulator::extrude(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
         performExtrude(batch, matrix, distance, color);
+      }
+    }
+
+    template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithTexture(batch, matrix, distance, color);
       }
     }
 
@@ -308,13 +347,19 @@ namespace chr
       }
     }
 
+    template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithNormalsAndTexture(batch, matrix, distance, color);
+      }
+    }
+
     // ---
 
     glm::vec2 Triangulator::getTextureCoords(const Texture &texture, const glm::vec2 &xy) const
     {
-      auto foo = (xy - textureOffset) / (texture.innerSize * textureScale);
-      LOGI << xy.x << "," << xy.y << " | " << foo.x << "," << foo.y << std::endl;
-
       return (xy - textureOffset) / (texture.innerSize * textureScale);
     }
   }
