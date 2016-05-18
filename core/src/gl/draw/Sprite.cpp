@@ -15,18 +15,6 @@ namespace chr
         return *this;
       }
 
-      Sprite& Sprite::setAnchor(const glm::vec2 &anchor)
-      {
-        this->anchor = anchor;
-        return *this;
-      }
-
-      Sprite& Sprite::setAnchor(float x, float y)
-      {
-        anchor = glm::vec2(x, y);
-        return *this;
-      }
-
       Sprite& Sprite::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -36,6 +24,18 @@ namespace chr
       Sprite& Sprite::setColor(float r, float g, float b, float a)
       {
         color = { r, g, b, a };
+        return *this;
+      }
+
+      Sprite& Sprite::setAnchor(const glm::vec2 &anchor)
+      {
+        this->anchor = anchor;
+        return *this;
+      }
+
+      Sprite& Sprite::setAnchor(float x, float y)
+      {
+        anchor = glm::vec2(x, y);
         return *this;
       }
 
@@ -133,10 +133,7 @@ namespace chr
         float height = texture.innerHeight;
         Rectf bounds(x - width * anchor.x, y - height * anchor.y, width, height);
 
-        glm::vec2 coords1 = texture.coords1;
-        glm::vec2  coords2 = texture.coords2;
-
-        return make_tuple(bounds, coords1, coords2);
+        return make_tuple(bounds, texture.coords1, texture.coords2);
       }
     }
   }

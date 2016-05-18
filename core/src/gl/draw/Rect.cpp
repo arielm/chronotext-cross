@@ -15,24 +15,6 @@ namespace chr
         return *this;
       }
 
-      Rect& Rect::setBounds(const math::Rectf &bounds)
-      {
-        this->bounds = bounds;
-        return *this;
-      }
-
-      Rect& Rect::setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight)
-      {
-        bounds = Rectf(upperLeft, lowerRight);
-        return *this;
-      }
-
-      Rect& Rect::setBounds(float left, float top, float width, float height)
-      {
-        bounds = Rectf(left, top, width, height);
-        return *this;
-      }
-
       Rect& Rect::setTextureOffset(const glm::vec2 &offset)
       {
         textureOffset = offset;
@@ -62,6 +44,26 @@ namespace chr
         color = { r, g, b, a };
         return *this;
       }
+
+      Rect& Rect::setBounds(const math::Rectf &bounds)
+      {
+        this->bounds = bounds;
+        return *this;
+      }
+
+      Rect& Rect::setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight)
+      {
+        bounds = Rectf(upperLeft, lowerRight);
+        return *this;
+      }
+
+      Rect& Rect::setBounds(float left, float top, float width, float height)
+      {
+        bounds = Rectf(left, top, width, height);
+        return *this;
+      }
+
+      // ---
 
       template <>
       void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const

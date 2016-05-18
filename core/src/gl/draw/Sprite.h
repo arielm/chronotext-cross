@@ -16,11 +16,11 @@ namespace chr
 
         Sprite& setFrontFace(GLenum mode);
 
-        Sprite& setAnchor(const glm::vec2 &anchor);
-        Sprite& setAnchor(float x, float y);
-
         Sprite& setColor(const glm::vec4 &color);
         Sprite& setColor(float r, float g, float b, float a);
+
+        Sprite& setAnchor(const glm::vec2 &anchor);
+        Sprite& setAnchor(float x, float y);
 
         template<int V = XYZ, typename I = GLushort>
         void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;
@@ -30,8 +30,8 @@ namespace chr
 
       protected:
         GLenum frontFace = GL_CCW;
-        glm::vec2 anchor;
         glm::vec4 color = { 1, 1, 1, 1 };
+        glm::vec2 anchor;
 
         std::tuple<math::Rectf, glm::vec2, glm::vec2> getTextureQuad(const gl::Texture &texture, float x, float y) const;
       };
