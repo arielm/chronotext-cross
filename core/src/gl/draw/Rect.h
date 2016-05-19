@@ -12,29 +12,33 @@ namespace chr
       class Rect
       {
       public:
+        Rect& setFrontFace(GLenum mode);
+
+        Rect& setTextureOffset(const glm::vec2 &offset);
+        Rect& setTextureOffset(float x, float y);
+        Rect& setTextureScale(float scale);
+
         Rect& setColor(const glm::vec4 &color);
         Rect& setColor(float r, float g, float b, float a);
 
-        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
-        void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const;
+        Rect& setBounds(const math::Rectf &bounds);
+        Rect& setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight);
+        Rect& setBounds(float left, float top, float width, float height);
 
-        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
-        inline void fill(IndexedVertexBatch<V,I> &batch, Matrix &matrix, const math::Rectf &rect) const
-        {
-          fill<Orientation>(batch, matrix, rect.x1, rect.y1, rect.x2, rect.y2);
-        };
+        template<int V = XYZ, typename I = GLushort>
+        void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix) const;
 
-        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
-        void fill(IndexedVertexBatch<V,I> &batch, float x1, float y1, float x2, float y2) const;
-
-        template<int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
-        inline void fill(IndexedVertexBatch<V,I> &batch, const math::Rectf &rect) const
-        {
-          fill<Orientation>(batch, rect.x1, rect.y1, rect.x2, rect.y2);
-        };
+        template<int V = XYZ, typename I = GLushort>
+        void append(IndexedVertexBatch<V,I> &batch) const;
 
       protected:
-        glm::vec4 color;
+        GLenum frontFace = GL_CCW;
+        glm::vec2 textureOffset;
+        float textureScale = 1;
+        glm::vec4 color = { 1, 1, 1, 1 };
+        math::Rectf bounds;
+
+        std::pair<glm::vec2, glm::vec2> getTextureCoords(const gl::Texture &texture) const;
       };
     }
   }

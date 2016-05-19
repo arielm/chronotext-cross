@@ -31,11 +31,11 @@ namespace chr
       glm::vec4 color;
       bool hasColor = false;
 
-      glm::mat3 matrices3[1];
-      bool hasMatrix3[1] = { false };
+      glm::mat3 matrices3[1]; // XXX
+      bool hasMatrix3[1] = { false }; // XXX
 
-      glm::mat4 matrices4[3];
-      bool hasMatrix4[3] = { false, false, false };
+      glm::mat4 matrices4[3]; // XXX
+      bool hasMatrix4[3] = { false, false, false }; // XXX
 
       Texture texture;
       bool hasTexture = false;
@@ -101,6 +101,12 @@ namespace chr
         return *this;
       }
 
+      VertexBatch& clearShader()
+      {
+        hasShader = false;
+        return *this;
+      }
+
       VertexBatch& setShaderColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -112,6 +118,12 @@ namespace chr
       {
         color = { r, g, b, a };
         hasColor = true;
+        return *this;
+      }
+
+      VertexBatch& clearShaderColor()
+      {
+        hasColor = false;
         return *this;
       }
 
@@ -139,10 +151,31 @@ namespace chr
         return *this;
       }
 
+      template<int T>
+      VertexBatch& clearShaderMatrix()
+      {
+        if ((T < 3) && hasMatrix4[T]) // XXX
+        {
+          hasMatrix4[T] = false;
+        }
+        else if ((T < 1) && hasMatrix3[T]) // XXX
+        {
+          hasMatrix3[T] = false;
+        }
+
+        return *this;
+      }
+
       VertexBatch& setTexture(const Texture &texture)
       {
         this->texture = texture;
         hasTexture = true;
+        return *this;
+      }
+
+      VertexBatch& clearTexture()
+      {
+        hasTexture = false;
         return *this;
       }
 
@@ -256,6 +289,7 @@ namespace chr
       inline IndexedVertexBatch& addIndex(I offset)
       {
         indexBuffer->storage.emplace_back(index + offset);
+        return *this;
       }
 
       template<typename... Args>

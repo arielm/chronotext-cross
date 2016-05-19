@@ -13,20 +13,25 @@ using namespace math;
 
 Sketch::Sketch()
 :
-fillBatch(GL_TRIANGLES),
 strokeBatch(GL_LINES),
 normalBatch(GL_LINES)
 {}
 
 void Sketch::setup()
 {
+  initTextures();
+
+  // ---
+
   state
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
-  fillBatch.setShader(lambertShader);
   strokeBatch.setShader(colorShader);
   normalBatch.setShader(colorShader);
+
+  fillBatch
+    .setTexture(texture);
 
   // ---
 
@@ -38,19 +43,20 @@ void Sketch::setup()
   vector<vector<glm::vec2>> polygons1;
   auto rect = shape::Rect().setSize(100, 100);
   polygons1
-    .emplace_back(rect.get());
+    .emplace_back(rect.append());
   polygons1
     .emplace_back(
       affine
         .scale(0.75f)
         .rotate(15 * D2R)
-        .transformPoints(rect.get()));
+        .transformPoints(rect.append()));
 
   Triangulator triangulator1;
   triangulator1
     .setContourCapture(Triangulator::CAPTURE_ALL)
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
     .add(polygons1)
+    .setTextureScale(0.125f)
     .extrude(fillBatch, matrix, -150);
 
   triangulator1.exportContours(strokeBatch, matrix);
@@ -71,18 +77,19 @@ void Sketch::setup()
   polygons2
     .emplace_back(
       affine
-        .transformPoints(triangle.get()));
+        .transformPoints(triangle.append()));
   polygons2
     .emplace_back(
       affine
-        .scale(0.75f)
-        .transformPoints(triangle.get()));
+        .scale(0.5f)
+        .transformPoints(triangle.append()));
 
   Triangulator triangulator2;
   triangulator2
     .setFrontFace(GL_CW)
     .setColor(0.5f, 1.0f, 0.0f, 1.0f)
     .add(polygons2)
+    .setTextureScale(0.125f)
     .stamp(fillBatch, matrix);
 
   //
@@ -98,17 +105,18 @@ void Sketch::setup()
   polygons3
     .emplace_back(
       affine
-        .transformPoints(circle.get()));
+        .transformPoints(circle.append()));
   polygons3
     .emplace_back(
       affine
         .scale(0.8f)
-        .transformPoints(circle.get()));
+        .transformPoints(circle.append()));
 
   Triangulator triangulator3;
   triangulator3
     .setColor(1.0f, 0.0f, 0.0f, 1.0f)
     .add(polygons3)
+    .setTextureScale(0.125f)
     .extrude(fillBatch, matrix, -75);
 
   // ---
@@ -156,12 +164,17 @@ void Sketch::draw()
   state.apply();
 
   fillBatch
+    .setShader(lambertShader)
     .setShaderMatrix<MVP>(mvpMatrix)
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .flush();
 
   glDepthMask(GL_FALSE);
   glDisable(GL_POLYGON_OFFSET_FILL);
+
+  fillBatch
+    .setShader(textureAlphaShader)
+    .flush();
 
   strokeBatch
     .setShaderMatrix<MVP>(mvpMatrix)
@@ -170,4 +183,12 @@ void Sketch::draw()
   normalBatch
     .setShaderMatrix<MVP>(mvpMatrix)
     .flush();
+}
+
+void Sketch::initTextures()
+{
+  texture = Texture(Texture::Request("lys_32.png")
+    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
+    .setMipmap(true).setWrap(GL_REPEAT, GL_REPEAT)
+    .setAnisotropy(true));
 }

@@ -1,5 +1,6 @@
 #include "gl/draw/Rect.h"
 
+using namespace std;
 using namespace chr::math;
 
 namespace chr
@@ -8,6 +9,30 @@ namespace chr
   {
     namespace draw
     {
+      Rect& Rect::setFrontFace(GLenum mode)
+      {
+        frontFace = mode;
+        return *this;
+      }
+
+      Rect& Rect::setTextureOffset(const glm::vec2 &offset)
+      {
+        textureOffset = offset;
+        return *this;
+      }
+
+      Rect& Rect::setTextureOffset(float x, float y)
+      {
+        textureOffset = glm::vec2(x, y);
+        return *this;
+      }
+
+      Rect& Rect::setTextureScale(float scale)
+      {
+        textureScale = scale;
+        return *this;
+      }
+
       Rect& Rect::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -20,98 +45,199 @@ namespace chr
         return *this;
       }
 
-      template <>
-      void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
+      Rect& Rect::setBounds(const math::Rectf &bounds)
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(x1, y1, x2, y2), batch);
+        this->bounds = bounds;
+        return *this;
       }
 
-      template <>
-      void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
+      Rect& Rect::setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight)
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ>(x1, y1, x2, y2), batch);
+        bounds = Rectf(upperLeft, lowerRight);
+        return *this;
       }
 
-      template <>
-      void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
+      Rect& Rect::setBounds(float left, float top, float width, float height)
       {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.RGBA>(x1, y1, x2, y2, color), batch);
-      }
-
-      template <>
-      void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
-      {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(x1, y1, x2, y2, color), batch);
-      }
-
-      template <>
-      void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
-      {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(x1, y1, x2, y2, glm::vec3(0, 0, +1), color), batch);
-      }
-
-      template <>
-      void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix, float x1, float y1, float x2, float y2) const
-      {
-        matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(x1, y1, x2, y2, glm::vec3(0, 0, -1), color), batch);
+        bounds = Rectf(left, top, width, height);
+        return *this;
       }
 
       // ---
 
       template <>
-      void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ, GLushort> &batch, float x1, float y1, float x2, float y2) const
+      void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
       {
-        batch
-          .addVertex(x1, y1)
-          .addVertex(x1, y2)
-          .addVertex(x2, y2)
-          .addVertex(x2, y1);
-
-        batch
-          .addIndices(0, 1, 2, 2, 3, 0)
-          .incrementIndices(4);
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ>(bounds), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(bounds), batch);
+        }
       }
 
       template <>
-      void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ, GLushort> &batch, float x1, float y1, float x2, float y2) const
+      void Rect::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix) const
       {
-        batch
-          .addVertex(x1, y1)
-          .addVertex(x1, y2)
-          .addVertex(x2, y2)
-          .addVertex(x2, y1);
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
 
-        batch
-          .addIndices(0, 3, 2, 2, 1, 0)
-          .incrementIndices(4);
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
+        }
       }
 
       template <>
-      void Rect::fill<GL_CCW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, float x1, float y1, float x2, float y2) const
+      void Rect::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        batch
-          .addVertex(x1, y1, 0, color)
-          .addVertex(x1, y2, 0, color)
-          .addVertex(x2, y2, 0, color)
-          .addVertex(x2, y1, 0, color);
-
-        batch
-          .addIndices(0, 1, 2, 2, 3, 0)
-          .incrementIndices(4);
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(bounds, color), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.RGBA>(bounds, color), batch);
+        }
       }
 
       template <>
-      void Rect::fill<GL_CW>(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, float x1, float y1, float x2, float y2) const
+      void Rect::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
+      {
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
+        }
+      }
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix) const
+      {
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
+
+        if (frontFace == GL_CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
+        }
+      }
+
+      // ---
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch) const
       {
         batch
-          .addVertex(x1, y1, 0, color)
-          .addVertex(x1, y2, 0, color)
-          .addVertex(x2, y2, 0, color)
-          .addVertex(x2, y1, 0, color);
+          .addVertex(bounds.x1, bounds.y1)
+          .addVertex(bounds.x1, bounds.y2)
+          .addVertex(bounds.x2, bounds.y2)
+          .addVertex(bounds.x2, bounds.y1);
+
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
+
+        batch.incrementIndices(4);
+      }
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch) const
+      {
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
 
         batch
-          .addIndices(0, 3, 2, 2, 1, 0)
-          .incrementIndices(4);
+          .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y)
+          .addVertex(bounds.x1, bounds.y2, 0, coords1.x, coords2.y)
+          .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y)
+          .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y);
+
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
+
+        batch.incrementIndices(4);
+      }
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch) const
+      {
+        batch
+          .addVertex(bounds.x1, bounds.y1, 0, color)
+          .addVertex(bounds.x1, bounds.y2, 0, color)
+          .addVertex(bounds.x2, bounds.y2, 0, color)
+          .addVertex(bounds.x2, bounds.y1, 0, color);
+
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
+
+        batch.incrementIndices(4);
+      }
+
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch) const
+      {
+        glm::vec2 coords1, coords2;
+        tie(coords1, coords2) = getTextureCoords(batch.texture);
+
+        batch
+          .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y, color)
+          .addVertex(bounds.x1, bounds.y2, 0, coords1.x, coords2.y, color)
+          .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y, color)
+          .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y, color);
+
+        if (frontFace == GL_CW)
+        {
+          batch.addIndices(0, 3, 2, 2, 1, 0);
+        }
+        else
+        {
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+        }
+
+        batch.incrementIndices(4);
+      }
+
+      // ---
+
+      pair<glm::vec2, glm::vec2> Rect::getTextureCoords(const Texture &texture) const
+      {
+        auto scaledSize = texture.innerSize * textureScale;
+
+        glm::vec2 coords1 = (bounds.x1y1() - textureOffset) / scaledSize;
+        glm::vec2 coords2 = (bounds.x2y2() - textureOffset) / scaledSize;
+
+        return make_pair(coords1, coords2);
       }
     }
   }

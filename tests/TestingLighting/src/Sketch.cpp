@@ -1,8 +1,7 @@
 #include "Sketch.h"
 
-#include "gl/draw/Rect.h"
+#include "gl/draw/Cube.h"
 #include "gl/Triangulator.h"
-#include "math/MatrixAffine.h"
 #include "shape/Circle.h"
 
 using namespace std;
@@ -10,9 +9,9 @@ using namespace chr;
 using namespace gl;
 using namespace math;
 
-static bool showNormals = false;
-static bool showTube = true;
-static bool showCube = false;
+static bool showNormals = true;
+static bool showTube = false;
+static bool showCube = true;
 
 Sketch::Sketch()
 :
@@ -36,8 +35,8 @@ void Sketch::setup()
   if (showTube)
   {
     vector<vector<glm::vec2>> polygons;
-    polygons.emplace_back(shape::Circle().setRadius(50).get());
-    polygons.emplace_back(shape::Circle().setRadius(40).get());
+    polygons.emplace_back(shape::Circle().setRadius(50).append());
+    polygons.emplace_back(shape::Circle().setRadius(40).append());
 
     matrix.translate(0, 0, 50);
 
@@ -49,48 +48,16 @@ void Sketch::setup()
   }
   else if (showCube)
   {
-    matrix
-      .translate(0, 0, 50)
-      .translate(-50, -50, 0)
-      .push();
-    draw::Rect()
-      .setColor(0.75f, 0.75f, 0.75f, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
-
-    matrix
-      .translate(100, 0, 0)
-      .rotateY(90 * D2R);
-    draw::Rect()
-      .setColor(1, 0.5f, 0, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
-
-    matrix
-      .translate(100, 0, 0)
-      .rotateY(90 * D2R);
-    draw::Rect()
-      .setColor(1, 0, 0, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
-
-    matrix
-      .translate(100, 0, 0)
-      .rotateY(90 * D2R);
-    draw::Rect()
-      .setColor(1, 1, 0, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
-
-    matrix
-      .translate(0, 100, 0)
-      .rotateX(-90 * D2R);
-    draw::Rect()
-      .setColor(0.5f, 1.0f, 0.5f, 1)
-      .fill(fillBatch, matrix, Rectf(0, 0, 100, 100));
-
-    matrix
-      .pop()
-      .rotateX(-90 * D2R);
-    draw::Rect()
-      .setColor(0.25f, 0.25f, 0.25f, 1)
-      .fill<GL_CW>(fillBatch, matrix, Rectf(0, 0, 100, 100));
+    draw::Cube()
+      .setSize(100)
+      .setColors(
+        glm::vec4(0.75f, 0.75f, 0.75f, 1),
+        glm::vec4(1, 0, 0, 1),
+        glm::vec4(0.5f, 1.0f, 0.5f, 1),
+        glm::vec4(0.25f, 0.25f, 0.25f, 1),
+        glm::vec4(1, 0.5f, 0, 1),
+        glm::vec4(1, 1, 0, 1))
+      .append(fillBatch, matrix);
   }
 
   // ---

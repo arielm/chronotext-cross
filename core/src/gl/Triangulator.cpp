@@ -48,6 +48,24 @@ namespace chr
       return *this;
     }
 
+    Triangulator& Triangulator::setTextureOffset(const glm::vec2 &offset)
+    {
+      textureOffset = offset;
+      return *this;
+    }
+
+    Triangulator& Triangulator::setTextureOffset(float x, float y)
+    {
+      textureOffset = glm::vec2(x, y);
+      return *this;
+    }
+
+    Triangulator& Triangulator::setTextureScale(float scale)
+    {
+      textureScale = scale;
+      return *this;
+    }
+
     Triangulator& Triangulator::setColor(const glm::vec4 &color)
     {
       this->color = color;
@@ -59,6 +77,8 @@ namespace chr
       color = { r, g, b, a };
       return *this;
     }
+
+    // ---
 
     Triangulator& Triangulator::setContourCapture(int contourCapture)
     {
@@ -133,6 +153,39 @@ namespace chr
       }
     }
 
+    void Triangulator::captureContours()
+    {
+      tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
+
+      auto vertices = (glm::vec2*)tessGetVertices(tess);
+      auto elements = tessGetElements(tess);
+      auto elementCount = tessGetElementCount(tess);
+
+      contours.clear();
+      contours.reserve(elementCount);
+
+      for (auto i = 0; i < elementCount; i++)
+      {
+        const auto base = elements[i << 1];
+        const auto count = elements[(i << 1) + 1];
+
+        contours.emplace_back();
+        contours.back().reserve(count);
+
+        for (int j = 0; j < count; j++)
+        {
+          contours.back().emplace_back(vertices[base + j]);
+        }
+
+        /*
+         * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
+         */
+        tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
+      }
+    }
+
+    // ---
+
     template <>
     Triangulator& Triangulator::add<GL_CCW>(const Rectf &rect)
     {
@@ -175,6 +228,8 @@ namespace chr
       return *this;
     }
 
+    // ---
+
     template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
     {
@@ -184,8 +239,21 @@ namespace chr
     template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
     {
-      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      auto normal = matrix.transformNormal(0, 0, 1);
       performStamp(batch, matrix, normal);
+    }
+
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
+    {
+      auto normal = matrix.transformNormal(0, 0, 1);
+      performStampWithNormalsAndTexture(batch, matrix, normal);
+    }
+
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix)
+    {
+      performStampWithTexture(batch, matrix);
     }
 
     template <>
@@ -197,9 +265,24 @@ namespace chr
     template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
     {
-      auto normal = matrix.transformNormal(0, 0, (frontFace == GL_CW) ? -1 : +1);
+      auto normal = matrix.transformNormal(0, 0, 1);
       performStamp(batch, matrix, normal, color);
     }
+
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix)
+    {
+      performStampWithTexture(batch, matrix, color);
+    }
+
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
+    {
+      auto normal = matrix.transformNormal(0, 0, 1);
+      performStampWithNormalsAndTexture(batch, matrix, normal, color);
+    }
+
+    // ---
 
     template <>
     void Triangulator::extrude(IndexedVertexBatch<XYZ> &batch, Matrix &matrix, float distance)
@@ -220,11 +303,38 @@ namespace chr
     }
 
     template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithTexture(batch, matrix, distance);
+      }
+    }
+
+    template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithNormalsAndTexture(batch, matrix, distance);
+      }
+    }
+
+    template <>
     void Triangulator::extrude(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
         performExtrude(batch, matrix, distance, color);
+      }
+    }
+
+    template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithTexture(batch, matrix, distance, color);
       }
     }
 
@@ -235,6 +345,22 @@ namespace chr
       {
         performExtrudeWithNormals(batch, matrix, distance, color);
       }
+    }
+
+    template <>
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix, float distance)
+    {
+      if (distance != 0)
+      {
+        performExtrudeWithNormalsAndTexture(batch, matrix, distance, color);
+      }
+    }
+
+    // ---
+
+    glm::vec2 Triangulator::getTextureCoords(const Texture &texture, const glm::vec2 &xy) const
+    {
+      return (xy - textureOffset) / (texture.innerSize * textureScale);
     }
   }
 }

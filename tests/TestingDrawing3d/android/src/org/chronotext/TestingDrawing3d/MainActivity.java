@@ -1,4 +1,4 @@
-package org.chronotext.TestingLighting;
+package org.chronotext.TestingDrawing3d;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingLighting");
+    System.loadLibrary("TestingDrawing3d");
   }
 
   CrossBridge bridge;

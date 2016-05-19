@@ -23,7 +23,9 @@ namespace chr
         return *this;
       }
 
-      std::vector<glm::vec2> get() const
+      inline std::vector<glm::vec2> get(const glm::vec2 &xy) const { return append(xy.x, xy.y); }
+
+      std::vector<glm::vec2> append(float x = 0, float y = 0) const
       {
         float w2 = width * 0.5f;
         float h2 = height * 0.5f;
@@ -31,10 +33,10 @@ namespace chr
         std::vector<glm::vec2> output;
         output.reserve(4);
 
-        output.emplace_back(-w2, -h2);
-        output.emplace_back(-w2, +h2);
-        output.emplace_back(+w2, +h2);
-        output.emplace_back(+w2, -h2);
+        output.emplace_back(x - w2, y - h2);
+        output.emplace_back(x - w2, y + h2);
+        output.emplace_back(x + w2, y + h2);
+        output.emplace_back(x + w2, y - h2);
 
         return output;
       }

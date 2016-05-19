@@ -1,5 +1,5 @@
 
-set(CTEST_PROJECT_NAME TestingDrawing)
+set(CTEST_PROJECT_NAME TestingDrawing2d)
 set(CTEST_CONFIGURATION_TYPE Release)
 
 if (PLATFORM MATCHES osx)

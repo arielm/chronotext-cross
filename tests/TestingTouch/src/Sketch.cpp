@@ -1,7 +1,6 @@
-
 #include "Sketch.h"
-#include "gl/Matrix.h"
-#include "gl/draw/Texture.h"
+
+#include "gl/draw/Sprite.h"
 
 using namespace std;
 using namespace chr;
@@ -65,12 +64,18 @@ void Sketch::updateTouch(int index, float x, float y)
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
   Matrix matrix;
-  matrix.translate(position).scale(radius / DOT_RADIUS_PIXELS);
+  matrix
+    .translate(position)
+    .scale(radius / DOT_RADIUS_PIXELS);
 
-  draw::Texture().fillFromCenter(textureBatch, matrix);
+  draw::Sprite()
+    .setAnchor(0.5f, 0.5f)
+    .append(textureBatch, matrix);
 }
 
 void Sketch::initTextures()
 {
-  texture = Texture(Texture::Request("dot_112.png").setFlags(image::FLAGS_TRANSLUCENT));
+  texture = Texture(Texture::Request("dot_112.png")
+    .setFlags(image::FLAGS_TRANSLUCENT)
+    .setMipmap(true));
 }
