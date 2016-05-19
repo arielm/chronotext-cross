@@ -34,9 +34,21 @@ set(CGAL_INCLUDE_DIRS
   "${CGAL_ROOT}/src/Hash_map/include"
   "${CGAL_ROOT}/src/Union_find/include"
   "${CGAL_ROOT}/src/Polygon/include"
+  "${CGAL_ROOT}/src/Polyhedron/include"
+  "${CGAL_ROOT}/src/Polyhedron_IO/include"
+  "${CGAL_ROOT}/src/Nef_S2/include"
+  "${CGAL_ROOT}/src/Nef_2/include"
+  "${CGAL_ROOT}/src/Nef_3/include"
+  "${CGAL_ROOT}/src/Modifier/include"
+  "${CGAL_ROOT}/src/Box_intersection_d/include"
+  "${CGAL_ROOT}/src/Triangulation_2/include"
+  "${CGAL_ROOT}/src/Triangulation_3/include"
+  "${CGAL_ROOT}/src/TDS_2/include"
+  "${CGAL_ROOT}/src/Spatial_sorting/include"
+  "${CGAL_ROOT}/src/Property_map/include"
 )
 set(CGAL_LIBRARY "${CGAL_ROOT}/lib/libCGAL.a")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCGAL_HAS_NO_THREADS")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCGAL_HAS_NO_THREADS -DCGAL_NO_DEPRECATED_CODE")
 
 set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}

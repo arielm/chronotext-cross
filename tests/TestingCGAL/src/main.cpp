@@ -1,62 +1,56 @@
-/*! \file simple_join_intersect.cpp
- * Computing the union and the intersection of two simple polygons.
- */
-
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-#include <CGAL/Boolean_set_operations_2.h>
-#include <list>
-
-typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
-typedef Kernel::Point_2                                   Point_2;
-typedef CGAL::Polygon_2<Kernel>                           Polygon_2;
-typedef CGAL::Polygon_with_holes_2<Kernel>                Polygon_with_holes_2;
-typedef std::list<Polygon_with_holes_2>                   Pwh_list_2;
-
-#include "print_utils.h"
+#include "MeshCreator.h"
 
 int main ()
 {
-  // Construct the two input polygons.
-  Polygon_2 P;
-  P.push_back (Point_2 (0, 0));
-  P.push_back (Point_2 (5, 0));
-  P.push_back (Point_2 (3.5, 1.5));
-  P.push_back (Point_2 (2.5, 0.5));
-  P.push_back (Point_2 (1.5, 1.5));
+  Polyhedron P1(8, 24, 12);
+  Polyhedron P2(8, 24, 12);
 
-  std::cout << "P = "; print_polygon (P);
+  std::vector<double> vertices1 = { 0, 0, 0,
+                                    2, 0, 0,
+                                    0, 2, 0,
+                                    2, 2, 0,
+                                    0, 0, 2,
+                                    2, 0, 2,
+                                    0, 2, 2,
+                                    2, 2, 2 };
 
-  Polygon_2 Q;
-  Q.push_back (Point_2 (0, 2));
-  Q.push_back (Point_2 (1.5, 0.5));
-  Q.push_back (Point_2 (2.5, 1.5));
-  Q.push_back (Point_2 (3.5, 0.5));
-  Q.push_back (Point_2 (5, 2));
+  std::vector<double> vertices2 = { 1, 1, 1,
+                                    3, 1, 1,
+                                    1, 3, 1,
+                                    3, 3, 1,
+                                    1, 1, 3,
+                                    3, 1, 3,
+                                    1, 3, 3,
+                                    3, 3, 3 };
 
-  std::cout << "Q = "; print_polygon (Q);
+  std::vector<int> triangles = { 0, 1, 2,
+                                 1, 3, 2,
+                                 0, 2, 4,
+                                 4, 2, 5,
+                                 4, 5, 7,
+                                 5, 6, 7,
+                                 3, 1, 7,
+                                 7, 6, 3,
+                                 2, 3, 6,
+                                 6, 5, 2,
+                                 1, 0, 7,
+                                 0, 4, 7 };
 
-  // Compute the union of P and Q.
-  Polygon_with_holes_2 unionR;
+  MeshCreator<HalfedgeDS> meshCreator1(vertices1, triangles, 24);
+  MeshCreator<HalfedgeDS> meshCreator2(vertices2, triangles, 24);
+  P1.delegate(meshCreator1);
+  P2.delegate(meshCreator2);
 
-  if (CGAL::join (P, Q, unionR)) {
-    std::cout << "The union: ";
-    print_polygon_with_holes (unionR);
-  } else
-    std::cout << "P and Q are disjoint and their union is trivial."
-      << std::endl;
-  std::cout << std::endl;
+  bool isClosed    = P1.is_closed()        && (P2.is_closed());
+  bool isValid     = P1.is_valid()         && (P2.is_valid());
+  bool isTriangles = P1.is_pure_triangle() && (P2.is_pure_triangle());
 
-  // Compute the intersection of P and Q.
-  Pwh_list_2                  intR;
-  Pwh_list_2::const_iterator  it;
+  Nef_polyhedron nef1(P1);
+  Nef_polyhedron nef2(P2);
 
-  CGAL::intersection (P, Q, std::back_inserter(intR));
-
-  std::cout << "The intersection:" << std::endl;
-  for (it = intR.begin(); it != intR.end(); ++it) {
-    std::cout << "--> ";
-    print_polygon_with_holes (*it);
-  }
+  Nef_polyhedron nef3 = nef1 + nef2;
+  Polyhedron result;
+  nef3.convert_to_Polyhedron(result);
 
   return 0;
 }
