@@ -1,10 +1,11 @@
-#include "MeshCreator.h"
+#include "PolyhedronBuilder.h"
+
+#include "Log.h"
+
+using namespace std;
 
 int main ()
 {
-  Polyhedron P1(8, 24, 12);
-  Polyhedron P2(8, 24, 12);
-
   std::vector<double> vertices1 = { 0, 0, 0,
                                     2, 0, 0,
                                     0, 2, 0,
@@ -36,14 +37,16 @@ int main ()
                                  1, 0, 7,
                                  0, 4, 7 };
 
-  MeshCreator<HalfedgeDS> meshCreator1(vertices1, triangles, 24);
-  MeshCreator<HalfedgeDS> meshCreator2(vertices2, triangles, 24);
-  P1.delegate(meshCreator1);
-  P2.delegate(meshCreator2);
+  Polyhedron P1;
+  PolyhedronBuilder<HalfedgeDS> builder1(vertices1, triangles);
+  P1.delegate(builder1);
 
-  bool isClosed    = P1.is_closed()        && (P2.is_closed());
-  bool isValid     = P1.is_valid()         && (P2.is_valid());
-  bool isTriangles = P1.is_pure_triangle() && (P2.is_pure_triangle());
+  Polyhedron P2;
+  PolyhedronBuilder<HalfedgeDS> builder2(vertices2, triangles);
+  P2.delegate(builder2);
+
+  LOGI << "isClosed: " << P1.is_closed() << " | isValid: " << P1.is_valid() << " | isPureTriangle: " << P1.is_pure_triangle() << endl;
+  LOGI << "isClosed: " << P2.is_closed() << " | isValid: " << P2.is_valid() << " | isPureTriangle: " << P2.is_pure_triangle() << endl;
 
   Nef_polyhedron nef1(P1);
   Nef_polyhedron nef2(P2);
