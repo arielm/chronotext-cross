@@ -15,7 +15,8 @@ static bool showCube = true;
 
 Sketch::Sketch()
 {
-  std::vector<double> vertices1 = { 0, 0, 0,
+  /*
+  std::vector<float> vertices1 = { 0, 0, 0,
                                     2, 0, 0,
                                     0, 2, 0,
                                     2, 2, 0,
@@ -24,7 +25,7 @@ Sketch::Sketch()
                                     0, 2, 2,
                                     2, 2, 2 };
 
-  std::vector<double> vertices2 = { 1, 1, 1,
+  std::vector<float> vertices2 = { 1, 1, 1,
                                     3, 1, 1,
                                     1, 3, 1,
                                     3, 3, 1,
@@ -33,7 +34,7 @@ Sketch::Sketch()
                                     1, 3, 3,
                                     3, 3, 3 };
 
-  std::vector<int> triangles = { 0, 1, 2,
+  std::vector<GLushort> triangles = { 0, 1, 2,
                                  1, 3, 2,
                                  0, 2, 4,
                                  4, 2, 5,
@@ -63,19 +64,20 @@ Sketch::Sketch()
   Nef_polyhedron nef3 = nef1 + nef2;
   Polyhedron result;
   nef3.convert_to_Polyhedron(result);
+  */
 }
 
 void Sketch::setup()
 {
-  state.setShader(lambertShader);
+  state.setShader(colorShader);
 
   // ---
 
   Matrix matrix;
 
   draw::Cube()
-    .setSize(100)
     .setFrontFace(GL_CW)
+    .setSize(100)
     .append(batch1, matrix);
 
   matrix
@@ -85,8 +87,8 @@ void Sketch::setup()
   if (showCube)
   {
     draw::Cube()
-      .setSize(75)
       .setFrontFace(GL_CW)
+      .setSize(75)
       .append(batch2, matrix);
   }
   else if (showTube)
@@ -114,6 +116,26 @@ void Sketch::setup()
   {
     assert(false);
   }
+
+  // ---
+
+  Polyhedron P1;
+  PolyhedronBuilder<HalfedgeDS> builder1(batch1.vertexBuffer->storage, batch1.indexBuffer->storage);
+  P1.delegate(builder1);
+
+  Polyhedron P2;
+  PolyhedronBuilder<HalfedgeDS> builder2(batch2.vertexBuffer->storage, batch2.indexBuffer->storage);
+  P2.delegate(builder2);
+
+  LOGI << "isClosed: " << P1.is_closed() << " | isValid: " << P1.is_valid() << " | isPureTriangle: " << P1.is_pure_triangle() << endl;
+  LOGI << "isClosed: " << P2.is_closed() << " | isValid: " << P2.is_valid() << " | isPureTriangle: " << P2.is_pure_triangle() << endl;
+
+  Nef_polyhedron nef1(P1);
+  Nef_polyhedron nef2(P2);
+
+  Nef_polyhedron nef3 = nef1 + nef2;
+  Polyhedron result;
+  nef3.convert_to_Polyhedron(result);
 
   // ---
 
@@ -147,7 +169,6 @@ void Sketch::draw()
 
   state
     .setShaderMatrix<MVP>(mvpMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();
 
   batch1

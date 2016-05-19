@@ -1,5 +1,8 @@
 #pragma once
 
+#include "gl.h"
+#include "gl/Vertex.h"
+
 #include <CGAL/Polyhedron_3.h>
 #include <CGAL/Nef_polyhedron_3.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
@@ -18,37 +21,38 @@ class PolyhedronBuilder : public CGAL::Modifier_base<HDS>
   typedef typename HDS::Vertex Vertex;
   typedef typename Vertex::Point Point;
 
-  std::vector<double> &coords;
-  std::vector<int> &tris;
+  std::vector<chr::gl::Vertex<chr::gl::XYZ>> &vertices;
+  std::vector<GLushort> &indices;
 
 public:
-  PolyhedronBuilder(std::vector<double> &_coords, std::vector<int> &_tris)
+  PolyhedronBuilder(std::vector<chr::gl::Vertex<chr::gl::XYZ>> &vertices, std::vector<GLushort> &indices)
   :
-  coords(_coords),
-  tris(_tris)
+  vertices(vertices),
+  indices(indices)
   {}
 
   void operator()(HDS &hds)
   {
     // create a cgal incremental builder
     CGAL::Polyhedron_incremental_builder_3<HDS> B(hds, true);
-    B.begin_surface(coords.size() / 3, tris.size() / 3);
+    B.begin_surface(vertices.size(), indices.size() / 3);
 
     // add the polyhedron vertices
-    for(int i=0; i< coords.size(); i += 3)
+    for (const auto &vertex : vertices)
     {
-      B.add_vertex(Point(coords[i], coords[i + 1], coords[i + 2]));
+      B.add_vertex(Point(vertex.x, vertex.y, vertex.z));
     }
 
     // add the polyhedron triangles
-    for( int i=0; i<(int)tris.size(); i+=3 )
+    for (int i = 0; i < indices.size(); i += 3)
     {
       B.begin_facet();
-      B.add_vertex_to_facet( tris[i] );
-      B.add_vertex_to_facet( tris[i + 1] );
-      B.add_vertex_to_facet( tris[i + 2] );
+      B.add_vertex_to_facet(indices[i]);
+      B.add_vertex_to_facet(indices[i + 1]);
+      B.add_vertex_to_facet(indices[i + 2]);
       B.end_facet();
     }
+    LOGI << std::endl;
 
     // finish up the surface
     B.end_surface();
