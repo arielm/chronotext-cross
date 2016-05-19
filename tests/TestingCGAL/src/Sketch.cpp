@@ -5,6 +5,7 @@
 #include "shape/Circle.h"
 
 #include "PolyhedronBuilder.h"
+#include "BatchPolyhedron.h"
 
 using namespace std;
 using namespace chr;
@@ -14,6 +15,8 @@ static bool showTube = false;
 static bool showCube = true;
 
 Sketch::Sketch()
+:
+batch3(GL_TRIANGLES)
 {}
 
 void Sketch::setup()
@@ -86,6 +89,8 @@ void Sketch::setup()
   Polyhedron result;
   nef3.convert_to_Polyhedron(result);
 
+  result.append(batch3);
+
   // ---
 
   glDepthMask(GL_TRUE);
@@ -120,11 +125,30 @@ void Sketch::draw()
     .setShaderMatrix<MVP>(mvpMatrix)
     .apply();
 
-  batch1
-    .setShaderColor(0.25f, 0.25f, 0.25f, 1)
-    .flush();
+  if (pressed)
+  {
+    batch1
+      .setShaderColor(0.25f, 0.25f, 0.25f, 1)
+      .flush();
 
-  batch2
-    .setShaderColor(0.5f, 0, 0, 1)
-    .flush();
+    batch2
+      .setShaderColor(0.5f, 0, 0, 1)
+      .flush();
+  }
+  else
+  {
+    batch3
+      .setShaderColor(1, 0.75f, 0, 1)
+      .flush();
+  }
+}
+
+void Sketch::addTouch(int index, float x, float y)
+{
+  pressed = true;
+}
+
+void Sketch::removeTouch(int index, float x, float y)
+{
+  pressed = false;
 }

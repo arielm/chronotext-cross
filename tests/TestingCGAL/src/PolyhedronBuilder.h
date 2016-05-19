@@ -1,19 +1,8 @@
 #pragma once
 
+#include "cgal.h"
 #include "gl.h"
 #include "gl/Vertex.h"
-
-#include <CGAL/Polyhedron_3.h>
-#include <CGAL/Nef_polyhedron_3.h>
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-
-typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
-typedef CGAL::Nef_polyhedron_3<Kernel> Nef_polyhedron;
-typedef CGAL::Polyhedron_3<Kernel> Polyhedron;
-typedef Polyhedron::HalfedgeDS HalfedgeDS;
-typedef Polyhedron::Halfedge_handle Halfedge_handle;
-typedef Polyhedron::Halfedge_iterator Halfedge_iterator;
-typedef Polyhedron::size_type size_type;
 
 template<class HDS>
 class PolyhedronBuilder : public CGAL::Modifier_base<HDS>
@@ -52,7 +41,6 @@ public:
       B.add_vertex_to_facet(indices[i + 2]);
       B.end_facet();
     }
-    LOGI << std::endl;
 
     // finish up the surface
     B.end_surface();

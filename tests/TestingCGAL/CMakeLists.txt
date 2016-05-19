@@ -62,6 +62,7 @@ set(LIBRARIES
 set(SRC_FILES
   "src/main.cpp"
   "src/Sketch.cpp"
+  "src/BatchPolyhedron.cpp"
 )
 
 include("${CROSS_ROOT}/cmake/sketch.cmake")
