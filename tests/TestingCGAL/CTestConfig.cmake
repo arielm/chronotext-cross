@@ -33,7 +33,6 @@ endif()
 
 list(APPEND ARGS
   "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
-  "-DGTEST_ROOT=$ENV{CROSS_PATH}/deps/gtest/dist/${PLATFORM}"
   "-DCGAL_ROOT=$ENV{CROSS_PATH}/deps/cgal/dist/${PLATFORM}"
 )
 

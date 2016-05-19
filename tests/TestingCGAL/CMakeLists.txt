@@ -3,7 +3,6 @@ cmake_minimum_required (VERSION 3.2.2)
 project(TestingCGAL)
 
 find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
-find_package(GTest REQUIRED)
 
 set(CGAL_INCLUDE_DIRS
   "${CGAL_ROOT}/include"
@@ -52,18 +51,18 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCGAL_HAS_NO_THREADS -DCGAL_NO_DEPRECAT
 
 set(INCLUDE_DIRS
   ${Boost_INCLUDE_DIRS}
-  ${GTEST_INCLUDE_DIRS}
   ${CGAL_INCLUDE_DIRS}
 )
 
 set(LIBRARIES
   ${Boost_LIBRARIES}
-  ${GTEST_BOTH_LIBRARIES}
   ${CGAL_LIBRARY}
 )
 
 set(SRC_FILES
-  src/main.cpp
+  "src/main.cpp"
+  "src/Sketch.cpp"
 )
 
+include("${CROSS_ROOT}/cmake/sketch.cmake")
 include("${CROSS_ROOT}/cmake/test.cmake")
