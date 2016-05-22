@@ -27,11 +27,11 @@ void Sketch::setup()
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
 
+  flatBatch.setShader(colorShader);
   strokeBatch.setShader(colorShader);
   normalBatch.setShader(colorShader);
 
-  fillBatch
-    .setTexture(texture);
+  lightenBatch.setTexture(texture);
 
   // ---
 
@@ -57,7 +57,7 @@ void Sketch::setup()
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
     .add(polygons1)
     .setTextureScale(0.125f)
-    .extrude(fillBatch, matrix, -150);
+    .extrude(lightenBatch, matrix, -150);
 
   triangulator1.exportContours(strokeBatch, matrix);
 
@@ -86,11 +86,13 @@ void Sketch::setup()
 
   Triangulator triangulator2;
   triangulator2
-    .setFrontFace(GL_CW)
-    .setColor(0.5f, 1.0f, 0.0f, 1.0f)
+    .setContourCapture(Triangulator::CAPTURE_ALL)
+    .setColor(0.25f, 0.75f, 0.0f, 1.0f)
     .add(polygons2)
     .setTextureScale(0.125f)
-    .stamp(fillBatch, matrix);
+    .extrude(flatBatch, matrix, 50);
+
+  triangulator2.exportContours(strokeBatch, matrix);
 
   //
 
@@ -117,11 +119,11 @@ void Sketch::setup()
     .setColor(1.0f, 0.0f, 0.0f, 1.0f)
     .add(polygons3)
     .setTextureScale(0.125f)
-    .extrude(fillBatch, matrix, -75);
+    .extrude(lightenBatch, matrix, -75);
 
   // ---
 
-  for (auto &vertex : fillBatch.vertexBuffer->storage)
+  for (auto &vertex : lightenBatch.vertexBuffer->storage)
   {
     normalBatch
       .addVertex(vertex.position)
@@ -159,20 +161,24 @@ void Sketch::draw()
   // ---
 
   glEnable(GL_POLYGON_OFFSET_FILL);
-  glPolygonOffset(4, 1);
+  glPolygonOffset(2, 1);
 
   state.apply();
 
-  fillBatch
+  lightenBatch
     .setShader(lambertShader)
     .setShaderMatrix<MVP>(mvpMatrix)
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .flush();
 
+  flatBatch
+    .setShaderMatrix<MVP>(mvpMatrix)
+    .flush();
+
   glDepthMask(GL_FALSE);
   glDisable(GL_POLYGON_OFFSET_FILL);
 
-  fillBatch
+  lightenBatch
     .setShader(textureAlphaShader)
     .flush();
 
