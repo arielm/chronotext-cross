@@ -11,8 +11,8 @@ using namespace std;
 using namespace chr;
 using namespace gl;
 
-static bool showTube = false;
-static bool showCube = true;
+static bool showTube = true;
+static bool showCube = false;
 
 Sketch::Sketch()
 :
@@ -60,7 +60,6 @@ void Sketch::setup()
     Triangulator triangulator;
     triangulator
       .setFrontFace(GL_CW)
-      .setTextureScale(100 / 256.0f)
       .add(polygons)
       .extrude(batch2, matrix, -120);
   }
@@ -82,6 +81,8 @@ void Sketch::setup()
   LOGI << "isClosed: " << P1.is_closed() << " | isValid: " << P1.is_valid() << " | isPureTriangle: " << P1.is_pure_triangle() << endl;
   LOGI << "isClosed: " << P2.is_closed() << " | isValid: " << P2.is_valid() << " | isPureTriangle: " << P2.is_pure_triangle() << endl;
 
+  Timer timer;
+
   Nef_polyhedron nef1(P1);
   Nef_polyhedron nef2(P2);
 
@@ -90,6 +91,9 @@ void Sketch::setup()
   nef3.convert_to_Polyhedron(result);
 
   result.append(batch3);
+
+  timer.stop();
+  LOGI << timer.getSeconds() << endl;
 
   // ---
 
