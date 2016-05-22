@@ -18,7 +18,8 @@ public:
 protected:
   chr::gl::State state;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> fillBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> lightenBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> flatBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ> strokeBatch;
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 
