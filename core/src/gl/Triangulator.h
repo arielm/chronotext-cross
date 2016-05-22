@@ -223,70 +223,143 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
-        auto vertices = (glm::vec2*)tessGetVertices(tess);
-        auto elements = tessGetElements(tess);
-        auto elementCount = tessGetElementCount(tess);
+        auto contourVertices = (glm::vec2*)tessGetVertices(tess);
+        auto contourVertexCount = tessGetVertexCount(tess);
+        auto contourVertexIndices = tessGetVertexIndices(tess);
+
+        auto contourElements = tessGetElements(tess);
+        auto contourElementCount = tessGetElementCount(tess);
 
         if (contourCapture)
         {
           contours.clear();
-          contours.reserve(elementCount);
+          contours.reserve(contourElementCount);
         }
 
-        for (auto i = 0; i < elementCount; i++)
+        // ---
+
+        /*
+         * HANDLING DUPLICATE VERTICES
+         * (AS A CONSEQUENCE OF INTERSECTING CONTOURS)
+         */
+
+        std::map<glm::vec2, int> uniqueIndices;
+        int map1[contourVertexCount];
+
+        for (auto i = 0; i < contourVertexCount; i++)
         {
-          const auto base = elements[i << 1];
-          const auto count = elements[(i << 1) + 1];
+          map1[i] = i;
+        }
+
+        for (int i = 0; i < contourVertexCount; i++)
+        {
+          /*
+           * INDICES MARKED AS "TESS_UNDEF" CORRESPOND TO INTERSECTIONS
+           */
+          if (contourVertexIndices[i] == TESS_UNDEF)
+          {
+            auto found = uniqueIndices.find(contourVertices[i]);
+
+            if (found != uniqueIndices.end())
+            {
+              map1[i] = found->second;
+            }
+            else
+            {
+              map1[i] = i;
+              uniqueIndices.emplace(contourVertices[i], i);
+            }
+          }
+        }
+
+        // ---
+
+        std::vector<std::vector<int>> contourIndices;
+        contourIndices.reserve(contourElementCount);
+
+        for (auto i = 0; i < contourElementCount; i++)
+        {
+          const auto base = contourElements[i * 2];
+          const auto count = contourElements[(i * 2) + 1];
 
           if (contourCapture)
           {
             contours.emplace_back();
             contours.back().reserve(count);
+
+            for (int j = 0; j < count; j++)
+            {
+              contours.back().emplace_back(contourVertices[base + j]);
+            }
           }
+
+          /*
+           * EACH OF THE LISTS OF CONTOUR INDICES GENERATED
+           * WILL REFER TO UNIQUE VERTICES
+           */
+
+          contourIndices.emplace_back();
+          contourIndices.back().reserve(count);
 
           for (int j = 0; j < count; j++)
           {
-            auto &p0 = vertices[base + j];
-            auto &p1 = vertices[base + (j + 1) % count];
-
-            if (contourCapture)
-            {
-              contours.back().emplace_back(p0);
-            }
-
-            batch
-              .addVertex(matrix.transformPoint(p0), std::forward<Args>(args)...)
-              .addVertex(matrix.transformPoint(p1), std::forward<Args>(args)...)
-              .addVertex(matrix.transformPoint(glm::vec3(p1, distance)), std::forward<Args>(args)...)
-              .addVertex(matrix.transformPoint(glm::vec3(p0, distance)), std::forward<Args>(args)...);
-
-            if (CW)
-            {
-              batch.addIndices(0, 3, 2, 2, 1, 0);
-            }
-            else
-            {
-              batch.addIndices(0, 1, 2, 2, 3, 0);
-            }
-
-            batch.incrementIndices(4);
+            contourIndices.back().emplace_back(map1[base + j]);
           }
 
           /*
            * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
            */
-          tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
+          tessAddContour(tess, 2, &contourVertices[base], sizeof(glm::vec2), count);
         }
 
         // ---
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        vertices = (glm::vec2*)tessGetVertices(tess);
+        auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
+        auto vertexIndices = tessGetVertexIndices(tess);
 
-        auto indices = (int *) tessGetElements(tess);
-        auto indexCount = tessGetElementCount(tess) * 3;
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
+
+        // ---
+
+        /*
+         * PROPERLY MAPPING BETWEEN THE PREVIOUS CONTOUR
+         * VERTICES AND THE CURRENT TRIANGULATION VERTICES
+         */
+
+        int map2[contourVertexCount]; // NO NEED TO PRE-FILL
+
+        for (auto i = 0; i < vertexCount; i++)
+        {
+          map2[map1[vertexIndices[i]]] = i;
+        }
+
+        for (const auto &contour : contourIndices)
+        {
+          auto size = contour.size();
+
+          for (auto i = 0; i < size; i++)
+          {
+            auto i0 = map2[contour[i]];
+            auto i1 = map2[contour[(i + 1) % size]];
+
+            if (CW)
+            {
+              batch
+                .addIndices(i0, i0 + vertexCount, i1 + vertexCount)
+                .addIndices(i1 + vertexCount, i1, i0);
+            }
+            else
+            {
+              batch
+                .addIndices(i0, i1, i1 + vertexCount)
+                .addIndices(i1 + vertexCount, i0 + vertexCount, i0);
+            }
+          }
+        }
 
         // ---
 
@@ -295,12 +368,12 @@ namespace chr
           batch.addVertex(matrix.transformPoint(vertices[i]), std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 0 : 2)],
-            indices[i + 1],
-            indices[i + (CW ? 2 : 0)]);
+            elements[i + (CW ? 0 : 2)],
+            elements[i + 1],
+            elements[i + (CW ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -312,12 +385,12 @@ namespace chr
           batch.addVertex(matrix.transformPoint(glm::vec3(vertices[i], distance)), std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
