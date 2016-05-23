@@ -22,20 +22,6 @@ namespace chr
         CAPTURE_ALL = 7
       };
 
-      struct Segment
-      {
-        glm::vec2 p1;
-        glm::vec2 p2;
-        glm::vec2 tangeant;
-
-        Segment(const glm::vec2 &p1, const glm::vec2 &p2, glm::vec2 &tangeant)
-        :
-        p1(p1),
-        p2(p2),
-        tangeant(tangeant)
-        {}
-      };
-
       Triangulator();
       ~Triangulator();
 
@@ -59,10 +45,10 @@ namespace chr
       Triangulator& add(const std::vector<glm::vec2> &polygon);
 
       template<int V = XYZ>
-      void stamp(IndexedVertexBatch<V> &batch);
+      void fill(IndexedVertexBatch<V> &batch);
 
       template<int V = XYZ>
-      void stamp(IndexedVertexBatch<V> &batch, Matrix &matrix);
+      void fill(IndexedVertexBatch<V> &batch, Matrix &matrix);
 
       template<int V = XYZ>
       void extrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance);
@@ -88,7 +74,7 @@ namespace chr
       // ---
 
       template<int V = XYZ, typename... Args>
-      void performStamp(IndexedVertexBatch<V> &batch, Args&&... args)
+      void performFill(IndexedVertexBatch<V> &batch, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -101,10 +87,13 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        // ---
-
         auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
+
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
+
+        // ---
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -113,24 +102,21 @@ namespace chr
 
         // ---
 
-        auto indices = (int*)tessGetElements(tess);
-        auto indexCount =  tessGetElementCount(tess) * 3;
-
         bool CW = (frontFace == GL_CW);
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
       }
 
       template<int V = XYZ, typename... Args>
-      void performStampWithTexture(IndexedVertexBatch<V> &batch, Args&&... args)
+      void performFillWithTexture(IndexedVertexBatch<V> &batch, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -143,10 +129,13 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        // ---
-
         auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
+
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
+
+        // ---
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -158,17 +147,14 @@ namespace chr
 
         // ---
 
-        auto indices = (int*)tessGetElements(tess);
-        auto indexCount =  tessGetElementCount(tess) * 3;
-
         bool CW = (frontFace == GL_CW);
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -177,7 +163,7 @@ namespace chr
       // ---
 
       template<int V = XYZ, typename... Args>
-      void performStamp(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
+      void performFill(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -190,10 +176,13 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        // ---
-
         auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
+
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
+
+        // ---
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -202,24 +191,21 @@ namespace chr
 
         // ---
 
-        auto indices = (int*)tessGetElements(tess);
-        auto indexCount =  tessGetElementCount(tess) * 3;
-
         bool CW = (frontFace == GL_CW);
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
       }
 
       template<int V = XYZ, typename... Args>
-      void performStampWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
+      void performFillWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -232,10 +218,13 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        // ---
-
         auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
+
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
+
+        // ---
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -247,24 +236,21 @@ namespace chr
 
         // ---
 
-        auto indices = (int*)tessGetElements(tess);
-        auto indexCount =  tessGetElementCount(tess) * 3;
-
         bool CW = (frontFace == GL_CW);
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
       }
 
       template<int V = XYZ, typename... Args>
-      void performStampWithNormalsAndTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, const glm::vec3 &normal, Args&&... args)
+      void performFillWithNormalsAndTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, const glm::vec3 &normal, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -277,10 +263,13 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        // ---
-
         auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
+
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
+
+        // ---
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -293,17 +282,14 @@ namespace chr
 
         // ---
 
-        auto indices = (int*)tessGetElements(tess);
-        auto indexCount =  tessGetElementCount(tess) * 3;
-
         bool CW = (frontFace == GL_CW);
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -500,20 +486,22 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
-        auto vertices = (glm::vec2*)tessGetVertices(tess);
-        auto elements = tessGetElements(tess);
-        auto elementCount = tessGetElementCount(tess);
+        auto contourVertices = (glm::vec2*)tessGetVertices(tess);
+        auto contourVertexCount = tessGetVertexCount(tess);
+
+        auto contourElements = tessGetElements(tess);
+        auto contourElementCount = tessGetElementCount(tess);
 
         if (contourCapture)
         {
           contours.clear();
-          contours.reserve(elementCount);
+          contours.reserve(contourElementCount);
         }
 
-        for (auto i = 0; i < elementCount; i++)
+        for (auto i = 0; i < contourElementCount; i++)
         {
-          const auto base = elements[i << 1];
-          const auto count = elements[(i << 1) + 1];
+          const auto base = contourElements[i << 1];
+          const auto count = contourElements[(i << 1) + 1];
 
           float length = 0;
 
@@ -525,8 +513,8 @@ namespace chr
 
           for (int j = 0; j < count; j++)
           {
-            auto &p0 = vertices[base + j];
-            auto &p1 = vertices[base + (j + 1) % count];
+            auto &p0 = contourVertices[base + j];
+            auto &p1 = contourVertices[base + (j + 1) % count];
 
             float length0 = length;
             length += glm::length(p1 - p0);
@@ -569,18 +557,18 @@ namespace chr
           /*
            * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
            */
-          tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
+          tessAddContour(tess, 2, &contourVertices[base], sizeof(glm::vec2), count);
         }
 
         // ---
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        vertices = (glm::vec2*)tessGetVertices(tess);
+        auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
 
-        auto indices = (int *) tessGetElements(tess);
-        auto indexCount = tessGetElementCount(tess) * 3;
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
 
         // ---
 
@@ -592,12 +580,12 @@ namespace chr
             std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 0 : 2)],
-            indices[i + 1],
-            indices[i + (CW ? 2 : 0)]);
+            elements[i + (CW ? 0 : 2)],
+            elements[i + 1],
+            elements[i + (CW ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -612,12 +600,12 @@ namespace chr
             std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -633,20 +621,20 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
-        auto vertices = (glm::vec2*)tessGetVertices(tess);
-        auto elements = tessGetElements(tess);
-        auto elementCount = tessGetElementCount(tess);
+        auto contourVertices = (glm::vec2*)tessGetVertices(tess);
+        auto contourElements = tessGetElements(tess);
+        auto contourElementCount = tessGetElementCount(tess);
 
         if (contourCapture)
         {
           contours.clear();
-          contours.reserve(elementCount);
+          contours.reserve(contourElementCount);
         }
 
-        for (auto i = 0; i < elementCount; i++)
+        for (auto i = 0; i < contourElementCount; i++)
         {
-          const auto base = elements[i << 1];
-          const auto count = elements[(i << 1) + 1];
+          const auto base = contourElements[i << 1];
+          const auto count = contourElements[(i << 1) + 1];
 
           if (contourCapture)
           {
@@ -656,11 +644,11 @@ namespace chr
 
           for (int j = 0; j < count; j++)
           {
-            auto &p0 = vertices[base + j];
-            auto &p1 = vertices[base + (j + 1) % count];
+            auto &p0 = contourVertices[base + j];
+            auto &p1 = contourVertices[base + (j + 1) % count];
 
-            auto tangeant = glm::normalize(p1 - p0).yx() * glm::vec2(-1, +1);
-            auto normal = matrix.transformNormal(glm::vec3(tangeant, 0));
+            auto up = glm::normalize(p1 - p0).yx() * glm::vec2(-1, +1);
+            auto normal = matrix.transformNormal(glm::vec3(up, 0));
 
             if (contourCapture)
             {
@@ -688,18 +676,18 @@ namespace chr
           /*
            * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
            */
-          tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
+          tessAddContour(tess, 2, &contourVertices[base], sizeof(glm::vec2), count);
         }
 
         // ---
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        vertices = (glm::vec2*)tessGetVertices(tess);
+        auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
 
-        auto indices = (int *) tessGetElements(tess);
-        auto indexCount = tessGetElementCount(tess) * 3;
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
 
         // ---
 
@@ -710,12 +698,12 @@ namespace chr
           batch.addVertex(matrix.transformPoint(vertices[i]), normal1, std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 0 : 2)],
-            indices[i + 1],
-            indices[i + (CW ? 2 : 0)]);
+            elements[i + (CW ? 0 : 2)],
+            elements[i + 1],
+            elements[i + (CW ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -729,12 +717,12 @@ namespace chr
           batch.addVertex(matrix.transformPoint(glm::vec3(vertices[i], distance)), normal2, std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -750,22 +738,22 @@ namespace chr
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
-        auto vertices = (glm::vec2*)tessGetVertices(tess);
-        auto elements = tessGetElements(tess);
-        auto elementCount = tessGetElementCount(tess);
+        auto contourVertices = (glm::vec2*)tessGetVertices(tess);
+        auto contourElements = tessGetElements(tess);
+        auto contourElementCount = tessGetElementCount(tess);
 
         float length = 0;
 
         if (contourCapture)
         {
           contours.clear();
-          contours.reserve(elementCount);
+          contours.reserve(contourElementCount);
         }
 
-        for (auto i = 0; i < elementCount; i++)
+        for (auto i = 0; i < contourElementCount; i++)
         {
-          const auto base = elements[i << 1];
-          const auto count = elements[(i << 1) + 1];
+          const auto base = contourElements[i << 1];
+          const auto count = contourElements[(i << 1) + 1];
 
           if (contourCapture)
           {
@@ -775,11 +763,11 @@ namespace chr
 
           for (int j = 0; j < count; j++)
           {
-            auto &p0 = vertices[base + j];
-            auto &p1 = vertices[base + (j + 1) % count];
+            auto &p0 = contourVertices[base + j];
+            auto &p1 = contourVertices[base + (j + 1) % count];
 
-            auto tangeant = glm::normalize(p1 - p0).yx() * glm::vec2(-1, +1);
-            auto normal = matrix.transformNormal(glm::vec3(tangeant, 0));
+            auto up = glm::normalize(p1 - p0).yx() * glm::vec2(-1, +1);
+            auto normal = matrix.transformNormal(glm::vec3(up, 0));
 
             float length0 = length;
             length += glm::length(p1 - p0);
@@ -826,18 +814,18 @@ namespace chr
           /*
            * NECESSARY TO ADD THE CONTOURS BACK FOR FURTHER tessTesselate OPERATIONS
            */
-          tessAddContour(tess, 2, &vertices[base], sizeof(glm::vec2), count);
+          tessAddContour(tess, 2, &contourVertices[base], sizeof(glm::vec2), count);
         }
 
         // ---
 
         tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
 
-        vertices = (glm::vec2*)tessGetVertices(tess);
+        auto vertices = (glm::vec2*)tessGetVertices(tess);
         auto vertexCount = tessGetVertexCount(tess);
 
-        auto indices = (int *) tessGetElements(tess);
-        auto indexCount = tessGetElementCount(tess) * 3;
+        auto elements = tessGetElements(tess);
+        auto elementCount = tessGetElementCount(tess) * 3;
 
         // ---
 
@@ -852,12 +840,12 @@ namespace chr
             std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 0 : 2)],
-            indices[i + 1],
-            indices[i + (CW ? 2 : 0)]);
+            elements[i + (CW ? 0 : 2)],
+            elements[i + 1],
+            elements[i + (CW ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -875,12 +863,12 @@ namespace chr
             std::forward<Args>(args)...);
         }
 
-        for (int i = 0; i < indexCount; i += 3)
+        for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            indices[i + (CW ? 2 : 0)],
-            indices[i + 1],
-            indices[i + (CW ? 0 : 2)]);
+            elements[i + (CW ? 2 : 0)],
+            elements[i + 1],
+            elements[i + (CW ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);

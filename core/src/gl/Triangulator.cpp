@@ -231,81 +231,81 @@ namespace chr
     // ---
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ> &batch)
+    void Triangulator::fill(IndexedVertexBatch<XYZ> &batch)
     {
-      performStamp(batch);
+      performFill(batch);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.RGBA> &batch)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.RGBA> &batch)
     {
-      performStamp(batch, color);
+      performFill(batch, color);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV> &batch)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV> &batch)
     {
-      performStampWithTexture(batch);
+      performFillWithTexture(batch);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV.RGBA> &batch)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV.RGBA> &batch)
     {
-      performStampWithTexture(batch, color);
+      performFillWithTexture(batch, color);
     }
 
     // ---
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
     {
-      performStamp(batch, matrix);
+      performFill(batch, matrix);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
-      performStamp(batch, matrix, normal);
+      performFill(batch, matrix, normal);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
-      performStampWithNormalsAndTexture(batch, matrix, normal);
+      performFillWithNormalsAndTexture(batch, matrix, normal);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix)
     {
-      performStampWithTexture(batch, matrix);
+      performFillWithTexture(batch, matrix);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix)
     {
-      performStamp(batch, matrix, color);
+      performFill(batch, matrix, color);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
-    {
-      auto normal = matrix.transformNormal(0, 0, 1);
-      performStamp(batch, matrix, normal, color);
-    }
-
-    template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix)
-    {
-      performStampWithTexture(batch, matrix, color);
-    }
-
-    template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
-      performStampWithNormalsAndTexture(batch, matrix, normal, color);
+      performFill(batch, matrix, normal, color);
+    }
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix)
+    {
+      performFillWithTexture(batch, matrix, color);
+    }
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
+    {
+      auto normal = matrix.transformNormal(0, 0, 1);
+      performFillWithNormalsAndTexture(batch, matrix, normal, color);
     }
 
     // ---
