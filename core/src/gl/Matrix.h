@@ -35,8 +35,8 @@ namespace chr
       Matrix(const glm::mat3 &matrix);
       Matrix(const Matrix &other) = delete;
       
-      operator float* () { return glm::value_ptr(m); }
-      operator const float* () const { return glm::value_ptr(m); }
+      operator Values& () { return values; }
+      operator const Values& () const { return values; }
 
       glm::mat4 operator * (const glm::mat4 &matrix) { return matrix * m; }
       Matrix& operator *= (const glm::mat4 &matrix) { m *= matrix; return *this; }
