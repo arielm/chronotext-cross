@@ -59,6 +59,9 @@ namespace chr
       Triangulator& add(const std::vector<glm::vec2> &polygon);
 
       template<int V = XYZ>
+      void stamp(IndexedVertexBatch<V> &batch);
+
+      template<int V = XYZ>
       void stamp(IndexedVertexBatch<V> &batch, Matrix &matrix);
 
       template<int V = XYZ>
@@ -81,6 +84,97 @@ namespace chr
       void captureContours();
 
       glm::vec2 getTextureCoords(const gl::Texture &texture, const glm::vec2 &xy) const;
+
+      // ---
+
+      template<int V = XYZ, typename... Args>
+      void performStamp(IndexedVertexBatch<V> &batch, Args&&... args)
+      {
+        extrudedDistance = 0;
+
+        if (contourCapture)
+        {
+          captureContours();
+        }
+
+        // ---
+
+        tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
+
+        // ---
+
+        auto vertices = (glm::vec2*)tessGetVertices(tess);
+        auto vertexCount = tessGetVertexCount(tess);
+
+        for (int i = 0; i < vertexCount; i++)
+        {
+          batch.addVertex(glm::vec3(vertices[i], 0), std::forward<Args>(args)...);
+        }
+
+        // ---
+
+        auto indices = (int*)tessGetElements(tess);
+        auto indexCount =  tessGetElementCount(tess) * 3;
+
+        bool CW = (frontFace == GL_CW);
+
+        for (int i = 0; i < indexCount; i += 3)
+        {
+          batch.addIndices(
+            indices[i + (CW ? 2 : 0)],
+            indices[i + 1],
+            indices[i + (CW ? 0 : 2)]);
+        }
+
+        batch.incrementIndices(vertexCount);
+      }
+
+      template<int V = XYZ, typename... Args>
+      void performStampWithTexture(IndexedVertexBatch<V> &batch, Args&&... args)
+      {
+        extrudedDistance = 0;
+
+        if (contourCapture)
+        {
+          captureContours();
+        }
+
+        // ---
+
+        tessTesselate(tess, windingRule, TESS_POLYGONS, 3, 2, 0);
+
+        // ---
+
+        auto vertices = (glm::vec2*)tessGetVertices(tess);
+        auto vertexCount = tessGetVertexCount(tess);
+
+        for (int i = 0; i < vertexCount; i++)
+        {
+          batch.addVertex(
+            glm::vec3(vertices[i], 0),
+            getTextureCoords(batch.texture, vertices[i]),
+            std::forward<Args>(args)...);
+        }
+
+        // ---
+
+        auto indices = (int*)tessGetElements(tess);
+        auto indexCount =  tessGetElementCount(tess) * 3;
+
+        bool CW = (frontFace == GL_CW);
+
+        for (int i = 0; i < indexCount; i += 3)
+        {
+          batch.addIndices(
+            indices[i + (CW ? 2 : 0)],
+            indices[i + 1],
+            indices[i + (CW ? 0 : 2)]);
+        }
+
+        batch.incrementIndices(vertexCount);
+      }
+
+      // ---
 
       template<int V = XYZ, typename... Args>
       void performStamp(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
@@ -214,6 +308,8 @@ namespace chr
 
         batch.incrementIndices(vertexCount);
       }
+
+      // ---
 
       template<int V = XYZ, typename... Args>
       void performExtrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)

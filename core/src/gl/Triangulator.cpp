@@ -231,6 +231,32 @@ namespace chr
     // ---
 
     template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ> &batch)
+    {
+      performStamp(batch);
+    }
+
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.RGBA> &batch)
+    {
+      performStamp(batch, color);
+    }
+
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV> &batch)
+    {
+      performStampWithTexture(batch);
+    }
+
+    template <>
+    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV.RGBA> &batch)
+    {
+      performStampWithTexture(batch, color);
+    }
+
+    // ---
+
+    template <>
     void Triangulator::stamp(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
     {
       performStamp(batch, matrix);
