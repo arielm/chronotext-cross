@@ -8,7 +8,7 @@
 
 using namespace std;
 
-TEST(TestPugiXML, TestFOO)
+TEST(TestPugiXML, TestResourceLoading)
 {
   fs::path path = "tree.xml";
 
