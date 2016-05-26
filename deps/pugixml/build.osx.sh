@@ -40,4 +40,5 @@ if [ $? != 0 ]; then
 fi
 
 cd "$INSTALL_PATH"
-ln -s "$SRC_PATH/src" include
+ln -s "$SRC_PATH/src"
+mv src include

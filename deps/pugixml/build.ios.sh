@@ -22,7 +22,8 @@ cmake -H"$SRC_DIR" -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
-  -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTS=OFF
+  -DBUILD_SHARED_LIBS=OFF -DBUILD_TESTS=OFF \
+  -DCMAKE_CXX_FLAGS=-fembed-bitcode
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"
@@ -40,4 +41,5 @@ if [ $? != 0 ]; then
 fi
 
 cd "$INSTALL_PATH"
-ln -s "$SRC_PATH/src" include
+ln -s "$SRC_PATH/src"
+mv src include
