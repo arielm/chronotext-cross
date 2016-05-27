@@ -41,8 +41,8 @@ namespace chr
       template<int Orientation = GL_CCW>
       Triangulator& add(const math::Rectf &rect);
 
-      Triangulator& add(const std::vector<std::vector<glm::vec2>> &polygons);
-      Triangulator& add(const std::vector<glm::vec2> &polygon);
+      Triangulator& add(const std::vector<std::vector<glm::vec2>> &polylines);
+      Triangulator& add(const std::vector<glm::vec2> &polyline);
 
       template<int V = XYZ>
       void fill(IndexedVertexBatch<V> &batch);

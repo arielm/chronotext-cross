@@ -212,19 +212,19 @@ namespace chr
       return *this;
     }
 
-    Triangulator& Triangulator::add(const vector<vector<glm::vec2>> &polygons)
+    Triangulator& Triangulator::add(const vector<vector<glm::vec2>> &polylines)
     {
-      for (auto &polygon : polygons)
+      for (auto &polyline : polylines)
       {
-        add(polygon);
+        add(polyline);
       }
 
       return *this;
     }
 
-    Triangulator& Triangulator::add(const vector<glm::vec2> &polygon)
+    Triangulator& Triangulator::add(const vector<glm::vec2> &polyline)
     {
-      tessAddContour(tess, 2, polygon.data(), sizeof(glm::vec2), polygon.size());
+      tessAddContour(tess, 2, polyline.data(), sizeof(glm::vec2), polyline.size());
       return *this;
     }
 
