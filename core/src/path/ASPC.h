@@ -24,7 +24,7 @@ namespace chr
       std::vector <glm::vec2> polyline;
 
       float samplingTolerance = 1;
-      std::function<glm::vec2(float, glm::vec2 * )> gamma;
+      std::function<glm::vec2(float, glm::vec2*)> gamma;
       std::array<glm::vec2, 4> in;
 
       static std::array<float, 256> random;

@@ -25,9 +25,9 @@ namespace chr
         glm::vec2 forward;
 
         Point(const glm::vec2 &position)
-          :
-          position(position)
-        { }
+        :
+        position(position)
+        {}
       };
 
       struct Value
@@ -49,18 +49,18 @@ namespace chr
       size_t size() const;
       bool empty() const;
 
-      FollowablePath2D &setMode(Mode mode);
+      FollowablePath2D& setMode(Mode mode);
 
       float getLength() const;
-      const std::vector<Point> &getPoints() const;
-      const std::vector<float> &getLengths() const;
+      const std::vector<Point>& getPoints() const;
+      const std::vector<float>& getLengths() const;
 
-      FollowablePath2D &begin();
-      FollowablePath2D &end();
+      FollowablePath2D& begin();
+      FollowablePath2D& end();
 
-      inline FollowablePath2D &add(float x, float y)
-      { return add(glm::vec2(x, y)); }
-      FollowablePath2D &add(const glm::vec2 &position);
+      FollowablePath2D& add(const std::vector<glm::vec2> &polyline);
+      FollowablePath2D& add(const glm::vec2 &point);
+      inline FollowablePath2D& add(float x, float y) { return add(glm::vec2(x, y)); }
 
       glm::vec2 offsetToPosition(float offset) const;
       glm::vec2 offsetToTangent(float offset, float sampleSize = 0) const;

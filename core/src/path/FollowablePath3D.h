@@ -68,17 +68,17 @@ namespace chr
       size_t size() const;
       bool empty() const;
 
-      FollowablePath3D &setMode(Mode mode);
-      FollowablePath3D &setSampling(Sampling sampling);
+      FollowablePath3D& setMode(Mode mode);
+      FollowablePath3D& setSampling(Sampling sampling);
 
       float getLength() const;
-      const std::vector<Point> &getPoints() const;
-      const std::vector<float> &getLengths() const;
+      const std::vector<Point>& getPoints() const;
+      const std::vector<float>& getLengths() const;
 
-      FollowablePath3D &begin();
-      FollowablePath3D &end();
+      FollowablePath3D& begin();
+      FollowablePath3D& end();
 
-      FollowablePath3D &add(const glm::vec3 &position, const glm::vec3 &left);
+      FollowablePath3D& add(const glm::vec3 &position, const glm::vec3 &left);
 
       glm::quat offsetToQuat(float offset, float sampleSize = 0) const;
       FollowablePath3D::Value offsetToValue(float offset, float sampleSize = 0) const;

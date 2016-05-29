@@ -43,7 +43,7 @@ namespace chr
       return points.empty();
     }
 
-    FollowablePath2D &FollowablePath2D::setMode(Mode mode)
+    FollowablePath2D& FollowablePath2D::setMode(Mode mode)
     {
       this->mode = mode;
       return *this;
@@ -61,17 +61,17 @@ namespace chr
       }
     }
 
-    const vector<FollowablePath2D::Point> &FollowablePath2D::getPoints() const
+    const vector<FollowablePath2D::Point>& FollowablePath2D::getPoints() const
     {
       return points;
     }
 
-    const vector<float> &FollowablePath2D::getLengths() const
+    const vector<float>& FollowablePath2D::getLengths() const
     {
       return lengths;
     }
 
-    FollowablePath2D &FollowablePath2D::begin()
+    FollowablePath2D& FollowablePath2D::begin()
     {
       points.clear();
       lengths.clear();
@@ -79,7 +79,7 @@ namespace chr
       return *this;
     }
 
-    FollowablePath2D &FollowablePath2D::end()
+    FollowablePath2D& FollowablePath2D::end()
     {
       auto end = size();
 
@@ -91,11 +91,21 @@ namespace chr
       return *this;
     }
 
-    FollowablePath2D &FollowablePath2D::add(const glm::vec2 &position)
+    FollowablePath2D& FollowablePath2D::add(const std::vector<glm::vec2> &polyline)
+    {
+      for (const auto &point : polyline)
+      {
+        add(point);
+      }
+
+      return *this;
+    }
+
+    FollowablePath2D& FollowablePath2D::add(const glm::vec2 &point)
     {
       if (!empty())
       {
-        auto delta = position - points.back().position;
+        auto delta = point - points.back().position;
         auto length = glm::length(delta); // ASSERT: length > EPSILON
 
         lengths.push_back(lengths.back() + length);
@@ -106,7 +116,7 @@ namespace chr
         lengths.push_back(0);
       }
 
-      points.emplace_back(position);
+      points.emplace_back(point);
       return *this;
     }
 

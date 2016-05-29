@@ -53,29 +53,29 @@ namespace chr
       }
     }
 
-    const vector<FollowablePath3D::Point> &FollowablePath3D::getPoints() const
+    const vector<FollowablePath3D::Point>& FollowablePath3D::getPoints() const
     {
       return points;
     }
 
-    const vector<float> &FollowablePath3D::getLengths() const
+    const vector<float>& FollowablePath3D::getLengths() const
     {
       return lengths;
     }
 
-    FollowablePath3D &FollowablePath3D::setMode(Mode mode)
+    FollowablePath3D& FollowablePath3D::setMode(Mode mode)
     {
       this->mode = mode;
       return *this;
     }
 
-    FollowablePath3D &FollowablePath3D::setSampling(Sampling sampling)
+    FollowablePath3D& FollowablePath3D::setSampling(Sampling sampling)
     {
       this->sampling = sampling;
       return *this;
     }
 
-    FollowablePath3D &FollowablePath3D::begin()
+    FollowablePath3D& FollowablePath3D::begin()
     {
       points.clear();
       lengths.clear();
@@ -83,9 +83,9 @@ namespace chr
       return *this;
     }
 
-    FollowablePath3D &FollowablePath3D::end()
+    FollowablePath3D& FollowablePath3D::end()
     {
-      int end = size();
+      auto end = size();
 
       if (end > 1)
       {
@@ -95,7 +95,7 @@ namespace chr
       return *this;
     }
 
-    FollowablePath3D &FollowablePath3D::add(const glm::vec3 &position, const glm::vec3 &left)
+    FollowablePath3D& FollowablePath3D::add(const glm::vec3 &position, const glm::vec3 &left)
     {
       if (!empty())
       {
