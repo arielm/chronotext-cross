@@ -91,6 +91,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/path/Shape.cpp"
   "${CROSS_ROOT}/src/path/FollowablePath2D.cpp"
   "${CROSS_ROOT}/src/path/FollowablePath3D.cpp"
+  "${CROSS_ROOT}/src/path/SplinePath.cpp"
   "${CROSS_ROOT}/src/path/SVGDocument.cpp"
   "${CROSS_ROOT}/src/math/MatrixAffine.cpp"
   "${CROSS_ROOT}/src/math/Utils.cpp"
