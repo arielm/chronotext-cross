@@ -2,8 +2,6 @@
 
 #include "nanosvg.h"
 
-#include "Log.h"
-
 using namespace std;
 using namespace chr;
 using namespace math;

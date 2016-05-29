@@ -1,3 +1,11 @@
+/*
+ * BASED ON "Adaptive Sampling of Parametric Curves"
+ * BY Luiz Henrique de Figueiredo
+ *
+ * COPY AVAILABLE AT:
+ * http://ariel.chronotext.org/dd/defigueiredo93adaptive.pdf
+ */
+
 #pragma once
 
 #include "glm.h"
