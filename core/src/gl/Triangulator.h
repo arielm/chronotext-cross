@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/Rect.h"
+#include "path/Shape.h"
 #include "gl/Batch.h"
 #include "gl/Matrix.h"
 
@@ -25,7 +25,7 @@ namespace chr
       Triangulator();
       ~Triangulator();
 
-      Triangulator& setWindingRule(int windingRule);
+      Triangulator& setWindingRule(TessWindingRule windingRule);
       Triangulator& setFrontFace(GLenum mode);
 
       Triangulator& setTextureOffset(const glm::vec2 &offset);
@@ -38,10 +38,7 @@ namespace chr
       Triangulator& setContourCapture(int contourCapture);
       void exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const;
 
-      template<int Orientation = GL_CCW>
-      Triangulator& add(const math::Rectf &rect);
-
-      Triangulator& add(const std::vector<std::vector<glm::vec2>> &polylines);
+      Triangulator& add(const path::Shape &shape);
       Triangulator& add(const std::vector<glm::vec2> &polyline);
 
       template<int V = XYZ>
@@ -57,7 +54,7 @@ namespace chr
       TESStesselator *tess;
       int allocated = 0;
 
-      int windingRule = TESS_WINDING_ODD;
+      TessWindingRule windingRule = TESS_WINDING_ODD;
       GLenum frontFace = GL_CCW;
       glm::vec2 textureOffset;
       float textureScale = 1;
@@ -70,6 +67,7 @@ namespace chr
       void captureContours();
 
       glm::vec2 getTextureCoords(const gl::Texture &texture, const glm::vec2 &xy) const;
+      static TessWindingRule convert(path::Shape::FillRule fillRule);
 
       // ---
 

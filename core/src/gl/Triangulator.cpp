@@ -1,7 +1,9 @@
 #include "gl/Triangulator.h"
 
 using namespace std;
-using namespace chr::math;
+using namespace chr;
+using namespace math;
+using namespace path;
 
 namespace chr
 {
@@ -36,7 +38,7 @@ namespace chr
       tessDeleteTess(tess);
     }
 
-    Triangulator& Triangulator::setWindingRule(int windingRule)
+    Triangulator& Triangulator::setWindingRule(TessWindingRule windingRule)
     {
       this->windingRule = windingRule;
       return *this;
@@ -186,37 +188,13 @@ namespace chr
 
     // ---
 
-    template <>
-    Triangulator& Triangulator::add<GL_CCW>(const Rectf &rect)
+    Triangulator& Triangulator::add(const Shape &shape)
     {
-      vector<glm::vec2> polygon;
-      polygon.emplace_back(rect.x1y1());
-      polygon.emplace_back(rect.x1y2());
-      polygon.emplace_back(rect.x2y2());
-      polygon.emplace_back(rect.x2y1());
+      windingRule = convert(shape.getFillRule());
 
-      add(polygon);
-      return *this;
-    }
-
-    template <>
-    Triangulator& Triangulator::add<GL_CW>(const Rectf &rect)
-    {
-      vector<glm::vec2> polygon;
-      polygon.emplace_back(rect.x1y1());
-      polygon.emplace_back(rect.x2y1());
-      polygon.emplace_back(rect.x2y2());
-      polygon.emplace_back(rect.x1y2());
-
-      add(polygon);
-      return *this;
-    }
-
-    Triangulator& Triangulator::add(const vector<vector<glm::vec2>> &polylines)
-    {
-      for (auto &polyline : polylines)
+      for (auto &path : shape.getPaths())
       {
-        add(polyline);
+        add(path.getPolyline());
       }
 
       return *this;
@@ -387,6 +365,19 @@ namespace chr
     glm::vec2 Triangulator::getTextureCoords(const Texture &texture, const glm::vec2 &xy) const
     {
       return (xy - textureOffset) / (texture.innerSize * textureScale);
+    }
+
+    TessWindingRule Triangulator::convert(Shape::FillRule fillRule)
+    {
+      switch (fillRule)
+      {
+        default:
+        case Shape::FILLRULE_EVENODD:
+          return TESS_WINDING_ODD;
+
+        case Shape::FILLRULE_NONZERO:
+          return TESS_WINDING_NONZERO;
+      }
     }
   }
 }
