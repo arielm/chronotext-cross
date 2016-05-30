@@ -71,9 +71,9 @@ namespace chr
       float rt = t0 + t * (t1 - t0);
       auto r = gamma(rt, in.data());
 
-      float cross = (p0.x - r.x) * (p1.y - r.y) - (p0.y - r.y) * (p1.x - r.x);
+      float cross = (p0.x - r.x) * (p1.y - r.y) - (p1.x - r.x) * (p0.y - r.y);
 
-      if (cross * cross < samplingTolerance) // XXX
+      if (cross * cross < samplingTolerance)
       {
         polyline.push_back(p0);
       }
