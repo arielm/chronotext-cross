@@ -6,24 +6,23 @@ namespace chr
 {
   namespace path
   {
-    array<float, 256> ASPC::random;
-
-    bool ASPC::randomGenerated = false;
+    array<float, 256> ASPC::randomBase;
+    bool ASPC::randomBaseGenerated = false;
 
     void ASPC::begin()
     {
       polyline.clear();
 
-      if (!randomGenerated)
+      if (!randomBaseGenerated)
       {
         srand(1);
 
-        for (int i = 0; i < random.size(); i++)
+        for (int i = 0; i < randomBase.size(); i++)
         {
-          random[i] = rand() / float(RAND_MAX);
+          randomBase[i] = rand() / float(RAND_MAX);
         }
 
-        randomGenerated = true;
+        randomBaseGenerated = true;
       }
 
       randomIndex = 0;
@@ -31,7 +30,7 @@ namespace chr
 
     float ASPC::nextRandom()
     {
-      return random[(randomIndex++) % random.size()];
+      return randomBase[(randomIndex++) % randomBase.size()];
     }
 
     void ASPC::segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2)

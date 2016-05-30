@@ -27,8 +27,8 @@ namespace chr
       std::function<glm::vec2(float, glm::vec2*)> gamma;
       std::array<glm::vec2, 4> in;
 
-      static std::array<float, 256> random;
-      static bool randomGenerated;
+      static std::array<float, 256> randomBase;
+      static bool randomBaseGenerated;
       int randomIndex = 0;
 
       void begin();
