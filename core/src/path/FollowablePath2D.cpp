@@ -183,13 +183,16 @@ namespace chr
           float offset0 = offset - sampleSize * 0.5f;
           float offset1 = offset + sampleSize * 0.5f;
 
-          if ((offset1 <= 0) || ((offset0 < 0) && (offset1 > 0)))
+          if (mode == MODE_BOUNDED)
           {
-            return points.front().forward;
-          }
-          else if ((offset0 >= length) || ((offset1 > length) && (offset0 < length)))
-          {
-            return points.back().forward;
+            if ((offset1 <= 0) || ((offset0 < 0) && (offset1 > 0)))
+            {
+              return points.front().forward;
+            }
+            else if ((offset0 >= length) || ((offset1 > length) && (offset0 < length)))
+            {
+              return points.back().forward;
+            }
           }
 
           auto index0 = utils::search(lengths, offset0, 1, size());

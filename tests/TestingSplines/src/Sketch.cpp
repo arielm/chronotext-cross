@@ -84,7 +84,9 @@ void Sketch::setup()
 
   path2
     .setMode(FollowablePath2D::MODE_LOOP)
-    .add(peanut.getPolyline());
+    .begin()
+    .add(peanut.getPolyline())
+    .end();
 
   drawPolyline(peanut.getPolyline());
 
