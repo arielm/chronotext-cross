@@ -1,10 +1,10 @@
 #include "Sketch.h"
 
-#include "math/MatrixAffine.h"
 #include "gl/draw/Sprite.h"
 #include "gl/draw/Rect.h"
 #include "gl/Triangulator.h"
 #include "shape/Rect.h"
+#include "path/SplinePath.h"
 
 using namespace std;
 using namespace chr;
@@ -16,7 +16,7 @@ static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 
 Sketch::Sketch()
 :
-lineBatch(GL_LINE_STRIP)
+lineBatch(GL_LINES)
 {}
 
 void Sketch::setup()
@@ -43,24 +43,54 @@ void Sketch::setup()
 
   // ---
 
-  splinePath
-    .setType(SplinePath::TYPE_CATMULL_ROM)
-    .setSamplingTolerance(16)
+  path1
+    .setMode(FollowablePath2D::MODE_MODULO)
+    .begin()
     .add(200, 300)
     .add(350, 325)
     .add(450, 150)
     .add(500, 175)
-    .add(550, 150);
+    .add(550, 150)
+    .end();
 
-  path
-    .setMode(FollowablePath2D::MODE_MODULO)
-    .add(splinePath.getPolyline());
+  drawPolyline(path1.getPoints());
 
-  drawPolyline(splinePath.getPolyline());
-
-  for (auto &point : splinePath.getPoints())
+  for (const auto &point : path1.getPoints())
   {
-    drawDot(point.x, point.y, 3);
+    drawDot(point.position, 3);
+  }
+
+  // ---
+
+  MatrixAffine matrix;
+  matrix
+    .setTranslate(150, 150)
+    .rotate(-45 * D2R);
+
+  SplinePath peanut;
+  peanut
+    .setType(SplinePath::TYPE_BSPLINE)
+    .setSamplingTolerance(16)
+    .add(-100, -100)
+    .add(   0,  -25)
+    .add( 100, -100)
+    .add( 200,    0)
+    .add( 100,  100)
+    .add(   0,   25)
+    .add(-100,  100)
+    .add(-200,    0)
+    .close()
+    .transformPoints(matrix);
+
+  path2
+    .setMode(FollowablePath2D::MODE_LOOP)
+    .add(peanut.getPolyline());
+
+  drawPolyline(peanut.getPolyline());
+
+  for (const auto &point : peanut.getPoints())
+  {
+    drawDot(point, 3);
   }
 
   // ---
@@ -95,12 +125,12 @@ void Sketch::draw()
   Matrix matrix1;
   MatrixAffine affine;
 
-  path
+  path1
     .offsetToValue(clock()->getTime() * 50, 20)
     .applyToMatrix(matrix1);
 
-  path
-    .offsetToValue(clock()->getTime() * 30 + 100, 10)
+  path2
+    .offsetToValue(-clock()->getTime() * 30 + 100, 10)
     .applyToMatrix(affine);
 
   draw::Rect()
@@ -132,11 +162,25 @@ void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
   }
 }
 
-void Sketch::drawDot(float x, float y, float radius)
+void Sketch::drawPolyline(const vector<FollowablePath2D::Point> &points)
+{
+  auto size = points.size();
+
+  if (size > 1)
+  {
+    for (auto i = 0; i < size - 1; i++)
+    {
+      lineBatch.addVertex(points[i].position);
+      lineBatch.addVertex(points[i + 1].position);
+    }
+  }
+}
+
+void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
   Matrix matrix;
   matrix
-    .translate(x, y)
+    .translate(position)
     .scale(radius / DOT_RADIUS_PIXELS);
 
   draw::Sprite()

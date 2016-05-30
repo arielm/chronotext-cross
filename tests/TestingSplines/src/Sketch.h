@@ -5,7 +5,6 @@
 #include "gl/shaders/ColorShader.h"
 #include "gl/shaders/TextureAlphaShader.h"
 #include "path/FollowablePath2D.h"
-#include "path/SplinePath.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -18,8 +17,7 @@ public:
   void draw() final;
 
 protected:
-  chr::path::FollowablePath2D path;
-  chr::path::SplinePath splinePath;
+  chr::path::FollowablePath2D path1, path2;
 
   chr::gl::Texture dotTexture;
   chr::gl::State dotState;
@@ -35,7 +33,8 @@ protected:
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 
   void drawPolyline(const std::vector<glm::vec2> &polyline);
-  void drawDot(float x, float y, float radius);
+  void drawPolyline(const std::vector<chr::path::FollowablePath2D::Point> &points);
+  void drawDot(const glm::vec2 &position, float radius);
 
   void initTextures();
 };
