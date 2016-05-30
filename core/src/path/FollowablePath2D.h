@@ -1,8 +1,6 @@
 #pragma once
 
-#include "glm.h"
-
-#include <vector>
+#include "math/MatrixAffine.h"
 
 namespace chr
 {
@@ -59,6 +57,8 @@ namespace chr
       FollowablePath2D& end();
 
       FollowablePath2D& add(const std::vector<glm::vec2> &polyline);
+      FollowablePath2D& add(const math::MatrixAffine &matrix, const std::vector<glm::vec2> &polyline);
+
       FollowablePath2D& add(const glm::vec2 &point);
       inline FollowablePath2D& add(float x, float y) { return add(glm::vec2(x, y)); }
 

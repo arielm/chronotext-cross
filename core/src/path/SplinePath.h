@@ -1,6 +1,7 @@
 #pragma once
 
 #include "path/ASPC.h"
+#include "math/MatrixAffine.h"
 
 namespace chr
 {
@@ -34,6 +35,8 @@ namespace chr
       SplinePath& add(const std::vector<glm::vec2> &points);
       SplinePath& add(const glm::vec2 &point);
       inline SplinePath& add(float x, float y) { return add(glm::vec2(x, y)); }
+
+      SplinePath& transformPoints(const math::MatrixAffine &matrix);
 
     protected:
       std::vector<glm::vec2> points;

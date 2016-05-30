@@ -5,6 +5,7 @@
 
 using namespace std;
 using namespace chr;
+using namespace math;
 
 namespace chr
 {
@@ -91,11 +92,21 @@ namespace chr
       return *this;
     }
 
-    FollowablePath2D& FollowablePath2D::add(const std::vector<glm::vec2> &polyline)
+    FollowablePath2D& FollowablePath2D::add(const vector<glm::vec2> &polyline)
     {
       for (const auto &point : polyline)
       {
         add(point);
+      }
+
+      return *this;
+    }
+
+    FollowablePath2D& FollowablePath2D::add(const MatrixAffine &matrix, const vector<glm::vec2> &polyline)
+    {
+      for (const auto &point : polyline)
+      {
+        add(matrix.transformPoint(point));
       }
 
       return *this;

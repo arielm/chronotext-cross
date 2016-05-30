@@ -1,6 +1,8 @@
 #include "path/SplinePath.h"
 
 using namespace std;
+using namespace chr;
+using namespace math;
 
 namespace chr
 {
@@ -110,6 +112,16 @@ namespace chr
       {
         points.emplace_back(point);
         flushed = false;
+      }
+
+      return *this;
+    }
+
+    SplinePath& SplinePath::transformPoints(const MatrixAffine &matrix)
+    {
+      for (auto &point : points)
+      {
+        point = matrix.transformPoint(point);
       }
 
       return *this;
