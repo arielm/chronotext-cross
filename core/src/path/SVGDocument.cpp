@@ -62,6 +62,7 @@ namespace chr
             for (auto shapePath = docShape->paths; shapePath != NULL; shapePath = shapePath->next)
             {
               auto &path = shape.addPath();
+              path.setSamplingTolerance(samplingTolerance);
 
               for (auto i = 0; i < shapePath->npts - 1; i += 3)
               {
