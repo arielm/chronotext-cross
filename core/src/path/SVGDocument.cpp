@@ -93,6 +93,12 @@ namespace chr
                   }
                 }
               }
+
+              /*
+               * NANOSVG HANDLES LINES VIA CUBIC-BEZIER-CURVES,
+               * WHICH PRODUCE DUPLICATE POINTS
+               */
+              path.cleanup();
             }
           }
 

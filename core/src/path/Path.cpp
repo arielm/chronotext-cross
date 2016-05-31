@@ -91,5 +91,29 @@ namespace chr
 
       return *this;
     }
+
+    Path& Path::cleanup()
+    {
+      size_t lastIndex = 0;
+      size_t size = polyline.size();
+
+      for (auto index = 0; index < size; ++index, ++lastIndex)
+      {
+        while (polyline[index] == polyline[(index + 1) % size])
+        {
+          ++index;
+        }
+
+        if (index >= size)
+        {
+          break;
+        }
+
+        polyline[lastIndex] = polyline[index];
+      }
+
+      polyline.resize(lastIndex);
+      return *this;
+    }
   }
 }
