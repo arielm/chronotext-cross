@@ -9,12 +9,12 @@
 
 namespace chr
 {
-  static constexpr float D2R (M_PI / 180.0);
-  static constexpr float R2D (180.0 / M_PI);
+  static constexpr float D2R = float(M_PI / 180.0);
+  static constexpr float R2D = float(180.0 / M_PI);
   
-  static constexpr float PI (M_PI);
-  static constexpr float TWO_PI (M_PI * 2.0);
-  static constexpr float HALF_PI (M_PI * 0.5);
+  static constexpr float PI = float(M_PI);
+  static constexpr float TWO_PI = float(M_PI * 2.0);
+  static constexpr float HALF_PI = float(M_PI * 0.5);
 
   namespace math
   {

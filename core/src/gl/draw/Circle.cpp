@@ -73,7 +73,7 @@ namespace chr
 
         for (int i = 0; i < n; i++)
         {
-          float dd = a1 + fmin(aa, i * segmentLength / r);
+          float dd = a1 + fminf(aa, i * segmentLength / r);
           float xx = +sinf(dd) * r;
           float yy = +cosf(dd) * r;
 
@@ -105,7 +105,7 @@ namespace chr
 
         for (int i = 0; i < n; i++)
         {
-          float dd = a1 + fmin(aa, i * segmentLength / r);
+          float dd = a1 + fminf(aa, i * segmentLength / r);
           float xx = +sinf(dd) * r;
           float yy = +cosf(dd) * r;
 
@@ -137,7 +137,7 @@ namespace chr
 
         for (int i = 0; i < n; i++)
         {
-          float dd = a1 + fmin(aa, i * segmentLength / r);
+          float dd = a1 + fminf(aa, i * segmentLength / r);
           float xx = +sinf(dd) * r;
           float yy = +cosf(dd) * r;
 
@@ -169,7 +169,7 @@ namespace chr
 
         for (int i = 0; i < n; i++)
         {
-          float dd = a1 + fmin(aa, i * segmentLength / r);
+          float dd = a1 + fminf(aa, i * segmentLength / r);
           float xx = +sinf(dd) * r;
           float yy = +cosf(dd) * r;
 
