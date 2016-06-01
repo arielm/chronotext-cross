@@ -500,8 +500,8 @@ namespace chr
 
         for (auto i = 0; i < contourElementCount; i++)
         {
-          const auto base = contourElements[i << 1];
-          const auto count = contourElements[(i << 1) + 1];
+          const auto base = contourElements[i * 2];
+          const auto count = contourElements[(i * 2) + 1];
 
           float length = 0;
 
@@ -633,8 +633,8 @@ namespace chr
 
         for (auto i = 0; i < contourElementCount; i++)
         {
-          const auto base = contourElements[i << 1];
-          const auto count = contourElements[(i << 1) + 1];
+          const auto base = contourElements[i * 2];
+          const auto count = contourElements[(i * 2) + 1];
 
           if (contourCapture)
           {
@@ -752,8 +752,8 @@ namespace chr
 
         for (auto i = 0; i < contourElementCount; i++)
         {
-          const auto base = contourElements[i << 1];
-          const auto count = contourElements[(i << 1) + 1];
+          const auto base = contourElements[i * 2];
+          const auto count = contourElements[(i * 2) + 1];
 
           if (contourCapture)
           {

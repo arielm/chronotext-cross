@@ -191,8 +191,10 @@ void Sketch::draw()
 
 void Sketch::initTextures()
 {
-  texture = Texture(Texture::Request("lys_32.png")
-    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-    .setMipmap(true).setWrap(GL_REPEAT, GL_REPEAT)
-    .setAnisotropy(true));
+  texture = Texture(
+    Texture::Request("lys_32.png")
+      .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
+      .setMipmap(true)
+      .setWrap(GL_REPEAT, GL_REPEAT)
+      .setAnisotropy(true));
 }

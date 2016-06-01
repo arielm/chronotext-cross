@@ -1,6 +1,7 @@
 #include "image/Utils.h"
 #include "math/Utils.h"
 #include "MemoryBuffer.h"
+#include "Log.h"
 
 #include <jpeglib.h>
 
@@ -384,6 +385,11 @@ namespace chr
       else if ((relativePath.extension() == ".jpg") || (relativePath.extension() == ".jpeg"))
       {
         image = image::loadJpgImage(relativePath, flags);
+      }
+
+      if (!image.isValid())
+      {
+        LOGE << "UNABLE TO LOAD IMAGE: " << relativePath.filename().string() << endl;
       }
 
       return image;
