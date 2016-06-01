@@ -82,43 +82,23 @@ namespace chr
 
     // ---
 
-    Triangulator& Triangulator::setContourCapture(CaptureType capture)
+    Triangulator& Triangulator::setContourCapture(int capture)
     {
       contourCapture = capture;
       return *this;
     }
 
-    void Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const
+    bool Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const
     {
-      if (contourCapture & CAPTURE_FRONT)
+      if (!contours.empty())
       {
-        for (const auto &contour : contours)
-        {
-          for (const auto &point : contour)
-          {
-            batch.addVertex(matrix.transformPoint(point));
-          }
-
-          auto size = contour.size();
-
-          for (size_t i = 0; i < size; i++)
-          {
-            batch.addIndices(i, (i + 1) % size);
-          }
-
-          batch.incrementIndices(size);
-        }
-      }
-
-      if (extrudedDistance != 0)
-      {
-        if (contourCapture & CAPTURE_BACK)
+        if (contourCapture & CAPTURE_FRONT)
         {
           for (const auto &contour : contours)
           {
             for (const auto &point : contour)
             {
-              batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              batch.addVertex(matrix.transformPoint(point));
             }
 
             auto size = contour.size();
@@ -132,27 +112,54 @@ namespace chr
           }
         }
 
-        if (contourCapture & CAPTURE_HEIGHT)
+        if (extrudedDistance != 0)
         {
-          for (const auto &contour : contours)
+          if (contourCapture & CAPTURE_BACK)
           {
-            for (const auto &point : contour)
+            for (const auto &contour : contours)
             {
-              batch.addVertex(matrix.transformPoint(point));
-              batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              for (const auto &point : contour)
+              {
+                batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              }
+
+              auto size = contour.size();
+
+              for (size_t i = 0; i < size; i++)
+              {
+                batch.addIndices(i, (i + 1) % size);
+              }
+
+              batch.incrementIndices(size);
             }
+          }
 
-            auto size2 = contour.size() * 2;
-
-            for (auto i = 0; i < size2; i++)
+          if (contourCapture & CAPTURE_HEIGHT)
+          {
+            for (const auto &contour : contours)
             {
-              batch.addIndices(i);
-            }
+              for (const auto &point : contour)
+              {
+                batch.addVertex(matrix.transformPoint(point));
+                batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              }
 
-            batch.incrementIndices(size2);
+              auto size2 = contour.size() * 2;
+
+              for (auto i = 0; i < size2; i++)
+              {
+                batch.addIndices(i);
+              }
+
+              batch.incrementIndices(size2);
+            }
           }
         }
+
+        return bool(contourCapture);
       }
+
+      return false;
     }
 
     void Triangulator::captureContours()

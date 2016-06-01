@@ -1,7 +1,6 @@
 #pragma once
 
 #include "path/Shape.h"
-#include "gl/Batch.h"
 #include "gl/Matrix.h"
 
 #include "tesselator.h"
@@ -13,7 +12,7 @@ namespace chr
     class Triangulator
     {
     public:
-      enum CaptureType
+      enum
       {
         CAPTURE_NONE = 0,
         CAPTURE_FRONT = 1,
@@ -35,8 +34,11 @@ namespace chr
       Triangulator& setColor(const glm::vec4 &color);
       Triangulator& setColor(float r, float g, float b, float a);
 
-      Triangulator& setContourCapture(CaptureType capture);
-      void exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const;
+      /*
+       * CONTOURS CAN BE EXPORTED ONLY FOLLOWING A fill OR extrude OPERATION
+       */
+      Triangulator& setContourCapture(int capture);
+      bool exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const;
 
       Triangulator& add(const path::Shape &shape);
       Triangulator& add(const std::vector<glm::vec2> &polyline);
