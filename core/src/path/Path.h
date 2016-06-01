@@ -9,6 +9,9 @@ namespace chr
     class Path: public ASPC
     {
     public:
+      Path() = default;
+      Path(std::vector<glm::vec2> &&polyline);
+
       const std::vector <glm::vec2> &getPolyline() const;
 
       size_t size() const;

@@ -20,8 +20,12 @@ namespace chr
   {
     class ASPC
     {
+    public:
+      ASPC() = default;
+      ASPC(std::vector<glm::vec2> &&polyline);
+
     protected:
-      std::vector <glm::vec2> polyline;
+      std::vector<glm::vec2> polyline;
 
       float samplingTolerance = 1;
       std::function<glm::vec2(float, glm::vec2*)> gamma;

@@ -6,6 +6,11 @@ namespace chr
 {
   namespace path
   {
+    Path::Path(vector<glm::vec2> &&polyline)
+    :
+    ASPC(std::forward<vector<glm::vec2>>(polyline))
+    {}
+
     const vector <glm::vec2> &Path::getPolyline() const
     {
       return polyline;
@@ -35,7 +40,7 @@ namespace chr
     Path &Path::clear()
     {
       begin();
-      current = {std::numeric_limits<float>::quiet_NaN(), std::numeric_limits<float>::quiet_NaN()};
+      current = {numeric_limits<float>::quiet_NaN(), numeric_limits<float>::quiet_NaN()};
 
       return *this;
     }

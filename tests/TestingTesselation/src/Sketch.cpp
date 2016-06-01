@@ -10,6 +10,7 @@ using namespace std;
 using namespace chr;
 using namespace gl;
 using namespace math;
+using namespace path;
 
 Sketch::Sketch()
 :
@@ -40,12 +41,11 @@ void Sketch::setup()
 
   matrix.translate(0, 0, 75);
 
-  vector<vector<glm::vec2>> polygons1;
   auto rect = shape::Rect().setSize(100, 100);
+  Shape polygons1;
   polygons1
-    .emplace_back(rect.append());
-  polygons1
-    .emplace_back(
+    .addPath(rect.append())
+    .addPath(
       affine
         .scale(0.75f)
         .rotate(15 * D2R)
@@ -72,14 +72,13 @@ void Sketch::setup()
     .translate(100, 0)
     .rotate(90 * D2R);
 
-  vector<vector<glm::vec2>> polygons2;
   auto triangle = shape::EquilateralTriangle().setSideLength(100);
+  Shape polygons2;
   polygons2
-    .emplace_back(
+    .addPath(
       affine
-        .transformPoints(triangle.append()));
-  polygons2
-    .emplace_back(
+        .transformPoints(triangle.append()))
+    .addPath(
       affine
         .scale(0.5f)
         .transformPoints(triangle.append()));
@@ -102,14 +101,13 @@ void Sketch::setup()
 
   affine.setIdentity();
 
-  vector<vector<glm::vec2>> polygons3;
   auto circle = shape::Circle().setRadius(50);
+  Shape polygons3;
   polygons3
-    .emplace_back(
+    .addPath(
       affine
-        .transformPoints(circle.append()));
-  polygons3
-    .emplace_back(
+        .transformPoints(circle.append()))
+    .addPath(
       affine
         .scale(0.8f)
         .transformPoints(circle.append()));

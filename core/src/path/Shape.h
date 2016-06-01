@@ -26,7 +26,14 @@ namespace chr
       math::Rectf getBounds() const;
 
       const std::vector<Path>& getPaths() const;
+
       Path& addPath();
+
+      inline Shape& addPath(std::vector<glm::vec2> &&points)
+      {
+        paths.emplace_back(std::forward<std::vector<glm::vec2>>(points));
+        return *this;
+      }
 
     protected:
       std::vector<Path> paths;

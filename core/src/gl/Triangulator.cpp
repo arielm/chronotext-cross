@@ -82,9 +82,9 @@ namespace chr
 
     // ---
 
-    Triangulator& Triangulator::setContourCapture(int contourCapture)
+    Triangulator& Triangulator::setContourCapture(CaptureType capture)
     {
-      this->contourCapture = contourCapture;
+      contourCapture = capture;
       return *this;
     }
 
@@ -99,9 +99,9 @@ namespace chr
             batch.addVertex(matrix.transformPoint(point));
           }
 
-          int size = contour.size();
+          auto size = contour.size();
 
-          for (int i = 0; i < size; i++)
+          for (size_t i = 0; i < size; i++)
           {
             batch.addIndices(i, (i + 1) % size);
           }
@@ -121,9 +121,9 @@ namespace chr
               batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
             }
 
-            int size = contour.size();
+            auto size = contour.size();
 
-            for (int i = 0; i < size; i++)
+            for (size_t i = 0; i < size; i++)
             {
               batch.addIndices(i, (i + 1) % size);
             }
@@ -142,9 +142,9 @@ namespace chr
               batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
             }
 
-            int size2 = contour.size() * 2;
+            auto size2 = contour.size() * 2;
 
-            for (int i = 0; i < size2; i++)
+            for (auto i = 0; i < size2; i++)
             {
               batch.addIndices(i);
             }

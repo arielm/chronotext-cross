@@ -9,6 +9,11 @@ namespace chr
     array<float, 256> ASPC::randomBase;
     bool ASPC::randomBaseGenerated = false;
 
+    ASPC::ASPC(vector<glm::vec2> &&polyline)
+    :
+    polyline(polyline)
+    {}
+
     void ASPC::begin()
     {
       polyline.clear();

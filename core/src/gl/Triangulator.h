@@ -13,7 +13,7 @@ namespace chr
     class Triangulator
     {
     public:
-      enum
+      enum CaptureType
       {
         CAPTURE_NONE = 0,
         CAPTURE_FRONT = 1,
@@ -35,7 +35,7 @@ namespace chr
       Triangulator& setColor(const glm::vec4 &color);
       Triangulator& setColor(float r, float g, float b, float a);
 
-      Triangulator& setContourCapture(int contourCapture);
+      Triangulator& setContourCapture(CaptureType capture);
       void exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const;
 
       Triangulator& add(const path::Shape &shape);
