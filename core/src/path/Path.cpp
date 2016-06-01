@@ -59,6 +59,7 @@ namespace chr
     Path &Path::moveTo(const glm::vec2 &p)
     {
       begin();
+      polyline.emplace_back(p);
       current = p;
 
       return *this;
