@@ -134,7 +134,7 @@ namespace chr
             }
           }
 
-          if (contourCapture & CAPTURE_HEIGHT)
+          if (contourCapture & CAPTURE_COLUMNS)
           {
             for (const auto &contour : contours)
             {

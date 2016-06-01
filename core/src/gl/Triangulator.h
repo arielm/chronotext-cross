@@ -17,7 +17,7 @@ namespace chr
         CAPTURE_NONE = 0,
         CAPTURE_FRONT = 1,
         CAPTURE_BACK = 2,
-        CAPTURE_HEIGHT = 4,
+        CAPTURE_COLUMNS = 4,
         CAPTURE_ALL = 7
       };
 
@@ -73,7 +73,7 @@ namespace chr
 
       // ---
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performFill(IndexedVertexBatch<V> &batch, Args&&... args)
       {
         extrudedDistance = 0;
@@ -115,7 +115,7 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performFillWithTexture(IndexedVertexBatch<V> &batch, Args&&... args)
       {
         extrudedDistance = 0;
@@ -162,7 +162,7 @@ namespace chr
 
       // ---
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performFill(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
       {
         extrudedDistance = 0;
@@ -204,7 +204,7 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performFillWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
       {
         extrudedDistance = 0;
@@ -249,7 +249,7 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performFillWithNormalsAndTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, const glm::vec3 &normal, Args&&... args)
       {
         extrudedDistance = 0;
@@ -297,7 +297,7 @@ namespace chr
 
       // ---
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performExtrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
@@ -478,7 +478,7 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performExtrudeWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
@@ -611,7 +611,7 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performExtrudeWithNormals(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
@@ -728,7 +728,7 @@ namespace chr
         batch.incrementIndices(vertexCount);
       }
 
-      template<int V = XYZ, typename... Args>
+      template<int V, typename... Args>
       void performExtrudeWithNormalsAndTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
