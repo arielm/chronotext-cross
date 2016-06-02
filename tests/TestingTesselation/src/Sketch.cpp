@@ -14,7 +14,7 @@ using namespace path;
 
 Sketch::Sketch()
 :
-strokeBatch(GL_LINES),
+contourBatch(GL_LINES),
 normalBatch(GL_LINES)
 {}
 
@@ -29,7 +29,7 @@ void Sketch::setup()
     .glLineWidth(2);
 
   flatBatch.setShader(colorShader);
-  strokeBatch.setShader(colorShader);
+  contourBatch.setShader(colorShader);
   normalBatch.setShader(colorShader);
 
   lightenBatch.setTexture(texture);
@@ -59,7 +59,7 @@ void Sketch::setup()
     .setTextureScale(0.125f)
     .extrude(lightenBatch, matrix, -150);
 
-  triangulator1.exportContours(strokeBatch, matrix);
+  triangulator1.exportContours(contourBatch, matrix);
 
   //
 
@@ -91,7 +91,7 @@ void Sketch::setup()
     .setTextureScale(0.125f)
     .extrude(flatBatch, matrix, 50);
 
-  triangulator2.exportContours(strokeBatch, matrix);
+  triangulator2.exportContours(contourBatch, matrix);
 
   //
 
@@ -152,24 +152,21 @@ void Sketch::draw()
     .rotateY(clock()->getTime())
     .rotateZ(clock()->getTime() * 0.25f);
 
-  auto mvpMatrix = mvMatrix * projectionMatrix;
-
   // ---
 
   glEnable(GL_POLYGON_OFFSET_FILL);
   glPolygonOffset(2, 1);
 
-  state.apply();
+  state
+    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix)
+    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .apply();
 
   lightenBatch
     .setShader(lambertShader)
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .flush();
 
-  flatBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .flush();
+  flatBatch.flush();
 
   glDepthMask(GL_FALSE);
   glDisable(GL_POLYGON_OFFSET_FILL);
@@ -178,13 +175,8 @@ void Sketch::draw()
     .setShader(textureAlphaShader)
     .flush();
 
-  strokeBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .flush();
-
-  normalBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .flush();
+  contourBatch.flush();
+  normalBatch.flush();
 }
 
 void Sketch::initTextures()

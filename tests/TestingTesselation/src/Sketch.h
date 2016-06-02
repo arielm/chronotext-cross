@@ -20,7 +20,7 @@ protected:
 
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> lightenBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> flatBatch;
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ> strokeBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ> contourBatch;
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 
   chr::gl::shaders::LambertShader lambertShader;
