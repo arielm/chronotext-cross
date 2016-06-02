@@ -78,6 +78,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/gl/State.cpp"
   "${CROSS_ROOT}/src/gl/Buffer.cpp"
   "${CROSS_ROOT}/src/gl/Triangulator.cpp"
+  "${CROSS_ROOT}/src/gl/Revolver.cpp"
   "${CROSS_ROOT}/src/gl/draw/Circle.cpp"
   "${CROSS_ROOT}/src/gl/draw/Rect.cpp"
   "${CROSS_ROOT}/src/gl/draw/Sprite.cpp"
