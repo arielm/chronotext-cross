@@ -4,6 +4,8 @@
 #include "gl/State.h"
 #include "gl/Texture.h"
 
+#include <array>
+
 namespace chr
 {
   namespace gl
@@ -161,9 +163,9 @@ namespace chr
       }
 
       template<int T = MV>
-      VertexBatch& setShaderMatrix(float *values)
+      VertexBatch& setShaderMatrix(std::array<float, 16> &values)
       {
-        matrices4[T] = glm::make_mat4(values);
+        matrices4[T] = glm::make_mat4(values.data());
         hasMatrix4[T] = true;
         return *this;
       }
