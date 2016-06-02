@@ -94,6 +94,17 @@ namespace chr
         return *this;
       }
 
+      template<typename... Args>
+      inline VertexBatch& addVertices(Args&&... args)
+      {
+        for (Vertex<V>&& vertex : {args...})
+        {
+          vertexBuffer->storage.emplace_back(vertex);
+        }
+
+        return *this;
+      }
+
       inline VertexBatch& addVertices(const std::vector<Vertex<V>> &vertices)
       {
         vertexBuffer->storage.insert(vertexBuffer->storage.end(), vertices.begin(), vertices.end());
@@ -306,6 +317,12 @@ namespace chr
           indexBuffer->storage.emplace_back(index + offset);
         }
 
+        return *this;
+      }
+
+      inline IndexedVertexBatch& addIndices(const std::vector<I> &indices)
+      {
+        indexBuffer->storage.insert(indexBuffer->storage.end(), indices.begin(), indices.end());
         return *this;
       }
 
