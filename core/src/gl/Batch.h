@@ -94,6 +94,12 @@ namespace chr
         return *this;
       }
 
+      inline VertexBatch& addVertices(const std::vector<Vertex<V>> &vertices)
+      {
+        vertexBuffer->storage.insert(vertexBuffer->storage.end(), vertices.begin(), vertices.end());
+        return *this;
+      }
+
       VertexBatch& setShader(const ShaderProgram &shader)
       {
         this->shader = shader;
