@@ -123,9 +123,7 @@ void Sketch::setup()
 
   for (auto &vertex : lightenBatch.vertexBuffer->storage)
   {
-    normalBatch
-      .addVertex(vertex.position)
-      .addVertex(vertex.position + vertex.normal * 5.0f);
+    normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
   }
 
   // ---
@@ -145,7 +143,7 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix

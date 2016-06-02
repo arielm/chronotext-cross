@@ -8,6 +8,7 @@ using namespace std;
 using namespace chr;
 using namespace gl;
 using namespace math;
+using namespace path;
 
 static bool showNormals = true;
 static bool showTube = false;
@@ -34,9 +35,10 @@ void Sketch::setup()
 
   if (showTube)
   {
-    vector<vector<glm::vec2>> polygons;
-    polygons.emplace_back(shape::Circle().setRadius(50).append());
-    polygons.emplace_back(shape::Circle().setRadius(40).append());
+    Shape polygons;
+    polygons
+      .addPath(shape::Circle().setRadius(50).append())
+      .addPath(shape::Circle().setRadius(40).append());
 
     matrix.translate(0, 0, 50);
 
@@ -66,9 +68,7 @@ void Sketch::setup()
   {
     for (auto &vertex : fillBatch.vertexBuffer->storage)
     {
-      normalBatch
-        .addVertex(vertex.position)
-        .addVertex(vertex.position + vertex.normal * 5.0f);
+      normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
     }
   }
 
@@ -89,7 +89,7 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix

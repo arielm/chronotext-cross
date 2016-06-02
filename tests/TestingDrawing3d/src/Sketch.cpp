@@ -54,7 +54,7 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix
@@ -101,9 +101,10 @@ void Sketch::draw()
 
 void Sketch::initTextures()
 {
-  texture = Texture(Texture::Request("lys_32.png")
-    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-    .setMipmap(true)
-    .setWrap(GL_REPEAT, GL_REPEAT)
-    .setAnisotropy(true));
+  texture = Texture(
+    Texture::Request("lys_32.png")
+      .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
+      .setMipmap(true)
+      .setWrap(GL_REPEAT, GL_REPEAT)
+      .setAnisotropy(true));
 }

@@ -29,7 +29,7 @@ namespace chr
         return *this;
       }
 
-      inline std::vector<glm::vec2> get(const glm::vec2 &xy) const { return append(xy.x, xy.y); }
+      inline std::vector<glm::vec2> append(const glm::vec2 &xy) const { return append(xy.x, xy.y); }
 
       std::vector<glm::vec2> append(float x = 0, float y = 0) const
       {
@@ -41,7 +41,7 @@ namespace chr
 
         for (int i = 0; i < n; i++)
         {
-          float d = fmin(aa, i * segmentLength / r);
+          float d = fminf(aa, i * segmentLength / r);
           output.emplace_back(x + sinf(a1 - d) * r, y - cosf(a1 - d) * r);
         }
 

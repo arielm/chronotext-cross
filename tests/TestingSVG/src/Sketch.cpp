@@ -15,7 +15,7 @@ strokeBatch(GL_LINES)
 
 void Sketch::setup()
 {
-  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
 
   Matrix modelViewMatrix;
   modelViewMatrix
@@ -102,8 +102,7 @@ void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
   {
     for (auto i = 0; i < size - 1; i++)
     {
-      strokeBatch.addVertex(polyline[i]);
-      strokeBatch.addVertex(polyline[i + 1]);
+      strokeBatch.addVertices(polyline[i], polyline[i + 1]);
     }
   }
 }

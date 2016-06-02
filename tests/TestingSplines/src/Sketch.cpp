@@ -23,7 +23,7 @@ void Sketch::setup()
 {
   initTextures();
 
-  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
 
   lineState
     .setShader(colorShader)
@@ -158,8 +158,7 @@ void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
   {
     for (auto i = 0; i < size - 1; i++)
     {
-      lineBatch.addVertex(polyline[i]);
-      lineBatch.addVertex(polyline[i + 1]);
+      lineBatch.addVertices(polyline[i], polyline[i + 1]);
     }
   }
 }
@@ -172,8 +171,7 @@ void Sketch::drawPolyline(const vector<FollowablePath2D::Point> &points)
   {
     for (auto i = 0; i < size - 1; i++)
     {
-      lineBatch.addVertex(points[i].position);
-      lineBatch.addVertex(points[i + 1].position);
+      lineBatch.addVertices(points[i].position, points[i + 1].position);
     }
   }
 }
@@ -192,7 +190,8 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
 
 void Sketch::initTextures()
 {
-  dotTexture = Texture(Texture::Request("dot_112.png")
-    .setFlags(image::FLAGS_TRANSLUCENT)
-    .setMipmap(true));
+  dotTexture = Texture(
+    Texture::Request("dot_112.png")
+      .setFlags(image::FLAGS_TRANSLUCENT)
+      .setMipmap(true));
 }

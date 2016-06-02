@@ -190,8 +190,7 @@ void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
   {
     for (auto i = 0; i < size - 1; i++)
     {
-      lineBatch.addVertex(polyline[i]);
-      lineBatch.addVertex(polyline[i + 1]);
+      lineBatch.addVertices(polyline[i], polyline[i + 1]);
     }
   }
 }
