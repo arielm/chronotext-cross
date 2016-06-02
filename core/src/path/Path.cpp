@@ -105,7 +105,7 @@ namespace chr
 
       for (auto index = 0; index < size; ++index, ++lastIndex)
       {
-        while (polyline[index] == polyline[(index + 1) % size])
+        while (polyline[index] == polyline[index + 1])
         {
           ++index;
         }
