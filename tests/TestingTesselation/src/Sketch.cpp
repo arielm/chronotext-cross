@@ -10,10 +10,11 @@ using namespace std;
 using namespace chr;
 using namespace gl;
 using namespace math;
+using namespace path;
 
 Sketch::Sketch()
 :
-strokeBatch(GL_LINES),
+contourBatch(GL_LINES),
 normalBatch(GL_LINES)
 {}
 
@@ -28,7 +29,7 @@ void Sketch::setup()
     .glLineWidth(2);
 
   flatBatch.setShader(colorShader);
-  strokeBatch.setShader(colorShader);
+  contourBatch.setShader(colorShader);
   normalBatch.setShader(colorShader);
 
   lightenBatch.setTexture(texture);
@@ -40,12 +41,11 @@ void Sketch::setup()
 
   matrix.translate(0, 0, 75);
 
-  vector<vector<glm::vec2>> polygons1;
   auto rect = shape::Rect().setSize(100, 100);
+  Shape polygons1;
   polygons1
-    .emplace_back(rect.append());
-  polygons1
-    .emplace_back(
+    .addPath(rect.append())
+    .addPath(
       affine
         .scale(0.75f)
         .rotate(15 * D2R)
@@ -59,7 +59,7 @@ void Sketch::setup()
     .setTextureScale(0.125f)
     .extrude(lightenBatch, matrix, -150);
 
-  triangulator1.exportContours(strokeBatch, matrix);
+  triangulator1.exportContours(contourBatch, matrix);
 
   //
 
@@ -72,14 +72,13 @@ void Sketch::setup()
     .translate(100, 0)
     .rotate(90 * D2R);
 
-  vector<vector<glm::vec2>> polygons2;
   auto triangle = shape::EquilateralTriangle().setSideLength(100);
+  Shape polygons2;
   polygons2
-    .emplace_back(
+    .addPath(
       affine
-        .transformPoints(triangle.append()));
-  polygons2
-    .emplace_back(
+        .transformPoints(triangle.append()))
+    .addPath(
       affine
         .scale(0.5f)
         .transformPoints(triangle.append()));
@@ -92,7 +91,7 @@ void Sketch::setup()
     .setTextureScale(0.125f)
     .extrude(flatBatch, matrix, 50);
 
-  triangulator2.exportContours(strokeBatch, matrix);
+  triangulator2.exportContours(contourBatch, matrix);
 
   //
 
@@ -102,14 +101,13 @@ void Sketch::setup()
 
   affine.setIdentity();
 
-  vector<vector<glm::vec2>> polygons3;
   auto circle = shape::Circle().setRadius(50);
+  Shape polygons3;
   polygons3
-    .emplace_back(
+    .addPath(
       affine
-        .transformPoints(circle.append()));
-  polygons3
-    .emplace_back(
+        .transformPoints(circle.append()))
+    .addPath(
       affine
         .scale(0.8f)
         .transformPoints(circle.append()));
@@ -125,9 +123,7 @@ void Sketch::setup()
 
   for (auto &vertex : lightenBatch.vertexBuffer->storage)
   {
-    normalBatch
-      .addVertex(vertex.position)
-      .addVertex(vertex.position + vertex.normal * 5.0f);
+    normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
   }
 
   // ---
@@ -147,7 +143,7 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix
@@ -156,24 +152,21 @@ void Sketch::draw()
     .rotateY(clock()->getTime())
     .rotateZ(clock()->getTime() * 0.25f);
 
-  auto mvpMatrix = mvMatrix * projectionMatrix;
-
   // ---
 
   glEnable(GL_POLYGON_OFFSET_FILL);
   glPolygonOffset(2, 1);
 
-  state.apply();
+  state
+    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix)
+    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .apply();
 
   lightenBatch
     .setShader(lambertShader)
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .flush();
 
-  flatBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .flush();
+  flatBatch.flush();
 
   glDepthMask(GL_FALSE);
   glDisable(GL_POLYGON_OFFSET_FILL);
@@ -182,19 +175,16 @@ void Sketch::draw()
     .setShader(textureAlphaShader)
     .flush();
 
-  strokeBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .flush();
-
-  normalBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .flush();
+  contourBatch.flush();
+  normalBatch.flush();
 }
 
 void Sketch::initTextures()
 {
-  texture = Texture(Texture::Request("lys_32.png")
-    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-    .setMipmap(true).setWrap(GL_REPEAT, GL_REPEAT)
-    .setAnisotropy(true));
+  texture = Texture(
+    Texture::Request("lys_32.png")
+      .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
+      .setMipmap(true)
+      .setWrap(GL_REPEAT, GL_REPEAT)
+      .setAnisotropy(true));
 }

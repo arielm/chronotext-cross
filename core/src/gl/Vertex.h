@@ -114,6 +114,11 @@ namespace chr
       z(z)
       {}
 
+      Vertex(const glm::vec2 &position)
+      :
+      position(position, 0)
+      {}
+
       Vertex(const glm::vec3 &position)
       :
       position(position)
@@ -135,9 +140,23 @@ namespace chr
       Vertex()
       {}
 
+      Vertex(float x, float y, float u, float v)
+      :
+      Vertex<>(x, y),
+      u(u),
+      v(v)
+      {}
+
       Vertex(float x, float y, float z, float u, float v)
       :
       Vertex<>(x, y, z),
+      u(u),
+      v(v)
+      {}
+
+      Vertex(const glm::vec2 &position, float u, float v)
+      :
+      Vertex<>(position),
       u(u),
       v(v)
       {}
@@ -147,6 +166,12 @@ namespace chr
       Vertex<>(position),
       u(u),
       v(v)
+      {}
+
+      Vertex(const glm::vec2 &position, const glm::vec2 &coords)
+      :
+      Vertex<>(position),
+      coords(coords)
       {}
 
       Vertex(const glm::vec3 &position, const glm::vec2 &coords)
@@ -171,9 +196,21 @@ namespace chr
       Vertex()
       {}
 
+      Vertex(float x, float y, const glm::vec4 &color)
+      :
+      Vertex<>(x, y),
+      color(color)
+      {}
+
       Vertex(float x, float y, float z, const glm::vec4 &color)
       :
       Vertex<>(x, y, z),
+      color(color)
+      {}
+
+      Vertex(const glm::vec2 &position, const glm::vec4 &color)
+      :
+      Vertex<>(position),
       color(color)
       {}
 
@@ -199,9 +236,21 @@ namespace chr
       Vertex()
       {}
 
+      Vertex(float x, float y, float u, float v, const glm::vec4 &color)
+      :
+      Vertex<XYZ.UV>(x, y, u, v),
+      color(color)
+      {}
+
       Vertex(float x, float y, float z, float u, float v, const glm::vec4 &color)
       :
       Vertex<XYZ.UV>(x, y, z, u, v),
+      color(color)
+      {}
+
+      Vertex(const glm::vec2 &position, const glm::vec2 &coords, const glm::vec4 &color)
+      :
+      Vertex<XYZ.UV>(position, coords),
       color(color)
       {}
 

@@ -16,7 +16,7 @@ namespace chr
     {
       Texture::Response response;
 
-      if (image.width * image.height)
+      if (image.isValid())
       {
         switch (image.components)
         {

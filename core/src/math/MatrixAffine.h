@@ -29,8 +29,8 @@ namespace chr
       MatrixAffine();
       MatrixAffine(const MatrixAffine &other) = delete;
       
-      operator float* () { return &m[0]; }
-      operator const float* () const { return &m[0]; }
+      operator Values& () { return m; }
+      operator const Values& () const { return m; }
 
       MatrixAffine& load(const MatrixAffine &matrix);
 

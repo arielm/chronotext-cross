@@ -4,6 +4,8 @@
 #include "gl/State.h"
 #include "gl/Texture.h"
 
+#include <array>
+
 namespace chr
 {
   namespace gl
@@ -94,6 +96,23 @@ namespace chr
         return *this;
       }
 
+      template<typename... Args>
+      inline VertexBatch& addVertices(Args&&... args)
+      {
+        for (Vertex<V>&& vertex : {args...})
+        {
+          vertexBuffer->storage.emplace_back(vertex);
+        }
+
+        return *this;
+      }
+
+      inline VertexBatch& addVertices(const std::vector<Vertex<V>> &vertices)
+      {
+        vertexBuffer->storage.insert(vertexBuffer->storage.end(), vertices.begin(), vertices.end());
+        return *this;
+      }
+
       VertexBatch& setShader(const ShaderProgram &shader)
       {
         this->shader = shader;
@@ -144,9 +163,9 @@ namespace chr
       }
 
       template<int T = MV>
-      VertexBatch& setShaderMatrix(float *values)
+      VertexBatch& setShaderMatrix(std::array<float, 16> &values)
       {
-        matrices4[T] = glm::make_mat4(values);
+        matrices4[T] = glm::make_mat4(values.data());
         hasMatrix4[T] = true;
         return *this;
       }
@@ -300,6 +319,12 @@ namespace chr
           indexBuffer->storage.emplace_back(index + offset);
         }
 
+        return *this;
+      }
+
+      inline IndexedVertexBatch& addIndices(const std::vector<I> &indices)
+      {
+        indexBuffer->storage.insert(indexBuffer->storage.end(), indices.begin(), indices.end());
         return *this;
       }
 

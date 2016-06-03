@@ -26,7 +26,7 @@ namespace chr
         return *this;
       }
 
-      std::vector<glm::vec2> get() const
+      std::vector<glm::vec2> append() const
       {
         float innerRadius = outerRadius * innerRadiusRatio;
 

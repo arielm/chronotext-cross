@@ -15,7 +15,7 @@ namespace chr
         return *this;
       }
 
-      inline std::vector<glm::vec2> get(const glm::vec2 &xy) const { return append(xy.x, xy.y); }
+      inline std::vector<glm::vec2> append(const glm::vec2 &xy) const { return append(xy.x, xy.y); }
 
       std::vector<glm::vec2> append(float x = 0, float y = 0) const
       {

@@ -1,7 +1,9 @@
 #include "gl/Triangulator.h"
 
 using namespace std;
-using namespace chr::math;
+using namespace chr;
+using namespace math;
+using namespace path;
 
 namespace chr
 {
@@ -36,7 +38,7 @@ namespace chr
       tessDeleteTess(tess);
     }
 
-    Triangulator& Triangulator::setWindingRule(int windingRule)
+    Triangulator& Triangulator::setWindingRule(TessWindingRule windingRule)
     {
       this->windingRule = windingRule;
       return *this;
@@ -80,48 +82,28 @@ namespace chr
 
     // ---
 
-    Triangulator& Triangulator::setContourCapture(int contourCapture)
+    Triangulator& Triangulator::setContourCapture(int capture)
     {
-      this->contourCapture = contourCapture;
+      contourCapture = capture;
       return *this;
     }
 
-    void Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const
+    bool Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const
     {
-      if (contourCapture & CAPTURE_FRONT)
+      if (!contours.empty())
       {
-        for (const auto &contour : contours)
-        {
-          for (const auto &point : contour)
-          {
-            batch.addVertex(matrix.transformPoint(point));
-          }
-
-          int size = contour.size();
-
-          for (int i = 0; i < size; i++)
-          {
-            batch.addIndices(i, (i + 1) % size);
-          }
-
-          batch.incrementIndices(size);
-        }
-      }
-
-      if (extrudedDistance != 0)
-      {
-        if (contourCapture & CAPTURE_BACK)
+        if (contourCapture & CAPTURE_FRONT)
         {
           for (const auto &contour : contours)
           {
             for (const auto &point : contour)
             {
-              batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              batch.addVertex(matrix.transformPoint(point));
             }
 
-            int size = contour.size();
+            auto size = contour.size();
 
-            for (int i = 0; i < size; i++)
+            for (size_t i = 0; i < size; i++)
             {
               batch.addIndices(i, (i + 1) % size);
             }
@@ -130,27 +112,54 @@ namespace chr
           }
         }
 
-        if (contourCapture & CAPTURE_HEIGHT)
+        if (extrudedDistance != 0)
         {
-          for (const auto &contour : contours)
+          if (contourCapture & CAPTURE_BACK)
           {
-            for (const auto &point : contour)
+            for (const auto &contour : contours)
             {
-              batch.addVertex(matrix.transformPoint(point));
-              batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              for (const auto &point : contour)
+              {
+                batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              }
+
+              auto size = contour.size();
+
+              for (size_t i = 0; i < size; i++)
+              {
+                batch.addIndices(i, (i + 1) % size);
+              }
+
+              batch.incrementIndices(size);
             }
+          }
 
-            int size2 = contour.size() * 2;
-
-            for (int i = 0; i < size2; i++)
+          if (contourCapture & CAPTURE_COLUMNS)
+          {
+            for (const auto &contour : contours)
             {
-              batch.addIndices(i);
-            }
+              for (const auto &point : contour)
+              {
+                batch.addVertex(matrix.transformPoint(point));
+                batch.addVertex(matrix.transformPoint(glm::vec3(point, extrudedDistance)));
+              }
 
-            batch.incrementIndices(size2);
+              auto size2 = contour.size() * 2;
+
+              for (auto i = 0; i < size2; i++)
+              {
+                batch.addIndices(i);
+              }
+
+              batch.incrementIndices(size2);
+            }
           }
         }
+
+        return bool(contourCapture);
       }
+
+      return false;
     }
 
     void Triangulator::captureContours()
@@ -186,100 +195,102 @@ namespace chr
 
     // ---
 
-    template <>
-    Triangulator& Triangulator::add<GL_CCW>(const Rectf &rect)
+    Triangulator& Triangulator::add(const Shape &shape)
     {
-      vector<glm::vec2> polygon;
-      polygon.emplace_back(rect.x1y1());
-      polygon.emplace_back(rect.x1y2());
-      polygon.emplace_back(rect.x2y2());
-      polygon.emplace_back(rect.x2y1());
+      windingRule = convert(shape.getFillRule());
 
-      add(polygon);
-      return *this;
-    }
-
-    template <>
-    Triangulator& Triangulator::add<GL_CW>(const Rectf &rect)
-    {
-      vector<glm::vec2> polygon;
-      polygon.emplace_back(rect.x1y1());
-      polygon.emplace_back(rect.x2y1());
-      polygon.emplace_back(rect.x2y2());
-      polygon.emplace_back(rect.x1y2());
-
-      add(polygon);
-      return *this;
-    }
-
-    Triangulator& Triangulator::add(const vector<vector<glm::vec2>> &polygons)
-    {
-      for (auto &polygon : polygons)
+      for (auto &path : shape.getPaths())
       {
-        add(polygon);
+        add(path.getPolyline());
       }
 
       return *this;
     }
 
-    Triangulator& Triangulator::add(const vector<glm::vec2> &polygon)
+    Triangulator& Triangulator::add(const vector<glm::vec2> &polyline)
     {
-      tessAddContour(tess, 2, polygon.data(), sizeof(glm::vec2), polygon.size());
+      tessAddContour(tess, 2, polyline.data(), sizeof(glm::vec2), polyline.size());
       return *this;
     }
 
     // ---
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ> &batch)
     {
-      performStamp(batch, matrix);
+      performFill(batch);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.RGBA> &batch)
+    {
+      performFill(batch, color);
+    }
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV> &batch)
+    {
+      performFillWithTexture(batch);
+    }
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV.RGBA> &batch)
+    {
+      performFillWithTexture(batch, color);
+    }
+
+    // ---
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
+    {
+      performFill(batch, matrix);
+    }
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
-      performStamp(batch, matrix, normal);
+      performFill(batch, matrix, normal);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
-      performStampWithNormalsAndTexture(batch, matrix, normal);
+      performFillWithNormalsAndTexture(batch, matrix, normal);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix)
     {
-      performStampWithTexture(batch, matrix);
+      performFillWithTexture(batch, matrix);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix)
     {
-      performStamp(batch, matrix, color);
+      performFill(batch, matrix, color);
     }
 
     template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
-    {
-      auto normal = matrix.transformNormal(0, 0, 1);
-      performStamp(batch, matrix, normal, color);
-    }
-
-    template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix)
-    {
-      performStampWithTexture(batch, matrix, color);
-    }
-
-    template <>
-    void Triangulator::stamp(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
-      performStampWithNormalsAndTexture(batch, matrix, normal, color);
+      performFill(batch, matrix, normal, color);
+    }
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix)
+    {
+      performFillWithTexture(batch, matrix, color);
+    }
+
+    template <>
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
+    {
+      auto normal = matrix.transformNormal(0, 0, 1);
+      performFillWithNormalsAndTexture(batch, matrix, normal, color);
     }
 
     // ---
@@ -361,6 +372,19 @@ namespace chr
     glm::vec2 Triangulator::getTextureCoords(const Texture &texture, const glm::vec2 &xy) const
     {
       return (xy - textureOffset) / (texture.innerSize * textureScale);
+    }
+
+    TessWindingRule Triangulator::convert(Shape::FillRule fillRule)
+    {
+      switch (fillRule)
+      {
+        default:
+        case Shape::FILLRULE_EVENODD:
+          return TESS_WINDING_ODD;
+
+        case Shape::FILLRULE_NONZERO:
+          return TESS_WINDING_NONZERO;
+      }
     }
   }
 }

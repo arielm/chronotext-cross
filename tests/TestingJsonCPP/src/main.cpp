@@ -1,4 +1,5 @@
 #include "Platform.h"
+#include "MemoryBuffer.h"
 #include "Log.h"
 
 #include <gtest/gtest.h>
@@ -9,25 +10,40 @@
 
 using namespace std;
 
-TEST(TestJsonCPP, TestRead)
+TEST(TestJsonCPP, TestResourceLoading)
 {
+  fs::path path = "config_doc.json";
+
   Json::Value root;
   Json::Reader reader;
 
-  fs::ifstream config_doc(chr::getResourcePath("config_doc.json"), ifstream::binary);
-  EXPECT_TRUE(reader.parse(config_doc, root));
+  if (chr::hasMemoryResources())
+  {
+    auto memoryBuffer = chr::getResourceBuffer(path);
 
-  Json::FastWriter writer;
-  LOGI << writer.write(root) << endl;
-}
+    if (memoryBuffer)
+    {
+      const char *beginDoc = (const char*)memoryBuffer->data();
+      const char *endDoc = beginDoc + memoryBuffer->size();
 
-TEST(TestJsonCPP, TestParse)
-{
-  const char *json = R"({"my-encoding":"UTF-8","my-indent":{"length":3,"use_space":true},"my-plug-ins":["python","c++","ruby"]})";
+      EXPECT_TRUE(reader.parse(beginDoc, endDoc, root));
+    }
+    else
+    {
+      ADD_FAILURE();
+    }
+  }
+  else if (chr::hasFileResources())
+  {
+    fs::ifstream stream(chr::getResourcePath(path), ifstream::binary);
+    EXPECT_TRUE(reader.parse(stream, root));
+  }
+  else
+  {
+    ADD_FAILURE();
+  }
 
-  Json::Value root;
-  Json::Reader reader;
-  EXPECT_TRUE(reader.parse(json, root));
+  // ---
 
   string encoding = root.get("my-encoding", "???").asString();
   EXPECT_STREQ("UTF-8", encoding.data());

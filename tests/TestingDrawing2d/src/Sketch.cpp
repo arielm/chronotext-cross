@@ -73,8 +73,8 @@ void Sketch::setup()
   triangulator1
     .setContourCapture(Triangulator::CAPTURE_FRONT)
     .setColor(1, 0.25f, 0.25f, 1)
-    .add(shape::FivePointedStar().setOuterRadius(100).get())
-    .stamp(foregroundBatch, matrix);
+    .add(shape::FivePointedStar().setOuterRadius(100).append())
+    .fill(foregroundBatch, matrix);
 
   triangulator1.exportContours(strokeBatch, matrix);
 
@@ -88,7 +88,7 @@ void Sketch::setup()
     .setColor(0.25f, 1, 0, 1)
     .add(shape::EquilateralTriangle().setSideLength(150).append())
     .add(shape::EquilateralTriangle().setSideLength(120).append())
-    .stamp(foregroundBatch, matrix);
+    .fill(foregroundBatch, matrix);
 
   triangulator2.exportContours(strokeBatch, matrix);
 

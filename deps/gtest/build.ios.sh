@@ -21,7 +21,8 @@ TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/ios.cmake"
 cmake -H"$SRC_DIR" -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
-  -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib"
+  -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
+  -DCMAKE_CXX_FLAGS=-fembed-bitcode
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"
