@@ -23,7 +23,7 @@ void Sketch::setup()
   camera
     .setFov(60)
     .setClip(0.1f, 1000.0f)
-    .setSize(windowInfo.size);
+    .setAspectRatio(windowInfo.size);
 
   state
     .setShaderColor(1, 1, 1, 1)
@@ -84,7 +84,7 @@ void Sketch::draw()
 
   // ---
 
-  camera.getModelViewMatrix()
+  camera.getMVMatrix()
     .setIdentity()
     .scale(1, -1, 1)
     .translate(0, 0, -300)
@@ -97,7 +97,7 @@ void Sketch::draw()
   glPolygonOffset(2, 1);
 
   state
-    .setShaderMatrix<MVP>(camera.getModelViewProjectionMatrix())
+    .setShaderMatrix<MVP>(camera.getMVPMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .apply();
 

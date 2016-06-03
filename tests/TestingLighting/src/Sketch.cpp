@@ -23,6 +23,11 @@ phongShader("PhongShader.vert", "PhongShader.frag")
 
 void Sketch::setup()
 {
+  camera
+    .setFov(60)
+    .setClip(0.1f, 1000.0f)
+    .setAspectRatio(windowInfo.size);
+
   state
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
@@ -89,16 +94,12 @@ void Sketch::draw()
 
   // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
-
-  Matrix mvMatrix;
-  mvMatrix
+  camera.getMVMatrix()
+    .setIdentity()
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateY(clock()->getTime())
     .rotateZ(clock()->getTime() * 0.25f);
-
-  auto mvpMatrix = mvMatrix * projectionMatrix;
 
   // ---
 
@@ -108,22 +109,22 @@ void Sketch::draw()
   {
     fillBatch
       .setShader(phongShader)
-      .setShaderMatrix<MV>(mvMatrix)
-      .setShaderMatrix<PROJECTION>(projectionMatrix);
+      .setShaderMatrix<MV>(camera.getMVMatrix())
+      .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix());
   }
   else
   {
     fillBatch
       .setShader(lambertShader)
-      .setShaderMatrix<MVP>(mvpMatrix);
+      .setShaderMatrix<MVP>(camera.getMVPMatrix());
   }
 
   fillBatch
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .flush();
 
   normalBatch
-    .setShaderMatrix<MVP>(mvpMatrix)
+    .setShaderMatrix<MVP>(camera.getMVPMatrix())
     .flush();
 }
 

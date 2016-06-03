@@ -32,7 +32,7 @@ namespace chr
       return *this;
     }
 
-    Camera& Camera::setSize(const glm::vec2 &size)
+    Camera& Camera::setAspectRatio(const glm::vec2 &size)
     {
       aspectRatio = size.x / size.y;
       updateRequired = true;
