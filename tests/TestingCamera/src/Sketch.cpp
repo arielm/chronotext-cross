@@ -20,6 +20,11 @@ normalBatch(GL_LINES)
 
 void Sketch::setup()
 {
+  camera
+    .setFov(60)
+    .setClip(0.1f, 1000.0f)
+    .setSize(windowInfo.size);
+
   state
     .setShaderColor(1, 1, 1, 1)
     .glLineWidth(2);
@@ -79,10 +84,8 @@ void Sketch::draw()
 
   // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
-
-  Matrix mvMatrix;
-  mvMatrix
+  camera.getModelViewMatrix()
+    .setIdentity()
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateY(clock()->getTime())
@@ -94,8 +97,8 @@ void Sketch::draw()
   glPolygonOffset(2, 1);
 
   state
-    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .setShaderMatrix<MVP>(camera.getModelViewProjectionMatrix())
+    .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .apply();
 
   lightenBatch.flush();

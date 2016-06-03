@@ -1,6 +1,7 @@
 #pragma once
 
 #include "cross/Context.h"
+#include "gl/Camera.h"
 #include "gl/Batch.h"
 #include "gl/shaders/ColorShader.h"
 #include "gl/shaders/LambertShader.h"
@@ -16,6 +17,7 @@ public:
 
 protected:
   chr::gl::State state;
+  chr::gl::Camera camera;
 
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> lightenBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ> contourBatch;
