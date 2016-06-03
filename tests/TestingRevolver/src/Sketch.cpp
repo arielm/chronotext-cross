@@ -58,7 +58,8 @@ void Sketch::setup()
   // ---
 
   SVGDocument doc;
-  doc.setOriginAtBottom(false)
+  doc
+    .setOriginAtBottom(false)
     .setSamplingTolerance(16)
     .load("bullet.svg");
 
