@@ -10,6 +10,7 @@
 using namespace std;
 using namespace chr;
 using namespace gl;
+using namespace path;
 
 static bool showTube = true;
 static bool showCube = false;
@@ -45,17 +46,18 @@ void Sketch::setup()
   }
   else if (showTube)
   {
-    vector<vector<glm::vec2>> polygons;
-    polygons.emplace_back(
-      shape::Circle()
-        .setSegmentLength(6)
-        .setRadius(50)
-        .append());
-    polygons.emplace_back(
-      shape::Circle()
-        .setSegmentLength(6)
-        .setRadius(40)
-        .append());
+    Shape polygons;
+    polygons
+      .addPath(
+        shape::Circle()
+          .setSegmentLength(6)
+          .setRadius(50)
+          .append())
+      .addPath(
+        shape::Circle()
+          .setSegmentLength(6)
+          .setRadius(40)
+          .append());
 
     Triangulator triangulator;
     triangulator
@@ -112,7 +114,7 @@ void Sketch::draw()
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix
