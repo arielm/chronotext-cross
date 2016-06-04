@@ -60,6 +60,7 @@ void Sketch::setup()
     .setColor(1.0f, 0.5f, 0.0f, 1.0f)
     .add(polygons)
     .setTextureScale(0.125f)
+    .setFrontFace(CCW)
     .extrude(lightenBatch, matrix, -150);
 
   triangulator.exportContours(contourBatch, matrix);
@@ -90,7 +91,7 @@ void Sketch::draw()
 
   if (mousePressed)
   {
-    processRay(mousePosition, camera.getMVMatrix());
+    processRay(mousePosition, camera.getMVMatrix(), CCW);
   }
 
   // ---
@@ -115,12 +116,12 @@ void Sketch::draw()
 void Sketch::addTouch(int index, float x, float y)
 {
   mousePressed = true;
-  mousePosition = { x, windowInfo.height - y };
+  mousePosition = { x, y };
 }
 
 void Sketch::updateTouch(int index, float x, float y)
 {
-  mousePosition = { x, windowInfo.height - y };
+  mousePosition = { x, y };
 }
 
 void Sketch::removeTouch(int index, float x, float y)
@@ -128,7 +129,7 @@ void Sketch::removeTouch(int index, float x, float y)
   mousePressed = false;
 }
 
-void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix)
+void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix, int frontFace)
 {
   auto ray = camera.getRay(position);
 
@@ -145,7 +146,7 @@ void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix)
     const auto &v1 = vertices[indices[i + 1]].position;
     const auto &v2 = vertices[indices[i + 2]].position;
 
-    float t = ray.triangleIntersection<CULLING>(v0, v1, v2);
+    float t = ray.triangleIntersection(v0, v1, v2, true, frontFace);
 
     if (t > 0)
     {
@@ -167,7 +168,7 @@ void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix)
 
     glm::vec3 pickedNormal(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
 
-    normalBatch.addVertices(pickedPoint, pickedPoint + pickedNormal * -10.0f);
+    normalBatch.addVertices(pickedPoint, pickedPoint + pickedNormal * 10.0f * (frontFace == CW ? +1.0f : -1.0f));
     normalBatch.vertexBuffer.requestUpload();
   }
 }

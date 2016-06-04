@@ -33,5 +33,5 @@ protected:
   bool mousePressed = false;
   glm::vec2 mousePosition;
 
-  void processRay(const glm::vec2 &position, const chr::gl::Matrix &matrix);
+  void processRay(const glm::vec2 &position, const chr::gl::Matrix &matrix, int frontFace);
 };

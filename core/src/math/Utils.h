@@ -11,12 +11,6 @@ namespace chr
 {
   enum
   {
-    CULLING,
-    NO_CULLING
-  };
-
-  enum
-  {
     CW,
     CCW
   };

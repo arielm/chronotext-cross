@@ -7,33 +7,6 @@ namespace chr
 {
   namespace math
   {
-    template <int C>
-    class TriangleIntersection
-    {
-    public:
-      static bool checkDeterminant(float det, float epsilon);
-    };
-
-    template <>
-    class TriangleIntersection<NO_CULLING>
-    {
-    public:
-      static bool checkDeterminant(float det, float epsilon)
-      {
-        return fabsf(det) < epsilon;
-      }
-    };
-
-    template <>
-    class TriangleIntersection<CULLING>
-    {
-    public:
-      static bool checkDeterminant(float det, float epsilon)
-      {
-        return det > -epsilon; // XXX
-      }
-    };
-
     class Ray
     {
     public:
@@ -58,8 +31,7 @@ namespace chr
        *    https://github.com/cinder/Cinder/blob/master/src/cinder/Ray.cpp
        */
 
-      template<int C = CULLING>
-      float triangleIntersection(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3) const
+      float triangleIntersection(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3, bool culling = false, int frontFace = CCW) const
       {
         constexpr float EPSILON = 0.000001f;
 
@@ -73,9 +45,26 @@ namespace chr
         // if determinant is near zero, ray lies in plane of triangle
         float det = glm::dot(e1, P);
 
-        if (TriangleIntersection<C>::checkDeterminant(det, EPSILON))
+        if (culling)
         {
-          return 0;
+          if (frontFace == CW)
+          {
+            if (det < EPSILON)
+            {
+              return 0;
+            }
+          }
+          else if (det > -EPSILON)
+          {
+            return 0;
+          }
+        }
+        else
+        {
+          if (fabsf(det) < EPSILON)
+          {
+            return 0;
+          }
         }
 
         // calculate distance from v1 to ray origin

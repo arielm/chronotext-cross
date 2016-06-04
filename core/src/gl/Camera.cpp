@@ -57,8 +57,8 @@ namespace chr
 
     glm::vec3 Camera::getEyePosition()
     {
-      auto pos = glm::inverse(getModelViewProjectionMatrix()) * glm::vec4(0, 0, 0, 1);
-      return glm::vec3(pos) / pos.w;
+      auto tmp = glm::inverse(getModelViewProjectionMatrix()) * glm::vec4(0, 0, 0, 1);
+      return glm::vec3(tmp) / tmp.w;
     }
 
     /*
@@ -68,7 +68,7 @@ namespace chr
     {
       float aspectRatio = windowSize.x / windowSize.y;
       float s = (windowPosition.x / windowSize.x - 0.5f) * aspectRatio;
-      float t = (windowPosition.y / windowSize.y - 0.5f);
+      float t = (windowSize.y - windowPosition.y) / windowSize.y - 0.5f;
       float viewDistance = aspectRatio / frustumWidth * nearZ;
 
       const auto &m = modelViewMatrix.m;
