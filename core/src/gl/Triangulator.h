@@ -453,9 +453,9 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 0 : 2)],
+            elements[i + (cw ? 0 : 2)],
             elements[i + 1],
-            elements[i + (CW ? 2 : 0)]);
+            elements[i + (cw ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -470,9 +470,9 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -583,9 +583,9 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 0 : 2)],
+            elements[i + (cw ? 0 : 2)],
             elements[i + 1],
-            elements[i + (CW ? 2 : 0)]);
+            elements[i + (cw ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -603,9 +603,9 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -691,7 +691,7 @@ namespace chr
 
         // ---
 
-        auto normal1 = matrix.transformNormal(0, 0, sign * (CW ? -1 : +1));
+        auto normal1 = matrix.transformNormal(0, 0, sign * (cw ? -1 : +1));
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -701,16 +701,16 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 0 : 2)],
+            elements[i + (cw ? 0 : 2)],
             elements[i + 1],
-            elements[i + (CW ? 2 : 0)]);
+            elements[i + (cw ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
 
         // ---
 
-        auto normal2 = matrix.transformNormal(0, 0, sign * (CW ? +1 : -1));
+        auto normal2 = matrix.transformNormal(0, 0, sign * (cw ? +1 : -1));
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -720,9 +720,9 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -799,7 +799,7 @@ namespace chr
                 getTextureCoords(batch.texture, glm::vec2(length0, distance)),
                 std::forward<Args>(args)...);
 
-            if (CW)
+            if (cw)
             {
               batch.addIndices(0, 3, 2, 2, 1, 0);
             }
@@ -829,7 +829,7 @@ namespace chr
 
         // ---
 
-        auto normal1 = matrix.transformNormal(0, 0, sign * (CW ? -1 : +1));
+        auto normal1 = matrix.transformNormal(0, 0, sign * (cw ? -1 : +1));
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -843,16 +843,16 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 0 : 2)],
+            elements[i + (cw ? 0 : 2)],
             elements[i + 1],
-            elements[i + (CW ? 2 : 0)]);
+            elements[i + (cw ? 2 : 0)]);
         }
 
         batch.incrementIndices(vertexCount);
 
         // ---
 
-        auto normal2 = matrix.transformNormal(0, 0, sign * (CW ? +1 : -1));
+        auto normal2 = matrix.transformNormal(0, 0, sign * (cw ? +1 : -1));
 
         for (int i = 0; i < vertexCount; i++)
         {
@@ -866,9 +866,9 @@ namespace chr
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
