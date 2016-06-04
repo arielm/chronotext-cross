@@ -15,6 +15,10 @@ public:
   void setup() final;
   void draw() final;
 
+  void addTouch(int index, float x, float y) final;
+  void updateTouch(int index, float x, float y) final;
+  void removeTouch(int index, float x, float y) final;
+
 protected:
   chr::gl::State state;
   chr::gl::Camera camera;
@@ -25,4 +29,9 @@ protected:
 
   chr::gl::shaders::LambertShader lambertShader;
   chr::gl::shaders::ColorShader colorShader;
+
+  bool mousePressed = false;
+  glm::vec2 mousePosition;
+
+  void processRay(const glm::vec2 &position, const chr::gl::Matrix &matrix);
 };

@@ -20,7 +20,7 @@ namespace chr
     };
 
     template <>
-    class TriangleIntersection<CULLING>
+    class TriangleIntersection<NO_CULLING>
     {
     public:
       static bool checkDeterminant(float det, float epsilon)
@@ -30,12 +30,12 @@ namespace chr
     };
 
     template <>
-    class TriangleIntersection<NO_CULLING>
+    class TriangleIntersection<CULLING>
     {
     public:
       static bool checkDeterminant(float det, float epsilon)
       {
-        return det < epsilon;
+        return det > -epsilon; // XXX
       }
     };
 
@@ -54,7 +54,7 @@ namespace chr
       {}
 
       /*
-       * SOURCE-CODE REFERENCES FOR THE triangleInterection() METHOD:
+       * SOURCE-CODE REFERENCES FOR THE triangleIntersection() METHOD:
        *
        * 1) Möller–Trumbore intersection algorithm
        *    https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
@@ -63,8 +63,8 @@ namespace chr
        *    https://github.com/cinder/Cinder/blob/master/src/cinder/Ray.cpp
        */
 
-      template<int C = NO_CULLING>
-      float triangleIntersection(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3)
+      template<int C = CULLING>
+      float triangleIntersection(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3) const
       {
         constexpr float EPSILON = 0.000001f;
 

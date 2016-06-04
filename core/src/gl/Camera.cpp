@@ -69,14 +69,14 @@ namespace chr
       float aspectRatio = windowSize.x / windowSize.y;
       float s = (windowPosition.x / windowSize.x - 0.5f) * aspectRatio;
       float t = (windowPosition.y / windowSize.y - 0.5f);
-      float viewDistance = aspectRatio / frustumWidth * nearZ; // XXX
+      float viewDistance = aspectRatio / frustumWidth * nearZ;
 
-      auto &m = modelViewMatrix.m;
+      const auto &m = modelViewMatrix.m;
       glm::vec3 right(m[0][0], m[1][0], m[2][0]);
       glm::vec3 up   (m[0][1], m[1][1], m[2][1]);
       glm::vec3 back (m[0][2], m[1][2], m[2][2]);
 
-      return Ray(getEyePosition(), glm::normalize(right * s + up * t - (back * viewDistance)));
+      return Ray(getEyePosition(), glm::normalize(right * s + up * t - back * viewDistance));
     }
 
     void Camera::update()

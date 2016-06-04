@@ -25,12 +25,16 @@ void Sketch::setup()
     .setClip(0.1f, 1000.0f)
     .setWindowSize(windowInfo.size);
 
-  state
-    .setShaderColor(1, 1, 1, 1)
-    .glLineWidth(2);
+  state.glLineWidth(2);
 
-  contourBatch.setShader(colorShader);
-  normalBatch.setShader(colorShader);
+  contourBatch
+    .setShader(colorShader)
+    .setShaderColor(1, 1, 1, 0.5f);
+
+  normalBatch
+    .setShader(colorShader)
+    .setShaderColor(1, 1, 1, 1);
+
   lightenBatch.setShader(lambertShader);
 
   // ---
@@ -62,13 +66,6 @@ void Sketch::setup()
 
   // ---
 
-  for (auto &vertex : lightenBatch.vertexBuffer->storage)
-  {
-    normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
-  }
-
-  // ---
-
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
 
@@ -89,13 +86,12 @@ void Sketch::draw()
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateY(clock()->getTime())
-    .rotateZ(clock()->getTime() * 0.25f * 0);
+    .rotateZ(clock()->getTime() * 0.25f);
 
-  auto eyep = camera.getEyePosition();
-  auto ray = camera.getRay(glm::vec2(400, 300));
-
-  LOGI << ray.direction.x << " " << ray.direction.y << " " << ray.direction.z << endl;
-//  LOGI << eyep.x << " " << eyep.y << " " << eyep.z << endl;
+  if (mousePressed)
+  {
+    processRay(mousePosition, camera.getMVMatrix());
+  }
 
   // ---
 
@@ -114,4 +110,64 @@ void Sketch::draw()
 
   contourBatch.flush();
   normalBatch.flush();
+}
+
+void Sketch::addTouch(int index, float x, float y)
+{
+  mousePressed = true;
+  mousePosition = { x, windowInfo.height - y };
+}
+
+void Sketch::updateTouch(int index, float x, float y)
+{
+  mousePosition = { x, windowInfo.height - y };
+}
+
+void Sketch::removeTouch(int index, float x, float y)
+{
+  mousePressed = false;
+}
+
+void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix)
+{
+  auto ray = camera.getRay(position);
+
+  auto &vertices = lightenBatch.vertexBuffer->storage;
+  auto &indices = lightenBatch.indexBuffer->storage;
+  auto indexCount = indices.size();
+
+  float bestT = numeric_limits<float>::max(); // XXX
+  int bestIndex = -1;
+
+  for (auto i = 0; i < indexCount; i += 3)
+  {
+    const auto &v0 = vertices[indices[i]].position;
+    const auto &v1 = vertices[indices[i + 1]].position;
+    const auto &v2 = vertices[indices[i + 2]].position;
+
+    float t = ray.triangleIntersection<CULLING>(v0, v1, v2);
+
+    if (t > 0)
+    {
+      if (bestT > t) // XXX
+      {
+        bestT = t;
+        bestIndex = i;
+      }
+    }
+  }
+
+  if (bestIndex != -1)
+  {
+    glm::vec3 pickedPoint(ray.origin + ray.direction * bestT);
+
+    const auto &v0 = vertices[indices[bestIndex]].position;
+    const auto &v1 = vertices[indices[bestIndex + 1]].position;
+    const auto &v2 = vertices[indices[bestIndex + 2]].position;
+
+    glm::vec3 pickedNormal(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
+
+    normalBatch.addVertices(pickedPoint, pickedPoint + pickedNormal * -10.0f);
+    normalBatch.vertexBuffer.requestUpload();
+  }
 }
