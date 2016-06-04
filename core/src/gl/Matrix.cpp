@@ -359,7 +359,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CCW>(const Quad<XYZ> &quad, IndexedVertexBatch<XYZ, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CCW>(const Quad<XYZ> &quad, IndexedVertexBatch<XYZ, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -375,7 +375,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CW>(const Quad<XYZ> &quad, IndexedVertexBatch<XYZ, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CW>(const Quad<XYZ> &quad, IndexedVertexBatch<XYZ, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -391,7 +391,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CCW>(const Quad<XYZ.UV> &quad, IndexedVertexBatch<XYZ.UV, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CCW>(const Quad<XYZ.UV> &quad, IndexedVertexBatch<XYZ.UV, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -407,7 +407,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CW>(const Quad<XYZ.UV> &quad, IndexedVertexBatch<XYZ.UV, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CW>(const Quad<XYZ.UV> &quad, IndexedVertexBatch<XYZ.UV, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -423,7 +423,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CCW>(const Quad<XYZ.RGBA> &quad, IndexedVertexBatch<XYZ.RGBA, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CCW>(const Quad<XYZ.RGBA> &quad, IndexedVertexBatch<XYZ.RGBA, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -439,7 +439,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CW>(const Quad<XYZ.RGBA> &quad, IndexedVertexBatch<XYZ.RGBA, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CW>(const Quad<XYZ.RGBA> &quad, IndexedVertexBatch<XYZ.RGBA, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -455,7 +455,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CCW>(const Quad<XYZ.UV.RGBA> &quad, IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CCW>(const Quad<XYZ.UV.RGBA> &quad, IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -471,7 +471,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CW>(const Quad<XYZ.UV.RGBA> &quad, IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CW>(const Quad<XYZ.UV.RGBA> &quad, IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -487,7 +487,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CCW>(const Quad<XYZ.N.RGBA> &quad, IndexedVertexBatch<XYZ.N.RGBA, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CCW>(const Quad<XYZ.N.RGBA> &quad, IndexedVertexBatch<XYZ.N.RGBA, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 
@@ -505,7 +505,7 @@ namespace chr
     }
 
     template <>
-    void Matrix::addTransformedQuad<GL_TRIANGLES, GL_CW>(const Quad<XYZ.N.RGBA> &quad, IndexedVertexBatch<XYZ.N.RGBA, GLushort> &output) const
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CW>(const Quad<XYZ.N.RGBA> &quad, IndexedVertexBatch<XYZ.N.RGBA, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER
 

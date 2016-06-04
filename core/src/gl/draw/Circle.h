@@ -2,7 +2,6 @@
 
 #include "gl/Batch.h"
 #include "gl/Matrix.h"
-#include "math/Utils.h"
 
 namespace chr
 {
@@ -30,7 +29,7 @@ namespace chr
         void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;
 
       protected:
-        GLenum frontFace = GL_CCW;
+        GLenum frontFace = CCW;
         glm::vec2 textureOffset;
         float textureScale = 1;
         glm::vec4 color = { 1, 1, 1, 1 };

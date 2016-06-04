@@ -1,17 +1,12 @@
 #pragma once
 
 #include "glm.h"
+#include "math/Utils.h"
 
 namespace chr
 {
   namespace math
   {
-    enum
-    {
-      NO_CULLING,
-      CULLING
-    };
-
     template <int C>
     class TriangleIntersection
     {

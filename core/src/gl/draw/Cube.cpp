@@ -49,7 +49,7 @@ namespace chr
 
         // ---
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch
             .addIndices(0, 1, 2, 2, 3, 0)
@@ -129,7 +129,7 @@ namespace chr
 
         // ---
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch
             .addIndices( 0,  1,  2,  0,  2,  3)  /* FRONT */
@@ -202,7 +202,7 @@ namespace chr
 
         // ---
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch
             .addIndices( 0,  1,  2,  0,  2,  3)  /* FRONT */
@@ -282,7 +282,7 @@ namespace chr
 
         // ---
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch
             .addIndices( 0,  1,  2,  0,  2,  3)  /* FRONT */
@@ -362,7 +362,7 @@ namespace chr
 
         // ---
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch
             .addIndices( 0,  1,  2,  0,  2,  3)  /* FRONT */
@@ -449,7 +449,7 @@ namespace chr
 
         // ---
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch
             .addIndices( 0,  1,  2,  0,  2,  3)  /* FRONT */

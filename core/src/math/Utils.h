@@ -9,6 +9,18 @@
 
 namespace chr
 {
+  enum
+  {
+    CULLING,
+    NO_CULLING
+  };
+
+  enum
+  {
+    CW,
+    CCW
+  };
+
   static constexpr float D2R = float(M_PI / 180.0);
   static constexpr float R2D = float(180.0 / M_PI);
   

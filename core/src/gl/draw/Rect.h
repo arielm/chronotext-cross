@@ -32,7 +32,7 @@ namespace chr
         void append(IndexedVertexBatch<V,I> &batch) const;
 
       protected:
-        GLenum frontFace = GL_CCW;
+        GLenum frontFace = CCW;
         glm::vec2 textureOffset;
         float textureScale = 1;
         glm::vec4 color = { 1, 1, 1, 1 };

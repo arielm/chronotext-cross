@@ -57,7 +57,7 @@ namespace chr
       int allocated = 0;
 
       TessWindingRule windingRule = TESS_WINDING_ODD;
-      GLenum frontFace = GL_CCW;
+      GLenum frontFace = CCW;
       glm::vec2 textureOffset;
       float textureScale = 1;
       glm::vec4 color = { 1, 1, 1, 1 };
@@ -102,14 +102,14 @@ namespace chr
 
         // ---
 
-        bool CW = (frontFace == GL_CW);
+        bool cw = (frontFace == CW);
 
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -147,14 +147,14 @@ namespace chr
 
         // ---
 
-        bool CW = (frontFace == GL_CW);
+        bool cw = (frontFace == CW);
 
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -191,14 +191,14 @@ namespace chr
 
         // ---
 
-        bool CW = (frontFace == GL_CW);
+        bool cw = (frontFace == CW);
 
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -236,14 +236,14 @@ namespace chr
 
         // ---
 
-        bool CW = (frontFace == GL_CW);
+        bool cw = (frontFace == CW);
 
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -282,14 +282,14 @@ namespace chr
 
         // ---
 
-        bool CW = (frontFace == GL_CW);
+        bool cw = (frontFace == CW);
 
         for (int i = 0; i < elementCount; i += 3)
         {
           batch.addIndices(
-            elements[i + (CW ? 2 : 0)],
+            elements[i + (cw ? 2 : 0)],
             elements[i + 1],
-            elements[i + (CW ? 0 : 2)]);
+            elements[i + (cw ? 0 : 2)]);
         }
 
         batch.incrementIndices(vertexCount);
@@ -301,7 +301,7 @@ namespace chr
       void performExtrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
-        bool CW = ((frontFace == GL_CW) && (distance > 0)) || ((frontFace == GL_CCW) && (distance < 0));
+        bool cw = ((frontFace == CW) && (distance > 0)) || ((frontFace == CCW) && (distance < 0));
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
@@ -428,7 +428,7 @@ namespace chr
             auto i0 = map2[contour[i]];
             auto i1 = map2[contour[(i + 1) % size]];
 
-            if (CW)
+            if (cw)
             {
               batch
                 .addIndices(i0, i0 + vertexCount, i1 + vertexCount)
@@ -482,7 +482,7 @@ namespace chr
       void performExtrudeWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
-        bool CW = ((frontFace == GL_CW) && (distance > 0)) || ((frontFace == GL_CCW) && (distance < 0));
+        bool cw = ((frontFace == CW) && (distance > 0)) || ((frontFace == CCW) && (distance < 0));
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
@@ -542,7 +542,7 @@ namespace chr
                 getTextureCoords(batch.texture, glm::vec2(length0, distance)),
                 std::forward<Args>(args)...);
 
-            if (CW)
+            if (cw)
             {
               batch.addIndices(0, 3, 2, 2, 1, 0);
             }
@@ -616,8 +616,8 @@ namespace chr
       {
         extrudedDistance = distance;
 
-        bool CW = ((frontFace == GL_CW) && (distance > 0)) || ((frontFace == GL_CCW) && (distance < 0));
-        int sign = (frontFace == GL_CW) ? + 1 : -1;
+        bool cw = ((frontFace == CW) && (distance > 0)) || ((frontFace == CCW) && (distance < 0));
+        int sign = (frontFace == CW) ? + 1 : -1;
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
@@ -661,7 +661,7 @@ namespace chr
               .addVertex(matrix.transformPoint(glm::vec3(p1, distance)), normal, std::forward<Args>(args)...)
               .addVertex(matrix.transformPoint(glm::vec3(p0, distance)), normal, std::forward<Args>(args)...);
 
-            if (CW)
+            if (cw)
             {
               batch.addIndices(0, 3, 2, 2, 1, 0);
             }
@@ -733,8 +733,8 @@ namespace chr
       {
         extrudedDistance = distance;
 
-        bool CW = ((frontFace == GL_CW) && (distance > 0)) || ((frontFace == GL_CCW) && (distance < 0));
-        int sign = (frontFace == GL_CW) ? + 1 : -1;
+        bool cw = ((frontFace == CW) && (distance > 0)) || ((frontFace == CCW) && (distance < 0));
+        int sign = (frontFace == CW) ? + 1 : -1;
 
         tessTesselate(tess, windingRule, TESS_BOUNDARY_CONTOURS, 0, 0, 0);
 
