@@ -23,7 +23,7 @@ void Sketch::setup()
   camera
     .setFov(60)
     .setClip(0.1f, 1000.0f)
-    .setAspectRatio(windowInfo.size);
+    .setWindowSize(windowInfo.size);
 
   state
     .setShaderColor(1, 1, 1, 1)
@@ -89,7 +89,13 @@ void Sketch::draw()
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateY(clock()->getTime())
-    .rotateZ(clock()->getTime() * 0.25f);
+    .rotateZ(clock()->getTime() * 0.25f * 0);
+
+  auto eyep = camera.getEyePosition();
+  auto ray = camera.getRay(glm::vec2(400, 300));
+
+  LOGI << ray.direction.x << " " << ray.direction.y << " " << ray.direction.z << endl;
+//  LOGI << eyep.x << " " << eyep.y << " " << eyep.z << endl;
 
   // ---
 

@@ -26,7 +26,7 @@ void Sketch::setup()
   camera
     .setFov(60)
     .setClip(0.1f, 1000.0f)
-    .setAspectRatio(windowInfo.size);
+    .setWindowSize(windowInfo.size);
 
   state
     .setShaderColor(1, 1, 1, 1)
