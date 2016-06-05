@@ -1,5 +1,7 @@
 #include "path/ASPC.h"
 
+#include <cstdlib>
+
 using namespace std;
 
 namespace chr
