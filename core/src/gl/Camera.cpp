@@ -9,18 +9,18 @@ namespace chr
 {
   namespace gl
   {
-    Camera& Camera::setFov(float fov)
+    Camera& Camera::setFov(float fovY)
     {
-      fovY = fov;
+      this->fovY = fovY;
       updateRequired = true;
 
       return *this;
     }
 
-    Camera& Camera::setClip(float near, float far)
+    Camera& Camera::setClip(float nearZ, float farZ)
     {
-      nearZ = near;
-      farZ = far;
+      this->nearZ = nearZ;
+      this->farZ = farZ;
       updateRequired = true;
 
       return *this;

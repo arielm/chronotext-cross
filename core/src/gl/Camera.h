@@ -10,8 +10,8 @@ namespace chr
     class Camera
     {
     public:
-      Camera& setFov(float fov); // IN DEGREES
-      Camera& setClip(float near, float far);
+      Camera& setFov(float fovY); // IN DEGREES
+      Camera& setClip(float nearZ, float farZ);
       Camera& setWindowSize(const glm::vec2 &size);
 
       Matrix& getModelViewMatrix();

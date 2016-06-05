@@ -2,6 +2,8 @@
 
 #include "MemoryBuffer.h"
 
+#include <chrono> // FOR MINGW
+
 using namespace std;
 
 namespace chr
