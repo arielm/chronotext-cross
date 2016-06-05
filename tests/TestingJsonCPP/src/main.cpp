@@ -23,10 +23,8 @@ TEST(TestJsonCPP, TestResourceLoading)
 
     if (memoryBuffer)
     {
-      const char *beginDoc = (const char*)memoryBuffer->data();
-      const char *endDoc = beginDoc + memoryBuffer->size();
-
-      EXPECT_TRUE(reader.parse(beginDoc, endDoc, root));
+      chr::imemstream stream(memoryBuffer);
+      EXPECT_TRUE(reader.parse(stream, root));
     }
     else
     {

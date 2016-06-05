@@ -75,5 +75,7 @@ namespace chr
   bool hasMemoryResources();
 
   fs::path getResourcePath(const fs::path &relativePath);
+  std::string getResourceFilename(const fs::path &relativePath);
+
   std::shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath);
 }

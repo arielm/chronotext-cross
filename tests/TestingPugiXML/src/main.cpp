@@ -31,7 +31,7 @@ TEST(TestPugiXML, TestResourceLoading)
   }
   else if (chr::hasFileResources())
   {
-    result = doc.load_file(chr::getResourcePath(path).c_str());
+    result = doc.load_file(chr::getResourceFilename(path).data());
     EXPECT_TRUE(result);
   }
   else

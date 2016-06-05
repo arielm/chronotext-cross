@@ -58,6 +58,11 @@ namespace chr
     return basePath / relativePath;
   }
 
+  string getResourceFilename(const fs::path &relativePath)
+  {
+    return getResourcePath(relativePath).string();
+  }
+
   shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath)
   {
     #if !defined(CHR_FS_APK) && !defined(CHR_FS_RC) && !defined(FS_JS_EMBED) && !defined(FS_JS_PRELOAD)
