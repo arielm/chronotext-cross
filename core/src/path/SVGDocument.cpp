@@ -39,7 +39,7 @@ namespace chr
 
     bool SVGDocument::load(const fs::path &resourcePath)
     {
-      auto text = utils::readTextFromResource<string>(resourcePath);
+      auto text = utils::readText<string>(resourcePath);
 
       if (!text.empty())
       {

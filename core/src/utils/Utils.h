@@ -34,10 +34,10 @@ namespace chr
     // ---
 
     template<typename T>
-    T readTextFromResource(const fs::path &resourcePath);
+    T readText(const fs::path &resourcePath);
 
     template<typename T>
-    std::vector<T> readLinesFromResource(const fs::path &resourcePath);
+    std::vector<T> readLines(const fs::path &resourcePath);
 
     // ---
 

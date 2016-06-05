@@ -9,7 +9,7 @@ namespace chr
   namespace utils
   {
     template <>
-    string readTextFromResource(const fs::path &resourcePath)
+    string readText(const fs::path &resourcePath)
     {
       string result;
 
@@ -41,7 +41,7 @@ namespace chr
     }
 
     template <>
-    u16string readTextFromResource(const fs::path &resourcePath)
+    u16string readText(const fs::path &resourcePath)
     {
       u16string result;
 
@@ -80,7 +80,7 @@ namespace chr
     // ---
 
     template <>
-    vector<string> readLinesFromResource(const fs::path &resourcePath)
+    vector<string> readLines(const fs::path &resourcePath)
     {
       auto stream = getResourceStream(resourcePath);
 
@@ -96,7 +96,7 @@ namespace chr
     }
 
     template <>
-    vector<u16string> readLinesFromResource(const fs::path &resourcePath)
+    vector<u16string> readLines(const fs::path &resourcePath)
     {
       auto stream = getResourceStream(resourcePath);
 

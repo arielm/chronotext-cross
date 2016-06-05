@@ -23,8 +23,8 @@ namespace chr
     :
     ShaderProgram()
     {
-      element->vertexShaderSource = utils::readTextFromResource<string>(vertexShaderResourcePath);
-      element->fragmentShaderSource = utils::readTextFromResource<string>(fragmentShaderResourcePath);
+      element->vertexShaderSource = utils::readText<string>(vertexShaderResourcePath);
+      element->fragmentShaderSource = utils::readText<string>(fragmentShaderResourcePath);
     }
 
     ShaderProgram::ShaderProgram(const ShaderProgram &other)
