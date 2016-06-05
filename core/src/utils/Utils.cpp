@@ -26,7 +26,7 @@ namespace chr
       }
       else if (chr::hasFileResources())
       {
-        auto resPath = getResourcePath(resourcePath);
+        auto resPath = getResourceFilePath(resourcePath);
         fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
 
         if (in)
@@ -61,7 +61,7 @@ namespace chr
       }
       else if (chr::hasFileResources())
       {
-        auto resPath = getResourcePath(resourcePath);
+        auto resPath = getResourceFilePath(resourcePath);
         fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
 
         if (in)

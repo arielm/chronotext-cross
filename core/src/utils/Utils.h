@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Platform.h"
+#include "FileSystem.h"
 #include "Log.h"
 
 #include <boost/algorithm/string.hpp>

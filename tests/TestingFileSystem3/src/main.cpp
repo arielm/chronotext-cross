@@ -36,7 +36,7 @@ TEST(TestFileSystem3, ZeroCopyInputStream)
   }
   else if (chr::hasFileResources())
   {
-    auto resPath = chr::getResourcePath(path);
+    auto resPath = chr::getResourceFilePath(path);
     fd = open(resPath.string().data(), O_RDONLY);
 
     if (fd > 0)

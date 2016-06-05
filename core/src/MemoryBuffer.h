@@ -1,6 +1,10 @@
 #pragma once
 
 #include "Platform.h"
+#include "FileSystem.h"
+
+#include <streambuf>
+#include <istream>
 
 namespace chr
 {

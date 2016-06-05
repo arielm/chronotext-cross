@@ -1,4 +1,4 @@
-#include "Platform.h"
+#include "FileSystem.h"
 #include "MemoryBuffer.h"
 
 using namespace std;
@@ -23,7 +23,7 @@ namespace chr
     #endif
   }
 
-  fs::path getResourcePath(const fs::path &relativePath)
+  fs::path getResourceFilePath(const fs::path &relativePath)
   {
     fs::path basePath;
 
@@ -58,11 +58,6 @@ namespace chr
     return basePath / relativePath;
   }
 
-  string getResourceFilename(const fs::path &relativePath)
-  {
-    return getResourcePath(relativePath).string();
-  }
-
   shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath)
   {
     #if !defined(CHR_FS_APK) && !defined(CHR_FS_RC) && !defined(FS_JS_EMBED) && !defined(FS_JS_PRELOAD)
@@ -94,7 +89,7 @@ namespace chr
     }
     else if (chr::hasFileResources())
     {
-      stream = new fs::ifstream(chr::getResourcePath(relativePath), ifstream::binary);
+      stream = new fs::ifstream(chr::getResourceFilePath(relativePath), ifstream::binary);
     }
 
     return shared_ptr<istream>(stream);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Platform.h"
+#include "FileSystem.h"
 #include "image/ImageBuffer.h"
 
 #include <png.h>

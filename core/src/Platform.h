@@ -1,18 +1,10 @@
 #pragma once
 
-#include <vector>
 #include <map>
-#include <memory>
-
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-
-namespace fs = boost::filesystem;
+#include <string>
 
 namespace chr
 {
-  class MemoryBuffer;
-
   enum
   {
     PLATFORM_OSX,
@@ -68,14 +60,3 @@ namespace chr
     }
   }
 #endif
-
-namespace chr
-{
-  bool hasFileResources();
-  bool hasMemoryResources();
-
-  fs::path getResourcePath(const fs::path &relativePath);
-  std::string getResourceFilename(const fs::path &relativePath);
-  std::shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath);
-  std::shared_ptr<std::istream> getResourceStream(const fs::path &relativePath);
-}

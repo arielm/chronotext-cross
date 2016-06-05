@@ -39,7 +39,7 @@ TEST(TestFileSystem2, TextResource)
   }
   else if (chr::hasFileResources())
   {
-    auto resPath = chr::getResourcePath(path);
+    auto resPath = chr::getResourceFilePath(path);
     fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
     
     if (in)
@@ -95,7 +95,7 @@ TEST(TestFileSystem2, ImageResource)
   }
   else if (chr::hasFileResources())
   {
-    auto resPath = chr::getResourcePath(path);
+    auto resPath = chr::getResourceFilePath(path);
 
     int x, y, comp;
     stbi_uc *data = stbi_load(resPath.string().data(), &x, &y, &comp, 0);

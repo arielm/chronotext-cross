@@ -84,7 +84,7 @@ namespace chr
       }
       else if (hasFileResources())
       {
-        fd = fopen(getResourcePath(relativePath).string().data(), "rb");
+        fd = fopen(getResourceFilePath(relativePath).string().data(), "rb");
 
         if (fd)
         {
@@ -256,7 +256,7 @@ namespace chr
       }
       else if (hasFileResources())
       {
-        fd = fopen(getResourcePath(relativePath).string().data(), "rb");
+        fd = fopen(getResourceFilePath(relativePath).string().data(), "rb");
 
         if (fd)
         {
