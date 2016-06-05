@@ -2,6 +2,8 @@
 
 #include "Platform.h"
 
+#include <memory>
+
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
@@ -21,52 +23,17 @@ namespace chr
 
     InputSource() = default;
 
-    bool isResource() const
-    {
-      return (type == TYPE_RESOURCE);
-    }
+    bool isResource() const;
+    bool isFile() const;
 
-    bool isFile() const
-    {
-      return (type == TYPE_FILE);
-    }
+    fs::path getFilePath() const;
+    fs::path getRelativePath() const;
+    const std::string& getUri() const;
 
-    fs::path getFilePath() const
-    {
-      return filePath;
-    }
+    std::shared_ptr<std::istream> getStream() const;
 
-    fs::path getRelativePath() const
-    {
-      return relativePath;
-    }
-
-    const std::string& getUri() const
-    {
-      return uri;
-    }
-
-    static InputSource resource(const fs::path &relativePath)
-    {
-      InputSource inputSource;
-
-      inputSource.type = TYPE_RESOURCE;
-      inputSource.relativePath = relativePath;
-      inputSource.uri = "res://" + relativePath.string();
-
-      return inputSource;
-    }
-
-    static InputSource file(const fs::path &filePath)
-    {
-      InputSource inputSource;
-
-      inputSource.type = TYPE_FILE;
-      inputSource.filePath = filePath;
-      inputSource.uri = "file://" + filePath.string();
-
-      return inputSource;
-    }
+    static InputSource resource(const fs::path &relativePath);
+    static InputSource file(const fs::path &filePath);
 
   protected:
     Type type;

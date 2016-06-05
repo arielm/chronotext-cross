@@ -11,23 +11,13 @@ namespace chr
   namespace utils
   {
     template <>
-    string readText(const fs::path &resourcePath)
+    string readText(const InputSource &inputSource)
     {
       string result;
 
-      if (chr::hasMemoryResources())
+      if (inputSource.isFile() || (inputSource.isResource() && hasFileResources()))
       {
-        auto memoryBuffer = getResourceBuffer(resourcePath);
-
-        if (memoryBuffer)
-        {
-          result.assign(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
-        }
-      }
-      else if (chr::hasFileResources())
-      {
-        auto resPath = getResourceFilePath(resourcePath);
-        fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
+        fs::ifstream in(inputSource.getFilePath(), ios::in | ios::binary | ios::ate);
 
         if (in)
         {
@@ -38,31 +28,27 @@ namespace chr
           in.read(&result[0], fileSize);
         }
       }
+      else if (inputSource.isResource() && hasMemoryResources())
+      {
+        auto memoryBuffer = getResourceBuffer(inputSource.getRelativePath());
+
+        if (memoryBuffer)
+        {
+          result.assign(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
+        }
+      }
 
       return result;
     }
 
     template <>
-    u16string readText(const fs::path &resourcePath)
+    u16string readText(const InputSource &inputSource)
     {
       u16string result;
 
-      if (chr::hasMemoryResources())
+      if (inputSource.isFile() || (inputSource.isResource() && hasFileResources()))
       {
-        auto memoryBuffer = getResourceBuffer(resourcePath);
-
-        if (memoryBuffer)
-        {
-          const char *begin = reinterpret_cast<const char*>(memoryBuffer->data());
-          const char *end = begin + memoryBuffer->size();
-
-          utf8::unchecked::utf8to16(begin, end, back_inserter(result));
-        }
-      }
-      else if (chr::hasFileResources())
-      {
-        auto resPath = getResourceFilePath(resourcePath);
-        fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
+        fs::ifstream in(inputSource.getFilePath(), ios::in | ios::binary | ios::ate);
 
         if (in)
         {
@@ -75,6 +61,18 @@ namespace chr
           utf8::unchecked::utf8to16(text.data(), text.data() + text.size(), back_inserter(result));
         }
       }
+      else if (inputSource.isResource() && hasMemoryResources())
+      {
+        auto memoryBuffer = getResourceBuffer(inputSource.getRelativePath());
+
+        if (memoryBuffer)
+        {
+          const char *begin = reinterpret_cast<const char*>(memoryBuffer->data());
+          const char *end = begin + memoryBuffer->size();
+
+          utf8::unchecked::utf8to16(begin, end, back_inserter(result));
+        }
+      }
 
       return result;
     }
@@ -82,9 +80,9 @@ namespace chr
     // ---
 
     template <>
-    vector<string> readLines(const fs::path &resourcePath)
+    vector<string> readLines(const InputSource &inputSource)
     {
-      auto stream = getResourceStream(resourcePath);
+      auto stream = inputSource.getStream();
 
       string line;
       vector<string> result;
@@ -98,9 +96,9 @@ namespace chr
     }
 
     template <>
-    vector<u16string> readLines(const fs::path &resourcePath)
+    vector<u16string> readLines(const InputSource &inputSource)
     {
-      auto stream = getResourceStream(resourcePath);
+      auto stream = inputSource.getStream();
 
       string line;
       vector<u16string> result;

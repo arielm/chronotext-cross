@@ -61,7 +61,7 @@ void Sketch::setup()
   doc
     .setOriginAtBottom(false)
     .setSamplingTolerance(16)
-    .load("bullet.svg");
+    .load(InputSource::resource("bullet.svg"));
 
   auto &path = doc.getShapes().front().getPaths().front();
   auto &contour1 = path.getPolyline();

@@ -19,12 +19,12 @@ namespace chr
       element->useCount++;
     }
 
-    ShaderProgram::ShaderProgram(const string &vertexShaderResourcePath, const string &fragmentShaderResourcePath)
+    ShaderProgram::ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource)
     :
     ShaderProgram()
     {
-      element->vertexShaderSource = utils::readText<string>(vertexShaderResourcePath);
-      element->fragmentShaderSource = utils::readText<string>(fragmentShaderResourcePath);
+      element->vertexShaderSource = utils::readText<string>(vertexShaderSource);
+      element->fragmentShaderSource = utils::readText<string>(fragmentShaderSource);
     }
 
     ShaderProgram::ShaderProgram(const ShaderProgram &other)

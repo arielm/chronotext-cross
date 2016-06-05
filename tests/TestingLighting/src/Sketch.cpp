@@ -18,7 +18,7 @@ Sketch::Sketch()
 :
 fillBatch(GL_TRIANGLES),
 normalBatch(GL_LINES),
-phongShader("PhongShader.vert", "PhongShader.frag")
+phongShader(InputSource::resource("PhongShader.vert"), InputSource::resource("PhongShader.frag"))
 {}
 
 void Sketch::setup()

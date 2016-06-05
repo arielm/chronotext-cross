@@ -2,8 +2,6 @@
 
 #include "InputSource.h"
 
-#include <memory>
-
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 

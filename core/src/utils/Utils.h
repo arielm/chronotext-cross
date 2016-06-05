@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Platform.h"
 #include "FileSystem.h"
 #include "Log.h"
 
@@ -35,10 +34,10 @@ namespace chr
     // ---
 
     template<typename T>
-    T readText(const fs::path &resourcePath);
+    T readText(const InputSource &inputSource);
 
     template<typename T>
-    std::vector<T> readLines(const fs::path &resourcePath);
+    std::vector<T> readLines(const InputSource &inputSource);
 
     // ---
 
