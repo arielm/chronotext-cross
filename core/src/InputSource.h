@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform.h"
+
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
@@ -39,11 +41,18 @@ namespace chr
       return relativePath;
     }
 
+    const std::string& getUri() const
+    {
+      return uri;
+    }
+
     static InputSource resource(const fs::path &relativePath)
     {
       InputSource inputSource;
+
       inputSource.type = TYPE_RESOURCE;
       inputSource.relativePath = relativePath;
+      inputSource.uri = "res://" + relativePath.string();
 
       return inputSource;
     }
@@ -51,8 +60,10 @@ namespace chr
     static InputSource file(const fs::path &filePath)
     {
       InputSource inputSource;
+
       inputSource.type = TYPE_FILE;
       inputSource.filePath = filePath;
+      inputSource.uri = "file://" + filePath.string();
 
       return inputSource;
     }
@@ -61,5 +72,6 @@ namespace chr
     Type type;
     fs::path filePath;
     fs::path relativePath;
+    std::string uri;
   };
 }

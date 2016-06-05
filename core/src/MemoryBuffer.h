@@ -3,9 +3,6 @@
 #include "Platform.h"
 #include "FileSystem.h"
 
-#include <streambuf>
-#include <istream>
-
 namespace chr
 {
   class MemoryBuffer
