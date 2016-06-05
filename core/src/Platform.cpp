@@ -74,4 +74,29 @@ namespace chr
 
     return buffer;
   }
+
+  shared_ptr<istream> getResourceStream(const fs::path &relativePath)
+  {
+    istream *stream;
+
+    if (chr::hasMemoryResources())
+    {
+      auto memoryBuffer = chr::getResourceBuffer(relativePath);
+
+      if (memoryBuffer)
+      {
+        stream = new imemstream(memoryBuffer);
+      }
+      else
+      {
+        return nullptr;
+      }
+    }
+    else if (chr::hasFileResources())
+    {
+      stream = new fs::ifstream(chr::getResourcePath(relativePath), ifstream::binary);
+    }
+
+    return shared_ptr<istream>(stream);
+  }
 }

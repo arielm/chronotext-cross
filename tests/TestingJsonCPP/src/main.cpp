@@ -12,29 +12,14 @@ using namespace std;
 
 TEST(TestJsonCPP, TestResourceLoading)
 {
-  fs::path path = "config_doc.json";
-
   Json::Value root;
-  Json::Reader reader;
 
-  if (chr::hasMemoryResources())
-  {
-    auto memoryBuffer = chr::getResourceBuffer(path);
+  auto stream = chr::getResourceStream("config_doc.json");
 
-    if (memoryBuffer)
-    {
-      chr::imemstream stream(memoryBuffer);
-      EXPECT_TRUE(reader.parse(stream, root));
-    }
-    else
-    {
-      ADD_FAILURE();
-    }
-  }
-  else if (chr::hasFileResources())
+  if (stream)
   {
-    fs::ifstream stream(chr::getResourcePath(path), ifstream::binary);
-    EXPECT_TRUE(reader.parse(stream, root));
+    Json::Reader reader;
+    EXPECT_TRUE(reader.parse(*stream, root));
   }
   else
   {

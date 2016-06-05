@@ -10,28 +10,13 @@ using namespace std;
 
 TEST(TestPugiXML, TestResourceLoading)
 {
-  fs::path path = "tree.xml";
-
   pugi::xml_document doc;
-  pugi::xml_parse_result result;
 
-  if (chr::hasMemoryResources())
-  {
-    auto memoryBuffer = chr::getResourceBuffer(path);
+  auto stream = chr::getResourceStream("tree.xml");
 
-    if (memoryBuffer)
-    {
-      result = doc.load_buffer(memoryBuffer->data(), memoryBuffer->size());
-      EXPECT_TRUE(result);
-    }
-    else
-    {
-      ADD_FAILURE();
-    }
-  }
-  else if (chr::hasFileResources())
+  if (stream)
   {
-    result = doc.load_file(chr::getResourceFilename(path).data());
+    pugi::xml_parse_result result = doc.load(*stream);
     EXPECT_TRUE(result);
   }
   else
