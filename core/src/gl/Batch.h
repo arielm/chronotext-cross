@@ -42,7 +42,7 @@ namespace chr
       Texture texture;
       bool hasTexture = false;
 
-      VertexBatch(GLenum primitive = GL_TRIANGLE_STRIP)
+      VertexBatch(GLenum primitive = GL_TRIANGLES)
       :
       primitive(primitive),
       Batch()

@@ -22,9 +22,6 @@ namespace chr
     glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec2 &input);
     glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec3 &input);
 
-    template<int Primitive = GL_TRIANGLE_STRIP, int FrontFace = CCW, int Type>
-    void addTransformedQuad(const glm::mat4 &matrix, const Quad<Type> &quad, std::vector<Vertex<Type>> &output);
-
     bool clip(Quad<XYZ.UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
   }
 }
