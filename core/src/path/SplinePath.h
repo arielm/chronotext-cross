@@ -228,6 +228,7 @@ namespace chr
       }
 
       inline SplinePath& add(float x, float y) { return add(T(x, y)); }
+      inline SplinePath& add(float x, float y, float z) { return add(T(x, y, z)); }
 
       template <typename M>
       SplinePath& transformPoints(const M &matrix)

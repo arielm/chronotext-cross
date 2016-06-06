@@ -106,6 +106,7 @@ namespace chr
       void clear()
       {
         element->storage.clear();
+        element->uploadRequired = true;
       }
 
       void reserve(size_t n)
