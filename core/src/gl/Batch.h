@@ -100,6 +100,11 @@ namespace chr
         }
       }
 
+      inline std::vector<Vertex<V>>& vertices() const
+      {
+        return vertexBuffer->storage;
+      }
+
       template<typename... Args>
       inline VertexBatch& addVertex(Args&&... args)
       {
@@ -337,6 +342,11 @@ namespace chr
       indexBuffer(indexBuffer),
       VertexBatch<V>(primitive, vertexBuffer)
       {}
+
+      inline std::vector<I>& indices() const
+      {
+        return indexBuffer->storage;
+      }
 
       inline IndexedVertexBatch& addIndex(I offset)
       {

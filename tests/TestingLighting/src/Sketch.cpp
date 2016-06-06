@@ -71,7 +71,7 @@ void Sketch::setup()
 
   if (showNormals)
   {
-    for (auto &vertex : fillBatch.vertexBuffer->storage)
+    for (auto &vertex : fillBatch.vertices())
     {
       normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
     }

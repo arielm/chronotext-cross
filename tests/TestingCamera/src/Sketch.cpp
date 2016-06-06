@@ -133,8 +133,8 @@ void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix, int fro
 {
   auto ray = camera.getRay(position);
 
-  auto &vertices = lightenBatch.vertexBuffer->storage;
-  auto &indices = lightenBatch.indexBuffer->storage;
+  auto &vertices = lightenBatch.vertices();
+  auto &indices = lightenBatch.indices();
   auto indexCount = indices.size();
 
   float bestT = numeric_limits<float>::max(); // XXX
