@@ -67,9 +67,9 @@ void Sketch::setup()
     .setTranslate(150, 150)
     .rotate(-45 * D2R);
 
-  SplinePath2D peanut;
+  SplinePath<glm::vec2> peanut;
   peanut
-    .setType(SplinePath2D::TYPE_BSPLINE)
+    .setType(SplinePath<glm::vec2>::TYPE_BSPLINE)
     .setSamplingTolerance(16)
     .add(-100, -100)
     .add(   0,  -25)

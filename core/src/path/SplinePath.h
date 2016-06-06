@@ -1,14 +1,13 @@
 #pragma once
 
 #include "path/ASPC.h"
-#include "math/MatrixAffine.h"
 
 namespace chr
 {
   namespace path
   {
     template <typename T>
-    class Spline : protected ASPC<T>
+    class SplinePathBase : protected ASPC<T>
     {
     public:
       enum Type
@@ -115,30 +114,131 @@ namespace chr
       }
     };
 
-    class SplinePath2D : public Spline<glm::vec2>
+    template <typename T>
+    class SplinePath : public SplinePathBase<T>
     {
     public:
-      SplinePath2D(int capacity = 0);
-      SplinePath2D(const std::vector<glm::vec2> &points);
+      SplinePath(int capacity = 0)
+      {
+        if (capacity > 0)
+        {
+          SplinePathBase<T>::points.reserve(capacity);
+        }
+      }
 
-      const std::vector<glm::vec2>& getPolyline();
-      const std::vector<glm::vec2>& getPoints() const;
+      SplinePath(const std::vector<T> &points)
+      {
+        add(points);
+      }
 
-      size_t size() const;
-      bool empty() const;
-      bool isClosed() const;
+      const std::vector<T>& getPolyline()
+      {
+        SplinePathBase<T>::flush();
+        return ASPC<T>::polyline;
+      }
 
-      SplinePath2D& setSamplingTolerance(float tolerance);
-      SplinePath2D& setType(Type type);
+      const std::vector<T>& getPoints() const
+      {
+        return SplinePathBase<T>::points;
+      }
 
-      SplinePath2D& clear();
-      SplinePath2D& close();
+      size_t size() const
+      {
+        return SplinePathBase<T>::points.size();
+      }
 
-      SplinePath2D& add(const std::vector<glm::vec2> &points);
-      SplinePath2D& add(const glm::vec2 &point);
-      inline SplinePath2D& add(float x, float y) { return add(glm::vec2(x, y)); }
+      bool empty() const
+      {
+        return SplinePathBase<T>::points.empty();
+      }
 
-      SplinePath2D& transformPoints(const math::MatrixAffine &matrix);
+      bool isClosed() const
+      {
+        return SplinePathBase<T>::closed;
+      }
+
+      SplinePath& setSamplingTolerance(float tolerance)
+      {
+        ASPC<T>::samplingTolerance = tolerance;
+        return *this;
+      }
+
+      SplinePath& setType(typename SplinePathBase<T>::Type type)
+      {
+        SplinePathBase<T>::type = type;
+        return *this;
+      }
+
+      SplinePath& clear()
+      {
+        SplinePathBase<T>::flushed = false;
+
+        SplinePathBase<T>::points.clear();
+        ASPC<T>::polyline.clear();
+
+        return *this;
+      }
+
+      SplinePath& close()
+      {
+        if (SplinePathBase<T>::points.size() > 2)
+        {
+          SplinePathBase<T>::closed = true;
+
+          if (SplinePathBase<T>::points.front() == SplinePathBase<T>::points.back())
+          {
+            SplinePathBase<T>::points.pop_back();
+          }
+        }
+
+        return *this;
+      }
+
+      SplinePath& add(const std::vector<glm::vec2> &newPoints)
+      {
+        if (!SplinePathBase<T>::closed)
+        {
+          auto newSize = newPoints.size();
+
+          if (newSize > 0)
+          {
+            SplinePathBase<T>::points.reserve(SplinePathBase<T>::points.size() + newSize);
+
+            for (auto &point : newPoints)
+            {
+              add(point);
+            }
+
+            SplinePathBase<T>::flushed = false;
+          }
+        }
+
+        return *this;
+      }
+
+      SplinePath& add(const glm::vec2 &point)
+      {
+        if (!SplinePathBase<T>::closed && (SplinePathBase<T>::points.empty() || (point != SplinePathBase<T>::points.back())))
+        {
+          SplinePathBase<T>::points.emplace_back(point);
+          SplinePathBase<T>::flushed = false;
+        }
+
+        return *this;
+      }
+
+      inline SplinePath& add(float x, float y) { return add(T(x, y)); }
+
+      template <typename M>
+      SplinePath& transformPoints(const M &matrix)
+      {
+        for (auto &point : SplinePathBase<T>::points)
+        {
+          point = matrix.transformPoint(point);
+        }
+
+        return *this;
+      }
     };
   }
 }
