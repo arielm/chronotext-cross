@@ -8,7 +8,7 @@ namespace chr
 {
   namespace path
   {
-    SplinePath::SplinePath(int capacity)
+    SplinePath2D::SplinePath2D(int capacity)
     {
       if (capacity > 0)
       {
@@ -16,50 +16,50 @@ namespace chr
       }
     }
 
-    SplinePath::SplinePath(const std::vector <glm::vec2> &points)
+    SplinePath2D::SplinePath2D(const std::vector <glm::vec2> &points)
     {
       add(points);
     }
 
-    const vector<glm::vec2>& SplinePath::getPolyline()
+    const vector<glm::vec2>& SplinePath2D::getPolyline()
     {
       flush();
       return polyline;
     }
 
-    const vector<glm::vec2>& SplinePath::getPoints() const
+    const vector<glm::vec2>& SplinePath2D::getPoints() const
     {
       return points;
     }
 
-    size_t SplinePath::size() const
+    size_t SplinePath2D::size() const
     {
       return points.size();
     }
 
-    bool SplinePath::empty() const
+    bool SplinePath2D::empty() const
     {
       return points.empty();
     }
 
-    bool SplinePath::isClosed() const
+    bool SplinePath2D::isClosed() const
     {
       return closed;
     }
 
-    SplinePath &SplinePath::setSamplingTolerance(float tolerance)
+    SplinePath2D &SplinePath2D::setSamplingTolerance(float tolerance)
     {
       samplingTolerance = tolerance;
       return *this;
     }
 
-    SplinePath &SplinePath::setType(Type type)
+    SplinePath2D &SplinePath2D::setType(Type type)
     {
       this->type = type;
       return *this;
     }
 
-    SplinePath &SplinePath::clear()
+    SplinePath2D &SplinePath2D::clear()
     {
       flushed = false;
 
@@ -69,7 +69,7 @@ namespace chr
       return *this;
     }
 
-    SplinePath &SplinePath::close()
+    SplinePath2D &SplinePath2D::close()
     {
       if (points.size() > 2)
       {
@@ -84,7 +84,7 @@ namespace chr
       return *this;
     }
 
-    SplinePath& SplinePath::add(const vector<glm::vec2> &newPoints)
+    SplinePath2D& SplinePath2D::add(const vector<glm::vec2> &newPoints)
     {
       if (!closed)
       {
@@ -106,7 +106,7 @@ namespace chr
       return *this;
     }
 
-    SplinePath& SplinePath::add(const glm::vec2 &point)
+    SplinePath2D& SplinePath2D::add(const glm::vec2 &point)
     {
       if (!closed && (points.empty() || (point != points.back())))
       {
@@ -117,7 +117,7 @@ namespace chr
       return *this;
     }
 
-    SplinePath& SplinePath::transformPoints(const MatrixAffine &matrix)
+    SplinePath2D& SplinePath2D::transformPoints(const MatrixAffine &matrix)
     {
       for (auto &point : points)
       {
@@ -127,7 +127,7 @@ namespace chr
       return *this;
     }
 
-    bool SplinePath::flush()
+    bool SplinePath2D::flush()
     {
       if (!flushed)
       {

@@ -18,10 +18,10 @@ namespace chr
 {
   namespace path
   {
-    class ASPC
+    class ASPCBase
     {
     public:
-      ASPC() = default;
+      ASPCBase() = default;
 
     protected:
       float samplingTolerance = 1;
@@ -34,25 +34,63 @@ namespace chr
       float nextRandom();
     };
 
-    // ----------
+    // ---
 
-    class ASPC2D : public ASPC
+    template <typename T>
+    class ASPC : protected ASPCBase
     {
     public:
-      ASPC2D() = default;
-      ASPC2D(std::vector<glm::vec2> &&polyline);
+      ASPC<T>() = default;
+
+      ASPC<T>(std::vector<T> &&polyline)
+      :
+      polyline(polyline)
+      {}
 
     protected:
-      std::vector<glm::vec2> polyline;
+      std::vector<T> polyline;
 
-      std::function<glm::vec2(float, glm::vec2*)> gamma;
-      std::array<glm::vec2, 4> in;
+      std::function<T(float, T *)> gamma;
+      std::array<T, 4> in;
 
-      void begin();
+      void sample(float t0, const T &p0, float t1, const T &p1);
 
-      void segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2);
-      void segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3);
-      void sample(float t0, const glm::vec2 &p0, float t1, const glm::vec2 &p1);
+      void begin()
+      {
+        polyline.clear();
+        generateRandomBase();
+      }
+
+      void segment(const T &p0, const T &p1, const T &p2)
+      {
+        in[0] = p0;
+        in[1] = p1;
+        in[2] = p2;
+
+        float pt = 0;
+        auto p = gamma(pt, in.data());
+
+        float qt = 1;
+        auto q = gamma(qt, in.data());
+
+        sample(pt, p, qt, q);
+      }
+
+      void segment(const T &p0, const T &p1, const T &p2, const T &p3)
+      {
+        in[0] = p0;
+        in[1] = p1;
+        in[2] = p2;
+        in[3] = p3;
+
+        float pt = 0;
+        auto p = gamma(pt, in.data());
+
+        float qt = 1;
+        auto q = gamma(qt, in.data());
+
+        sample(pt, p, qt, q);
+      }
     };
   }
 }
