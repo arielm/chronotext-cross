@@ -8,7 +8,7 @@ namespace chr
   namespace path
   {
     template <typename T>
-    class Spline
+    class Spline : protected ASPC<T>
     {
     public:
       enum Type
@@ -43,9 +43,79 @@ namespace chr
       Type type = TYPE_BSPLINE;
       bool closed = false;
       bool flushed = false;
+
+      bool flush()
+      {
+        if (!flushed)
+        {
+          auto size = points.size();
+
+          if (size > 2)
+          {
+            ASPC<T>::begin();
+
+            switch (type)
+            {
+              case TYPE_BSPLINE:
+                ASPC<T>::gamma = GammaBSpline;
+                break;
+
+              case TYPE_CATMULL_ROM:
+                ASPC<T>::gamma = GammaCatmullRom;
+                break;
+            }
+
+            if (closed)
+            {
+              ASPC<T>::segment(points[size - 1], points[0], points[1], points[2]);
+            }
+            else
+            {
+              if (type == TYPE_BSPLINE)
+              {
+                ASPC<T>::segment(points[0], points[0], points[0], points[1]);
+              }
+
+              ASPC<T>::segment(points[0], points[0], points[1], points[2]);
+            }
+
+            for (auto i = 0; i < size - 3; i++)
+            {
+              ASPC<T>::segment(points[i], points[i + 1], points[i + 2], points[i + 3]);
+            }
+
+            if (closed)
+            {
+              ASPC<T>::segment(points[size - 3], points[size - 2], points[size - 1], points[0]);
+              ASPC<T>::segment(points[size - 2], points[size - 1], points[0], points[1]);
+
+              if (ASPC<T>::polyline.front() != ASPC<T>::polyline.back())
+              {
+                ASPC<T>::polyline.emplace_back(ASPC<T>::polyline.front());
+              }
+            }
+            else
+            {
+              ASPC<T>::segment(points[size - 3], points[size - 2], points[size - 1], points[size - 1]);
+              ASPC<T>::segment(points[size - 2], points[size - 1], points[size - 1], points[size - 1]);
+
+              if (type == TYPE_BSPLINE)
+              {
+                ASPC<T>::segment(points[size - 1], points[size - 1], points[size - 1], points[size - 1]);
+              }
+            }
+
+            flushed = true;
+          }
+
+          return flushed;
+        }
+
+        return false;
+      }
     };
 
-    class SplinePath2D : public Spline<glm::vec2>, ASPC<glm::vec2>
+    class SplinePath2D : public Spline<glm::vec2>
     {
     public:
       SplinePath2D(int capacity = 0);
@@ -69,9 +139,6 @@ namespace chr
       inline SplinePath2D& add(float x, float y) { return add(glm::vec2(x, y)); }
 
       SplinePath2D& transformPoints(const math::MatrixAffine &matrix);
-
-    protected:
-      bool flush();
     };
   }
 }
