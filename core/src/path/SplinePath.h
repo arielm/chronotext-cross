@@ -194,7 +194,7 @@ namespace chr
         return *this;
       }
 
-      SplinePath& add(const std::vector<glm::vec2> &newPoints)
+      SplinePath& add(const std::vector<T> &newPoints)
       {
         if (!SplinePathBase<T>::closed)
         {
@@ -204,7 +204,7 @@ namespace chr
           {
             SplinePathBase<T>::points.reserve(SplinePathBase<T>::points.size() + newSize);
 
-            for (auto &point : newPoints)
+            for (const auto &point : newPoints)
             {
               add(point);
             }
@@ -216,7 +216,7 @@ namespace chr
         return *this;
       }
 
-      SplinePath& add(const glm::vec2 &point)
+      SplinePath& add(const T &point)
       {
         if (!SplinePathBase<T>::closed && (SplinePathBase<T>::points.empty() || (point != SplinePathBase<T>::points.back())))
         {
