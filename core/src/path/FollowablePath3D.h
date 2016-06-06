@@ -22,6 +22,7 @@ namespace chr
 
       enum Sampling
       {
+        SAMPLING_NONE,
         SAMPLING_CONTINUOUS,
         SAMPLING_CORNERS
       };
