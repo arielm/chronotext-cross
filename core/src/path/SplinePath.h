@@ -7,7 +7,7 @@ namespace chr
 {
   namespace path
   {
-    class SplinePath : public ASPC
+    class SplinePath : public ASPC2D
     {
     public:
       enum Type

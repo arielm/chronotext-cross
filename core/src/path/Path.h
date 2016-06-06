@@ -6,7 +6,7 @@ namespace chr
 {
   namespace path
   {
-    class Path: public ASPC
+    class Path: public ASPC2D
     {
     public:
       Path() = default;

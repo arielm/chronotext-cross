@@ -22,21 +22,33 @@ namespace chr
     {
     public:
       ASPC() = default;
-      ASPC(std::vector<glm::vec2> &&polyline);
 
     protected:
-      std::vector<glm::vec2> polyline;
-
       float samplingTolerance = 1;
-      std::function<glm::vec2(float, glm::vec2*)> gamma;
-      std::array<glm::vec2, 4> in;
 
       static std::array<float, 256> randomBase;
       static bool randomBaseGenerated;
       int randomIndex = 0;
 
-      void begin();
+      void generateRandomBase();
       float nextRandom();
+    };
+
+    // ----------
+
+    class ASPC2D : public ASPC
+    {
+    public:
+      ASPC2D() = default;
+      ASPC2D(std::vector<glm::vec2> &&polyline);
+
+    protected:
+      std::vector<glm::vec2> polyline;
+
+      std::function<glm::vec2(float, glm::vec2*)> gamma;
+      std::array<glm::vec2, 4> in;
+
+      void begin();
 
       void segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2);
       void segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3);

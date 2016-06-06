@@ -11,15 +11,8 @@ namespace chr
     array<float, 256> ASPC::randomBase;
     bool ASPC::randomBaseGenerated = false;
 
-    ASPC::ASPC(vector<glm::vec2> &&polyline)
-    :
-    polyline(polyline)
-    {}
-
-    void ASPC::begin()
+    void ASPC::generateRandomBase()
     {
-      polyline.clear();
-
       if (!randomBaseGenerated)
       {
         srand(1);
@@ -40,7 +33,20 @@ namespace chr
       return randomBase[(randomIndex++) % randomBase.size()];
     }
 
-    void ASPC::segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2)
+    // ----------
+
+    ASPC2D::ASPC2D(vector<glm::vec2> &&polyline)
+    :
+    polyline(polyline)
+    {}
+
+    void ASPC2D::begin()
+    {
+      polyline.clear();
+      generateRandomBase();
+    }
+
+    void ASPC2D::segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2)
     {
       in[0] = p0;
       in[1] = p1;
@@ -55,7 +61,7 @@ namespace chr
       sample(pt, p, qt, q);
     }
 
-    void ASPC::segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3)
+    void ASPC2D::segment(const glm::vec2 &p0, const glm::vec2 &p1, const glm::vec2 &p2, const glm::vec2 &p3)
     {
       in[0] = p0;
       in[1] = p1;
@@ -71,7 +77,7 @@ namespace chr
       sample(pt, p, qt, q);
     }
 
-    void ASPC::sample(float t0, const glm::vec2 &p0, float t1, const glm::vec2 &p1)
+    void ASPC2D::sample(float t0, const glm::vec2 &p0, float t1, const glm::vec2 &p1)
     {
       float t = 0.45f + 0.1f * nextRandom();
       float rt = t0 + t * (t1 - t0);
