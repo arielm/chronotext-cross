@@ -16,8 +16,6 @@ static bool showTube = true;
 static bool showCube = false;
 
 Sketch::Sketch()
-:
-batch3(GL_TRIANGLES)
 {}
 
 void Sketch::setup()
@@ -73,11 +71,11 @@ void Sketch::setup()
   // ---
 
   Polyhedron P1;
-  PolyhedronBuilder<HalfedgeDS> builder1(batch1.vertexBuffer->storage, batch1.indexBuffer->storage);
+  PolyhedronBuilder<HalfedgeDS> builder1(batch1.vertices(), batch1.indices());
   P1.delegate(builder1);
 
   Polyhedron P2;
-  PolyhedronBuilder<HalfedgeDS> builder2(batch2.vertexBuffer->storage, batch2.indexBuffer->storage);
+  PolyhedronBuilder<HalfedgeDS> builder2(batch2.vertices(), batch2.indices());
   P2.delegate(builder2);
 
   LOGI << "isClosed: " << P1.is_closed() << " | isValid: " << P1.is_valid() << " | isPureTriangle: " << P1.is_pure_triangle() << endl;
@@ -99,7 +97,6 @@ void Sketch::setup()
 
   // ---
 
-  glDepthMask(GL_TRUE);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
 
@@ -110,6 +107,7 @@ void Sketch::setup()
 void Sketch::draw()
 {
   glClearColor(0.5f, 0.5f, 0.5f, 1);
+  glDepthMask(GL_TRUE);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // ---
