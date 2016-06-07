@@ -6,7 +6,7 @@ namespace chr
 {
   namespace path
   {
-    class Path: public ASPC
+    class Path: public ASPC<glm::vec2>
     {
     public:
       Path() = default;

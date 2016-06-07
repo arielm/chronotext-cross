@@ -6,7 +6,8 @@ list(APPEND INCLUDE_DIRS
 
 list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/Log.cpp"
-  "${CROSS_ROOT}/src/Platform.cpp"
+  "${CROSS_ROOT}/src/InputSource.cpp"
+  "${CROSS_ROOT}/src/FileSystem.cpp"
   "${CROSS_ROOT}/src/MemoryBuffer.cpp"
 )
 

@@ -1,8 +1,10 @@
 #pragma once
 
+#include "InputSource.h"
 #include "gl.h"
 
 #include <map>
+#include <vector>
 #include <experimental/string_view>
 
 namespace chr
@@ -55,7 +57,7 @@ namespace chr
       shader::Element *element;
 
       ShaderProgram();
-      ShaderProgram(const std::string &vertexShaderResourcePath, const std::string &fragmentShaderResourcePath);
+      ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource);
       ShaderProgram(const ShaderProgram &other);
       ShaderProgram& operator=(const ShaderProgram &other);
 

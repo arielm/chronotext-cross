@@ -37,9 +37,9 @@ namespace chr
       return shapes;
     }
 
-    bool SVGDocument::load(const fs::path &resourcePath)
+    bool SVGDocument::load(const InputSource &inputSource)
     {
-      auto text = utils::readTextFromResource<string>(resourcePath);
+      auto text = utils::readText<string>(inputSource);
 
       if (!text.empty())
       {

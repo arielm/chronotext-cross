@@ -29,7 +29,7 @@ namespace chr
         void append(IndexedVertexBatch<V,I> &batch, float x = 0, float y = 0) const;
 
       protected:
-        GLenum frontFace = GL_CCW;
+        GLenum frontFace = CCW;
         glm::vec4 color = { 1, 1, 1, 1 };
         glm::vec2 anchor;
 

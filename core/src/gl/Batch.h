@@ -24,7 +24,7 @@ namespace chr
     class VertexBatch : public Batch
     {
     public:
-      GLenum primitive;
+      GLenum primitive = GL_TRIANGLES;
       Buffer<Vertex<V>> vertexBuffer;
 
       ShaderProgram shader;
@@ -42,9 +42,20 @@ namespace chr
       Texture texture;
       bool hasTexture = false;
 
-      VertexBatch(GLenum primitive = GL_TRIANGLE_STRIP)
+      VertexBatch()
+      :
+      Batch()
+      {}
+
+      VertexBatch(GLenum primitive)
       :
       primitive(primitive),
+      Batch()
+      {}
+
+      VertexBatch(const Buffer<Vertex<V>> &vertexBuffer)
+      :
+      vertexBuffer(vertexBuffer),
       Batch()
       {}
 
@@ -89,6 +100,11 @@ namespace chr
         }
       }
 
+      inline std::vector<Vertex<V>>& vertices() const
+      {
+        return vertexBuffer->storage;
+      }
+
       template<typename... Args>
       inline VertexBatch& addVertex(Args&&... args)
       {
@@ -110,6 +126,12 @@ namespace chr
       inline VertexBatch& addVertices(const std::vector<Vertex<V>> &vertices)
       {
         vertexBuffer->storage.insert(vertexBuffer->storage.end(), vertices.begin(), vertices.end());
+        return *this;
+      }
+
+      VertexBatch& setPrimitive(GLenum primitive)
+      {
+        this->primitive = primitive;
         return *this;
       }
 
@@ -289,9 +311,19 @@ namespace chr
     public:
       Buffer<I> indexBuffer;
 
-      IndexedVertexBatch(GLenum primitive = GL_TRIANGLES)
+      IndexedVertexBatch()
+      :
+      VertexBatch<V>()
+      {}
+
+      IndexedVertexBatch(GLenum primitive)
       :
       VertexBatch<V>(primitive)
+      {}
+
+      IndexedVertexBatch(const Buffer<Vertex<V>> &vertexBuffer)
+      :
+      VertexBatch<V>(vertexBuffer)
       {}
 
       IndexedVertexBatch(GLenum primitive, const Buffer<Vertex<V>> &vertexBuffer)
@@ -299,11 +331,22 @@ namespace chr
       VertexBatch<V>(primitive, vertexBuffer)
       {}
 
+      IndexedVertexBatch(const Buffer<Vertex<V>> &vertexBuffer, const Buffer<I> &indexBuffer)
+      :
+      indexBuffer(indexBuffer),
+      VertexBatch<V>(vertexBuffer)
+      {}
+
       IndexedVertexBatch(GLenum primitive, const Buffer<Vertex<V>> &vertexBuffer, const Buffer<I> &indexBuffer)
       :
       indexBuffer(indexBuffer),
       VertexBatch<V>(primitive, vertexBuffer)
       {}
+
+      inline std::vector<I>& indices() const
+      {
+        return indexBuffer->storage;
+      }
 
       inline IndexedVertexBatch& addIndex(I offset)
       {

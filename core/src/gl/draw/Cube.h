@@ -32,7 +32,7 @@ namespace chr
 
       protected:
         float size = 1;
-        GLenum frontFace = GL_CCW;
+        GLenum frontFace = CCW;
 
         glm::vec4 color = glm::vec4(1, 1, 1, 1);
         std::array<glm::vec4, 6> colors;

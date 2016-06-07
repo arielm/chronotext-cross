@@ -81,7 +81,7 @@ namespace chr
 
           if (i < n - 1)
           {
-            if (frontFace == GL_CW)
+            if (frontFace == CW)
             {
               batch.addIndices(i + 1, 0, i + 2);
             }
@@ -113,7 +113,7 @@ namespace chr
 
           if (i < n - 1)
           {
-            if (frontFace == GL_CW)
+            if (frontFace == CW)
             {
               batch.addIndices(i + 1, 0, i + 2);
             }
@@ -145,7 +145,7 @@ namespace chr
 
           if (i < n - 1)
           {
-            if (frontFace == GL_CW)
+            if (frontFace == CW)
             {
               batch.addIndices(i + 1, 0, i + 2);
             }
@@ -177,7 +177,7 @@ namespace chr
 
           if (i < n - 1)
           {
-            if (frontFace == GL_CW)
+            if (frontFace == CW)
             {
               batch.addIndices(i + 1, 0, i + 2);
             }

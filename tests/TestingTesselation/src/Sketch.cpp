@@ -121,7 +121,7 @@ void Sketch::setup()
 
   // ---
 
-  for (auto &vertex : lightenBatch.vertexBuffer->storage)
+  for (auto &vertex : lightenBatch.vertices())
   {
     normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
   }

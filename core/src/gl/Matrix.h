@@ -2,6 +2,7 @@
 
 #include "gl/Quad.h"
 #include "gl/Batch.h"
+#include "math/Utils.h"
 
 #include <array>
 #include <vector>
@@ -84,10 +85,10 @@ namespace chr
       inline glm::vec3 transformNormal(const glm::vec3 &normal) const { return transformNormal(normal.x, normal.y, normal.z); }
       glm::vec3 transformNormal(float x, float y, float z) const;
 
-      template<int Primitive = GL_TRIANGLES, int Orientation = GL_CCW, int V = XYZ>
+      template<int Primitive = GL_TRIANGLES, int FrontFace = CCW, int V = XYZ>
       void addTransformedQuad(const Quad<V> &quad, std::vector<Vertex<V>> &output) const;
 
-      template<int Primitive = GL_TRIANGLES, int Orientation = GL_CCW, int V = XYZ, typename I = GLushort>
+      template<int Primitive = GL_TRIANGLES, int FrontFace = CCW, int V = XYZ, typename I = GLushort>
       void addTransformedQuad(const Quad<V> &quad, IndexedVertexBatch<V, I> &output) const;
 
     protected:

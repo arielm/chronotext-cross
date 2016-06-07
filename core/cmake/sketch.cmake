@@ -73,6 +73,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/gl/Utils.cpp"
   "${CROSS_ROOT}/src/gl/ShaderProgram.cpp"
   "${CROSS_ROOT}/src/gl/ShaderHelper.cpp"
+  "${CROSS_ROOT}/src/gl/Camera.cpp"
   "${CROSS_ROOT}/src/gl/Matrix.cpp"
   "${CROSS_ROOT}/src/gl/Texture.cpp"
   "${CROSS_ROOT}/src/gl/State.cpp"
@@ -92,11 +93,11 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/path/Shape.cpp"
   "${CROSS_ROOT}/src/path/FollowablePath2D.cpp"
   "${CROSS_ROOT}/src/path/FollowablePath3D.cpp"
-  "${CROSS_ROOT}/src/path/SplinePath.cpp"
   "${CROSS_ROOT}/src/path/SVGDocument.cpp"
   "${CROSS_ROOT}/src/math/MatrixAffine.cpp"
   "${CROSS_ROOT}/src/math/Utils.cpp"
   "${CROSS_ROOT}/src/math/Rect.cpp"
+  "${CROSS_ROOT}/src/math/Box.cpp"
   "${CROSS_ROOT}/src/image/Utils.cpp"
 )
 

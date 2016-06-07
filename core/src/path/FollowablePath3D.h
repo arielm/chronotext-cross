@@ -22,6 +22,7 @@ namespace chr
 
       enum Sampling
       {
+        SAMPLING_NONE,
         SAMPLING_CONTINUOUS,
         SAMPLING_CORNERS
       };
@@ -85,7 +86,7 @@ namespace chr
 
     protected:
       Mode mode = MODE_TANGENT;
-      Sampling sampling = SAMPLING_CORNERS;
+      Sampling sampling = SAMPLING_CONTINUOUS;
 
       std::vector<Point> points;
       std::vector<float> lengths;

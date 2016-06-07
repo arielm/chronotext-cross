@@ -1,4 +1,4 @@
-#include "Platform.h"
+#include "FileSystem.h"
 #include "MemoryBuffer.h"
 
 using namespace std;
@@ -23,7 +23,7 @@ namespace chr
     #endif
   }
 
-  fs::path getResourcePath(const fs::path &relativePath)
+  fs::path getResourceFilePath(const fs::path &relativePath)
   {
     fs::path basePath;
 
@@ -68,5 +68,30 @@ namespace chr
     buffer->lock(relativePath);
 
     return buffer;
+  }
+
+  shared_ptr<istream> getResourceStream(const fs::path &relativePath)
+  {
+    istream *stream;
+
+    if (chr::hasMemoryResources())
+    {
+      auto memoryBuffer = chr::getResourceBuffer(relativePath);
+
+      if (memoryBuffer)
+      {
+        stream = new imemstream(memoryBuffer);
+      }
+      else
+      {
+        return nullptr;
+      }
+    }
+    else if (chr::hasFileResources())
+    {
+      stream = new fs::ifstream(chr::getResourceFilePath(relativePath), ifstream::binary);
+    }
+
+    return shared_ptr<istream>(stream);
   }
 }

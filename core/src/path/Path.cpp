@@ -8,7 +8,7 @@ namespace chr
   {
     Path::Path(vector<glm::vec2> &&polyline)
     :
-    ASPC(std::forward<vector<glm::vec2>>(polyline))
+    ASPC<glm::vec2>(std::forward<vector<glm::vec2>>(polyline))
     {}
 
     const vector <glm::vec2> &Path::getPolyline() const

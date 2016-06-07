@@ -41,10 +41,10 @@ void Sketch::setup()
   doc1
     .setOriginAtBottom(false)
     .setSamplingTolerance(16)
-    .load("256.svg");
+    .load(InputSource::resource("256.svg"));
 
   SVGDocument doc2;
-  doc2.load("lys.svg");
+  doc2.load(InputSource::resource("lys.svg"));
 
   // ---
 

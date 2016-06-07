@@ -46,7 +46,7 @@ namespace chr
       bool process(IndexedVertexBatch<V> &batch, Matrix &matrix, const std::vector<glm::vec2> &polyline);
 
     protected:
-      GLenum frontFace = GL_CCW;
+      GLenum frontFace = CCW;
       glm::vec2 textureOffset;
       float textureScale = 1;
       glm::vec4 color = { 1, 1, 1, 1 };
@@ -98,7 +98,7 @@ namespace chr
             auto i2 = i0 + 1;
             auto i3 = i2 + rowCount;
 
-            if (frontFace == GL_CCW)
+            if (frontFace == CCW)
             {
               batch.addIndices(i0, i2, i3, i3, i1, i0);
             }
@@ -130,7 +130,7 @@ namespace chr
               auto i0 = shift + column;
               auto i1 = i0 + 1;
 
-              if (frontFace == GL_CCW)
+              if (frontFace == CCW)
               {
                 batch.addIndices(frontCoreCapIndex, i0, i1);
               }
@@ -150,7 +150,7 @@ namespace chr
               auto i0 = shift + column;
               auto i1 = i0 + 1;
 
-              if (frontFace == GL_CCW)
+              if (frontFace == CCW)
               {
                 batch.addIndices(i0, backCoreCapIndex, i1);
               }
@@ -186,7 +186,7 @@ namespace chr
 
             if (frontCapped)
             {
-              if (frontFace == GL_CCW)
+              if (frontFace == CCW)
               {
                 batch.addIndices(coreCapIndex, i2, i3);
               }
@@ -197,7 +197,7 @@ namespace chr
             }
             else if (backCapped)
             {
-              if (frontFace == GL_CCW)
+              if (frontFace == CCW)
               {
                 batch.addIndices(i0, coreCapIndex, i1);
               }

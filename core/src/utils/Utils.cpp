@@ -1,17 +1,8 @@
-/*
- * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
- *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
- * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
- */
-
 #include "utils/Utils.h"
 
 #include "MemoryBuffer.h"
 
-#include <regex>
-#include <chrono>
+#include <chrono> // FOR MINGW
 
 using namespace std;
 
@@ -20,23 +11,13 @@ namespace chr
   namespace utils
   {
     template <>
-    string readTextFromResource(const fs::path &resourcePath)
+    string readText(const InputSource &inputSource)
     {
       string result;
 
-      if (chr::hasMemoryResources())
+      if (inputSource.isFile() || (inputSource.isResource() && hasFileResources()))
       {
-        auto memoryBuffer = getResourceBuffer(resourcePath);
-
-        if (memoryBuffer)
-        {
-          result.assign(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
-        }
-      }
-      else if (chr::hasFileResources())
-      {
-        auto resPath = getResourcePath(resourcePath);
-        fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
+        fs::ifstream in(inputSource.getFilePath(), ios::in | ios::binary | ios::ate);
 
         if (in)
         {
@@ -47,31 +28,27 @@ namespace chr
           in.read(&result[0], fileSize);
         }
       }
+      else if (inputSource.isResource() && hasMemoryResources())
+      {
+        auto memoryBuffer = getResourceBuffer(inputSource.getRelativePath());
+
+        if (memoryBuffer)
+        {
+          result.assign(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
+        }
+      }
 
       return result;
     }
 
     template <>
-    u16string readTextFromResource(const fs::path &resourcePath)
+    u16string readText(const InputSource &inputSource)
     {
       u16string result;
 
-      if (chr::hasMemoryResources())
+      if (inputSource.isFile() || (inputSource.isResource() && hasFileResources()))
       {
-        auto memoryBuffer = getResourceBuffer(resourcePath);
-
-        if (memoryBuffer)
-        {
-          const char *begin = reinterpret_cast<const char*>(memoryBuffer->data());
-          const char *end = begin + memoryBuffer->size();
-
-          utf8::unchecked::utf8to16(begin, end, back_inserter(result));
-        }
-      }
-      else if (chr::hasFileResources())
-      {
-        auto resPath = getResourcePath(resourcePath);
-        fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
+        fs::ifstream in(inputSource.getFilePath(), ios::in | ios::binary | ios::ate);
 
         if (in)
         {
@@ -84,6 +61,18 @@ namespace chr
           utf8::unchecked::utf8to16(text.data(), text.data() + text.size(), back_inserter(result));
         }
       }
+      else if (inputSource.isResource() && hasMemoryResources())
+      {
+        auto memoryBuffer = getResourceBuffer(inputSource.getRelativePath());
+
+        if (memoryBuffer)
+        {
+          const char *begin = reinterpret_cast<const char*>(memoryBuffer->data());
+          const char *end = begin + memoryBuffer->size();
+
+          utf8::unchecked::utf8to16(begin, end, back_inserter(result));
+        }
+      }
 
       return result;
     }
@@ -91,20 +80,30 @@ namespace chr
     // ---
 
     template <>
-    vector<string> readLinesFromResource(const fs::path &resourcePath)
+    vector<string> readLines(const InputSource &inputSource)
     {
-      return splitLines(utils::readTextFromResource<string>(resourcePath));
+      auto stream = inputSource.getStream();
+
+      string line;
+      vector<string> result;
+
+      while (std::getline(*stream, line))
+      {
+        result.push_back(line);
+      }
+
+      return result;
     }
 
     template <>
-    vector<u16string> readLinesFromResource(const fs::path &resourcePath)
+    vector<u16string> readLines(const InputSource &inputSource)
     {
-      const auto &lines = splitLines(utils::readTextFromResource<string>(resourcePath));
+      auto stream = inputSource.getStream();
 
+      string line;
       vector<u16string> result;
-      result.reserve(lines.size());
 
-      for (const auto &line : lines)
+      while (std::getline(*stream, line))
       {
         result.emplace_back(to<u16string>(line));
       }
@@ -123,24 +122,6 @@ namespace chr
     {
       vector<string> result;
       boost::algorithm::split(result, str, boost::is_any_of(separators), compress ? boost::token_compress_on : boost::token_compress_off);
-      return result;
-    }
-
-    /*
-     * REFERENCE: http://stackoverflow.com/a/30052055/50335
-     */
-    vector<string> splitLines(const string &str)
-    {
-      vector<string> result;
-
-      const regex rgx("(?:\\r\\n|\\r|\\n)");
-      sregex_token_iterator iter(str.begin(), str.end(), rgx, -1);
-
-      for (sregex_token_iterator end; iter != end; ++iter)
-      {
-        result.push_back(iter->str());
-      }
-
       return result;
     }
 

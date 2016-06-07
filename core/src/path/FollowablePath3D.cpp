@@ -120,7 +120,7 @@ namespace chr
 
       if (length > 0)
       {
-        if (sampleSize > 0)
+        if ((sampling != SAMPLING_NONE) && (sampleSize > 0))
         {
           if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
           {
@@ -277,6 +277,10 @@ namespace chr
         if (sampleSize > 0)
         {
           value.fromQuat(offsetToQuat(offset, sampleSize));
+        }
+        else if (sampling == SAMPLING_CONTINUOUS)
+        {
+          value.fromQuat(glm::slerp(p0.toQuat(), p1.toQuat(), u));
         }
         else
         {

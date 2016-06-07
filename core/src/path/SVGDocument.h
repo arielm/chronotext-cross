@@ -18,7 +18,7 @@ namespace chr
       glm::vec2 getSize() const;
       const std::vector<Shape>& getShapes() const;
 
-      bool load(const fs::path &resourcePath);
+      bool load(const InputSource &inputSource);
 
     protected:
       std::vector<Shape> shapes;

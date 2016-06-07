@@ -151,15 +151,15 @@ namespace chr
       }
     }
 
-    const glm::mat4 getPerspectiveMatrix(float fovy, float zNear, float zFar, float width, float height, float panX, float panY, float zoom)
+    const glm::mat4 getPerspectiveMatrix(float fovY, float nearZ, float farZ, float width, float height, float panX, float panY, float zoom)
     {
-      float halfHeight = zNear * tanf(fovy * PI / 360.0f) / zoom;
+      float halfHeight = nearZ * tanf(fovY * PI / 360.0f) / zoom;
       float halfWidth = halfHeight * width / height;
 
       float offsetX = -panX * (halfWidth * 2 / width);
       float offsetY = -panY * (halfHeight * 2 / height);
 
-      return glm::frustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, zNear, zFar);
+      return glm::frustum(-halfWidth + offsetX, halfWidth + offsetX, -halfHeight + offsetY, halfHeight + offsetY, nearZ, farZ);
     }
 
     glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec2 &input)

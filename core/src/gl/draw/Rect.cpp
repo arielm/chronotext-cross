@@ -68,13 +68,13 @@ namespace chr
       template <>
       void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
       {
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ>(bounds), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CW>(Quad<XYZ>(bounds), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ>(bounds), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CCW>(Quad<XYZ>(bounds), batch);
         }
       }
 
@@ -84,39 +84,39 @@ namespace chr
         glm::vec2 coords1, coords2;
         tie(coords1, coords2) = getTextureCoords(batch.texture);
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CCW>(Quad<XYZ.UV>(bounds, coords1, coords2), batch);
         }
       }
 
       template <>
       void Rect::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.RGBA>(bounds, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CW>(Quad<XYZ.RGBA>(bounds, color), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.RGBA>(bounds, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CCW>(Quad<XYZ.RGBA>(bounds, color), batch);
         }
       }
 
       template <>
       void Rect::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
       {
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CCW>(Quad<XYZ.N.RGBA>(bounds, glm::vec3(0, 0, +1), color), batch);
         }
       }
 
@@ -126,13 +126,13 @@ namespace chr
         glm::vec2 coords1, coords2;
         tie(coords1, coords2) = getTextureCoords(batch.texture);
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
         }
         else
         {
-          matrix.addTransformedQuad<GL_TRIANGLES, GL_CCW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
+          matrix.addTransformedQuad<GL_TRIANGLES, CCW>(Quad<XYZ.UV.RGBA>(bounds, coords1, coords2, color), batch);
         }
       }
 
@@ -147,7 +147,7 @@ namespace chr
           .addVertex(bounds.x2, bounds.y2)
           .addVertex(bounds.x2, bounds.y1);
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch.addIndices(0, 3, 2, 2, 1, 0);
         }
@@ -171,7 +171,7 @@ namespace chr
           .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y)
           .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y);
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch.addIndices(0, 3, 2, 2, 1, 0);
         }
@@ -192,7 +192,7 @@ namespace chr
           .addVertex(bounds.x2, bounds.y2, 0, color)
           .addVertex(bounds.x2, bounds.y1, 0, color);
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch.addIndices(0, 3, 2, 2, 1, 0);
         }
@@ -216,7 +216,7 @@ namespace chr
           .addVertex(bounds.x2, bounds.y2, 0, coords2.x, coords2.y, color)
           .addVertex(bounds.x2, bounds.y1, 0, coords2.x, coords1.y, color);
 
-        if (frontFace == GL_CW)
+        if (frontFace == CW)
         {
           batch.addIndices(0, 3, 2, 2, 1, 0);
         }
