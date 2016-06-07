@@ -91,7 +91,7 @@ void Sketch::draw()
 
   if (mousePressed)
   {
-    processRay(mousePosition, camera.getMVMatrix(), CCW);
+    processRay(mousePosition, CCW);
   }
 
   // ---
@@ -129,7 +129,7 @@ void Sketch::removeTouch(int index, float x, float y)
   mousePressed = false;
 }
 
-void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix, int frontFace)
+void Sketch::processRay(const glm::vec2 &position, int frontFace)
 {
   auto ray = camera.getRay(position);
 
