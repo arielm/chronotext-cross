@@ -97,6 +97,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/math/MatrixAffine.cpp"
   "${CROSS_ROOT}/src/math/Utils.cpp"
   "${CROSS_ROOT}/src/math/Rect.cpp"
+  "${CROSS_ROOT}/src/math/Box.cpp"
   "${CROSS_ROOT}/src/image/Utils.cpp"
 )
 
