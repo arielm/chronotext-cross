@@ -281,7 +281,7 @@ namespace chr
 
     bool Revolver::scanProfile(const vector<glm::vec2> &polyline)
     {
-      minRadius = numeric_limits<float>::max();
+      minRadius = FLT_MAX;
       maxRadius = 0;
 
       if (polyline.size() > 1)

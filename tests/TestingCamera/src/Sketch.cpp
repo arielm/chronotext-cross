@@ -137,7 +137,7 @@ void Sketch::processRay(const glm::vec2 &position, const Matrix &matrix, int fro
   auto &indices = lightenBatch.indices();
   auto indexCount = indices.size();
 
-  float bestT = numeric_limits<float>::max(); // XXX
+  float bestT = FLT_MAX; // XXX
   int bestIndex = -1;
 
   for (auto i = 0; i < indexCount; i += 3)
