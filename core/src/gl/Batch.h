@@ -105,6 +105,11 @@ namespace chr
         return vertexBuffer->storage;
       }
 
+      inline Vertex<V>& vertex(size_t i) const
+      {
+        return vertexBuffer->storage[i];
+      }
+
       template<typename... Args>
       inline VertexBatch& addVertex(Args&&... args)
       {
@@ -348,9 +353,14 @@ namespace chr
         return indexBuffer->storage;
       }
 
+      inline I index(size_t i) const
+      {
+        return indexBuffer->storage[i];
+      }
+
       inline IndexedVertexBatch& addIndex(I offset)
       {
-        indexBuffer->storage.emplace_back(index + offset);
+        indexBuffer->storage.emplace_back(currentIndex + offset);
         return *this;
       }
 
@@ -359,7 +369,7 @@ namespace chr
       {
         for (I offset : {args...})
         {
-          indexBuffer->storage.emplace_back(index + offset);
+          indexBuffer->storage.emplace_back(currentIndex + offset);
         }
 
         return *this;
@@ -373,13 +383,13 @@ namespace chr
 
       inline IndexedVertexBatch& incrementIndices(I increment)
       {
-        index += increment;
+        currentIndex += increment;
         return *this;
       }
 
       inline I getIndex() const
       {
-        return index;
+        return currentIndex;
       }
 
       void clear() override
@@ -389,7 +399,7 @@ namespace chr
         indexBuffer.clear();
         indexBuffer.requestUpload();
 
-        index = 0;
+        currentIndex = 0;
       }
 
       bool empty() const override
@@ -398,7 +408,7 @@ namespace chr
       }
 
     protected:
-      I index = 0;
+      I currentIndex = 0;
 
       void bind(ShaderProgram &shader) override
       {
