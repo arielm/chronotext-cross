@@ -34,6 +34,22 @@ namespace chr
       return *this;
     }
 
+    Camera& Camera::setPan2D(const glm::vec2 &pan)
+    {
+      pan2D = pan;
+      updateRequired = true;
+
+      return *this;
+    }
+
+    Camera& Camera::setZoom2D(float zoom)
+    {
+      zoom2D = zoom;
+      updateRequired = true;
+
+      return *this;
+    }
+
     glm::mat4 Camera::getProjectionMatrix()
     {
       update();
@@ -69,7 +85,7 @@ namespace chr
       float aspectRatio = windowSize.x / windowSize.y;
       float s = (windowPosition.x / windowSize.x - 0.5f) * aspectRatio;
       float t = (windowSize.y - windowPosition.y) / windowSize.y - 0.5f;
-      float viewDistance = aspectRatio / frustumWidth * nearZ;
+      float viewDistance = aspectRatio / frustumSize.x * nearZ;
 
       const auto &m = modelViewMatrix.m;
       glm::vec3 right(m[0][0], m[1][0], m[2][0]);
@@ -85,13 +101,15 @@ namespace chr
       {
         updateRequired = false;
 
-        float halfHeight = nearZ * tanf(fovY * PI / 360.0f);
+        float halfHeight = nearZ * tanf(fovY * PI / 360.0f) / zoom2D;
         float halfWidth = halfHeight * windowSize.x / windowSize.y;
 
-        frustumWidth = halfWidth * 2;
-        frustumHeight = halfHeight * 2;
+        frustumSize.x = halfWidth * 2;
+        frustumSize.y = halfHeight * 2;
 
-        projectionMatrix = glm::frustum(-halfWidth, +halfWidth, -halfHeight, +halfHeight, nearZ, farZ);
+        glm::vec2 offset(-pan2D * frustumSize / windowSize);
+
+        projectionMatrix = glm::frustum(-halfWidth + offset.x, halfWidth + offset.x, -halfHeight + offset.y, halfHeight + offset.y, nearZ, farZ);
       }
     }
   }

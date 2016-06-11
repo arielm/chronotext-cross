@@ -14,6 +14,9 @@ namespace chr
       Camera& setClip(float nearZ, float farZ);
       Camera& setWindowSize(const glm::vec2 &size);
 
+      Camera& setPan2D(const glm::vec2 &pan);
+      Camera& setZoom2D(float zoom);
+
       Matrix& getModelViewMatrix();
       glm::mat4 getProjectionMatrix();
       glm::mat4 getModelViewProjectionMatrix();
@@ -25,19 +28,22 @@ namespace chr
       glm::vec3 getEyePosition();
       math::Ray getRay(const glm::vec2 &windowPosition);
 
+      inline Camera& setPan2D(float x, float y) { return setPan2D(glm::vec2(x, y)); }
+
     protected:
+      bool updateRequired = false;
+
       float fovY = 60;
       float nearZ = 0.1f;
       float farZ = 1000.0f;
       glm::vec2 windowSize = { 1, 1 };
 
+      glm::vec2 pan2D;
+      float zoom2D = 1;
+      glm::vec2 frustumSize;
+
       glm::mat4 projectionMatrix;
       Matrix modelViewMatrix;
-
-      float frustumWidth;
-      float frustumHeight;
-
-      bool updateRequired = false;
 
       void update();
     };
