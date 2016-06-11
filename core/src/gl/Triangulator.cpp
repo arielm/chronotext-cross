@@ -88,7 +88,7 @@ namespace chr
       return *this;
     }
 
-    bool Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const
+    bool Triangulator::exportContours(IndexedVertexBatch<XYZ> &batch, const Matrix &matrix) const
     {
       if (!contours.empty())
       {
@@ -242,52 +242,52 @@ namespace chr
     // ---
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ> &batch, const Matrix &matrix)
     {
       performFill(batch, matrix);
     }
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N> &batch, const Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
       performFill(batch, matrix, normal);
     }
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV> &batch, const Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
       performFillWithNormalsAndTexture(batch, matrix, normal);
     }
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV> &batch, const Matrix &matrix)
     {
       performFillWithTexture(batch, matrix);
     }
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.RGBA> &batch, const Matrix &matrix)
     {
       performFill(batch, matrix, color);
     }
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.RGBA> &batch, const Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
       performFill(batch, matrix, normal, color);
     }
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.UV.RGBA> &batch, const Matrix &matrix)
     {
       performFillWithTexture(batch, matrix, color);
     }
 
     template <>
-    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix)
+    void Triangulator::fill(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, const Matrix &matrix)
     {
       auto normal = matrix.transformNormal(0, 0, 1);
       performFillWithNormalsAndTexture(batch, matrix, normal, color);
@@ -296,7 +296,7 @@ namespace chr
     // ---
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
@@ -305,7 +305,7 @@ namespace chr
     }
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
@@ -314,7 +314,7 @@ namespace chr
     }
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
@@ -323,7 +323,7 @@ namespace chr
     }
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
@@ -332,7 +332,7 @@ namespace chr
     }
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.RGBA> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
@@ -341,7 +341,7 @@ namespace chr
     }
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.UV.RGBA> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
@@ -350,7 +350,7 @@ namespace chr
     }
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.RGBA> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {
@@ -359,7 +359,7 @@ namespace chr
     }
 
     template <>
-    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix, float distance)
+    void Triangulator::extrude(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, const Matrix &matrix, float distance)
     {
       if (distance != 0)
       {

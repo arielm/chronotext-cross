@@ -43,7 +43,7 @@ namespace chr
       bool exportContours(IndexedVertexBatch<XYZ> &batch) const;
 
       template<int V = XYZ>
-      bool process(IndexedVertexBatch<V> &batch, Matrix &matrix, const std::vector<glm::vec2> &polyline);
+      bool process(IndexedVertexBatch<V> &batch, const Matrix &matrix, const std::vector<glm::vec2> &polyline);
 
     protected:
       GLenum frontFace = CCW;
@@ -213,7 +213,7 @@ namespace chr
       // ---
 
       template<int V, typename... Args>
-      void performProcess(IndexedVertexBatch<V> &batch, Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
+      void performProcess(IndexedVertexBatch<V> &batch, const Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
       {
         bool frontCapped = false;
         bool backCapped = false;
@@ -280,7 +280,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performProcessWithNormals(IndexedVertexBatch<V> &batch, Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
+      void performProcessWithNormals(IndexedVertexBatch<V> &batch, const Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
       {
         bool frontCapped = false;
         bool backCapped = false;
@@ -394,7 +394,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performProcessWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
+      void performProcessWithTexture(IndexedVertexBatch<V> &batch, const Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
       {
         bool frontCapped = false;
         bool backCapped = false;
@@ -519,7 +519,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performProcessWithNormalsAndTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
+      void performProcessWithNormalsAndTexture(IndexedVertexBatch<V> &batch, const Matrix &matrix, const std::vector<glm::vec2> &polyline, Args&&... args)
       {
         bool frontCapped = false;
         bool backCapped = false;

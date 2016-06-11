@@ -77,7 +77,7 @@ namespace chr
     // ---
 
     template <>
-    bool Revolver::process(IndexedVertexBatch<XYZ> &batch, Matrix &matrix, const vector<glm::vec2> &polyline)
+    bool Revolver::process(IndexedVertexBatch<XYZ> &batch, const Matrix &matrix, const vector<glm::vec2> &polyline)
     {
       if (scanProfile(polyline))
       {
@@ -89,7 +89,7 @@ namespace chr
     }
 
     template <>
-    bool Revolver::process(IndexedVertexBatch<XYZ.N> &batch, Matrix &matrix, const vector<glm::vec2> &polyline)
+    bool Revolver::process(IndexedVertexBatch<XYZ.N> &batch, const Matrix &matrix, const vector<glm::vec2> &polyline)
     {
       if (scanProfile(polyline))
       {
@@ -101,7 +101,7 @@ namespace chr
     }
 
     template <>
-    bool Revolver::process(IndexedVertexBatch<XYZ.UV> &batch, Matrix &matrix, const vector<glm::vec2> &polyline)
+    bool Revolver::process(IndexedVertexBatch<XYZ.UV> &batch, const Matrix &matrix, const vector<glm::vec2> &polyline)
     {
       if (scanProfile(polyline))
       {
@@ -113,7 +113,7 @@ namespace chr
     }
 
     template <>
-    bool Revolver::process(IndexedVertexBatch<XYZ.RGBA> &batch, Matrix &matrix, const vector<glm::vec2> &polyline)
+    bool Revolver::process(IndexedVertexBatch<XYZ.RGBA> &batch, const Matrix &matrix, const vector<glm::vec2> &polyline)
     {
       if (scanProfile(polyline))
       {
@@ -125,7 +125,7 @@ namespace chr
     }
 
     template <>
-    bool Revolver::process(IndexedVertexBatch<XYZ.N.RGBA> &batch, Matrix &matrix, const vector<glm::vec2> &polyline)
+    bool Revolver::process(IndexedVertexBatch<XYZ.N.RGBA> &batch, const Matrix &matrix, const vector<glm::vec2> &polyline)
     {
       if (scanProfile(polyline))
       {
@@ -137,7 +137,7 @@ namespace chr
     }
 
     template <>
-    bool Revolver::process(IndexedVertexBatch<XYZ.UV.RGBA> &batch, Matrix &matrix, const vector<glm::vec2> &polyline)
+    bool Revolver::process(IndexedVertexBatch<XYZ.UV.RGBA> &batch, const Matrix &matrix, const vector<glm::vec2> &polyline)
     {
       if (scanProfile(polyline))
       {
@@ -149,7 +149,7 @@ namespace chr
     }
 
     template <>
-    bool Revolver::process(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, Matrix &matrix, const vector<glm::vec2> &polyline)
+    bool Revolver::process(IndexedVertexBatch<XYZ.N.UV.RGBA> &batch, const Matrix &matrix, const vector<glm::vec2> &polyline)
     {
       if (scanProfile(polyline))
       {

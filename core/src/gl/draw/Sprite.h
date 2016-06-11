@@ -23,7 +23,7 @@ namespace chr
         Sprite& setAnchor(float x, float y);
 
         template<int V = XYZ, typename I = GLushort>
-        void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix, float x = 0, float y = 0) const;
+        void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix, float x = 0, float y = 0) const;
 
         template<int V = XYZ, typename I = GLushort>
         void append(IndexedVertexBatch<V,I> &batch, float x = 0, float y = 0) const;

@@ -28,7 +28,7 @@ namespace chr
         }
 
         template<int V = XYZ, typename I = GLushort>
-        void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix) const;
+        void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix) const;
 
       protected:
         float size = 1;

@@ -66,7 +66,7 @@ namespace chr
       // ---
 
       template <>
-      void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ, GLushort> &batch, const Matrix &matrix) const
       {
         if (frontFace == CW)
         {
@@ -79,7 +79,7 @@ namespace chr
       }
 
       template <>
-      void Rect::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, const Matrix &matrix) const
       {
         glm::vec2 coords1, coords2;
         tie(coords1, coords2) = getTextureCoords(batch.texture);
@@ -95,7 +95,7 @@ namespace chr
       }
 
       template <>
-      void Rect::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, const Matrix &matrix) const
       {
         if (frontFace == CW)
         {
@@ -108,7 +108,7 @@ namespace chr
       }
 
       template <>
-      void Rect::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, const Matrix &matrix) const
       {
         if (frontFace == CW)
         {
@@ -121,7 +121,7 @@ namespace chr
       }
 
       template <>
-      void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix) const
+      void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, const Matrix &matrix) const
       {
         glm::vec2 coords1, coords2;
         tie(coords1, coords2) = getTextureCoords(batch.texture);

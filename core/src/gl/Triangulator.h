@@ -38,7 +38,7 @@ namespace chr
        * CONTOURS CAN BE EXPORTED ONLY FOLLOWING A fill OR extrude OPERATION
        */
       Triangulator& setContourCapture(int capture);
-      bool exportContours(IndexedVertexBatch<XYZ> &batch, Matrix &matrix) const;
+      bool exportContours(IndexedVertexBatch<XYZ> &batch, const Matrix &matrix) const;
 
       Triangulator& add(const path::Shape &shape);
       Triangulator& add(const std::vector<glm::vec2> &polyline);
@@ -47,10 +47,10 @@ namespace chr
       void fill(IndexedVertexBatch<V> &batch);
 
       template<int V = XYZ>
-      void fill(IndexedVertexBatch<V> &batch, Matrix &matrix);
+      void fill(IndexedVertexBatch<V> &batch, const Matrix &matrix);
 
       template<int V = XYZ>
-      void extrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance);
+      void extrude(IndexedVertexBatch<V> &batch, const Matrix &matrix, float distance);
 
     protected:
       TESStesselator *tess;
@@ -163,7 +163,7 @@ namespace chr
       // ---
 
       template<int V, typename... Args>
-      void performFill(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
+      void performFill(IndexedVertexBatch<V> &batch, const Matrix &matrix, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -205,7 +205,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performFillWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, Args&&... args)
+      void performFillWithTexture(IndexedVertexBatch<V> &batch, const Matrix &matrix, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -250,7 +250,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performFillWithNormalsAndTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, const glm::vec3 &normal, Args&&... args)
+      void performFillWithNormalsAndTexture(IndexedVertexBatch<V> &batch, const Matrix &matrix, const glm::vec3 &normal, Args&&... args)
       {
         extrudedDistance = 0;
 
@@ -298,7 +298,7 @@ namespace chr
       // ---
 
       template<int V, typename... Args>
-      void performExtrude(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
+      void performExtrude(IndexedVertexBatch<V> &batch, const Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
         bool cw = ((frontFace == CW) && (distance > 0)) || ((frontFace == CCW) && (distance < 0));
@@ -479,7 +479,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performExtrudeWithTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
+      void performExtrudeWithTexture(IndexedVertexBatch<V> &batch, const Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
         bool cw = ((frontFace == CW) && (distance > 0)) || ((frontFace == CCW) && (distance < 0));
@@ -612,7 +612,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performExtrudeWithNormals(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
+      void performExtrudeWithNormals(IndexedVertexBatch<V> &batch, const Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
 
@@ -729,7 +729,7 @@ namespace chr
       }
 
       template<int V, typename... Args>
-      void performExtrudeWithNormalsAndTexture(IndexedVertexBatch<V> &batch, Matrix &matrix, float distance, Args&&... args)
+      void performExtrudeWithNormalsAndTexture(IndexedVertexBatch<V> &batch, const Matrix &matrix, float distance, Args&&... args)
       {
         extrudedDistance = distance;
 

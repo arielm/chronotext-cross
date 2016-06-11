@@ -42,7 +42,7 @@ namespace chr
       // ---
 
       template <>
-      void Sprite::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, Matrix &matrix, float x, float y) const
+      void Sprite::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, const Matrix &matrix, float x, float y) const
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
@@ -59,7 +59,7 @@ namespace chr
       }
 
       template <>
-      void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, Matrix &matrix, float x, float y) const
+      void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, const Matrix &matrix, float x, float y) const
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;

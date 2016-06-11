@@ -26,7 +26,7 @@ namespace chr
         Rect& setBounds(float left, float top, float width, float height);
 
         template<int V = XYZ, typename I = GLushort>
-        void append(IndexedVertexBatch<V,I> &batch, Matrix &matrix) const;
+        void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix) const;
 
         template<int V = XYZ, typename I = GLushort>
         void append(IndexedVertexBatch<V,I> &batch) const;
