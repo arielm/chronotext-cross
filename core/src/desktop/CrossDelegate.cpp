@@ -1,11 +1,3 @@
-/*
- * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
- *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
- * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
- */
-
 #include "desktop/CrossDelegate.h"
 #include "cross/Context.h"
 
@@ -22,9 +14,9 @@ namespace chr
     {
         return checkedReference(intern::instance);
     }
-    
+
     // ---
-    
+
     bool CrossDelegate::performInit()
     {
         if (!initialized_)
@@ -64,10 +56,10 @@ namespace chr
                 }
                 else
                 {
-                    targetWidth = initInfo.windowInfo.size.x;
-                    targetHeight = initInfo.windowInfo.size.y;
+                    targetWidth = initInfo.windowInfo.width;
+                    targetHeight = initInfo.windowInfo.height;
 
-                    initInfo.window = glfwCreateWindow(targetWidth, targetHeight, "", NULL, NULL);    
+                    initInfo.window = glfwCreateWindow(targetWidth, targetHeight, "", NULL, NULL);
                 }
 
                 if (initInfo.window)
@@ -77,6 +69,7 @@ namespace chr
                     glfwSetCursorPosCallback(initInfo.window, cursorPosCallback);
                     glfwSetMouseButtonCallback(initInfo.window, mouseButtonCallback);
                     glfwSetKeyCallback(initInfo.window, keyCallback);
+                    glfwSetCharCallback(initInfo.window, characterCallback);
 
                     glfwMakeContextCurrent(initInfo.window);
                     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
@@ -88,10 +81,10 @@ namespace chr
                 }
             }
         }
-        
+
         return initialized_;
     }
-    
+
     void CrossDelegate::performUninit()
     {
         if (initialized_ && !setup_)
@@ -102,7 +95,7 @@ namespace chr
             intern::instance = nullptr;
         }
     }
-    
+
     void CrossDelegate::performSetup()
     {
         if (!setup_ && initialized_)
@@ -114,7 +107,7 @@ namespace chr
             setup_ = true;
         }
     }
-    
+
     void CrossDelegate::performShutdown()
     {
         if (setup_)
@@ -126,13 +119,13 @@ namespace chr
             setup_ = false;
         }
     }
-    
+
     void CrossDelegate::performResize(const glm::vec2 &size)
     {
         setupInfo.windowInfo.size = size;
         sketch->performResize(size);
     }
-    
+
     void CrossDelegate::performUpdate()
     {
         /*
@@ -143,7 +136,7 @@ namespace chr
         sketch->performUpdate();
         updateCount++;
     }
-    
+
     void CrossDelegate::performDraw()
     {
         sketch->draw();
@@ -162,12 +155,15 @@ namespace chr
         while (!glfwWindowShouldClose(initInfo.window))
         {
             intern::instance->processMouseEvents();
+            intern::instance->processKeyEvents();
+
             performUpdate();
             performDraw();
 
             glfwSwapBuffers(initInfo.window);
 
             intern::instance->clearMouseEvents();
+            intern::instance->clearKeyEvents();
             glfwPollEvents();
         }
 
@@ -206,7 +202,42 @@ namespace chr
         mouseEvents.clear();
     }
 
-    void CrossDelegate::cursorPosCallback(GLFWwindow* window, double xpos, double ypos)
+    void CrossDelegate::processKeyEvents()
+    {
+      for (auto event : keyEvents)
+      {
+          if (!codepoints.empty())
+          {
+              event.codepoint = codepoints.front();
+              codepoints.pop_front();
+          }
+
+          string kind;
+          if (event.kind == KeyEvent::KIND_PRESSED) kind = "PRESSED";
+          if (event.kind == KeyEvent::KIND_RELEASED) kind = "RELEASED";
+          if (event.kind == KeyEvent::KIND_REPEATED) kind = "REPEATED";
+
+          string modifiers;
+          if (event.modifiers & KeyEvent::MODIFIER_SHIFT) modifiers += "SHIFT|";
+          if (event.modifiers & KeyEvent::MODIFIER_CTRL) modifiers += "CTRL|";
+          if (event.modifiers & KeyEvent::MODIFIER_ALT) modifiers += "ALT|";
+          if (event.modifiers & KeyEvent::MODIFIER_ALT) modifiers += "SUPER|";
+
+          LOGI << kind << " " << modifiers << " " << event.keyCode << " " << "[" << event.codepoint << "]" << endl;
+      }
+
+        if (!keyEvents.empty())
+        {
+            LOGI << endl;
+        }
+    }
+
+    void CrossDelegate::clearKeyEvents()
+    {
+      keyEvents.clear();
+    }
+
+    void CrossDelegate::cursorPosCallback(GLFWwindow *window, double xpos, double ypos)
     {
         intern::instance->mouseEvents.emplace_back(xpos, ypos, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
 
@@ -214,7 +245,7 @@ namespace chr
         intern::instance->mouseY = ypos;
     }
 
-    void CrossDelegate::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+    void CrossDelegate::mouseButtonCallback(GLFWwindow *window, int button, int action, int mods)
     {
         intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, button, (action == GLFW_PRESS) ? MouseEvent::KIND_PRESSED : MouseEvent::KIND_RELEASED);
 
@@ -222,11 +253,43 @@ namespace chr
         intern::instance->mousePressed = (action == GLFW_PRESS);
     }
 
-    void CrossDelegate::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    void CrossDelegate::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
     {
         if ((action == GLFW_PRESS) && (key == GLFW_KEY_ESCAPE))
         {
             glfwSetWindowShouldClose(window, true);
         }
+        else
+        {
+            KeyEvent::Kind kind = KeyEvent::KIND_UNDEFINED;
+            int modifiers = KeyEvent::MODIFIER_NONE;
+
+            switch (action)
+            {
+                case GLFW_PRESS:
+                    kind = KeyEvent::KIND_PRESSED;
+                    break;
+
+                case GLFW_RELEASE:
+                    kind = KeyEvent::KIND_RELEASED;
+                    break;
+
+                case GLFW_REPEAT:
+                    kind = KeyEvent::KIND_REPEATED;
+                    break;
+            }
+
+            if (mods & GLFW_MOD_SHIFT) modifiers |= KeyEvent::MODIFIER_SHIFT;
+            if (mods & GLFW_MOD_CONTROL) modifiers |= KeyEvent::MODIFIER_CTRL;
+            if (mods & GLFW_MOD_ALT) modifiers |= KeyEvent::MODIFIER_ALT;
+            if (mods & GLFW_MOD_SUPER) modifiers |= KeyEvent::MODIFIER_SUPER;
+
+            intern::instance->keyEvents.push_back(KeyEvent(kind, modifiers, key)); // XXX: emplace_back DOESN'T WORK HERE
+        }
+    }
+
+    void CrossDelegate::characterCallback(GLFWwindow *window, unsigned int codepoint)
+    {
+        intern::instance->codepoints.push_back(codepoint);
     }
 }

@@ -1,15 +1,8 @@
-/*
- * THE NEW CHRONOTEXT TOOLKIT: https://github.com/arielm/new-chronotext-toolkit
- * COPYRIGHT (C) 2012-2015, ARIEL MALKA ALL RIGHTS RESERVED.
- *
- * THE FOLLOWING SOURCE-CODE IS DISTRIBUTED UNDER THE SIMPLIFIED BSD LICENSE:
- * https://github.com/arielm/new-chronotext-toolkit/blob/master/LICENSE.md
- */
-
 #pragma once
 
 #include "cross/CrossDelegateBase.h"
 #include "cross/MouseEvent.h"
+#include "cross/KeyEvent.h"
 
 namespace chr
 {
@@ -36,11 +29,18 @@ namespace chr
         int mouseButton = -1;
         bool mousePressed = false;
 
+        std::vector<KeyEvent> keyEvents;
+        std::deque<uint32_t> codepoints;
+
         void processMouseEvents();
         void clearMouseEvents();
 
-        static void cursorPosCallback(GLFWwindow* window, double xpos, double ypos);
-        static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        void processKeyEvents();
+        void clearKeyEvents();
+
+        static void cursorPosCallback(GLFWwindow *window, double xpos, double ypos);
+        static void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
+        static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+        static void characterCallback(GLFWwindow *window, unsigned int codepoint);
     };
 }

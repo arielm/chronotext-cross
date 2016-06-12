@@ -11,7 +11,7 @@ void Sketch::setup()
 {
   auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
 
- state
+  state
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 1)
     .setShaderMatrix(projectionMatrix);
