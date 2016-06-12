@@ -9,8 +9,8 @@ namespace chr
     {
       KIND_UNDEFINED,
       KIND_PRESSED,
-      KIND_RELEASED,
-      KIND_REPEATED
+      KIND_UP,
+      KIND_DOWN
     };
 
     enum
@@ -19,7 +19,7 @@ namespace chr
       MODIFIER_SHIFT = 1,
       MODIFIER_CTRL = 2,
       MODIFIER_ALT = 4,
-      MODIFIER_SUPER = 8,
+      MODIFIER_META = 8,
     };
 
     Kind kind;

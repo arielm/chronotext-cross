@@ -24,13 +24,12 @@ namespace chr
         int updateCount = 0;
 
         std::vector<MouseEvent> mouseEvents;
+        std::vector<KeyEvent> keyEvents;
+
         float mouseX;
         float mouseY;
         int mouseButton = -1;
         bool mousePressed = false;
-
-        std::vector<KeyEvent> keyEvents;
-        std::deque<uint32_t> codepoints;
 
         void processMouseEvents();
         void clearMouseEvents();

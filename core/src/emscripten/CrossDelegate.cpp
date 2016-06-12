@@ -26,6 +26,10 @@ namespace chr
             emscripten_set_mouseup_callback(0, 0, 1, mouseCallback);
             emscripten_set_mousemove_callback(0, 0, 1, mouseCallback);
 
+            emscripten_set_keypress_callback(0, 0, 1, keyCallback);
+            emscripten_set_keyup_callback(0, 0, 1, keyCallback);
+            emscripten_set_keydown_callback(0, 0, 1, keyCallback);
+
             // ---
 
             int targetWidth;
@@ -179,14 +183,45 @@ namespace chr
         mouseEvents.clear();
     }
 
+    void CrossDelegate::processKeyEvents()
+    {
+      for (const auto &event : keyEvents)
+      {
+          string kind;
+          if (event.kind == KeyEvent::KIND_PRESSED) kind = "PRESSED";
+          if (event.kind == KeyEvent::KIND_UP) kind = "UP";
+          if (event.kind == KeyEvent::KIND_DOWN) kind = "DOWN";
+
+          string modifiers;
+          if (event.modifiers & KeyEvent::MODIFIER_SHIFT) modifiers += "SHIFT|";
+          if (event.modifiers & KeyEvent::MODIFIER_CTRL) modifiers += "CTRL|";
+          if (event.modifiers & KeyEvent::MODIFIER_ALT) modifiers += "ALT|";
+          if (event.modifiers & KeyEvent::MODIFIER_META) modifiers += "META|";
+
+          LOGI << kind << " " << modifiers << " " << event.keyCode << " [" << event.codepoint << "]" << endl;
+      }
+
+        if (!keyEvents.empty())
+        {
+            LOGI << endl;
+        }
+    }
+
+    void CrossDelegate::clearKeyEvents()
+    {
+      keyEvents.clear();
+    }
+
     void CrossDelegate::mainLoopCallback()
     {
         intern::instance->processMouseEvents();
+        intern::instance->processKeyEvents();
 
         intern::instance->performUpdate();
         intern::instance->performDraw();
 
         intern::instance->clearMouseEvents();
+        intern::instance->clearKeyEvents();
     }
 
     EM_BOOL CrossDelegate::mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData)
@@ -199,8 +234,8 @@ namespace chr
 
                 intern::instance->mouseButton = e->button;
                 intern::instance->mousePressed = true;
-                break;
             }
+            break;
 
             case EMSCRIPTEN_EVENT_MOUSEUP:
             {
@@ -208,8 +243,8 @@ namespace chr
 
                 intern::instance->mouseButton = e->button;
                 intern::instance->mousePressed = false;
-                break;
             }
+            break;
 
             case EMSCRIPTEN_EVENT_MOUSEMOVE:
             {
@@ -217,9 +252,41 @@ namespace chr
 
                 intern::instance->mouseX = e->clientX;
                 intern::instance->mouseY = e->clientY;
-                break;
             }
+            break;
         }
+
+        return 0;
+    }
+
+    EM_BOOL CrossDelegate::keyCallback(int eventType, const EmscriptenKeyboardEvent *e, void *userData)
+    {
+        KeyEvent::Kind kind = KeyEvent::KIND_UNDEFINED;
+        int modifiers = KeyEvent::MODIFIER_NONE;
+        uint32_t keyCode = 0;
+        uint32_t codepoint = 0;
+
+        if (e->shiftKey) modifiers |= KeyEvent::MODIFIER_SHIFT;
+        if (e->ctrlKey) modifiers |= KeyEvent::MODIFIER_CTRL;
+        if (e->altKey) modifiers |= KeyEvent::MODIFIER_ALT;
+        if (e->metaKey) modifiers |= KeyEvent::MODIFIER_META;
+
+        switch (eventType)
+        {
+            case EMSCRIPTEN_EVENT_KEYPRESS:
+                codepoint = e->keyCode;
+                break;
+
+            case EMSCRIPTEN_EVENT_KEYUP:
+                keyCode = e->keyCode;
+                break;
+
+            case EMSCRIPTEN_EVENT_KEYDOWN:
+                keyCode = e->keyCode;
+                break;
+        }
+
+        intern::instance->keyEvents.emplace_back(kind, modifiers, keyCode, codepoint);
 
         return 0;
     }

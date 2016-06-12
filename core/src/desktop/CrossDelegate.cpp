@@ -204,26 +204,20 @@ namespace chr
 
     void CrossDelegate::processKeyEvents()
     {
-      for (auto event : keyEvents)
+      for (const auto &event : keyEvents)
       {
-          if (!codepoints.empty())
-          {
-              event.codepoint = codepoints.front();
-              codepoints.pop_front();
-          }
-
           string kind;
           if (event.kind == KeyEvent::KIND_PRESSED) kind = "PRESSED";
-          if (event.kind == KeyEvent::KIND_RELEASED) kind = "RELEASED";
-          if (event.kind == KeyEvent::KIND_REPEATED) kind = "REPEATED";
+          if (event.kind == KeyEvent::KIND_UP) kind = "UP";
+          if (event.kind == KeyEvent::KIND_DOWN) kind = "DOWN";
 
           string modifiers;
           if (event.modifiers & KeyEvent::MODIFIER_SHIFT) modifiers += "SHIFT|";
           if (event.modifiers & KeyEvent::MODIFIER_CTRL) modifiers += "CTRL|";
           if (event.modifiers & KeyEvent::MODIFIER_ALT) modifiers += "ALT|";
-          if (event.modifiers & KeyEvent::MODIFIER_ALT) modifiers += "SUPER|";
+          if (event.modifiers & KeyEvent::MODIFIER_META) modifiers += "META|";
 
-          LOGI << kind << " " << modifiers << " " << event.keyCode << " " << "[" << event.codepoint << "]" << endl;
+          LOGI << kind << " " << modifiers << " " << event.keyCode << " [" << event.codepoint << "]" << endl;
       }
 
         if (!keyEvents.empty())
@@ -267,29 +261,26 @@ namespace chr
             switch (action)
             {
                 case GLFW_PRESS:
-                    kind = KeyEvent::KIND_PRESSED;
+                case GLFW_REPEAT:
+                    kind = KeyEvent::KIND_DOWN;
                     break;
 
                 case GLFW_RELEASE:
-                    kind = KeyEvent::KIND_RELEASED;
-                    break;
-
-                case GLFW_REPEAT:
-                    kind = KeyEvent::KIND_REPEATED;
+                    kind = KeyEvent::KIND_UP;
                     break;
             }
 
             if (mods & GLFW_MOD_SHIFT) modifiers |= KeyEvent::MODIFIER_SHIFT;
             if (mods & GLFW_MOD_CONTROL) modifiers |= KeyEvent::MODIFIER_CTRL;
             if (mods & GLFW_MOD_ALT) modifiers |= KeyEvent::MODIFIER_ALT;
-            if (mods & GLFW_MOD_SUPER) modifiers |= KeyEvent::MODIFIER_SUPER;
+            if (mods & GLFW_MOD_SUPER) modifiers |= KeyEvent::MODIFIER_META;
 
-            intern::instance->keyEvents.push_back(KeyEvent(kind, modifiers, key)); // XXX: emplace_back DOESN'T WORK HERE
+            intern::instance->keyEvents.emplace_back(kind, modifiers, key);
         }
     }
 
     void CrossDelegate::characterCallback(GLFWwindow *window, unsigned int codepoint)
     {
-        intern::instance->codepoints.push_back(codepoint);
+        intern::instance->keyEvents.emplace_back(KeyEvent::KIND_PRESSED, KeyEvent::MODIFIER_NONE, 0, codepoint);
     }
 }
