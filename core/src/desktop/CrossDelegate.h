@@ -3,6 +3,7 @@
 #include "cross/CrossDelegateBase.h"
 #include "cross/MouseEvent.h"
 #include "cross/KeyEvent.h"
+#include "cross/Keyboard.h"
 
 namespace chr
 {
