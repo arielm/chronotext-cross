@@ -6,303 +6,303 @@ using namespace std;
 
 namespace chr
 {
-    namespace intern
+  namespace intern
+  {
+    CrossDelegate *instance = nullptr;
+  }
+
+  CrossDelegate& delegate()
+  {
+    return checkedReference(intern::instance);
+  }
+  
+  // ---
+  
+  bool CrossDelegate::performInit()
+  {
+    if (!initialized_)
     {
-        CrossDelegate *instance = nullptr;
-    }
+      emscripten_set_mousedown_callback(0, 0, 1, mouseCallback);
+      emscripten_set_mouseup_callback(0, 0, 1, mouseCallback);
+      emscripten_set_mousemove_callback(0, 0, 1, mouseCallback);
 
-    CrossDelegate& delegate()
-    {
-        return checkedReference(intern::instance);
-    }
-    
-    // ---
-    
-    bool CrossDelegate::performInit()
-    {
-        if (!initialized_)
-        {
-            emscripten_set_mousedown_callback(0, 0, 1, mouseCallback);
-            emscripten_set_mouseup_callback(0, 0, 1, mouseCallback);
-            emscripten_set_mousemove_callback(0, 0, 1, mouseCallback);
+      emscripten_set_keypress_callback(0, 0, 1, keyCallback);
+      emscripten_set_keyup_callback(0, 0, 1, keyCallback);
+      emscripten_set_keydown_callback(0, 0, 1, keyCallback);
 
-            emscripten_set_keypress_callback(0, 0, 1, keyCallback);
-            emscripten_set_keyup_callback(0, 0, 1, keyCallback);
-            emscripten_set_keydown_callback(0, 0, 1, keyCallback);
+      // ---
 
-            // ---
+      int targetWidth;
+      int targetHeight;
 
-            int targetWidth;
-            int targetHeight;
+      if (initInfo.windowInfo.width * initInfo.windowInfo.height == 0)
+      {
+        targetWidth = EM_ASM_INT_V("return window.innerWidth");
+        targetHeight = EM_ASM_INT_V("return window.innerHeight");
+      }
+      else
+      {
+        targetWidth = initInfo.windowInfo.width;
+        targetHeight = initInfo.windowInfo.height;
+      }
 
-            if (initInfo.windowInfo.width * initInfo.windowInfo.height == 0)
-            {
-                targetWidth = EM_ASM_INT_V("return window.innerWidth");
-                targetHeight = EM_ASM_INT_V("return window.innerHeight");
-            }
-            else
-            {
-                targetWidth = initInfo.windowInfo.width;
-                targetHeight = initInfo.windowInfo.height;
-            }
+      setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples);
+      emscripten_set_canvas_size(targetWidth, targetHeight);
 
-            setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples);
-            emscripten_set_canvas_size(targetWidth, targetHeight);
+      // ---
 
-            // ---
+      EmscriptenWebGLContextAttributes attr;
+      emscripten_webgl_init_context_attributes(&attr);
 
-            EmscriptenWebGLContextAttributes attr;
-            emscripten_webgl_init_context_attributes(&attr);
+      attr.alpha = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
+      attr.enableExtensionsByDefault = 1;
+      attr.antialias = (initInfo.windowInfo.aaSamples > 0) ? 1 : 0;
+      attr.depth = (initInfo.windowInfo.depthBits > 0) ? 1 : 0;
+      attr.premultipliedAlpha = 0;
+      attr.majorVersion = 1;
+      attr.minorVersion = 0;
 
-            attr.alpha = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
-            attr.enableExtensionsByDefault = 1;
-            attr.antialias = (initInfo.windowInfo.aaSamples > 0) ? 1 : 0;
-            attr.depth = (initInfo.windowInfo.depthBits > 0) ? 1 : 0;
-            attr.premultipliedAlpha = 0;
-            attr.majorVersion = 1;
-            attr.minorVersion = 0;
+      EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
+      emscripten_webgl_make_context_current(ctx);
 
-            EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
-            emscripten_webgl_make_context_current(ctx);
+      // ---
 
-            // ---
+      emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
+      emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "WEBKIT_EXT_texture_filter_anisotropic");
 
-            emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "EXT_texture_filter_anisotropic");
-            emscripten_webgl_enable_extension(emscripten_webgl_get_current_context(), "WEBKIT_EXT_texture_filter_anisotropic");
+      // ---
 
-            // ---
-
-            intern::instance = this;
-            initialized_ = _init();
-        }
-        
-        return initialized_;
+      intern::instance = this;
+      initialized_ = _init();
     }
     
-    void CrossDelegate::performUninit()
+    return initialized_;
+  }
+  
+  void CrossDelegate::performUninit()
+  {
+    if (initialized_ && !setup_)
     {
-        if (initialized_ && !setup_)
-        {
-            _uninit();
+      _uninit();
 
-            initialized_ = false;
-            intern::instance = nullptr;
-        }
+      initialized_ = false;
+      intern::instance = nullptr;
     }
-    
-    void CrossDelegate::performSetup()
+  }
+  
+  void CrossDelegate::performSetup()
+  {
+    if (!setup_ && initialized_)
     {
-        if (!setup_ && initialized_)
-        {
-            _setup();
+      _setup();
 
-            // ---
+      // ---
 
-            setup_ = true;
-        }
+      setup_ = true;
     }
-    
-    void CrossDelegate::performShutdown()
+  }
+  
+  void CrossDelegate::performShutdown()
+  {
+    if (setup_)
     {
-        if (setup_)
-        {
-            _shutdown();
+      _shutdown();
 
-            // ---
+      // ---
 
-            setup_ = false;
-        }
+      setup_ = false;
     }
-    
-    void CrossDelegate::performResize(const glm::vec2 &size)
+  }
+  
+  void CrossDelegate::performResize(const glm::vec2 &size)
+  {
+    setupInfo.windowInfo.size = size;
+    sketch->performResize(size);
+  }
+  
+  void CrossDelegate::performUpdate()
+  {
+    /*
+     * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
+     */
+    sketch->clock()->update(true);
+
+    sketch->performUpdate();
+    updateCount++;
+  }
+
+  void CrossDelegate::performDraw()
+  {
+    sketch->draw();
+  }
+
+  void CrossDelegate::run(int width, int height, int aaSamples, int depthBits)
+  {
+    initInfo.windowInfo = WindowInfo(width, height, aaSamples, depthBits);
+
+    performInit();
+    performSetup();
+    performResize(setupInfo.windowInfo.size);
+
+    sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
+
+    emscripten_set_main_loop(mainLoopCallback, 0, 1);
+
+    sketch->performStop(CrossSketch::STOP_REASON_VIEW_HIDDEN);
+
+    performShutdown();
+    performUninit();
+  }
+
+  void CrossDelegate::processMouseEvents()
+  {
+    for (auto &event : mouseEvents)
     {
-        setupInfo.windowInfo.size = size;
-        sketch->performResize(size);
+      switch (event.kind)
+      {
+        case MouseEvent::KIND_PRESSED:
+          sketch->addTouch(event.button, event.x, event.y);
+          break;
+
+        case MouseEvent::KIND_DRAGGED:
+          sketch->updateTouch(event.button, event.x, event.y);
+          break;
+
+        case MouseEvent::KIND_RELEASED:
+          sketch->removeTouch(event.button, event.x, event.y);
+          break;
+
+        default:
+          break;
+      }
     }
-    
-    void CrossDelegate::performUpdate()
-    {
-        /*
-         * SUBSEQUENT CALLS TO FrameClock::getTime() DURING THE FRAME WILL RETURN THE SAME TIME-SAMPLE
-         */
-        sketch->clock()->update(true);
+  }
 
-        sketch->performUpdate();
-        updateCount++;
+  void CrossDelegate::clearMouseEvents()
+  {
+    mouseEvents.clear();
+  }
+
+  void CrossDelegate::processKeyEvents()
+  {
+    for (const auto &event : keyEvents)
+    {
+      switch (event.kind)
+      {
+        case KeyEvent::KIND_PRESSED:
+          sketch->keyPressed(event.codePoint);
+          break;
+
+        case KeyEvent::KIND_DOWN:
+          sketch->keyDown(event.keyCode, event.modifiers);
+          break;
+
+        case KeyEvent::KIND_UP:
+          sketch->keyUp(event.keyCode, event.modifiers);
+          break;
+
+        default:
+          break;
+      }
     }
+  }
 
-    void CrossDelegate::performDraw()
+  void CrossDelegate::clearKeyEvents()
+  {
+    keyEvents.clear();
+  }
+
+  int CrossDelegate::convertKeyCode(int keyCode)
+  {
+    auto found = KEYMAP.find(keyCode);
+
+    if (found != KEYMAP.end())
     {
-        sketch->draw();
-    }
-
-    void CrossDelegate::run(int width, int height, int aaSamples, int depthBits)
-    {
-        initInfo.windowInfo = WindowInfo(width, height, aaSamples, depthBits);
-
-        performInit();
-        performSetup();
-        performResize(setupInfo.windowInfo.size);
-
-        sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
-
-        emscripten_set_main_loop(mainLoopCallback, 0, 1);
-
-        sketch->performStop(CrossSketch::STOP_REASON_VIEW_HIDDEN);
-
-        performShutdown();
-        performUninit();
-    }
-
-    void CrossDelegate::processMouseEvents()
-    {
-        for (auto &event : mouseEvents)
-        {
-            switch (event.kind)
-            {
-                case MouseEvent::KIND_PRESSED:
-                    sketch->addTouch(event.button, event.x, event.y);
-                    break;
-
-                case MouseEvent::KIND_DRAGGED:
-                    sketch->updateTouch(event.button, event.x, event.y);
-                    break;
-
-                case MouseEvent::KIND_RELEASED:
-                    sketch->removeTouch(event.button, event.x, event.y);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
-
-    void CrossDelegate::clearMouseEvents()
-    {
-        mouseEvents.clear();
-    }
-
-    void CrossDelegate::processKeyEvents()
-    {
-        for (const auto &event : keyEvents)
-        {
-            switch (event.kind)
-            {
-                case KeyEvent::KIND_PRESSED:
-                    sketch->keyPressed(event.codePoint);
-                    break;
-
-                case KeyEvent::KIND_DOWN:
-                    sketch->keyDown(event.keyCode, event.modifiers);
-                    break;
-
-                case KeyEvent::KIND_UP:
-                    sketch->keyUp(event.keyCode, event.modifiers);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
-
-    void CrossDelegate::clearKeyEvents()
-    {
-      keyEvents.clear();
-    }
-
-    int CrossDelegate::convertKeyCode(int keyCode)
-    {
-        auto found = KEYMAP.find(keyCode);
-
-        if (found != KEYMAP.end())
-        {
-            return found->second;
-        }
-
-        return keyCode;
-    }
-
-    void CrossDelegate::mainLoopCallback()
-    {
-        intern::instance->processMouseEvents();
-        intern::instance->processKeyEvents();
-
-        intern::instance->performUpdate();
-        intern::instance->performDraw();
-
-        intern::instance->clearMouseEvents();
-        intern::instance->clearKeyEvents();
+      return found->second;
     }
 
-    EM_BOOL CrossDelegate::mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData)
+    return keyCode;
+  }
+
+  void CrossDelegate::mainLoopCallback()
+  {
+    intern::instance->processMouseEvents();
+    intern::instance->processKeyEvents();
+
+    intern::instance->performUpdate();
+    intern::instance->performDraw();
+
+    intern::instance->clearMouseEvents();
+    intern::instance->clearKeyEvents();
+  }
+
+  EM_BOOL CrossDelegate::mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData)
+  {
+    switch (eventType)
     {
-        switch (eventType)
-        {
-            case EMSCRIPTEN_EVENT_MOUSEDOWN:
-            {
-                intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_PRESSED);
+      case EMSCRIPTEN_EVENT_MOUSEDOWN:
+      {
+        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_PRESSED);
 
-                intern::instance->mouseButton = e->button;
-                intern::instance->mousePressed = true;
-            }
-            break;
+        intern::instance->mouseButton = e->button;
+        intern::instance->mousePressed = true;
+      }
+      break;
 
-            case EMSCRIPTEN_EVENT_MOUSEUP:
-            {
-                intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_RELEASED);
+      case EMSCRIPTEN_EVENT_MOUSEUP:
+      {
+        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_RELEASED);
 
-                intern::instance->mouseButton = e->button;
-                intern::instance->mousePressed = false;
-            }
-            break;
+        intern::instance->mouseButton = e->button;
+        intern::instance->mousePressed = false;
+      }
+      break;
 
-            case EMSCRIPTEN_EVENT_MOUSEMOVE:
-            {
-                intern::instance->mouseEvents.emplace_back(e->clientX, e->clientY, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
+      case EMSCRIPTEN_EVENT_MOUSEMOVE:
+      {
+        intern::instance->mouseEvents.emplace_back(e->clientX, e->clientY, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
 
-                intern::instance->mouseX = e->clientX;
-                intern::instance->mouseY = e->clientY;
-            }
-            break;
-        }
-
-        return 0;
+        intern::instance->mouseX = e->clientX;
+        intern::instance->mouseY = e->clientY;
+      }
+      break;
     }
 
-    EM_BOOL CrossDelegate::keyCallback(int eventType, const EmscriptenKeyboardEvent *e, void *userData)
+    return 0;
+  }
+
+  EM_BOOL CrossDelegate::keyCallback(int eventType, const EmscriptenKeyboardEvent *e, void *userData)
+  {
+    KeyEvent::Kind kind = KeyEvent::KIND_UNDEFINED;
+    int modifiers = KeyEvent::MODIFIER_NONE;
+    uint32_t keyCode = 0;
+    uint32_t codePoint = 0;
+
+    if (e->shiftKey) modifiers |= KeyEvent::MODIFIER_SHIFT;
+    if (e->ctrlKey) modifiers |= KeyEvent::MODIFIER_CTRL;
+    if (e->altKey) modifiers |= KeyEvent::MODIFIER_ALT;
+    if (e->metaKey) modifiers |= KeyEvent::MODIFIER_META;
+
+    switch (eventType)
     {
-        KeyEvent::Kind kind = KeyEvent::KIND_UNDEFINED;
-        int modifiers = KeyEvent::MODIFIER_NONE;
-        uint32_t keyCode = 0;
-        uint32_t codePoint = 0;
+      case EMSCRIPTEN_EVENT_KEYPRESS:
+        kind = KeyEvent::KIND_PRESSED;
+        codePoint = e->keyCode;
+        break;
 
-        if (e->shiftKey) modifiers |= KeyEvent::MODIFIER_SHIFT;
-        if (e->ctrlKey) modifiers |= KeyEvent::MODIFIER_CTRL;
-        if (e->altKey) modifiers |= KeyEvent::MODIFIER_ALT;
-        if (e->metaKey) modifiers |= KeyEvent::MODIFIER_META;
+      case EMSCRIPTEN_EVENT_KEYDOWN:
+        kind = KeyEvent::KIND_DOWN;
+        keyCode = e->keyCode;
+        break;
 
-        switch (eventType)
-        {
-            case EMSCRIPTEN_EVENT_KEYPRESS:
-                kind = KeyEvent::KIND_PRESSED;
-                codePoint = e->keyCode;
-                break;
+      case EMSCRIPTEN_EVENT_KEYUP:
+        kind = KeyEvent::KIND_UP;
+        keyCode = e->keyCode;
+        break;
+     }
 
-            case EMSCRIPTEN_EVENT_KEYDOWN:
-                kind = KeyEvent::KIND_DOWN;
-                keyCode = e->keyCode;
-                break;
+    intern::instance->keyEvents.emplace_back(kind, modifiers, intern::instance->convertKeyCode(keyCode), codePoint);
 
-            case EMSCRIPTEN_EVENT_KEYUP:
-                kind = KeyEvent::KIND_UP;
-                keyCode = e->keyCode;
-                break;
-       }
-
-        intern::instance->keyEvents.emplace_back(kind, modifiers, intern::instance->convertKeyCode(keyCode), codePoint);
-
-        return 0;
-    }
+    return 0;
+  }
 }
