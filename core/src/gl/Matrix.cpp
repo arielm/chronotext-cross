@@ -61,11 +61,6 @@ namespace chr
     m33(1)
     {}
 
-    const glm::mat4& Matrix::get() const
-    {
-      return m;
-    }
-
     Matrix& Matrix::set(const Matrix &matrix)
     {
       values = matrix.values;
@@ -87,6 +82,18 @@ namespace chr
     Matrix& Matrix::set(const glm::quat &quat)
     {
       m = glm::mat4_cast(quat);
+      return *this;
+    }
+
+    Matrix& Matrix::set(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward)
+    {
+      m00 = forward.x, m10 = forward.y, m20 = forward.z;
+      m01 = left.x,    m11 = left.y,    m21 = left.z;
+      m02 = up.x,      m12 = up.y,      m22 = up.z;
+
+      m30 = m31 = m32 = m03 = m13 = m23 = 0.0f;
+      m33 = 1.0f;
+
       return *this;
     }
 
@@ -262,6 +269,26 @@ namespace chr
     {
       m *= glm::inverse(glm::mat4_cast(q));
       return *this;
+    }
+
+    glm::vec3 Matrix::left() const
+    {
+      return glm::vec3(m01, m11, m21);
+    }
+
+    glm::vec3 Matrix::up() const
+    {
+      return glm::vec3(m02, m12, m22);
+    }
+
+    glm::vec3 Matrix::forward() const
+    {
+      return glm::vec3(m00, m10, m20);
+    }
+
+    const glm::mat4& Matrix::get() const
+    {
+      return m;
     }
 
     glm::quat Matrix::getQuat() const

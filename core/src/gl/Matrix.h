@@ -30,12 +30,11 @@ namespace chr
       glm::mat4 operator * (const glm::mat4 &matrix) { return matrix * m; }
       Matrix& operator *= (const glm::mat4 &matrix) { m *= matrix; return *this; }
 
-      const glm::mat4& get() const;
-
       Matrix& set(const Matrix &matrix);
       Matrix& set(const glm::mat4 &matrix);
       Matrix& set(const glm::mat3 &matrix);
       Matrix& set(const glm::quat &quat);
+      Matrix& set(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward);
 
       Matrix& push();
       Matrix& pop();
@@ -63,6 +62,11 @@ namespace chr
       template<int T = 1>
       Matrix& applyQuat(const glm::quat &q);
 
+      glm::vec3 left() const;
+      glm::vec3 up() const;
+      glm::vec3 forward() const;
+
+      const glm::mat4& get() const;
       glm::quat getQuat() const;
       glm::mat4 getInverse() const;
 
