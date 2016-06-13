@@ -50,6 +50,7 @@ namespace chr
       Matrix& pop();
 
       Matrix& setIdentity();
+      Matrix& inverse();
 
       inline Matrix& setTranslate(const glm::vec2 &t) { return setTranslate(t.x, t.y); }
       inline Matrix& setTranslate(const glm::vec3 &t) { return setTranslate(t.x, t.y, t.z); }
@@ -72,6 +73,7 @@ namespace chr
       Matrix& applyQuat(const glm::quat &q);
 
       glm::quat getQuat() const;
+      glm::mat4 getInverse() const;
 
       float getDeterminant3x3() const;
       glm::mat3 getNormalMatrix() const;

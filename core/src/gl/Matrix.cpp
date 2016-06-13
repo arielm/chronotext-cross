@@ -79,6 +79,12 @@ namespace chr
       return *this;
     }
 
+    Matrix& Matrix::inverse()
+    {
+      m = glm::inverse(m);
+      return *this;
+    }
+
     Matrix& Matrix::setTranslate(float x, float y, float z)
     {
       m00 = m11 = m22 = m33 = 1.0f;
@@ -225,6 +231,11 @@ namespace chr
     glm::quat Matrix::getQuat() const
     {
       return glm::quat_cast(m);
+    }
+
+    glm::mat4 Matrix::getInverse() const
+    {
+      return glm::inverse(m);
     }
 
     float Matrix::getDeterminant3x3() const
