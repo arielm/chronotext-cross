@@ -70,6 +70,10 @@ namespace chr
     virtual void updateTouch(int index, float x, float y) {}
     virtual void removeTouch(int index, float x, float y) {}
 
+    virtual void keyPressed(uint32_t codepoint) {}
+    virtual void keyDown(int keyCode, int modifiers) {}
+    virtual void keyUp(int keyCode, int modifiers) {}
+
     virtual void accelerated(AccelEvent event) {}
 
     const WindowInfo& getWindowInfo() const;

@@ -36,10 +36,11 @@ namespace chr
 
         void processKeyEvents();
         void clearKeyEvents();
+        int convertKeyCode(int keyCode);
 
         static void cursorPosCallback(GLFWwindow *window, double xpos, double ypos);
         static void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
         static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
-        static void characterCallback(GLFWwindow *window, unsigned int codepoint);
+        static void characterCallback(GLFWwindow *window, unsigned int codePoint);
     };
 }

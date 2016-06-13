@@ -1,6 +1,6 @@
 
 #include "emscripten/CrossDelegate.h"
-#include "cross/Context.h"
+#include "emscripten/Keyboard.h"
 
 using namespace std;
 
@@ -185,31 +185,43 @@ namespace chr
 
     void CrossDelegate::processKeyEvents()
     {
-      for (const auto &event : keyEvents)
-      {
-          string kind;
-          if (event.kind == KeyEvent::KIND_PRESSED) kind = "PRESSED";
-          if (event.kind == KeyEvent::KIND_UP) kind = "UP";
-          if (event.kind == KeyEvent::KIND_DOWN) kind = "DOWN";
-
-          string modifiers;
-          if (event.modifiers & KeyEvent::MODIFIER_SHIFT) modifiers += "SHIFT|";
-          if (event.modifiers & KeyEvent::MODIFIER_CTRL) modifiers += "CTRL|";
-          if (event.modifiers & KeyEvent::MODIFIER_ALT) modifiers += "ALT|";
-          if (event.modifiers & KeyEvent::MODIFIER_META) modifiers += "META|";
-
-          LOGI << kind << " " << modifiers << " " << event.keyCode << " [" << event.codepoint << "]" << endl;
-      }
-
-        if (!keyEvents.empty())
+        for (const auto &event : keyEvents)
         {
-            LOGI << endl;
+            switch (event.kind)
+            {
+                case KeyEvent::KIND_PRESSED:
+                    sketch->keyPressed(event.codePoint);
+                    break;
+
+                case KeyEvent::KIND_DOWN:
+                    sketch->keyDown(event.keyCode, event.modifiers);
+                    break;
+
+                case KeyEvent::KIND_UP:
+                    sketch->keyUp(event.keyCode, event.modifiers);
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 
     void CrossDelegate::clearKeyEvents()
     {
       keyEvents.clear();
+    }
+
+    int CrossDelegate::convertKeyCode(int keyCode)
+    {
+        auto found = KEYMAP.find(keyCode);
+
+        if (found != KEYMAP.end())
+        {
+            return found->second;
+        }
+
+        return keyCode;
     }
 
     void CrossDelegate::mainLoopCallback()
@@ -264,7 +276,7 @@ namespace chr
         KeyEvent::Kind kind = KeyEvent::KIND_UNDEFINED;
         int modifiers = KeyEvent::MODIFIER_NONE;
         uint32_t keyCode = 0;
-        uint32_t codepoint = 0;
+        uint32_t codePoint = 0;
 
         if (e->shiftKey) modifiers |= KeyEvent::MODIFIER_SHIFT;
         if (e->ctrlKey) modifiers |= KeyEvent::MODIFIER_CTRL;
@@ -274,19 +286,22 @@ namespace chr
         switch (eventType)
         {
             case EMSCRIPTEN_EVENT_KEYPRESS:
-                codepoint = e->keyCode;
-                break;
-
-            case EMSCRIPTEN_EVENT_KEYUP:
-                keyCode = e->keyCode;
+                kind = KeyEvent::KIND_PRESSED;
+                codePoint = e->keyCode;
                 break;
 
             case EMSCRIPTEN_EVENT_KEYDOWN:
+                kind = KeyEvent::KIND_DOWN;
                 keyCode = e->keyCode;
                 break;
-        }
 
-        intern::instance->keyEvents.emplace_back(kind, modifiers, keyCode, codepoint);
+            case EMSCRIPTEN_EVENT_KEYUP:
+                kind = KeyEvent::KIND_UP;
+                keyCode = e->keyCode;
+                break;
+       }
+
+        intern::instance->keyEvents.emplace_back(kind, modifiers, intern::instance->convertKeyCode(keyCode), codePoint);
 
         return 0;
     }

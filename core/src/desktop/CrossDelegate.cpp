@@ -1,5 +1,5 @@
 #include "desktop/CrossDelegate.h"
-#include "cross/Context.h"
+#include "desktop/Keyboard.h"
 
 using namespace std;
 
@@ -175,7 +175,7 @@ namespace chr
 
     void CrossDelegate::processMouseEvents()
     {
-        for (auto &event : mouseEvents)
+        for (const auto &event : mouseEvents)
         {
             switch (event.kind)
             {
@@ -204,31 +204,43 @@ namespace chr
 
     void CrossDelegate::processKeyEvents()
     {
-      for (const auto &event : keyEvents)
-      {
-          string kind;
-          if (event.kind == KeyEvent::KIND_PRESSED) kind = "PRESSED";
-          if (event.kind == KeyEvent::KIND_UP) kind = "UP";
-          if (event.kind == KeyEvent::KIND_DOWN) kind = "DOWN";
-
-          string modifiers;
-          if (event.modifiers & KeyEvent::MODIFIER_SHIFT) modifiers += "SHIFT|";
-          if (event.modifiers & KeyEvent::MODIFIER_CTRL) modifiers += "CTRL|";
-          if (event.modifiers & KeyEvent::MODIFIER_ALT) modifiers += "ALT|";
-          if (event.modifiers & KeyEvent::MODIFIER_META) modifiers += "META|";
-
-          LOGI << kind << " " << modifiers << " " << event.keyCode << " [" << event.codepoint << "]" << endl;
-      }
-
-        if (!keyEvents.empty())
+        for (const auto &event : keyEvents)
         {
-            LOGI << endl;
+            switch (event.kind)
+            {
+                case KeyEvent::KIND_PRESSED:
+                    sketch->keyPressed(event.codePoint);
+                    break;
+
+                case KeyEvent::KIND_DOWN:
+                    sketch->keyDown(event.keyCode, event.modifiers);
+                    break;
+
+                case KeyEvent::KIND_UP:
+                    sketch->keyUp(event.keyCode, event.modifiers);
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 
     void CrossDelegate::clearKeyEvents()
     {
       keyEvents.clear();
+    }
+
+    int CrossDelegate::convertKeyCode(int keyCode)
+    {
+        auto found = KEYMAP.find(keyCode);
+
+        if (found != KEYMAP.end())
+        {
+            return found->second;
+        }
+
+        return keyCode;
     }
 
     void CrossDelegate::cursorPosCallback(GLFWwindow *window, double xpos, double ypos)
@@ -275,12 +287,12 @@ namespace chr
             if (mods & GLFW_MOD_ALT) modifiers |= KeyEvent::MODIFIER_ALT;
             if (mods & GLFW_MOD_SUPER) modifiers |= KeyEvent::MODIFIER_META;
 
-            intern::instance->keyEvents.emplace_back(kind, modifiers, key);
+            intern::instance->keyEvents.emplace_back(kind, modifiers, intern::instance->convertKeyCode(key));
         }
     }
 
-    void CrossDelegate::characterCallback(GLFWwindow *window, unsigned int codepoint)
+    void CrossDelegate::characterCallback(GLFWwindow *window, unsigned int codePoint)
     {
-        intern::instance->keyEvents.emplace_back(KeyEvent::KIND_PRESSED, KeyEvent::MODIFIER_NONE, 0, codepoint);
+        intern::instance->keyEvents.emplace_back(KeyEvent::KIND_PRESSED, KeyEvent::MODIFIER_NONE, 0, codePoint);
     }
 }

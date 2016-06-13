@@ -38,6 +38,7 @@ namespace chr
 
         void processKeyEvents();
         void clearKeyEvents();
+        int convertKeyCode(int keyCode);
         
         static void mainLoopCallback();
         static EM_BOOL mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData);

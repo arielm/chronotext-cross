@@ -25,14 +25,14 @@ namespace chr
     Kind kind;
     int modifiers;
     int keyCode;
-    uint32_t codepoint;
+    uint32_t codePoint;
 
-    KeyEvent(Kind kind, int modifiers, int keyCode, uint32_t codepoint = 0)
+    KeyEvent(Kind kind, int modifiers, int keyCode, uint32_t codePoint = 0)
     :
     kind(kind),
     modifiers(modifiers),
     keyCode(keyCode),
-    codepoint(codepoint)
+    codePoint(codePoint)
     {}
   };
 }
