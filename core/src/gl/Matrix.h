@@ -15,25 +15,13 @@ namespace chr
     {
     public:
       typedef std::array<float, 16> Values;
-      
-      union
-      {
-        glm::mat4 m;
-        
-        struct
-        {
-          float m00, m10, m20, m30;
-          float m01, m11, m21, m31;
-          float m02, m12, m22, m32;
-          float m03, m13, m23, m33;
-        };
-        
-        Values values;
-      };
-      
+
       Matrix();
       Matrix(const glm::mat4 &matrix);
       Matrix(const glm::mat3 &matrix);
+      Matrix(const glm::quat &quat);
+      Matrix(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward);
+
       Matrix(const Matrix &other) = delete;
       
       operator Values& () { return values; }
@@ -42,9 +30,12 @@ namespace chr
       glm::mat4 operator * (const glm::mat4 &matrix) { return matrix * m; }
       Matrix& operator *= (const glm::mat4 &matrix) { m *= matrix; return *this; }
 
-      Matrix& load(const Matrix &matrix);
-      Matrix& load(const glm::mat4 &matrix);
-      Matrix& load(const glm::mat3 &matrix);
+      const glm::mat4& get() const;
+
+      Matrix& set(const Matrix &matrix);
+      Matrix& set(const glm::mat4 &matrix);
+      Matrix& set(const glm::mat3 &matrix);
+      Matrix& set(const glm::quat &quat);
 
       Matrix& push();
       Matrix& pop();
@@ -94,6 +85,21 @@ namespace chr
       void addTransformedQuad(const Quad<V> &quad, IndexedVertexBatch<V, I> &output) const;
 
     protected:
+      union
+      {
+        glm::mat4 m;
+
+        struct
+        {
+          float m00, m10, m20, m30;
+          float m01, m11, m21, m31;
+          float m02, m12, m22, m32;
+          float m03, m13, m23, m33;
+        };
+
+        Values values;
+      };
+
       std::vector<Values> stack;
     };
   }

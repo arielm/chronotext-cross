@@ -36,21 +36,57 @@ namespace chr
     m(matrix)
     {}
 
-    Matrix& Matrix::load(const Matrix &matrix)
+    Matrix::Matrix(const glm::quat &quat)
+    :
+    m(glm::mat4_cast(quat))
+    {}
+
+    Matrix::Matrix(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward)
+    :
+    m00(forward.x),
+    m10(forward.y),
+    m20(forward.z),
+    m30(0),
+    m01(left.x),
+    m11(left.y),
+    m21(left.z),
+    m31(0),
+    m02(up.x),
+    m12(up.y),
+    m22(up.z),
+    m32(0),
+    m03(0),
+    m13(0),
+    m23(0),
+    m33(1)
+    {}
+
+    const glm::mat4& Matrix::get() const
+    {
+      return m;
+    }
+
+    Matrix& Matrix::set(const Matrix &matrix)
     {
       values = matrix.values;
       return *this;
     }
     
-    Matrix& Matrix::load(const glm::mat4 &matrix)
+    Matrix& Matrix::set(const glm::mat4 &matrix)
     {
       m = matrix;
       return *this;
     }
     
-    Matrix& Matrix::load(const glm::mat3 &matrix)
+    Matrix& Matrix::set(const glm::mat3 &matrix)
     {
       m = glm::mat4(matrix);
+      return *this;
+    }
+
+    Matrix& Matrix::set(const glm::quat &quat)
+    {
+      m = glm::mat4_cast(quat);
       return *this;
     }
 
