@@ -41,19 +41,19 @@ namespace chr
     m(glm::mat4_cast(quat))
     {}
 
-    Matrix::Matrix(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward)
+    Matrix::Matrix(const glm::vec3 &right, const glm::vec3 &up, const glm::vec3 &back)
     :
-    m00(forward.x),
-    m10(forward.y),
-    m20(forward.z),
+    m00(right.x),
+    m10(up.x),
+    m20(back.x),
     m30(0),
-    m01(left.x),
-    m11(left.y),
-    m21(left.z),
+    m01(right.y),
+    m11(up.y),
+    m21(back.y),
     m31(0),
-    m02(up.x),
-    m12(up.y),
-    m22(up.z),
+    m02(right.z),
+    m12(up.z),
+    m22(back.z),
     m32(0),
     m03(0),
     m13(0),
@@ -85,11 +85,11 @@ namespace chr
       return *this;
     }
 
-    Matrix& Matrix::set(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward)
+    Matrix& Matrix::set(const glm::vec3 &right, const glm::vec3 &up, const glm::vec3 &back)
     {
-      m00 = forward.x, m10 = forward.y, m20 = forward.z;
-      m01 = left.x,    m11 = left.y,    m21 = left.z;
-      m02 = up.x,      m12 = up.y,      m22 = up.z;
+      m00 = right.x, m10 = up.x, m20 = back.x;
+      m01 = right.y, m11 = up.y, m21 = back.y;
+      m02 = right.z, m12 = up.z, m22 = back.z;
 
       m30 = m31 = m32 = m03 = m13 = m23 = 0.0f;
       m33 = 1.0f;
@@ -271,19 +271,19 @@ namespace chr
       return *this;
     }
 
-    glm::vec3 Matrix::left() const
+    glm::vec3 Matrix::right() const
     {
-      return glm::vec3(m01, m11, m21);
+      return glm::vec3(m00, m01, m02);
     }
 
     glm::vec3 Matrix::up() const
     {
-      return glm::vec3(m02, m12, m22);
+      return glm::vec3(m10, m11, m12);
     }
 
-    glm::vec3 Matrix::forward() const
+    glm::vec3 Matrix::back() const
     {
-      return glm::vec3(m00, m10, m20);
+      return glm::vec3(m20, m21, m22);
     }
 
     const glm::mat4& Matrix::get() const

@@ -20,7 +20,7 @@ namespace chr
       Matrix(const glm::mat4 &matrix);
       Matrix(const glm::mat3 &matrix);
       Matrix(const glm::quat &quat);
-      Matrix(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward);
+      Matrix(const glm::vec3 &right, const glm::vec3 &up, const glm::vec3 &back);
 
       Matrix(const Matrix &other) = delete;
       
@@ -34,7 +34,7 @@ namespace chr
       Matrix& set(const glm::mat4 &matrix);
       Matrix& set(const glm::mat3 &matrix);
       Matrix& set(const glm::quat &quat);
-      Matrix& set(const glm::vec3 &left, const glm::vec3 &up, const glm::vec3 &forward);
+      Matrix& set(const glm::vec3 &right, const glm::vec3 &up, const glm::vec3 &back);
 
       Matrix& push();
       Matrix& pop();
@@ -62,9 +62,9 @@ namespace chr
       template<int T = 1>
       Matrix& applyQuat(const glm::quat &q);
 
-      glm::vec3 left() const;
+      glm::vec3 right() const;
       glm::vec3 up() const;
-      glm::vec3 forward() const;
+      glm::vec3 back() const;
 
       const glm::mat4& get() const;
       glm::quat getQuat() const;
