@@ -14,8 +14,6 @@ namespace chr
     class Matrix
     {
     public:
-      typedef std::array<float, 16> Values;
-
       Matrix();
       Matrix(const glm::mat4 &matrix);
       Matrix(const glm::mat3 &matrix);
@@ -24,8 +22,8 @@ namespace chr
 
       Matrix(const Matrix &other) = delete;
       
-      operator Values& () { return values; }
-      operator const Values& () const { return values; }
+      operator std::array<float, 16>& () { return values; }
+      operator const std::array<float, 16>& () const { return values; }
 
       glm::mat4 operator * (const glm::mat4 &matrix) { return matrix * m; }
       Matrix& operator *= (const glm::mat4 &matrix) { m *= matrix; return *this; }
@@ -66,7 +64,7 @@ namespace chr
       glm::vec3 up() const;
       glm::vec3 back() const;
 
-      const glm::mat4& get() const;
+      const glm::mat4& getMat4() const;
       glm::quat getQuat() const;
       glm::mat4 getInverse() const;
 
@@ -101,10 +99,10 @@ namespace chr
           float m03, m13, m23, m33;
         };
 
-        Values values;
+        std::array<float, 16> values;
       };
 
-      std::vector<Values> stack;
+      std::vector<std::array<float, 16>> stack;
     };
   }
 }

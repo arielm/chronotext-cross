@@ -286,7 +286,7 @@ namespace chr
       return glm::vec3(m20, m21, m22);
     }
 
-    const glm::mat4& Matrix::get() const
+    const glm::mat4& Matrix::getMat4() const
     {
       return m;
     }
