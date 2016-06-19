@@ -1,7 +1,7 @@
 #pragma once
 
+#include "gl.h"
 #include "gl/Quad.h"
-#include "gl/Batch.h"
 #include "math/Utils.h"
 
 #include <array>
@@ -11,6 +11,9 @@ namespace chr
 {
   namespace gl
   {
+    template<int V, typename I>
+    class IndexedVertexBatch;
+
     class Matrix
     {
     public:
@@ -79,6 +82,9 @@ namespace chr
 
       inline glm::vec3 transformNormal(const glm::vec3 &normal) const { return transformNormal(normal.x, normal.y, normal.z); }
       glm::vec3 transformNormal(float x, float y, float z) const;
+
+      template<int V>
+      inline glm::vec3 transformPoint(Vertex<V> vertex) const { return transformPoint(vertex.x, vertex.y, vertex.z); }
 
       template<int Primitive = GL_TRIANGLES, int FrontFace = CCW, int V = XYZ>
       void addTransformedQuad(const Quad<V> &quad, std::vector<Vertex<V>> &output) const;

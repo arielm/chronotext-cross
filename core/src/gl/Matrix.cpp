@@ -1,4 +1,5 @@
 #include "gl/Matrix.h"
+#include "gl/Batch.h"
 
 using namespace std;
 

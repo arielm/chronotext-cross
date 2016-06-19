@@ -1,7 +1,7 @@
 #pragma once
 
 #include "math/Utils.h"
-#include "gl/Matrix.h"
+#include "gl/Batch.h"
 
 namespace chr
 {

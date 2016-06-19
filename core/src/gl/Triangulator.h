@@ -1,7 +1,7 @@
 #pragma once
 
 #include "path/Shape.h"
-#include "gl/Matrix.h"
+#include "gl/Batch.h"
 
 #include "tesselator.h"
 
