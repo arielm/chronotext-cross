@@ -116,6 +116,12 @@ namespace chr
         return vertexBuffer->storage.size();
       }
 
+      inline VertexBatch& addVertex(const Vertex<V> &vertex)
+      {
+        vertexBuffer->storage.push_back(vertex);
+        return *this;
+      }
+
       template<typename... Args>
       inline VertexBatch& addVertex(Args&&... args)
       {
@@ -137,17 +143,6 @@ namespace chr
       inline VertexBatch& addVertices(const std::vector<Vertex<V>> &vertices)
       {
         vertexBuffer->storage.insert(vertexBuffer->storage.end(), vertices.begin(), vertices.end());
-        return *this;
-      }
-
-      template<typename... Args>
-      inline VertexBatch& addTransformedVertices(const Matrix &matrix, Args&&... args)
-      {
-        for (Vertex<V>&& vertex : {args...})
-        {
-          vertexBuffer->storage.emplace_back(matrix.transformPoint(vertex));
-        }
-
         return *this;
       }
 
