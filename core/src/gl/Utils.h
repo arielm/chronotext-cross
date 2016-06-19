@@ -19,9 +19,6 @@ namespace chr
 
     const glm::mat4 getPerspectiveMatrix(float fovY, float nearZ, float farZ, float width, float height, float panX = 0, float panY = 0, float zoom = 1);
 
-    glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec2 &input);
-    glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec3 &input);
-
     bool clip(Quad<XYZ.UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
   }
 }

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <cmath>
-#include <limits>
+#include "glm.h"
 
 #ifndef M_PI
   #define M_PI 3.14159265358979323846
@@ -37,5 +36,10 @@ namespace chr
     
     int nextPowerOfTwo(int x);
     bool isPowerOfTwo(int x);
+
+    glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec2 &input);
+    glm::vec3 transformPoint(const glm::mat4 &matrix, const glm::vec3 &input);
+
+    glm::quat quatFromEuler(float eulerX, float eulerY, float eulerZ);
   }
 }
