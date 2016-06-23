@@ -409,14 +409,18 @@ namespace chr
         return idx;
       }
 
-      void clear() override
+      void clearIndices()
       {
-        VertexBatch<V>::clear();
-
         indexBuffer.clear();
         indexBuffer.requestUpload();
 
         idx = 0;
+      }
+
+      void clear() override
+      {
+        VertexBatch<V>::clear();
+        clearIndices();
       }
 
       bool empty() const override
