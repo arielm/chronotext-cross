@@ -109,9 +109,9 @@ namespace chr
         element->uploadRequired = true;
       }
 
-      void reserve(size_t n)
+      void extendCapacity(size_t count)
       {
-        element->storage.reserve(n);
+        element->storage.reserve(element->storage.size() + count);
       }
 
       size_t size() const

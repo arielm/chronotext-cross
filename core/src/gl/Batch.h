@@ -80,6 +80,11 @@ namespace chr
         return vertexBuffer.empty();
       }
 
+      void extendVertexCapacity(size_t count)
+      {
+        vertexBuffer.extendCapacity(count);
+      }
+
       void flush()
       {
         if (hasTexture)
@@ -426,6 +431,17 @@ namespace chr
       bool empty() const override
       {
         return VertexBatch<V>::vertexBuffer.empty() || indexBuffer.empty();
+      }
+
+      void extendCapacity(size_t vertexCount, size_t indexCount)
+      {
+        VertexBatch<V>::vertexBuffer.extendCapacity(vertexCount);
+        indexBuffer.extendCapacity(indexCount);
+      }
+
+      void extendIndexCapacity(size_t count)
+      {
+        indexBuffer.extendCapacity(count);
       }
 
     protected:
