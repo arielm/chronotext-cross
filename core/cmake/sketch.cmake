@@ -39,6 +39,8 @@ list(APPEND LIBRARIES
 # ---
 
 if (PLATFORM MATCHES emscripten)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s TOTAL_MEMORY=25165824")
+  
   set(ZLIB_INCLUDE_DIRS "$ENV{HOME}/.emscripten_cache/ports-builds/zlib")
   set(ZLIB_LIBRARIES "$ENV{HOME}/.emscripten_cache/zlib.bc")
 
