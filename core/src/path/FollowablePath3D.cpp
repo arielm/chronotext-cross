@@ -83,9 +83,20 @@ namespace chr
       return *this;
     }
 
-    FollowablePath3D& FollowablePath3D::end()
+    FollowablePath3D& FollowablePath3D::end(bool close)
     {
       auto end = size();
+
+      if (close)
+      {
+        if ((end > 2) && (points.front().position != points.back().position))
+        {
+          add(points.front().position, points.front().left);
+          points.back().forward = points.front().forward;
+
+          return *this;
+        }
+      }
 
       if (end > 1)
       {

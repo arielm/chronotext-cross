@@ -77,7 +77,7 @@ namespace chr
       const std::vector<float>& getLengths() const;
 
       FollowablePath3D& begin();
-      FollowablePath3D& end();
+      FollowablePath3D& end(bool close = false);
 
       FollowablePath3D& add(const glm::vec3 &position, const glm::vec3 &left);
 
