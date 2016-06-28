@@ -466,6 +466,42 @@ namespace chr
     }
 
     template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CCW>(const Quad<XYZ.N> &quad, IndexedVertexBatch<XYZ.N, GLushort> &output) const
+    {
+      TRANSFORM_QUAD_HEADER
+
+      const auto &transformedNormal = transformNormal(quad.normal);
+
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal);
+
+      output
+        .addIndices(0, 1, 2, 2, 3, 0)
+        .incrementIndices(4);
+    }
+
+    template <>
+    void Matrix::addTransformedQuad<GL_TRIANGLES, CW>(const Quad<XYZ.N> &quad, IndexedVertexBatch<XYZ.N, GLushort> &output) const
+    {
+      TRANSFORM_QUAD_HEADER
+
+      const auto &transformedNormal = transformNormal(quad.normal);
+
+      output
+        .addVertex(TRANSFORM_QUAD_X1_Y1, transformedNormal)
+        .addVertex(TRANSFORM_QUAD_X1_Y2, transformedNormal)
+        .addVertex(TRANSFORM_QUAD_X2_Y2, transformedNormal)
+        .addVertex(TRANSFORM_QUAD_X2_Y1, transformedNormal);
+
+      output
+        .addIndices(0, 3, 2, 2, 1, 0)
+        .incrementIndices(4);
+    }
+
+    template <>
     void Matrix::addTransformedQuad<GL_TRIANGLES, CCW>(const Quad<XYZ.UV> &quad, IndexedVertexBatch<XYZ.UV, GLushort> &output) const
     {
       TRANSFORM_QUAD_HEADER

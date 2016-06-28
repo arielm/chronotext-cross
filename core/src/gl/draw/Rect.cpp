@@ -79,6 +79,19 @@ namespace chr
       }
 
       template <>
+      void Rect::append(IndexedVertexBatch<XYZ.N, GLushort> &batch, const Matrix &matrix) const
+      {
+        if (frontFace == CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, CW>(Quad<XYZ.N>(bounds, glm::vec3(0, 0, +1)), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, CCW>(Quad<XYZ.N>(bounds, glm::vec3(0, 0, +1)), batch);
+        }
+      }
+
+      template <>
       void Rect::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, const Matrix &matrix) const
       {
         glm::vec2 coords1, coords2;

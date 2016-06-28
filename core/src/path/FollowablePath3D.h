@@ -34,15 +34,15 @@ namespace chr
         glm::vec3 position;
 
         Point(const glm::vec3 &position)
-          :
-          position(position)
-        { }
+        :
+        position(position)
+        {}
 
         Point(const glm::vec3 &position, const glm::vec3 &left)
-          :
-          position(position),
-          left(left)
-        { }
+        :
+        position(position),
+        left(left)
+        {}
 
         glm::quat toQuat() const;
       };
