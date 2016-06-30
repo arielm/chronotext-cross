@@ -44,6 +44,24 @@ void Sketch::setup()
   // ---
 
   path1
+    .setMode(FollowablePath2D::MODE_LOOP)
+    .begin()
+    .add(450, 300)
+    .add(500, 300)
+    .add(500, 350)
+    .add(450, 350)
+    .end(true); // CLOSED-PATH
+
+  drawPolyline(path1.getPoints());
+
+  for (const auto &point : path1.getPoints())
+  {
+    drawDot(point.position, 3);
+  }
+
+  // ---
+
+  path2
     .setMode(FollowablePath2D::MODE_MODULO)
     .begin()
     .add(200, 300)
@@ -53,9 +71,9 @@ void Sketch::setup()
     .add(550, 150)
     .end();
 
-  drawPolyline(path1.getPoints());
+  drawPolyline(path2.getPoints());
 
-  for (const auto &point : path1.getPoints())
+  for (const auto &point : path2.getPoints())
   {
     drawDot(point.position, 3);
   }
@@ -82,7 +100,7 @@ void Sketch::setup()
     .close()
     .transformPoints(matrix);
 
-  path2
+  path3
     .setMode(FollowablePath2D::MODE_LOOP)
     .begin()
     .add(peanut.getPolyline())
@@ -124,21 +142,30 @@ void Sketch::draw()
 
   flatBatch.clear();
 
-  Matrix matrix1;
+  Matrix matrix1, matrix2;
   MatrixAffine affine;
 
   path1
-    .offsetToValue(clock()->getTime() * 50, 20)
+    .offsetToValue(clock()->getTime() * 40, 15)
     .applyToMatrix(matrix1);
 
   path2
+    .offsetToValue(clock()->getTime() * -50 - 100, 20)
+    .applyToMatrix(matrix2);
+
+  path3
     .offsetToValue(-clock()->getTime() * 30 + 100, 10)
     .applyToMatrix(affine);
 
   draw::Rect()
+    .setColor(0, 0.50f, 0.75f, 0.75f)
+    .setBounds(-7.5f, -7.5f, 15, 15)
+    .append(flatBatch, matrix1);
+
+  draw::Rect()
     .setColor(0, 0.75f, 0.25f, 0.75f)
     .setBounds(-10, -10, 20, 20)
-    .append(flatBatch, matrix1);
+    .append(flatBatch, matrix2);
 
   Triangulator triangulator;
   triangulator

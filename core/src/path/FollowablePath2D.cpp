@@ -80,9 +80,20 @@ namespace chr
       return *this;
     }
 
-    FollowablePath2D& FollowablePath2D::end()
+    FollowablePath2D& FollowablePath2D::end(bool close)
     {
       auto end = size();
+
+      if (close)
+      {
+        if ((end > 2) && (points.front().position != points.back().position))
+        {
+          add(points.front().position);
+          points.back().forward = points.front().forward;
+
+          return *this;
+        }
+      }
 
       if (end > 1)
       {
@@ -175,13 +186,28 @@ namespace chr
       {
         if (sampleSize > 0)
         {
-          if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
+          float offset0, offset1;
+
+          if (mode == MODE_MODULO)
           {
             offset = math::boundf(offset, length);
           }
 
-          float offset0 = offset - sampleSize * 0.5f;
-          float offset1 = offset + sampleSize * 0.5f;
+          if (mode == MODE_LOOP)
+          {
+            offset0 = math::boundf(offset - sampleSize * 0.5f, length);
+            offset1 = math::boundf(offset + sampleSize * 0.5f, length);
+
+            if (offset1 < offset0)
+            {
+              std::swap(offset0, offset1);
+            }
+          }
+          else
+          {
+            offset0 = offset - sampleSize * 0.5f;
+            offset1 = offset + sampleSize * 0.5f;
+          }
 
           if (mode == MODE_BOUNDED)
           {

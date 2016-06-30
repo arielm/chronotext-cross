@@ -54,7 +54,7 @@ namespace chr
       const std::vector<float>& getLengths() const;
 
       FollowablePath2D& begin();
-      FollowablePath2D& end();
+      FollowablePath2D& end(bool close = false);
 
       FollowablePath2D& add(const std::vector<glm::vec2> &polyline);
       FollowablePath2D& add(const math::MatrixAffine &matrix, const std::vector<glm::vec2> &polyline);

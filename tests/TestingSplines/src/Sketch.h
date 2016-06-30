@@ -17,7 +17,7 @@ public:
   void draw() final;
 
 protected:
-  chr::path::FollowablePath2D path1, path2;
+  chr::path::FollowablePath2D path1, path2, path3;
 
   chr::gl::Texture dotTexture;
   chr::gl::State dotState;
