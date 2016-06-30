@@ -17,6 +17,21 @@ namespace chr
     class Matrix
     {
     public:
+      union
+      {
+        glm::mat4 m;
+
+        struct
+        {
+          float m00, m10, m20, m30;
+          float m01, m11, m21, m31;
+          float m02, m12, m22, m32;
+          float m03, m13, m23, m33;
+        };
+
+        std::array<float, 16> values;
+      };
+
       Matrix();
       Matrix(const glm::mat4 &matrix);
       Matrix(const glm::mat3 &matrix);
@@ -93,21 +108,6 @@ namespace chr
       void addTransformedQuad(const Quad<V> &quad, IndexedVertexBatch<V, I> &output) const;
 
     protected:
-      union
-      {
-        glm::mat4 m;
-
-        struct
-        {
-          float m00, m10, m20, m30;
-          float m01, m11, m21, m31;
-          float m02, m12, m22, m32;
-          float m03, m13, m23, m33;
-        };
-
-        std::array<float, 16> values;
-      };
-
       std::vector<std::array<float, 16>> stack;
     };
   }

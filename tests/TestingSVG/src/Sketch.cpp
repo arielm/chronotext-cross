@@ -9,8 +9,6 @@ using namespace gl;
 using namespace path;
 
 Sketch::Sketch()
-:
-strokeBatch(GL_LINES)
 {}
 
 void Sketch::setup()
@@ -32,6 +30,7 @@ void Sketch::setup()
     .setShader(colorShader);
 
   strokeBatch
+    .setPrimitive(GL_LINES)
     .setShader(colorShader)
     .setShaderColor(0, 0, 0, 0.75f);
 
