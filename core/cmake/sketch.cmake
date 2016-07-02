@@ -40,7 +40,7 @@ list(APPEND LIBRARIES
 
 if (PLATFORM MATCHES emscripten)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s TOTAL_MEMORY=25165824")
-  
+
   set(ZLIB_INCLUDE_DIRS "$ENV{HOME}/.emscripten_cache/ports-builds/zlib")
   set(ZLIB_LIBRARIES "$ENV{HOME}/.emscripten_cache/zlib.bc")
 
@@ -80,6 +80,7 @@ list(APPEND SRC_FILES
   "${CROSS_ROOT}/src/gl/Texture.cpp"
   "${CROSS_ROOT}/src/gl/State.cpp"
   "${CROSS_ROOT}/src/gl/Buffer.cpp"
+  "${CROSS_ROOT}/src/gl/Vertex.cpp"
   "${CROSS_ROOT}/src/gl/Triangulator.cpp"
   "${CROSS_ROOT}/src/gl/Revolver.cpp"
   "${CROSS_ROOT}/src/gl/draw/Circle.cpp"

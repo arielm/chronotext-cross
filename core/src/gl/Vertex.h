@@ -92,6 +92,9 @@ namespace chr
     template<int T = XYZ> struct Vertex
     {};
 
+    template<int T>
+    bool operator==(const Vertex<T> &lhs, const Vertex<T> &rhs);
+
     template<> struct Vertex<XYZ>
     {
       union
