@@ -1,5 +1,6 @@
 #include "Sketch.h"
 
+#include "gl/draw/Box.h"
 #include "gl/draw/Cube.h"
 
 using namespace std;
@@ -13,12 +14,16 @@ void Sketch::setup()
 {
   initTextures();
 
+  lightenBatch.setTexture(texture);
+  flatBatch.setTexture(texture);
+
   // ---
 
   Matrix matrix;
 
-  draw::Cube()
-    .setSize(100)
+  draw::Box()
+    .setSize(100, 75, 25)
+    .setTextureScale(0.25f)
     .append(lightenBatch, matrix);
 
   matrix
