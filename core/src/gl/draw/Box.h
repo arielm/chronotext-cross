@@ -18,6 +18,7 @@ namespace chr
         Box& setTextureOffset(const glm::vec2 &offset);
         Box& setTextureOffset(float x, float y);
         Box& setTextureScale(float scale);
+        Box& setTextureScale(float scaleX, float scaleY);
 
         Box& setColor(const glm::vec4 &color);
         Box& setColor(float r, float g, float b, float a);
@@ -38,7 +39,7 @@ namespace chr
         float width = 1, height = 1, depth = 1;
         GLenum frontFace = CCW;
         glm::vec2 textureOffset;
-        float textureScale = 1;
+        glm::vec2 textureScale = { 1, 1 };
 
         glm::vec4 color = glm::vec4(1, 1, 1, 1);
         std::array<glm::vec4, 6> colors;

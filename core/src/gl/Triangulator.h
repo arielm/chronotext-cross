@@ -30,6 +30,7 @@ namespace chr
       Triangulator& setTextureOffset(const glm::vec2 &offset);
       Triangulator& setTextureOffset(float x, float y);
       Triangulator& setTextureScale(float scale);
+      Triangulator& setTextureScale(float scaleX, float scaleY);
 
       Triangulator& setColor(const glm::vec4 &color);
       Triangulator& setColor(float r, float g, float b, float a);
@@ -59,7 +60,7 @@ namespace chr
       TessWindingRule windingRule = TESS_WINDING_ODD;
       GLenum frontFace = CCW;
       glm::vec2 textureOffset;
-      float textureScale = 1;
+      glm::vec2 textureScale = { 1, 1 };
       glm::vec4 color = { 1, 1, 1, 1 };
 
       int contourCapture = CAPTURE_NONE;

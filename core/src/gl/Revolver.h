@@ -26,6 +26,7 @@ namespace chr
       Revolver& setTextureOffset(const glm::vec2 &offset);
       Revolver& setTextureOffset(float x, float y);
       Revolver& setTextureScale(float scale);
+      Revolver& setTextureScale(float scaleX, float scaleY);
 
       Revolver& setColor(const glm::vec4 &color);
       Revolver& setColor(float r, float g, float b, float a);
@@ -48,7 +49,7 @@ namespace chr
     protected:
       GLenum frontFace = CCW;
       glm::vec2 textureOffset;
-      float textureScale = 1;
+      glm::vec2 textureScale = { 1, 1 };
       glm::vec4 color = { 1, 1, 1, 1 };
 
       bool capFront = false;

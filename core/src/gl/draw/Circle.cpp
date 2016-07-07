@@ -26,7 +26,13 @@ namespace chr
 
       Circle& Circle::setTextureScale(float scale)
       {
-        textureScale = scale;
+        textureScale = { scale, scale };
+        return *this;
+      }
+
+      Circle& Circle::setTextureScale(float scaleX, float scaleY)
+      {
+        textureScale = { scaleX, scaleY };
         return *this;
       }
 

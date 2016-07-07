@@ -17,6 +17,7 @@ namespace chr
         Circle& setTextureOffset(const glm::vec2 &offset);
         Circle& setTextureOffset(float x, float y);
         Circle& setTextureScale(float scale);
+        Circle& setTextureScale(float scaleX, float scaleY);
 
         Circle& setColor(const glm::vec4 &color);
         Circle& setColor(float r, float g, float b, float a);
@@ -31,7 +32,7 @@ namespace chr
       protected:
         GLenum frontFace = CCW;
         glm::vec2 textureOffset;
-        float textureScale = 1;
+        glm::vec2 textureScale = { 1, 1 };
         glm::vec4 color = { 1, 1, 1, 1 };
 
         float r = 1;

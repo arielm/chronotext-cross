@@ -64,7 +64,13 @@ namespace chr
 
     Triangulator& Triangulator::setTextureScale(float scale)
     {
-      textureScale = scale;
+      textureScale = { scale, scale };
+      return *this;
+    }
+
+    Triangulator& Triangulator::setTextureScale(float scaleX, float scaleY)
+    {
+      textureScale = { scaleX, scaleY };
       return *this;
     }
 

@@ -56,7 +56,7 @@ void Sketch::setup()
   matrix.push()
     .translate(200, 100)
     .rotateZ(30 * D2R);
-  textureMatrix.load(matrix);
+  textureMatrix.set(matrix);
 
   draw::Rect()
     .setColor(1, 1, 0.5f, 1)

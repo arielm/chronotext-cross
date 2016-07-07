@@ -37,7 +37,13 @@ namespace chr
 
       Box& Box::setTextureScale(float scale)
       {
-        textureScale = scale;
+        textureScale = { scale, scale };
+        return *this;
+      }
+
+      Box& Box::setTextureScale(float scaleX, float scaleY)
+      {
+        textureScale = { scaleX, scaleY };
         return *this;
       }
 

@@ -26,7 +26,13 @@ namespace chr
 
     Revolver& Revolver::setTextureScale(float scale)
     {
-      textureScale = scale;
+      textureScale = { scale, scale };
+      return *this;
+    }
+
+    Revolver& Revolver::setTextureScale(float scaleX, float scaleY)
+    {
+      textureScale = { scaleX, scaleY };
       return *this;
     }
 

@@ -17,6 +17,7 @@ namespace chr
         Rect& setTextureOffset(const glm::vec2 &offset);
         Rect& setTextureOffset(float x, float y);
         Rect& setTextureScale(float scale);
+        Rect& setTextureScale(float scaleX, float scaleY);
 
         Rect& setColor(const glm::vec4 &color);
         Rect& setColor(float r, float g, float b, float a);
@@ -34,7 +35,7 @@ namespace chr
       protected:
         GLenum frontFace = CCW;
         glm::vec2 textureOffset;
-        float textureScale = 1;
+        glm::vec2 textureScale = { 1, 1 };
         glm::vec4 color = { 1, 1, 1, 1 };
         math::Rectf bounds;
 

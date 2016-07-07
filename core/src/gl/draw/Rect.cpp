@@ -29,7 +29,13 @@ namespace chr
 
       Rect& Rect::setTextureScale(float scale)
       {
-        textureScale = scale;
+        textureScale = { scale, scale };
+        return *this;
+      }
+
+      Rect& Rect::setTextureScale(float scaleX, float scaleY)
+      {
+        textureScale = { scaleX, scaleY };
         return *this;
       }
 
