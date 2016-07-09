@@ -1,14 +1,18 @@
+if (NOT SKETCH)
+  list(APPEND INCLUDE_DIRS
+    "${CROSS_ROOT}/src"
+  )
+
+  list(APPEND SRC_FILES
+    "${CROSS_ROOT}/src/Log.cpp"
+    "${CROSS_ROOT}/src/InputSource.cpp"
+    "${CROSS_ROOT}/src/FileSystem.cpp"
+    "${CROSS_ROOT}/src/MemoryBuffer.cpp"
+  )
+endif()
 
 list(APPEND INCLUDE_DIRS
   "src"
-  "${CROSS_ROOT}/src"
-)
-
-list(APPEND SRC_FILES
-  "${CROSS_ROOT}/src/Log.cpp"
-  "${CROSS_ROOT}/src/InputSource.cpp"
-  "${CROSS_ROOT}/src/FileSystem.cpp"
-  "${CROSS_ROOT}/src/MemoryBuffer.cpp"
 )
 
 file(GLOB_RECURSE RESOURCE_FILES
@@ -238,18 +242,20 @@ endif()
 
 # ---
 
-if (PLATFORM MATCHES ios|osx)
-  list(APPEND LIBRARIES
-    "-framework Foundation"
-  )
+if (NOT SKETCH)
+  if (PLATFORM MATCHES ios|osx)
+    list(APPEND LIBRARIES
+      "-framework Foundation"
+    )
 
-elseif (PLATFORM MATCHES android AND RUN MATCHES APK)
-  list(APPEND LIBRARIES
-    log
-    android
-    EGL
-    GLESv2
-  )
+  elseif (PLATFORM MATCHES android AND RUN MATCHES APK)
+    list(APPEND LIBRARIES
+      log
+      android
+      EGL
+      GLESv2
+    )
+  endif()
 endif()
 
 include_directories(
