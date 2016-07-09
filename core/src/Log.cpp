@@ -2,7 +2,8 @@
 #include "Platform.h"
 
 #if defined(CHR_RUN_APK)
-#  include <android/log.h>
+  #include <cstdlib>
+  #include <android/log.h>
 #endif
 
 using namespace std;
