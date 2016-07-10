@@ -1,3 +1,7 @@
+/*
+ * THIS MUST BE PART OF THE SKETCH'S SHARED-LIB
+ */
+
 #pragma once
 
 #include <jni.h>

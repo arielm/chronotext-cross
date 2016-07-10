@@ -21,12 +21,17 @@ void Sketch::setup()
 
   Matrix matrix;
 
+  matrix
+    .push()
+    .translate(-50, -75 * 0.5f, - 25 * 0.5f);
+
   draw::Box()
     .setSize(100, 75, 25)
     .setTextureScale(0.25f)
     .append(lightenBatch, matrix);
 
   matrix
+    .pop()
     .push()
     .translate(50, 0, 0);
 

@@ -1,4 +1,3 @@
-
 set(CTEST_PROJECT_NAME TestingDrawing2d)
 set(CTEST_CONFIGURATION_TYPE Release)
 
@@ -31,9 +30,5 @@ elseif (PLATFORM MATCHES emscripten)
     -DRUN=BROWSER
   )
 endif()
-
-list(APPEND ARGS
-  "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
-)
 
 include("${CROSS_ROOT}/cmake/platforms.cmake")

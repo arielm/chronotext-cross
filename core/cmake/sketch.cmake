@@ -9,6 +9,8 @@ set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/deps/libtess2/dist/${PLATFORM}")
 
 set(SKETCH ON)
 
+list(APPEND SRC_FILES "src/main.cpp")
+
 if (PLATFORM MATCHES ios)
   list(APPEND SRC_FILES "src/ios/Application.mm")
 
@@ -18,7 +20,7 @@ if (PLATFORM MATCHES ios)
   )
 
 elseif (PLATFORM MATCHES android)
-  list(APPEND SRC_FILES "src/android/Stub.cpp")
+  list(APPEND SRC_FILES "$ENV{CROSS_PATH}/core/src/android/Stub.cpp")
 endif()
 
 # ---

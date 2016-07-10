@@ -1,5 +1,7 @@
 #include "Sketch.h"
-#include "gl/draw/Texture.h"
+
+#include "gl/draw/Sprite.h"
+#include "gl/draw/Rect.h"
 
 using namespace std;
 using namespace chr;
@@ -31,21 +33,21 @@ void Sketch::setup()
   matrix
     .push()
     .scale(0.333f);
-  draw::Texture()
+  draw::Sprite()
     .setAnchor(0.5f, 0.5f)
     .append(textureBatches[0], matrix);
 
   matrix
     .pop()
     .translate(0, 0, 5);
-  draw::Texture()
+  draw::Rect()
     .setBounds(-200, -150, 400, 300)
     .append(textureBatches[1], matrix);
 
   matrix
     .translate(0, 0, 5)
     .scale(0.75f);
-  draw::Texture()
+  draw::Sprite()
     .setAnchor(0.5f, 0.5f)
     .append(textureBatches[2], matrix, 100, 100);
 
