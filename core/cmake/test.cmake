@@ -273,7 +273,7 @@ if (CONFIG_RUN AND CONFIG_INSTALL)
   configure_file(${CONFIG_RUN} run.sh)
   configure_file(${CONFIG_INSTALL} install.sh)
 
-  if (DEFINED CLION)
+  if (CLION)
     add_custom_target(CLION_BUILD COMMAND ./install.sh)
   else()
     install(CODE "

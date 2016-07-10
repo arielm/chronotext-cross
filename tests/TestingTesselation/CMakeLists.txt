@@ -7,19 +7,5 @@ set(SRC_FILES
   "src/Sketch.cpp"
 )
 
-if (PLATFORM MATCHES ios)
-  list(APPEND SRC_FILES "src/ios/Application.mm")
-
-  set_source_files_properties(
-    "src/main.cpp"
-    PROPERTIES COMPILE_FLAGS "-x objective-c++"
-  )
-
-elseif (PLATFORM MATCHES android)
-  list(APPEND SRC_FILES "src/android/Stub.cpp")
-endif()
-
-# ---
-
 include("${CROSS_ROOT}/cmake/sketch.cmake")
 include("${CROSS_ROOT}/cmake/test.cmake")

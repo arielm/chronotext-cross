@@ -17,7 +17,7 @@ TEST(TestPugiXML, TestResourceLoading)
   if (stream)
   {
     pugi::xml_parse_result result = doc.load(*stream);
-    EXPECT_TRUE(result);
+    EXPECT_TRUE(result.status == pugi::xml_parse_status::status_ok);
   }
   else
   {

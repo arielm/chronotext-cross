@@ -1,5 +1,3 @@
-set(SKETCH ON)
-
 set(BOOST_ROOT "$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}")
 set(GLFW_ROOT "$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}")
 set(GLM_ROOT "$ENV{CROSS_PATH}/deps/glm/dist")
@@ -7,6 +5,21 @@ set(JPEG_ROOT "$ENV{CROSS_PATH}/deps/libjpeg-turbo")
 set(PNG_ROOT "$ENV{CROSS_PATH}/deps/libpng/dist/${PLATFORM}")
 set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/deps/libtess2/dist/${PLATFORM}")
 
+# ---
+
+set(SKETCH ON)
+
+if (PLATFORM MATCHES ios)
+  list(APPEND SRC_FILES "src/ios/Application.mm")
+
+  set_source_files_properties(
+    "src/main.cpp"
+    PROPERTIES COMPILE_FLAGS "-x objective-c++"
+  )
+
+elseif (PLATFORM MATCHES android)
+  list(APPEND SRC_FILES "src/android/Stub.cpp")
+endif()
 
 # ---
 
