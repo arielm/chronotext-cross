@@ -29,4 +29,8 @@ namespace chr
     }
   }
 
+#elif defined(CHR_PLATFORM_ANDROID)
+
+  #include "android/Stub.h"
+
 #endif

@@ -14,6 +14,9 @@ if (PLATFORM MATCHES ios)
     "src/main.cpp"
     PROPERTIES COMPILE_FLAGS "-x objective-c++"
   )
+
+elseif (PLATFORM MATCHES android)
+  list(APPEND SRC_FILES "src/android/Stub.cpp")
 endif()
 
 # ---
