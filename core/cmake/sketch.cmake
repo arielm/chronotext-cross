@@ -11,7 +11,7 @@ set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/deps/libtess2/dist/${PLATFORM}")
 # ---
 
 list(APPEND INCLUDE_DIRS "$ENV{CROSS_PATH}/core/src")
-list(APPEND LIBRARIES "$ENV{CROSS_PATH}/dist/${PLATFORM}/lib/libchr_cross.a")
+list(APPEND LIBRARIES "$ENV{CROSS_PATH}/core/src/dist/${PLATFORM}/lib/${CMAKE_BUILD_TYPE}/libchr_cross.a")
 
 list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
 list(APPEND LIBRARIES
@@ -100,5 +100,13 @@ elseif (PLATFORM MATCHES ios)
     "-framework OpenGLES"
     "-framework CoreGraphics"
     "-framework CoreVideo"
+  )
+
+elseif (PLATFORM MATCHES android)
+  list(APPEND LIBRARIES
+    log
+    android
+    EGL
+    GLESv2
   )
 endif()

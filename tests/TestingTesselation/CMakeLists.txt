@@ -8,6 +8,8 @@ set(SRC_FILES
 )
 
 if (PLATFORM MATCHES ios)
+  list(APPEND SRC_FILES "src/ios/Application.mm")
+
   set_source_files_properties(
     "src/main.cpp"
     PROPERTIES COMPILE_FLAGS "-x objective-c++"

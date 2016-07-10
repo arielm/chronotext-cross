@@ -2,106 +2,108 @@ cmake_minimum_required(VERSION 3.2.2)
 
 project(chr_cross)
 
-set(BOOST_ROOT "deps/boost/dist/${PLATFORM}")
-set(GLFW_ROOT "deps/glfw/dist/${PLATFORM}")
-set(GLM_ROOT "deps/glm/dist")
-set(JPEG_ROOT "deps/libjpeg-turbo")
-set(PNG_ROOT "deps/libpng/dist/${PLATFORM}")
-set(LIBTESS2_ROOT "deps/libtess2/dist/${PLATFORM}")
+set(DEPS "../../deps")
+
+set(BOOST_ROOT "${DEPS}/boost/dist/${PLATFORM}")
+set(GLFW_ROOT "${DEPS}/glfw/dist/${PLATFORM}")
+set(GLM_ROOT "${DEPS}/glm/dist")
+set(JPEG_ROOT "${DEPS}/libjpeg-turbo")
+set(PNG_ROOT "${DEPS}/libpng/dist/${PLATFORM}")
+set(LIBTESS2_ROOT "${DEPS}/libtess2/dist/${PLATFORM}")
 
 # ---
 
 list(APPEND INCLUDE_DIRS
-  "core/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
 list(APPEND SRC_FILES
-  "core/src/Log.cpp"
-  "core/src/InputSource.cpp"
-  "core/src/FileSystem.cpp"
-  "core/src/MemoryBuffer.cpp"
-  "core/src/cross/CrossSketch.cpp"
-  "core/src/cross/CrossDelegateBase.cpp"
-  "core/src/system/SystemManagerBase.cpp"
-  "core/src/system/DisplayHelperBase.cpp"
-  "core/src/Random.cpp"
-  "core/src/Timer.cpp"
-  "core/src/time/Clock.cpp"
-  "core/src/time/FrameClock.cpp"
-  "core/src/utils/Utils.cpp"
-  "core/src/gl/Utils.cpp"
-  "core/src/gl/ShaderProgram.cpp"
-  "core/src/gl/ShaderHelper.cpp"
-  "core/src/gl/Camera.cpp"
-  "core/src/gl/Matrix.cpp"
-  "core/src/gl/Texture.cpp"
-  "core/src/gl/State.cpp"
-  "core/src/gl/Buffer.cpp"
-  "core/src/gl/Vertex.cpp"
-  "core/src/gl/Triangulator.cpp"
-  "core/src/gl/Revolver.cpp"
-  "core/src/gl/draw/Circle.cpp"
-  "core/src/gl/draw/Rect.cpp"
-  "core/src/gl/draw/Sprite.cpp"
-  "core/src/gl/draw/Cube.cpp"
-  "core/src/gl/draw/Box.cpp"
-  "core/src/gl/shaders/ColorShader.cpp"
-  "core/src/gl/shaders/LambertShader.cpp"
-  "core/src/gl/shaders/TextureAlphaShader.cpp"
-  "core/src/gl/shaders/TextureShader.cpp"
-  "core/src/path/ASPC.cpp"
-  "core/src/path/Path.cpp"
-  "core/src/path/Shape.cpp"
-  "core/src/path/FollowablePath2D.cpp"
-  "core/src/path/FollowablePath3D.cpp"
-  "core/src/path/SVGDocument.cpp"
-  "core/src/math/MatrixAffine.cpp"
-  "core/src/math/Utils.cpp"
-  "core/src/math/Rect.cpp"
-  "core/src/math/Box.cpp"
-  "core/src/image/Utils.cpp"
+  "Log.cpp"
+  "InputSource.cpp"
+  "FileSystem.cpp"
+  "MemoryBuffer.cpp"
+  "cross/CrossSketch.cpp"
+  "cross/CrossDelegateBase.cpp"
+  "system/SystemManagerBase.cpp"
+  "system/DisplayHelperBase.cpp"
+  "Random.cpp"
+  "Timer.cpp"
+  "time/Clock.cpp"
+  "time/FrameClock.cpp"
+  "utils/Utils.cpp"
+  "gl/Utils.cpp"
+  "gl/ShaderProgram.cpp"
+  "gl/ShaderHelper.cpp"
+  "gl/Camera.cpp"
+  "gl/Matrix.cpp"
+  "gl/Texture.cpp"
+  "gl/State.cpp"
+  "gl/Buffer.cpp"
+  "gl/Vertex.cpp"
+  "gl/Triangulator.cpp"
+  "gl/Revolver.cpp"
+  "gl/draw/Circle.cpp"
+  "gl/draw/Rect.cpp"
+  "gl/draw/Sprite.cpp"
+  "gl/draw/Cube.cpp"
+  "gl/draw/Box.cpp"
+  "gl/shaders/ColorShader.cpp"
+  "gl/shaders/LambertShader.cpp"
+  "gl/shaders/TextureAlphaShader.cpp"
+  "gl/shaders/TextureShader.cpp"
+  "path/ASPC.cpp"
+  "path/Path.cpp"
+  "path/Shape.cpp"
+  "path/FollowablePath2D.cpp"
+  "path/FollowablePath3D.cpp"
+  "path/SVGDocument.cpp"
+  "math/MatrixAffine.cpp"
+  "math/Utils.cpp"
+  "math/Rect.cpp"
+  "math/Box.cpp"
+  "image/Utils.cpp"
 )
 
 if (PLATFORM MATCHES osx|mxe)
   list(APPEND SRC_FILES
-    "core/src/desktop/CrossDelegate.cpp"
-    "core/src/desktop/system/DisplayHelper.cpp"
-    "core/src/desktop/system/SystemManager.cpp"
+    "desktop/CrossDelegate.cpp"
+    "desktop/system/DisplayHelper.cpp"
+    "desktop/system/SystemManager.cpp"
   )
 
 elseif (PLATFORM MATCHES emscripten)
   list(APPEND SRC_FILES
-    "core/src/emscripten/CrossDelegate.cpp"
-    "core/src/emscripten/system/DisplayHelper.cpp"
-    "core/src/emscripten/system/SystemManager.cpp"
+    "emscripten/CrossDelegate.cpp"
+    "emscripten/system/DisplayHelper.cpp"
+    "emscripten/system/SystemManager.cpp"
   )
 
 elseif (PLATFORM MATCHES ios)
   list(APPEND SRC_FILES
-    "core/src/ios/CrossDelegate.mm"
-    "core/src/ios/system/DisplayHelper.mm"
-    "core/src/ios/system/SystemManager.mm"
-    "core/src/ios/GLViewController.mm"
-    "core/src/ios/CrossBridge.mm"
-    "core/src/cocoa/NSDictionary+DefautValues.m"
-    "core/src/cocoa/NSMutableDictionary+Merge.m"
-    "core/src/cocoa/NSString+JSON.m"
+    "ios/CrossDelegate.mm"
+    "ios/system/DisplayHelper.mm"
+    "ios/system/SystemManager.mm"
+    "ios/GLViewController.mm"
+    "ios/CrossBridge.mm"
+    "cocoa/NSDictionary+DefautValues.m"
+    "cocoa/NSMutableDictionary+Merge.m"
+    "cocoa/NSString+JSON.m"
   )
 
 elseif (PLATFORM MATCHES android)
   list(APPEND SRC_FILES
-    "core/src/android/JNI.cpp"
-    "core/src/android/CrossBridge.cpp"
-    "core/src/android/CrossDelegate.cpp"
-    "core/src/android/system/DisplayHelper.cpp"
-    "core/src/android/system/SystemManager.cpp"
+    "android/JNI.cpp"
+    "android/CrossBridge.cpp"
+    "android/CrossDelegate.cpp"
+    "android/system/DisplayHelper.cpp"
+    "android/system/SystemManager.cpp"
   )
 endif()
 
 # ---
 
 if (PLATFORM MATCHES osx|mxe)
-  set(GLFW_SRC "deps/glfw/build/src")
+  set(GLFW_SRC "${DEPS}/glfw/build/src")
 
   list(APPEND INCLUDE_DIRS
     "${GLFW_ROOT}/include"
@@ -113,6 +115,8 @@ if (PLATFORM MATCHES osx|mxe)
 endif()
 
 if (PLATFORM MATCHES osx)
+  add_definitions(-DCHR_RUN_EXE)
+
   list(APPEND LIBRARIES
   	"-framework Foundation"
     "-framework CoreFoundation"
@@ -123,12 +127,15 @@ if (PLATFORM MATCHES osx)
   )
 
 elseif (PLATFORM MATCHES mxe)
+  add_definitions(-DCHR_RUN_EXE -DCHR_FS_RC)
+
   list(APPEND LIBRARIES
     gdi32
     opengl32
   )
 
 elseif (PLATFORM MATCHES ios)
+  add_definitions(-DCHR_RUN_APP -DCHR_FS_BUNDLE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode")
 
   list(APPEND LIBRARIES

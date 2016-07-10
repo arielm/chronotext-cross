@@ -9,6 +9,10 @@ if (NOT SKETCH)
     "${CROSS_ROOT}/src/FileSystem.cpp"
     "${CROSS_ROOT}/src/MemoryBuffer.cpp"
   )
+
+  if (PLATFORM MATCHES mxe)
+    list(APPEND SRC_FILES "${CROSS_ROOT}/src/android/JNI.cpp")
+  endif()
 endif()
 
 list(APPEND INCLUDE_DIRS
@@ -81,10 +85,7 @@ elseif (PLATFORM MATCHES android)
 
     set(LIBRARY_OUTPUT_PATH "libs/${ANDROID_ABI}")
 
-    add_library(${PROJECT_NAME} SHARED
-      ${SRC_FILES}
-      "${CROSS_ROOT}/src/android/JNI.cpp"
-    )
+    add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
 
   elseif (RUN MATCHES EXE)
     add_definitions(-DCHR_RUN_EXE)
