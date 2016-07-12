@@ -1,4 +1,4 @@
-set(CTEST_PROJECT_NAME TestingKeyboard)
+set(CTEST_PROJECT_NAME TestingInput)
 set(CTEST_CONFIGURATION_TYPE Release)
 
 if (PLATFORM MATCHES osx)

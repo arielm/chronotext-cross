@@ -1,4 +1,4 @@
-package org.chronotext.TestingKeyboard;
+package org.chronotext.TestingInput;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,7 +10,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingKeyboard");
+    System.loadLibrary("TestingInput");
   }
 
   CrossBridge bridge;
