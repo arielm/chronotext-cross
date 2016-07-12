@@ -3,6 +3,7 @@
 #include "cross/CrossDelegateBase.h"
 #include "cross/MouseEvent.h"
 #include "cross/KeyEvent.h"
+#include "cross/WheelEvent.h"
 #include "cross/Keyboard.h"
 
 #include <emscripten.h>
@@ -28,6 +29,7 @@ namespace chr
 
     std::vector<MouseEvent> mouseEvents;
     std::vector<KeyEvent> keyEvents;
+    std::vector<WheelEvent> wheelEvents;
 
     float mouseX;
     float mouseY;
@@ -40,9 +42,13 @@ namespace chr
     void processKeyEvents();
     void clearKeyEvents();
     int convertKeyCode(int keyCode);
+
+    void processWheelEvents();
+    void clearWheelEvents();
     
     static void mainLoopCallback();
     static EM_BOOL mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData);
     static EM_BOOL keyCallback(int eventType, const EmscriptenKeyboardEvent *e, void *userData);
+    static EM_BOOL wheelCallback(int eventType, const EmscriptenWheelEvent *wheelEvent, void *userData);
   };
 }

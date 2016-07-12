@@ -3,6 +3,7 @@
 #include "cross/CrossDelegateBase.h"
 #include "cross/MouseEvent.h"
 #include "cross/KeyEvent.h"
+#include "cross/WheelEvent.h"
 #include "cross/Keyboard.h"
 
 namespace chr
@@ -26,6 +27,7 @@ namespace chr
 
     std::vector<MouseEvent> mouseEvents;
     std::vector<KeyEvent> keyEvents;
+    std::vector<WheelEvent> wheelEvents;
 
     float mouseX;
     float mouseY;
@@ -39,9 +41,13 @@ namespace chr
     void clearKeyEvents();
     int convertKeyCode(int keyCode);
 
+    void processWheelEvents();
+    void clearWheelEvents();
+
     static void cursorPosCallback(GLFWwindow *window, double xpos, double ypos);
     static void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
     static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
     static void characterCallback(GLFWwindow *window, unsigned int codePoint);
+    static void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
   };
 }

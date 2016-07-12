@@ -17,6 +17,8 @@ public:
   void keyDown(int keyCode, int modifiers) final;
   void keyUp(int keyCode, int modifiers) final;
 
+  void wheelUpdated(float offset);
+
 protected:
   chr::gl::State state;
   chr::gl::shaders::ColorShader colorShader;

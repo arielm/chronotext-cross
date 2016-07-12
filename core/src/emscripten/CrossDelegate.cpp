@@ -30,6 +30,8 @@ namespace chr
       emscripten_set_keyup_callback(0, 0, 1, keyCallback);
       emscripten_set_keydown_callback(0, 0, 1, keyCallback);
 
+      emscripten_set_wheel_callback(0, 0, 1, wheelCallback);
+
       // ---
 
       int targetWidth;
@@ -224,16 +226,31 @@ namespace chr
     return keyCode;
   }
 
+  void CrossDelegate::processWheelEvents()
+  {
+    for (const auto &event : wheelEvents)
+    {
+      sketch->wheelUpdated(event.offset);
+    }
+  }
+
+  void CrossDelegate::clearWheelEvents()
+  {
+    wheelEvents.clear();
+  }
+
   void CrossDelegate::mainLoopCallback()
   {
     intern::instance->processMouseEvents();
     intern::instance->processKeyEvents();
+    intern::instance->processWheelEvents();
 
     intern::instance->performUpdate();
     intern::instance->performDraw();
 
     intern::instance->clearMouseEvents();
     intern::instance->clearKeyEvents();
+    intern::instance->clearWheelEvents();
   }
 
   EM_BOOL CrossDelegate::mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData)
@@ -302,6 +319,13 @@ namespace chr
      }
 
     intern::instance->keyEvents.emplace_back(kind, modifiers, intern::instance->convertKeyCode(keyCode), codePoint);
+
+    return 0;
+  }
+
+  EM_BOOL CrossDelegate::wheelCallback(int eventType, const EmscriptenWheelEvent *wheelEvent, void *userData)
+  {
+    intern::instance->wheelEvents.emplace_back(wheelEvent->deltaY);
 
     return 0;
   }

@@ -59,3 +59,7 @@ void Sketch::keyUp(int keyCode, int modifiers)
 
   LOGI << "keyUp: " << keyCode << mods << endl;
 }
+void Sketch::wheelUpdated(float offset)
+{
+  LOGI << "wheelUpdated: " << offset << endl;
+}

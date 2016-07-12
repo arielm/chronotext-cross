@@ -70,6 +70,7 @@ namespace chr
           glfwSetMouseButtonCallback(initInfo.window, mouseButtonCallback);
           glfwSetKeyCallback(initInfo.window, keyCallback);
           glfwSetCharCallback(initInfo.window, characterCallback);
+          glfwSetScrollCallback(initInfo.window, scrollCallback);
 
           glfwMakeContextCurrent(initInfo.window);
           gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
@@ -156,6 +157,7 @@ namespace chr
     {
       intern::instance->processMouseEvents();
       intern::instance->processKeyEvents();
+      intern::instance->processWheelEvents();
 
       performUpdate();
       performDraw();
@@ -164,6 +166,7 @@ namespace chr
 
       intern::instance->clearMouseEvents();
       intern::instance->clearKeyEvents();
+      intern::instance->clearWheelEvents();
       glfwPollEvents();
     }
 
@@ -243,6 +246,19 @@ namespace chr
     return keyCode;
   }
 
+  void CrossDelegate::processWheelEvents()
+  {
+    for (const auto &event : wheelEvents)
+    {
+      sketch->wheelUpdated(event.offset);
+    }
+  }
+
+  void CrossDelegate::clearWheelEvents()
+  {
+    wheelEvents.clear();
+  }
+
   void CrossDelegate::cursorPosCallback(GLFWwindow *window, double xpos, double ypos)
   {
     intern::instance->mouseEvents.emplace_back(xpos, ypos, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
@@ -294,5 +310,18 @@ namespace chr
   void CrossDelegate::characterCallback(GLFWwindow *window, unsigned int codePoint)
   {
     intern::instance->keyEvents.emplace_back(KeyEvent::KIND_PRESSED, KeyEvent::MODIFIER_NONE, 0, codePoint);
+  }
+
+  void CrossDelegate::scrollCallback(GLFWwindow *window, double xoffset, double yoffset)
+  {
+    /*
+     * THE UNIT USED FOR yoffset IS NOT CLEAR:
+     * THE VALUE OF THE FIRST NOTCH IS 0.100006 FOR GLFW AND 4.00024 FOR EMSCRIPTEN
+     *
+     * CURRENTLY:
+     * - THE OFFSET VALUE IS NOT UNIFIED BETWEEN THE TWO PLATFORMS
+     * - THE DIRECTION OF SCROLLING IS UNIFIED: EMSCRIPTEN BEING THE REFERENCE
+     */
+    intern::instance->wheelEvents.emplace_back(-yoffset);
   }
 }

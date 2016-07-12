@@ -74,6 +74,7 @@ namespace chr
     virtual void keyDown(int keyCode, int modifiers) {}
     virtual void keyUp(int keyCode, int modifiers) {}
 
+    virtual void wheelUpdated(float offset) {}
     virtual void accelerated(AccelEvent event) {}
 
     const WindowInfo& getWindowInfo() const;
