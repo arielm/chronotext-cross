@@ -51,4 +51,15 @@ namespace glm
 
     return lhs;
   }
+
+  template <typename T, precision P>
+  std::ostream& operator<<(std::ostream &lhs, const tquat<T, P> &rhs)
+  {
+    lhs
+      << "["
+      << rhs.w << ", " << rhs.x << ", " << rhs.y << ", " << rhs.z
+      << "]";
+
+    return lhs;
+  };
 }
