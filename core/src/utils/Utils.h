@@ -41,6 +41,11 @@ namespace chr
 
     // ---
 
+    inline int fromString(const std::string &in)
+    {
+      return std::atoi(in.data()); // std::stoi() DOESN'T WORK ON ANDROID
+    }
+
     /*
      * toString() AND split() BASED ON:
      * https://github.com/cinder/Cinder/blob/master/include/cinder/Utilities.h
