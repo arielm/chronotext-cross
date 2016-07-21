@@ -157,6 +157,18 @@ namespace chr
       v(v)
       {}
 
+      Vertex(float x, float y, const glm::vec2 &coords)
+      :
+      Vertex<>(x, y),
+      coords(coords)
+      {}
+
+      Vertex(float x, float y, float z, const glm::vec2 &coords)
+      :
+      Vertex<>(x, y, z),
+      coords(coords)
+      {}
+
       Vertex(const glm::vec2 &position, float u, float v)
       :
       Vertex<>(position),
