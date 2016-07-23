@@ -287,6 +287,27 @@ namespace chr
       return glm::vec3(m20, m21, m22);
     }
 
+    void Matrix::clearTranslation()
+    {
+      m03 = m13 = m23 = m30 = m31 = m32 = 0.0f;
+      m33 = 1;
+    }
+
+    void Matrix::clearRotation()
+    {
+      m00 = 1.0f;
+      m01 = 0.0f;
+      m02 = 0.0f;
+
+      m10 = 0.0f;
+      m11 = 1.0f;
+      m12 = 0.0f;
+
+      m20 = 0.0f;
+      m21 = 0.0f;
+      m22 = 1.0f;
+    }
+
     const glm::mat4& Matrix::getMat4() const
     {
       return m;

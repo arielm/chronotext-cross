@@ -82,6 +82,9 @@ namespace chr
       glm::vec3 up() const;
       glm::vec3 back() const;
 
+      void clearTranslation();
+      void clearRotation();
+
       const glm::mat4& getMat4() const;
       glm::quat getQuat() const;
       glm::mat4 getInverse() const;
