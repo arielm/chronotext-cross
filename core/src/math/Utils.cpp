@@ -30,6 +30,16 @@ namespace chr
     {
       return (t * t * (3 - 2 * t));
     }
+
+    float easeIn(float t)
+    {
+      return (t < 0.5f) ? ease(t) : t;
+    }
+
+    float easeOut(float t)
+    {
+      return (t > 0.5f) ? ease(t) : t;
+    }
     
     int nextPowerOfTwo(int x)
     {
