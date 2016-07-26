@@ -95,7 +95,6 @@ namespace chr
     {
       if (load())
       {
-        glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, element->textureId);
 
         return true;
@@ -108,7 +107,6 @@ namespace chr
     {
       if (element && element->textureId)
       {
-        glDisable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, 0);
       }
     }
