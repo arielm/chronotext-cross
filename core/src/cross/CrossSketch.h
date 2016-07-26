@@ -50,7 +50,11 @@ namespace chr
       ACTION_RELEASE_ESCAPE,
     };
 
-    static void run(int width, int height, int aaSamples = 0, int depthBits = 0);
+    #if defined(CHR_PLATFORM_DESKTOP)
+      static void run(int width, int height, int aaSamples = 0, int depthBits = 0);
+    #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+      static void run(int aaSamples = 0, int depthBits = 0);
+    #endif
 
     virtual bool init() { return true; }
     virtual void uninit() {}

@@ -9,13 +9,19 @@ using namespace std;
 
 namespace chr
 {
-#if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_EMSCRIPTEN)
-  void CrossSketch::run(int width, int height, int aaSamples, int depthBits)
-  {
+  #if defined(CHR_PLATFORM_DESKTOP)
+    void CrossSketch::run(int width, int height, int aaSamples, int depthBits)
+    {
+        CrossDelegate delegate;
+        delegate.run(width, height, aaSamples, depthBits);
+    }
+  #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+    void CrossSketch::run(int aaSamples, int depthBits)
+    {
       CrossDelegate delegate;
-      delegate.run(width, height, aaSamples, depthBits);
-  }
-#endif
+      delegate.run(aaSamples, depthBits);
+    }
+  #endif
 
   double CrossSketch::getElapsedSeconds()
   {

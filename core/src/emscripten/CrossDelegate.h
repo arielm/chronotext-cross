@@ -22,7 +22,7 @@ namespace chr
     void performUpdate();
     void performDraw();
 
-    void run(int width, int height, int aaSamples = 0, int depthBits = 0);
+    void run(int aaSamples = 0, int depthBits = 0);
 
   protected:
     int updateCount = 0;
@@ -47,6 +47,8 @@ namespace chr
     void clearWheelEvents();
     
     static void mainLoopCallback();
+
+    static EM_BOOL resizeCallback(int eventType, const EmscriptenUiEvent *e, void *userData);
     static EM_BOOL mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData);
     static EM_BOOL keyCallback(int eventType, const EmscriptenKeyboardEvent *e, void *userData);
     static EM_BOOL wheelCallback(int eventType, const EmscriptenWheelEvent *wheelEvent, void *userData);

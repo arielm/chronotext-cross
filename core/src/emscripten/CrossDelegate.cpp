@@ -22,6 +22,8 @@ namespace chr
   {
     if (!initialized_)
     {
+      emscripten_set_resize_callback(0, 0, 1, resizeCallback);
+
       emscripten_set_mousedown_callback(0, 0, 1, mouseCallback);
       emscripten_set_mouseup_callback(0, 0, 1, mouseCallback);
       emscripten_set_mousemove_callback(0, 0, 1, mouseCallback);
@@ -34,22 +36,10 @@ namespace chr
 
       // ---
 
-      int targetWidth;
-      int targetHeight;
+      int canvasWidth = EM_ASM_INT_V("return document.getElementById('canvas').clientWidth");
+      int canvasHeight = EM_ASM_INT_V("return document.getElementById('canvas').clientHeight");
 
-      if (initInfo.windowInfo.width * initInfo.windowInfo.height == 0)
-      {
-        targetWidth = EM_ASM_INT_V("return window.innerWidth");
-        targetHeight = EM_ASM_INT_V("return window.innerHeight");
-      }
-      else
-      {
-        targetWidth = initInfo.windowInfo.width;
-        targetHeight = initInfo.windowInfo.height;
-      }
-
-      setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples);
-      emscripten_set_canvas_size(targetWidth, targetHeight);
+      setupInfo.windowInfo = WindowInfo(canvasWidth, canvasHeight, initInfo.windowInfo.aaSamples);
 
       // ---
 
@@ -119,6 +109,10 @@ namespace chr
   void CrossDelegate::performResize(const glm::vec2 &size)
   {
     setupInfo.windowInfo.size = size;
+
+    emscripten_set_canvas_size(size.x, size.y);
+    glViewport(0, 0, size.x, size.y);
+
     sketch->performResize(size);
   }
   
@@ -138,9 +132,9 @@ namespace chr
     sketch->draw();
   }
 
-  void CrossDelegate::run(int width, int height, int aaSamples, int depthBits)
+  void CrossDelegate::run(int aaSamples, int depthBits)
   {
-    initInfo.windowInfo = WindowInfo(width, height, aaSamples, depthBits);
+    initInfo.windowInfo = WindowInfo(0, 0, aaSamples, depthBits);
 
     performInit();
     performSetup();
@@ -251,6 +245,19 @@ namespace chr
     intern::instance->clearMouseEvents();
     intern::instance->clearKeyEvents();
     intern::instance->clearWheelEvents();
+  }
+
+  EM_BOOL CrossDelegate::resizeCallback(int eventType, const EmscriptenUiEvent *e, void *userData)
+  {
+    int canvasWidth = EM_ASM_INT_V("return document.getElementById('canvas').clientWidth");
+    int canvasHeight = EM_ASM_INT_V("return document.getElementById('canvas').clientHeight");
+
+    if ((canvasWidth != intern::instance->setupInfo.windowInfo.width) || (canvasHeight != intern::instance->setupInfo.windowInfo.height))
+    {
+      intern::instance->performResize(glm::vec2(canvasWidth, canvasHeight));
+    }
+
+    return 0;
   }
 
   EM_BOOL CrossDelegate::mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData)
