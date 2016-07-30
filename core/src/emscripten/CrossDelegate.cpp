@@ -156,15 +156,22 @@ namespace chr
     {
       switch (event.kind)
       {
-        case MouseEvent::KIND_PRESSED:
-          sketch->addTouch(event.button, event.x, event.y);
+        case MouseEvent::KIND_MOVED:
+          sketch->mouseMoved(event.x, event.y);
           break;
 
         case MouseEvent::KIND_DRAGGED:
+          sketch->mouseDragged(event.button, event.x, event.y);
           sketch->updateTouch(event.button, event.x, event.y);
           break;
 
+        case MouseEvent::KIND_PRESSED:
+          sketch->mousePressed(event.button, event.x, event.y);
+          sketch->addTouch(event.button, event.x, event.y);
+          break;
+
         case MouseEvent::KIND_RELEASED:
+          sketch->mouseReleased(event.button, event.x, event.y);
           sketch->removeTouch(event.button, event.x, event.y);
           break;
 

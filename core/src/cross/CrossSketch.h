@@ -70,6 +70,11 @@ namespace chr
     virtual void update() {}
     virtual void draw() {}
 
+    virtual void mouseMoved(float x, float y) {}
+    virtual void mouseDragged(int button, float x, float y) {}
+    virtual void mousePressed(int button, float x, float y) {}
+    virtual void mouseReleased(int button, float x, float y) {}
+
     virtual void addTouch(int index, float x, float y) {}
     virtual void updateTouch(int index, float x, float y) {}
     virtual void removeTouch(int index, float x, float y) {}
