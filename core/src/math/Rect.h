@@ -27,6 +27,9 @@ namespace chr
       glm::vec2 x2y1() const;
       glm::vec2 x2y2() const;
       glm::vec2 x1y2() const;
+
+      bool contains(float x, float y) const;
+      inline bool contains(const glm::vec2 &point) const { return contains(point.x, point.y); }
     };
   }
 }
