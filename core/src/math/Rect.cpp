@@ -77,7 +77,7 @@ namespace chr
 
 		Rectf Rectf::inflated(const glm::vec2 amount) const
 		{
-			return Rectf(x1 - amount.x, y1 - amount.y, x2 + amount.x, y2 + amount.y);
+			return Rectf(x1 - amount.x, y1 - amount.y, (x2 - x1) + amount.x * 2, (y2 - y1) + amount.y * 2);
 		}
 
 		glm::vec2 Rectf::center() const
@@ -91,20 +91,20 @@ namespace chr
 
 			if (point.x < x1)
 			{
-				dx = point.x - x1;
+				dx = x1 - point.x;
 			}
 			else if (point.x > x2)
 			{
-				dx = x2 - point.x;
+				dx = point.x - x2;
 			}
 
 			if (point.y < y1)
 			{
-				dy = point.y - y1;
+				dy = y1 - point.y;
 			}
 			else if (point.y > y2)
 			{
-				dy = y2 - point.y;
+				dy = point.y - y2;
 			}
 
 			return sqrtf(dx * dx + dy * dy);
