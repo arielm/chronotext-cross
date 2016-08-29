@@ -16,6 +16,8 @@ namespace chr
 
         Sprite& setFrontFace(GLenum mode);
 
+        Sprite& setTextureBounds(const math::Rectf &bounds);
+
         Sprite& setColor(const glm::vec4 &color);
         Sprite& setColor(float r, float g, float b, float a);
 
@@ -44,6 +46,7 @@ namespace chr
         GLenum frontFace = CCW;
         glm::vec4 color = { 1, 1, 1, 1 };
         glm::vec2 anchor;
+        math::Rectf textureBounds;
 
         std::tuple<math::Rectf, glm::vec2, glm::vec2> getTextureQuad(const gl::Texture &texture, float x, float y) const;
       };

@@ -15,6 +15,12 @@ namespace chr
         return *this;
       }
 
+      Sprite& Sprite::setTextureBounds(const math::Rectf &bounds)
+      {
+        textureBounds = bounds;
+        return *this;
+      }
+
       Sprite& Sprite::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -129,11 +135,29 @@ namespace chr
 
       tuple<Rectf, glm::vec2, glm::vec2> Sprite::getTextureQuad(const Texture &texture, float x, float y) const
       {
-        float width = texture.innerWidth;
-        float height = texture.innerHeight;
+        float width, height;
+        glm::vec2 coords1, coords2;
+
+        if (textureBounds.isNull())
+        {
+          width = texture.innerWidth;
+          height = texture.innerHeight;
+
+          coords1 = texture.coords1;
+          coords2 = texture.coords2;
+        }
+        else
+        {
+          width = textureBounds.width();
+          height = textureBounds.height();
+
+          coords1 = textureBounds.x1y1() / texture.size;
+          coords2 = textureBounds.x2y2() / texture.size;
+        }
+
         Rectf bounds(x - width * anchor.x, y - height * anchor.y, width, height);
 
-        return make_tuple(bounds, texture.coords1, texture.coords2);
+        return make_tuple(bounds, coords1, coords2);
       }
     }
   }
