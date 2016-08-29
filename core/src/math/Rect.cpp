@@ -56,6 +56,11 @@ namespace chr
 			return glm::vec2(x1, y2);
 		}
 
+		bool Rectf::isNull() const
+		{
+			return (x1 == x2) || (y1 == y2);
+		}
+
 		bool Rectf::contains(float x, float y) const
 		{
 			return (x >= x1) && (y >= y1) && (x < x2) && (y < y2);
