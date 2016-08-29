@@ -28,6 +28,18 @@ namespace chr
         template<int V = XYZ, typename I = GLushort>
         void append(IndexedVertexBatch<V,I> &batch, float x = 0, float y = 0) const;
 
+        template<int V = XYZ, typename I = GLushort>
+        inline void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix, const glm::vec2 &position) const
+        {
+          append(batch, matrix, position.x, position.y);
+        };
+
+        template<int V = XYZ, typename I = GLushort>
+        inline void append(IndexedVertexBatch<V,I> &batch, const glm::vec2 &position) const
+        {
+          append(batch, position.x, position.y);
+        };
+
       protected:
         GLenum frontFace = CCW;
         glm::vec4 color = { 1, 1, 1, 1 };
