@@ -30,6 +30,12 @@ namespace chr
 
       bool contains(float x, float y) const;
       inline bool contains(const glm::vec2 &point) const { return contains(point.x, point.y); }
+
+      void inflate(const glm::vec2 amount);
+      Rectf inflated(const glm::vec2 amount) const;
+
+      glm::vec2 center() const;
+      float distance(const glm::vec2 &point) const;
     };
   }
 }

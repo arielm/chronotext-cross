@@ -60,5 +60,49 @@ namespace chr
 		{
 			return (x >= x1) && (y >= y1) && (x < x2) && (y < y2);
 		}
+
+		void Rectf::inflate(const glm::vec2 amount)
+		{
+			x1 -= amount.x;
+			y1 -= amount.y;
+
+		  x2 += amount.x;
+			y2 += amount.y;
+		}
+
+		Rectf Rectf::inflated(const glm::vec2 amount) const
+		{
+			return Rectf(x1 - amount.x, y1 - amount.y, x2 + amount.x, y2 + amount.y);
+		}
+
+		glm::vec2 Rectf::center() const
+		{
+			return glm::vec2(x1 + (x2 - x1) * 0.5f, y1 + (y2 - y1) * 0.5f);
+		}
+
+		float Rectf::distance(const glm::vec2 &point) const
+		{
+			float dx = 0, dy = 0;
+
+			if (point.x < x1)
+			{
+				dx = point.x - x1;
+			}
+			else if (point.x > x2)
+			{
+				dx = x2 - point.x;
+			}
+
+			if (point.y < y1)
+			{
+				dy = point.y - y1;
+			}
+			else if (point.y > y2)
+			{
+				dy = y2 - point.y;
+			}
+
+			return sqrtf(dx * dx + dy * dy);
+		}
 	}
 }
