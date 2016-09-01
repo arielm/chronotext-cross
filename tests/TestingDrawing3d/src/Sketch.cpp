@@ -1,7 +1,7 @@
 #include "Sketch.h"
 
-#include "gl/draw/Box.h"
-#include "gl/draw/Cube.h"
+#include "chr/gl/draw/Box.h"
+#include "chr/gl/draw/Cube.h"
 
 using namespace std;
 using namespace chr;

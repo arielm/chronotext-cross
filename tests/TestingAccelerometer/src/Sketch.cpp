@@ -1,7 +1,7 @@
 #include "Sketch.h"
 
-#include "gl/Matrix.h"
-#include "gl/draw/Sprite.h"
+#include "chr/gl/Matrix.h"
+#include "chr/gl/draw/Sprite.h"
 
 using namespace std;
 using namespace chr;

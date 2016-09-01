@@ -1,9 +1,9 @@
 #include "Sketch.h"
 
-#include "math/MatrixAffine.h"
-#include "gl/draw/Sprite.h"
-#include "gl/Revolver.h"
-#include "path/SVGDocument.h"
+#include "chr/math/MatrixAffine.h"
+#include "chr/gl/draw/Sprite.h"
+#include "chr/gl/Revolver.h"
+#include "chr/path/SVGDocument.h"
 
 using namespace std;
 using namespace chr;

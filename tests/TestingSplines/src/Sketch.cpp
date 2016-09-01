@@ -1,10 +1,10 @@
 #include "Sketch.h"
 
-#include "gl/draw/Sprite.h"
-#include "gl/draw/Rect.h"
-#include "gl/Triangulator.h"
-#include "shape/Rect.h"
-#include "path/SplinePath.h"
+#include "chr/gl/draw/Sprite.h"
+#include "chr/gl/draw/Rect.h"
+#include "chr/gl/Triangulator.h"
+#include "chr/shape/Rect.h"
+#include "chr/path/SplinePath.h"
 
 using namespace std;
 using namespace chr;

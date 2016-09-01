@@ -1,8 +1,8 @@
 #include "Sketch.h"
 
-#include "gl/draw/Cube.h"
-#include "gl/Triangulator.h"
-#include "shape/Circle.h"
+#include "chr/gl/draw/Cube.h"
+#include "chr/gl/Triangulator.h"
+#include "chr/shape/Circle.h"
 
 using namespace std;
 using namespace chr;

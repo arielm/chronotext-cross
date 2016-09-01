@@ -1,9 +1,9 @@
 #pragma once
 
-#include "cross/Context.h"
-#include "gl/Batch.h"
-#include "gl/shaders/TextureShader.h"
-#include "gl/shaders/TextureAlphaShader.h"
+#include "chr/cross/Context.h"
+#include "chr/gl/Batch.h"
+#include "chr/gl/shaders/TextureShader.h"
+#include "chr/gl/shaders/TextureAlphaShader.h"
 
 class Sketch : public chr::CrossSketch
 {

@@ -1,6 +1,6 @@
-#include "Platform.h"
-#include "MemoryBuffer.h"
-#include "Log.h"
+#include "chr/Platform.h"
+#include "chr/MemoryBuffer.h"
+#include "chr/Log.h"
 
 #include <gtest/gtest.h>
 

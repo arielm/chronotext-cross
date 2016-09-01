@@ -1,10 +1,10 @@
 #include "Sketch.h"
 
-#include "gl/Triangulator.h"
-#include "math/MatrixAffine.h"
-#include "shape/Rect.h"
-#include "shape/EquilateralTriangle.h"
-#include "shape/Circle.h"
+#include "chr/gl/Triangulator.h"
+#include "chr/math/MatrixAffine.h"
+#include "chr/shape/Rect.h"
+#include "chr/shape/EquilateralTriangle.h"
+#include "chr/shape/Circle.h"
 
 using namespace std;
 using namespace chr;

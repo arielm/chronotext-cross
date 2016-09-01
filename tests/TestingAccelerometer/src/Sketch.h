@@ -1,8 +1,8 @@
 #pragma once
 
-#include "cross/Context.h"
-#include "gl/Batch.h"
-#include "gl/shaders/TextureAlphaShader.h"
+#include "chr/cross/Context.h"
+#include "chr/gl/Batch.h"
+#include "chr/gl/shaders/TextureAlphaShader.h"
 
 struct Particle
 {

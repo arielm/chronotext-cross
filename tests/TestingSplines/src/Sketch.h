@@ -1,10 +1,10 @@
 #pragma once
 
-#include "cross/Context.h"
-#include "gl/Batch.h"
-#include "gl/shaders/ColorShader.h"
-#include "gl/shaders/TextureAlphaShader.h"
-#include "path/FollowablePath2D.h"
+#include "chr/cross/Context.h"
+#include "chr/gl/Batch.h"
+#include "chr/gl/shaders/ColorShader.h"
+#include "chr/gl/shaders/TextureAlphaShader.h"
+#include "chr/path/FollowablePath2D.h"
 
 class Sketch : public chr::CrossSketch
 {

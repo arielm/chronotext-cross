@@ -1,6 +1,6 @@
 #include "Sketch.h"
 
-#include "gl/draw/Sprite.h"
+#include "chr/gl/draw/Sprite.h"
 
 using namespace std;
 using namespace chr;

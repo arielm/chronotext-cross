@@ -1,7 +1,7 @@
 #include "Sketch.h"
 
-#include "path/SVGDocument.h"
-#include "gl/Triangulator.h"
+#include "chr/path/SVGDocument.h"
+#include "chr/gl/Triangulator.h"
 
 using namespace std;
 using namespace chr;

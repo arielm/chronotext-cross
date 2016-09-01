@@ -1,10 +1,10 @@
 #include "Sketch.h"
 
-#include "gl/draw/Rect.h"
-#include "gl/draw/Circle.h"
-#include "gl/Triangulator.h"
-#include "shape/EquilateralTriangle.h"
-#include "shape/FivePointedStar.h"
+#include "chr/gl/draw/Rect.h"
+#include "chr/gl/draw/Circle.h"
+#include "chr/gl/Triangulator.h"
+#include "chr/shape/EquilateralTriangle.h"
+#include "chr/shape/FivePointedStar.h"
 
 using namespace std;
 using namespace chr;
