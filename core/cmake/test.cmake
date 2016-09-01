@@ -4,10 +4,10 @@ if (NOT SKETCH)
   )
 
   list(APPEND SRC_FILES
-    "${CROSS_ROOT}/src/Log.cpp"
-    "${CROSS_ROOT}/src/InputSource.cpp"
-    "${CROSS_ROOT}/src/FileSystem.cpp"
-    "${CROSS_ROOT}/src/MemoryBuffer.cpp"
+    "${CROSS_ROOT}/src/chr/Log.cpp"
+    "${CROSS_ROOT}/src/chr/InputSource.cpp"
+    "${CROSS_ROOT}/src/chr/FileSystem.cpp"
+    "${CROSS_ROOT}/src/chr/MemoryBuffer.cpp"
   )
 
   if (PLATFORM MATCHES mxe)
