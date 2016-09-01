@@ -20,7 +20,7 @@ if (PLATFORM MATCHES ios)
   )
 
 elseif (PLATFORM MATCHES android)
-  list(APPEND SRC_FILES "$ENV{CROSS_PATH}/core/src/android/Stub.cpp")
+  list(APPEND SRC_FILES "$ENV{CROSS_PATH}/core/src/chr/android/Stub.cpp")
 endif()
 
 # ---
