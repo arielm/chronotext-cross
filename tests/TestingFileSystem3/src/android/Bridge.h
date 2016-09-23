@@ -1,6 +1,6 @@
 #pragma once
 
-#include "android/JNI.h"
+#include "chr/android/JNI.h"
 
 extern "C"
 {

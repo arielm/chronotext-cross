@@ -10,8 +10,8 @@ if (NOT SKETCH)
     "${CROSS_ROOT}/src/chr/MemoryBuffer.cpp"
   )
 
-  if (PLATFORM MATCHES mxe)
-    list(APPEND SRC_FILES "${CROSS_ROOT}/src/android/JNI.cpp")
+  if (PLATFORM MATCHES android)
+    list(APPEND SRC_FILES "${CROSS_ROOT}/src/chr/android/JNI.cpp")
   endif()
 endif()
 

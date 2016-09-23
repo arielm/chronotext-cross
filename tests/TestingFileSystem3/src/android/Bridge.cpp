@@ -1,5 +1,7 @@
 #include "android/Bridge.h"
 
+#include <vector>
+
 using namespace std;
 
 void Java_org_chronotext_TestingFileSystem3_MainActivity_performInit(JNIEnv *env, jobject obj, jobject activity)
