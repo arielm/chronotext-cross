@@ -412,7 +412,7 @@ namespace chr
 
     CGPoint pt = [touch locationInView:view];
     CGPoint prevPt = [touch previousLocationInView:view];
-    activeTouches.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, touchId, [touch timestamp]);
+    activeTouches.emplace_back(pt.x * scale, pt.y * scale, touchId);
   }
 }
 
@@ -427,7 +427,7 @@ namespace chr
   {
     CGPoint pt = [touch locationInView:view];
     CGPoint prevPt = [touch previousLocationInView:view];
-    touchList.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, [self addTouchToMap:touch], [touch timestamp]);
+    touchList.emplace_back(pt.x * scale, pt.y * scale, [self addTouchToMap:touch]);
   }
 
   [self updateActiveTouches];
@@ -449,7 +449,7 @@ namespace chr
   {
     CGPoint pt = [touch locationInView:view];
     CGPoint prevPt = [touch previousLocationInView:view];
-    touchList.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp]);
+    touchList.emplace_back(pt.x * scale, pt.y * scale, [self findTouchInMap:touch]);
   }
 
   [self updateActiveTouches];
@@ -471,7 +471,7 @@ namespace chr
   {
     CGPoint pt = [touch locationInView:view];
     CGPoint prevPt = [touch previousLocationInView:view];
-    touchList.emplace_back(glm::vec2(pt.x, pt.y) * scale, glm::vec2(prevPt.x, prevPt.y) * scale, [self findTouchInMap:touch], [touch timestamp]);
+    touchList.emplace_back(pt.x * scale, pt.y * scale, [self findTouchInMap:touch]);
 
     [self removeTouchFromMap:touch];
   }

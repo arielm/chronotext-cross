@@ -1,22 +1,35 @@
 #pragma once
 
-#include "chr/glm.h"
-
 namespace chr
 {
 	struct TouchEvent
 	{
-		glm::vec2 pos;
-		glm::vec2 prevPos;
-		uint32_t id;
-		double time;
+		enum Kind
+		{
+			KIND_UNDEFINED,
+			KIND_ADD,
+			KIND_UPDATE,
+			KIND_REMOVE,
+		};
 
-		TouchEvent(const glm::vec2 &pos, const glm::vec2 &prevPos, uint32_t id, double time)
+		float x;
+		float y;
+		uint32_t id;
+		Kind kind = KIND_UNDEFINED;
+
+		TouchEvent(float x, float y, uint32_t id, Kind kind)
 		:
-		pos(pos),
-		prevPos(prevPos),
+		x(x),
+		y(y),
 		id(id),
-		time(time)
+		kind(kind)
+		{}
+
+		TouchEvent(float x, float y, uint32_t id)
+		:
+		x(x),
+		y(y),
+		id(id)
 		{}
 	};
 }

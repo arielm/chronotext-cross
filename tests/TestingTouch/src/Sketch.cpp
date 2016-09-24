@@ -31,6 +31,7 @@ void Sketch::setup()
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
+
 void Sketch::draw()
 {
   glClearColor(0, 0, 1, 1);

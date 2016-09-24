@@ -164,7 +164,7 @@ namespace chr
    {
      for (auto &touch : touches)
      {
-       sketch->addTouch(touch.id - 1, touch.pos.x, touch.pos.y);
+       sketch->addTouch(touch.id - 1, touch.x, touch.y);
      }
    }
 
@@ -172,7 +172,7 @@ namespace chr
    {
      for (auto &touch : touches)
      {
-       sketch->updateTouch(touch.id - 1, touch.pos.x, touch.pos.y);
+       sketch->updateTouch(touch.id - 1, touch.x, touch.y);
      }
    }
 
@@ -180,7 +180,7 @@ namespace chr
    {
      for (auto &touch : touches)
      {
-       sketch->removeTouch(touch.id - 1, touch.pos.x, touch.pos.y);
+       sketch->removeTouch(touch.id - 1, touch.x, touch.y);
      }
    }
   

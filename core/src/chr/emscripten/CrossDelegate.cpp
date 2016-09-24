@@ -27,6 +27,11 @@ namespace chr
       emscripten_set_mouseup_callback(0, 0, 1, mouseCallback);
       emscripten_set_mousemove_callback(0, 0, 1, mouseCallback);
 
+      emscripten_set_touchstart_callback(0, 0, 1, touchCallback);
+      emscripten_set_touchend_callback(0, 0, 1, touchCallback);
+      emscripten_set_touchmove_callback(0, 0, 1, touchCallback);
+      emscripten_set_touchcancel_callback(0, 0, 1, touchCallback);
+
       emscripten_set_keypress_callback(0, 0, 1, keyCallback);
       emscripten_set_keyup_callback(0, 0, 1, keyCallback);
       emscripten_set_keydown_callback(0, 0, 1, keyCallback);
@@ -149,6 +154,17 @@ namespace chr
     performUninit();
   }
 
+  void CrossDelegate::enableAccelerometer(float updateFrequency, float filterFactor)
+  {
+    accelFilter = AccelEvent::Filter(filterFactor);
+    emscripten_set_devicemotion_callback(0, 1, deviceMotionCallback);
+  }
+
+  void CrossDelegate::disableAccelerometer()
+  {
+    emscripten_set_devicemotion_callback(0, 1, NULL);
+  }
+
   void CrossDelegate::processMouseEvents()
   {
     for (auto &event : mouseEvents)
@@ -183,6 +199,35 @@ namespace chr
   void CrossDelegate::clearMouseEvents()
   {
     mouseEvents.clear();
+  }
+
+  void CrossDelegate::processTouchEvents()
+  {
+    for (auto &event : touchEvents)
+    {
+      switch (event.kind)
+      {
+        case TouchEvent::KIND_ADD:
+          sketch->addTouch(event.id, event.x, event.y);
+          break;
+
+        case TouchEvent::KIND_UPDATE:
+          sketch->updateTouch(event.id, event.x, event.y);
+          break;
+
+        case TouchEvent::KIND_REMOVE:
+          sketch->removeTouch(event.id, event.x, event.y);
+          break;
+
+        default:
+          break;
+      }
+    }
+  }
+
+  void CrossDelegate::clearTouchEvents()
+  {
+    touchEvents.clear();
   }
 
   void CrossDelegate::processKeyEvents()
@@ -239,18 +284,35 @@ namespace chr
     wheelEvents.clear();
   }
 
+  void CrossDelegate::processAccelerationEvents()
+  {
+    for (const auto &event : accelerationEvents)
+    {
+      sketch->accelerated(event);
+    }
+  }
+
+  void CrossDelegate::clearAccelerationEvents()
+  {
+    accelerationEvents.clear();
+  }
+
   void CrossDelegate::mainLoopCallback()
   {
     intern::instance->processMouseEvents();
+    intern::instance->processTouchEvents();
     intern::instance->processKeyEvents();
     intern::instance->processWheelEvents();
+    intern::instance->processAccelerationEvents();
 
     intern::instance->performUpdate();
     intern::instance->performDraw();
 
     intern::instance->clearMouseEvents();
+    intern::instance->clearTouchEvents();
     intern::instance->clearKeyEvents();
     intern::instance->clearWheelEvents();
+    intern::instance->clearAccelerationEvents();
   }
 
   EM_BOOL CrossDelegate::resizeCallback(int eventType, const EmscriptenUiEvent *e, void *userData)
@@ -301,6 +363,36 @@ namespace chr
     return 0;
   }
 
+  EM_BOOL CrossDelegate::touchCallback(int eventType, const EmscriptenTouchEvent *e, void *userData)
+  {
+    for (int i = 0; i < e->numTouches; ++i)
+    {
+      const EmscriptenTouchPoint *t = &e->touches[i];
+
+      int id = t->identifier;
+      float x = t->canvasX;
+      float y = t->canvasY;
+
+      switch (eventType)
+      {
+        case EMSCRIPTEN_EVENT_TOUCHSTART:
+          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_ADD);
+          break;
+
+        case EMSCRIPTEN_EVENT_TOUCHMOVE:
+          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_UPDATE);
+          break;
+
+        case EMSCRIPTEN_EVENT_TOUCHEND:
+        case EMSCRIPTEN_EVENT_TOUCHCANCEL:
+          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_REMOVE);
+          break;
+      }
+    }
+
+    return 1;
+  }
+
   EM_BOOL CrossDelegate::keyCallback(int eventType, const EmscriptenKeyboardEvent *e, void *userData)
   {
     KeyEvent::Kind kind = KeyEvent::KIND_UNDEFINED;
@@ -339,6 +431,14 @@ namespace chr
   EM_BOOL CrossDelegate::wheelCallback(int eventType, const EmscriptenWheelEvent *wheelEvent, void *userData)
   {
     intern::instance->wheelEvents.emplace_back(wheelEvent->deltaY);
+
+    return 0;
+  }
+
+  EM_BOOL CrossDelegate::deviceMotionCallback(int eventType, const EmscriptenDeviceMotionEvent *e, void *userData)
+  {
+    glm::vec3 acceleration(-e->accelerationIncludingGravityX, -e->accelerationIncludingGravityY, -e->accelerationIncludingGravityZ);
+    intern::instance->accelerationEvents.emplace_back(intern::instance->accelFilter.process(acceleration));
 
     return 0;
   }
