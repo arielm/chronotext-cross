@@ -29,6 +29,13 @@ namespace chr
     void disableAccelerometer() final;
 
   protected:
+    enum
+    {
+      BROWSER_PLATFORM_UNDEFINED,
+      BROWSER_PLATFORM_ANDROID,
+      BROWSER_PLATFORM_IOS
+    };
+
     int updateCount = 0;
 
     std::vector<MouseEvent> mouseEvents;
@@ -41,6 +48,8 @@ namespace chr
     float mouseY;
     int mouseButton = -1;
     bool mousePressed = false;
+
+    int browserPlatform = BROWSER_PLATFORM_UNDEFINED;
 
     void processMouseEvents();
     void clearMouseEvents();

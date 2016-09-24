@@ -47,6 +47,17 @@ namespace chr
 
       // ---
 
+      if (EM_ASM_INT_V("return /android/i.test(navigator.userAgent)"))
+      {
+        browserPlatform = BROWSER_PLATFORM_ANDROID;
+      }
+      else if (EM_ASM_INT_V("return /iPad|iPhone|iPod/i.test(navigator.userAgent)"))
+      {
+        browserPlatform = BROWSER_PLATFORM_IOS;
+      }
+
+      // ---
+
       EmscriptenWebGLContextAttributes attr;
       emscripten_webgl_init_context_attributes(&attr);
 
@@ -437,7 +448,13 @@ namespace chr
 
   EM_BOOL CrossDelegate::deviceMotionCallback(int eventType, const EmscriptenDeviceMotionEvent *e, void *userData)
   {
-    glm::vec3 acceleration(-e->accelerationIncludingGravityX, -e->accelerationIncludingGravityY, -e->accelerationIncludingGravityZ);
+    glm::vec3 acceleration(e->accelerationIncludingGravityX, e->accelerationIncludingGravityY, e->accelerationIncludingGravityZ);
+
+    if (intern::instance->browserPlatform == BROWSER_PLATFORM_ANDROID)
+    {
+      acceleration *= -1;
+    }
+
     intern::instance->accelerationEvents.emplace_back(intern::instance->accelFilter.process(acceleration));
 
     return 0;

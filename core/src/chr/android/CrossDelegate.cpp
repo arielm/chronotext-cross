@@ -311,7 +311,7 @@ namespace chr
     /*
      * ADDITIONAL TRANSFORMATION: FOR CONSISTENCY WITH iOS
      */
-    transformed *= glm::vec3(-1, -1, +1) / ASENSOR_STANDARD_GRAVITY; // TODO: DOUBLE-CHECK Z AXIS
+    transformed *= glm::vec3(-1, -1, -1) / ASENSOR_STANDARD_GRAVITY; // TODO: DOUBLE-CHECK Z AXIS
     
     sketch->accelerated(accelFilter.process(transformed));
   }
