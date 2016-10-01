@@ -385,7 +385,11 @@ namespace chr
         image = image::loadJpgImage(relativePath, flags);
       }
 
-      if (!image.isValid())
+      if (image.isValid())
+      {
+        LOGD << "IMAGE LOADED: " << relativePath.filename().string() << endl;
+      }
+      else
       {
         LOGE << "UNABLE TO LOAD IMAGE: " << relativePath.filename().string() << endl;
       }

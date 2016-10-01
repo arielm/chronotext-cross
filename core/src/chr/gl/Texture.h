@@ -59,6 +59,13 @@ namespace chr
           wrapT = t;
           return *this;
         }
+
+        bool operator<(const Request &rhs) const
+        {
+          return
+            std::tie(relativePath, imageFlags, useMipmap, useAnisotropy, wrapS, wrapT) <
+            std::tie(rhs.relativePath, rhs.imageFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT);
+        }
       };
 
       struct MaskedRequest
@@ -104,6 +111,13 @@ namespace chr
           wrapS = s;
           wrapT = t;
           return *this;
+        }
+
+        bool operator<(const MaskedRequest &rhs) const
+        {
+          return
+            std::tie(imageRelativePath, maskRelativePath, imageFlags, maskFlags, useMipmap, useAnisotropy, wrapS, wrapT) <
+            std::tie(rhs.imageRelativePath, rhs.maskRelativePath, rhs.imageFlags, rhs.maskFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT);
         }
       };
 
