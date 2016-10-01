@@ -105,6 +105,8 @@ namespace chr
 
     FollowablePath2D& FollowablePath2D::add(const vector<glm::vec2> &polyline)
     {
+      points.reserve(points.size() + polyline.size());
+
       for (const auto &point : polyline)
       {
         add(point);
@@ -115,6 +117,8 @@ namespace chr
 
     FollowablePath2D& FollowablePath2D::add(const MatrixAffine &matrix, const vector<glm::vec2> &polyline)
     {
+      points.reserve(points.size() + polyline.size());
+
       for (const auto &point : polyline)
       {
         add(matrix.transformPoint(point));
