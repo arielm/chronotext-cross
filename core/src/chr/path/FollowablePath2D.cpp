@@ -297,6 +297,8 @@ namespace chr
             value.forward = points.front().forward;
             value.up = value.forward.yx() * glm::vec2(-1, +1);
             value.offset = 0;
+            value.index = 0;
+
             goto exit; // BECAUSE OF RVO
           }
         }
@@ -308,6 +310,8 @@ namespace chr
             value.forward = points.back().forward;
             value.up = value.forward.yx() * glm::vec2(-1, +1);
             value.offset = length;
+            value.index = points.size() - 1;
+
             goto exit; // BECAUSE OF RVO
           }
         }
@@ -320,6 +324,7 @@ namespace chr
 
         value.position = p0.position * (1 - u) + p1.position * u;
         value.offset = offset;
+        value.index = index;
 
         if (sampleSize > 0)
         {

@@ -34,6 +34,7 @@ namespace chr
         glm::vec2 forward;
         glm::vec2 up;
         float offset;
+        int index;
 
         void applyToMatrix(glm::mat4 &m) const;
         void applyToMatrix(std::array<float, 16> &m) const;
