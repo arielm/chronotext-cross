@@ -342,6 +342,149 @@ namespace chr
       return value;
     }
 
+    /*
+     * RETURNS false IF CLOSEST-POINT IS FARTHER THAN threshold DISTANCE
+     *
+     * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
+     * http://paulbourke.net/geometry/pointlineplane
+     */
+    bool FollowablePath2D::findClosestPoint(const glm::vec2 &input, float threshold, ClosePoint &output) const
+    {
+      float min = threshold * threshold; // BECAUSE IT IS MORE EFFICIENT TO WORK WITH MAGNIFIED DISTANCES
+
+      int end = size();
+      int index = -1;
+      glm::vec2 position;
+      float offset;
+
+      for (int i = 0; i < end; i++)
+      {
+        int i0, i1;
+
+        if (i == end - 1)
+        {
+          i0 = i - 1;
+          i1 = i;
+        }
+        else
+        {
+          i0 = i;
+          i1 = i + 1;
+        }
+
+        auto &p0 = points[i0].position;
+        auto &p1 = points[i1].position;
+
+        glm::vec2 delta = p1 - p0;
+        float length = lengths[i1] - lengths[i0];
+        float u = glm::dot(delta, input - p0) / (length * length);
+
+        if (u >= 0 && u <= 1)
+        {
+          glm::vec2 p = p0 + u * delta;
+          float mag = glm::length2(p - input);
+
+          if (mag < min)
+          {
+            min = mag;
+            index = i0;
+
+            position = p;
+            offset = lengths[index] + u * length;
+          }
+        }
+        else
+        {
+          float mag0 = glm::length2(p0 - input);
+          float mag1 = glm::length2(p1 - input);
+
+          if ((mag0 < min) && (mag0 < mag1))
+          {
+            min = mag0;
+            index = i0;
+
+            position = p0;
+            offset = lengths[index];
+          }
+          else if ((mag1 < min) && (mag1 < mag0))
+          {
+            min = mag1;
+            index = i1;
+
+            position = p1;
+            offset = lengths[index];
+          }
+        }
+      }
+
+      if (index != -1)
+      {
+        output.position = position;
+        output.offset = offset;
+        output.distance = sqrtf(min);
+
+        return true;
+      }
+
+      return false;
+    }
+
+    /*
+     * REFERENCE: "Minimum Distance between a Point and a Line" BY Paul Bourke
+     * http://paulbourke.net/geometry/pointlineplane
+     */
+    FollowablePath2D::ClosePoint FollowablePath2D::closestPointFromSegment(const glm::vec2 &input, int segmentIndex) const
+    {
+      FollowablePath2D::ClosePoint output;
+
+      if ((segmentIndex >= 0) && (segmentIndex + 1 < size()))
+      {
+        int i0 = segmentIndex;
+        int i1 = segmentIndex + 1;
+
+        auto &p0 = points[i0].position;
+        auto &p1 = points[i1].position;
+
+        glm::vec2 delta = p1 - p0;
+        float length = lengths[i1] - lengths[i0];
+        float u = glm::dot(delta, input - p0) / (length * length);
+
+        if (u >= 0 && u <= 1)
+        {
+          glm::vec2 p = p0 + u * delta;
+          float mag = glm::length2(p - input);
+
+          output.position = p;
+          output.offset = lengths[i0] + u * length;
+          output.distance = sqrtf(mag);
+        }
+        else
+        {
+          float mag0 = glm::length2(p0 - input);
+          float mag1 = glm::length2(p1 - input);
+
+          if (mag0 < mag1)
+          {
+            output.position = p0;
+            output.offset = lengths[i0];
+            output.distance = sqrtf(mag0);
+          }
+          else
+          {
+            output.position = p1;
+            output.offset = lengths[i1];
+            output.distance = sqrtf(mag1);
+          }
+        }
+      }
+      else
+      {
+        output.distance = numeric_limits<float>::max();
+      }
+
+      return output;
+    }
+
     // ---
 
     void FollowablePath2D::Value::applyToMatrix(glm::mat4 &m) const

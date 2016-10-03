@@ -28,6 +28,13 @@ namespace chr
         {}
       };
 
+      struct ClosePoint
+      {
+        glm::vec2 position; // POSITION OF CLOSEST-POINT ON PATH
+        float offset; // OFFSET OF CLOSEST-POINT ON PATH
+        float distance; // DISTANCE TO CLOSEST-POINT ON PATH
+      };
+
       struct Value
       {
         glm::vec2 position;
@@ -66,6 +73,9 @@ namespace chr
       glm::vec2 offsetToPosition(float offset) const;
       glm::vec2 offsetToTangent(float offset, float sampleSize = 0) const;
       FollowablePath2D::Value offsetToValue(float offset, float sampleSize = 0) const;
+
+      bool findClosestPoint(const glm::vec2 &input, float threshold, ClosePoint &output) const;
+      ClosePoint closestPointFromSegment(const glm::vec2 &input, int segmentIndex) const;
 
     protected:
       Mode mode;
