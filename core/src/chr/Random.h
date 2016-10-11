@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "chr/math/Utils.h"
+
 #include <random>
 
 namespace chr
@@ -25,6 +27,9 @@ namespace chr
     float nextFloat();
     float nextFloat(float v);
     float nextFloat(float a, float b);
+
+    glm::vec2 nextVec2();
+    glm::vec3 nextVec3();
 
   protected:
     std::mt19937 base;

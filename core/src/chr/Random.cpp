@@ -63,4 +63,23 @@ namespace chr
   {
     return floatGenerator(base) * (b - a) + a;
   }
+
+  glm::vec2 Random::nextVec2()
+  {
+    float theta = nextFloat(M_PI * 2);
+    return glm::vec2(cosf(theta), sinf(theta));
+  }
+
+  glm::vec3 Random::nextVec3()
+  {
+    float phi = nextFloat(M_PI * 2);
+    float costheta = nextFloat(-1, +1);
+
+    float rho = sqrtf(1 - costheta * costheta);
+    float x = rho * cosf(phi);
+    float y = rho * sinf(phi);
+    float z = costheta;
+
+    return glm::vec3(x, y, z);
+  }
 }
