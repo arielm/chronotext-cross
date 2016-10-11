@@ -86,21 +86,22 @@ namespace chr
     FollowablePath3D& FollowablePath3D::end(bool close)
     {
       auto end = size();
+      bool closed = (end > 2) && (points.front().position == points.back().position);
 
-      if (close)
+      if (!closed)
       {
-        if ((end > 2) && (points.front().position != points.back().position))
+        if (close && (end > 2))
         {
           add(points.front().position, points.front().left);
           points.back().forward = points.front().forward;
-
-          return *this;
         }
-      }
-
-      if (end > 1)
-      {
-        points[end - 1].forward = points[end - 2].forward;
+        else
+        {
+          if (end > 1)
+          {
+            points[end - 1].forward = points[end - 2].forward;
+          }
+        }
       }
 
       return *this;
@@ -144,11 +145,6 @@ namespace chr
           {
             offset0 = math::boundf(offset - sampleSize * 0.5f, length);
             offset1 = math::boundf(offset + sampleSize * 0.5f, length);
-
-            if (offset1 < offset0)
-            {
-              std::swap(offset0, offset1);
-            }
           }
           else
           {
@@ -171,13 +167,9 @@ namespace chr
           auto index0 = utils::search(lengths, offset0, 1, size());
           auto index1 = utils::search(lengths, offset1, 1, size());
 
-          if (index1 < index0)
+          if (index0 == index1)
           {
             return points[index0].toQuat();
-          }
-          else if (index0 > index1)
-          {
-            return points[index1].toQuat();
           }
           else
           {
