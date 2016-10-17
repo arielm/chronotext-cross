@@ -23,6 +23,7 @@ import org.chronotext.utils.Utils;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.opengl.GLSurfaceView;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -73,10 +74,21 @@ public class GLView extends GLSurfaceView
   protected boolean shutdown;
   protected boolean uninitialized;
 
-  public GLView(Context context, CrossBridge bridge, Properties properties)
+  public GLView(Context context)
   {
     super(context);
+  }
 
+  public GLView(Context context, AttributeSet attrs)
+  {
+    super(context, attrs);
+  }
+
+  /*
+   * SHOULD ONLY BE INVOKED ONLY BY CrossBridge.bindView()
+   */
+  public void bind(CrossBridge bridge, Properties properties)
+  {
     crossBridge = bridge;
 
     // ---

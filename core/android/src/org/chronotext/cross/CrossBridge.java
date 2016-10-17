@@ -8,14 +8,6 @@
 
 package org.chronotext.cross;
 
-import org.chronotext.cross.BridgeListener;
-import org.chronotext.gl.GLView;
-import org.chronotext.utils.DisplayUtils;
-import org.chronotext.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.MemoryInfo;
@@ -23,9 +15,13 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Display;
-import android.view.View;
+
+import org.chronotext.gl.GLView;
+import org.chronotext.utils.DisplayUtils;
+import org.chronotext.utils.Utils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class CrossBridge extends Handler implements BridgeListener
 {
@@ -61,8 +57,7 @@ public class CrossBridge extends Handler implements BridgeListener
   protected BridgeListener listener;
 
   protected GLView view;
-  protected GLView.Properties viewProperties;
-  
+
   protected boolean initialized;
   protected boolean backCaptured;
 
@@ -84,24 +79,16 @@ public class CrossBridge extends Handler implements BridgeListener
     return activity;
   }
 
-  public GLView getView()
+  public void bindView(GLView view)
   {
-    if (view == null)
-    {
-      if (viewProperties == null)
-      {
-        viewProperties = new GLView.Properties();
-      }
-
-      view = new GLView(activity, this, viewProperties); // WILL START THE RENDERER'S THREAD
-    }
-
-    return view;
+    this.view = view;
+    view.bind(this, new GLView.Properties());
   }
 
-  public void setViewProperties(GLView.Properties properties)
+  public void bindView(GLView view, GLView.Properties properties)
   {
-    viewProperties = properties;
+    this.view = view;
+    view.bind(this, properties);
   }
 
   // ---------------------------------------- LIFE-CYCLE ----------------------------------------
