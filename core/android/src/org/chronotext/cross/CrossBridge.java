@@ -74,12 +74,11 @@ public class CrossBridge extends Handler implements BridgeListener
     this(activity, null);
   }
 
-  /*
-   * INVOKED BY GLView.bind()
-   */
-  public void setView(GLView view)
+
+  public void bind(GLView view)
   {
     this.view = view;
+    view.bind(this);
   }
 
   public Activity getActivity()

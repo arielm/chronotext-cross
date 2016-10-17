@@ -119,10 +119,12 @@ public class GLView extends GLSurfaceView
     setPreserveEGLContextOnPause(properties.preserveEGLContextOnPause);
   }
 
+  /*
+   * INVOKED BY CrossBridge.bind()
+   */
   public void bind(CrossBridge bridge)
   {
     applyProperties();
-    bridge.setView(this);
 
     crossBridge = bridge;
     crossRenderer = new CrossRenderer(crossBridge);
