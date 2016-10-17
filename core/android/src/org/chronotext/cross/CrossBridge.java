@@ -79,18 +79,6 @@ public class CrossBridge extends Handler implements BridgeListener
     return activity;
   }
 
-  public void bindView(GLView view)
-  {
-    this.view = view;
-    view.bind(this, new GLView.Properties());
-  }
-
-  public void bindView(GLView view, GLView.Properties properties)
-  {
-    this.view = view;
-    view.bind(this, properties);
-  }
-
   // ---------------------------------------- LIFE-CYCLE ----------------------------------------
 
   protected void performInit()

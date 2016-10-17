@@ -66,6 +66,7 @@ public class GLView extends GLSurfaceView
   
   protected CrossBridge crossBridge;
   protected CrossRenderer crossRenderer;
+  Properties properties;
 
   protected boolean attached;
   protected boolean paused;
@@ -84,14 +85,17 @@ public class GLView extends GLSurfaceView
     super(context, attrs);
   }
 
-  /*
-   * SHOULD ONLY BE INVOKED ONLY BY CrossBridge.bindView()
-   */
-  public void bind(CrossBridge bridge, Properties properties)
+  public void setProperties(Properties properties)
   {
-    crossBridge = bridge;
+    this.properties = properties;
+  }
 
-    // ---
+  protected void applyProperties()
+  {
+    if (properties == null)
+    {
+      properties = new GLView.Properties();
+    }
 
     setEGLContextClientVersion(properties.eglContextClientVersion);
     setEGLContextFactory(new CustomContextFactory(properties.eglContextClientVersion));
@@ -99,12 +103,12 @@ public class GLView extends GLSurfaceView
     if (properties.eglConfigChooser != null)
     {
       setEGLConfigChooser(
-        properties.eglConfigChooser[0],
-        properties.eglConfigChooser[1],
-        properties.eglConfigChooser[2],
-        properties.eglConfigChooser[3],
-        properties.eglConfigChooser[4],
-        properties.eglConfigChooser[5]);
+              properties.eglConfigChooser[0],
+              properties.eglConfigChooser[1],
+              properties.eglConfigChooser[2],
+              properties.eglConfigChooser[3],
+              properties.eglConfigChooser[4],
+              properties.eglConfigChooser[5]);
     }
 
     if (properties.pixelFormat != PixelFormat.UNKNOWN)
@@ -113,9 +117,13 @@ public class GLView extends GLSurfaceView
     }
 
     setPreserveEGLContextOnPause(properties.preserveEGLContextOnPause);
+  }
 
-    // ---
+  public void bind(CrossBridge bridge)
+  {
+    applyProperties();
 
+    crossBridge = bridge;
     crossRenderer = new CrossRenderer(crossBridge);
     setRenderer(crossRenderer); // WILL START THE RENDERER'S THREAD
   }
