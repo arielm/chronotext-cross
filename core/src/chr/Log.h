@@ -5,17 +5,17 @@
 
 namespace chr
 {
-  static constexpr int FATAL   = -3;
-  static constexpr int ERROR   = -2;
-  static constexpr int WARNING = -1;
-  static constexpr int INFO    =  0;
-  static constexpr int DEBUG   =  1;
-  static constexpr int VERBOSE =  2;
+  static constexpr int _FATAL   = -3;
+  static constexpr int _ERROR   = -2;
+  static constexpr int _WARNING = -1;
+  static constexpr int _INFO    =  0;
+  static constexpr int _DEBUG   =  1;
+  static constexpr int _VERBOSE =  2;
 
   class Log
   {
   public:
-    Log(int level = INFO);
+    Log(int level = _INFO);
     ~Log();
 
     std::stringstream& stream();
@@ -26,8 +26,8 @@ namespace chr
   };
 }
 
-#define LOGF chr::Log(chr::FATAL).stream()
-#define LOGE chr::Log(chr::ERROR).stream()
-#define LOGW chr::Log(chr::WARNING).stream()
-#define LOGI chr::Log(chr::INFO).stream()
-#define LOGD chr::Log(chr::DEBUG).stream()
+#define LOGF chr::Log(chr::_FATAL).stream()
+#define LOGE chr::Log(chr::_ERROR).stream()
+#define LOGW chr::Log(chr::_WARNING).stream()
+#define LOGI chr::Log(chr::_INFO).stream()
+#define LOGD chr::Log(chr::_DEBUG).stream()

@@ -22,24 +22,24 @@ namespace chr
 
     switch (level)
     {
-      case FATAL:
+      case _FATAL:
         androidPriority = ANDROID_LOG_FATAL;
         break;
 
-      case ERROR:
+      case _ERROR:
         androidPriority = ANDROID_LOG_ERROR;
         break;
 
-      case WARNING:
+      case _WARNING:
         androidPriority = ANDROID_LOG_WARN;
         break;
 
       default:
-      case INFO:
+      case _INFO:
         androidPriority = ANDROID_LOG_INFO;
         break;
 
-      case DEBUG:
+      case _DEBUG:
         androidPriority = ANDROID_LOG_DEBUG;
         break;
     }
@@ -56,7 +56,7 @@ namespace chr
     }
   #endif
 
-    if (level == FATAL)
+    if (level == _FATAL)
     {
       abort();
     }
