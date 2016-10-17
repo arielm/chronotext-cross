@@ -122,9 +122,11 @@ public class GLView extends GLSurfaceView
   public void bind(CrossBridge bridge)
   {
     applyProperties();
+    bridge.setView(this);
 
     crossBridge = bridge;
     crossRenderer = new CrossRenderer(crossBridge);
+
     setRenderer(crossRenderer); // WILL START THE RENDERER'S THREAD
   }
 
