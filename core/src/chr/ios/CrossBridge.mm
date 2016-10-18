@@ -43,7 +43,6 @@ namespace chr
 @implementation CrossBridge
 
 @synthesize listener;
-@synthesize viewControllerProperties;
 
 - (id) init
 {
@@ -64,9 +63,20 @@ namespace chr
 - (void) dealloc
 {
   DLOG(@"CrossBridge.dealloc");
+
+  [listener release];
+  [viewController release];
   [self performUninit];
   
   [super dealloc];
+}
+
+- (void) bind:(GLViewController*)controller
+{
+    viewController = controller;
+    [viewController retain];
+
+    [viewController bind:self];
 }
 
 - (BOOL) performInit
@@ -170,11 +180,6 @@ namespace chr
 
 - (GLViewController*) viewController
 {
-  if (!viewController)
-  {
-    viewController = [[GLViewController alloc] initWithBridge:self properties:viewControllerProperties];
-  }
-  
   return viewController;
 }
 

@@ -29,14 +29,14 @@ enum
 {
   NSObject<BridgeListener> *listener;
   GLViewController *viewController;
-  NSDictionary *viewControllerProperties;
 }
 
 @property (nonatomic, retain) NSObject<BridgeListener> *listener;
 @property (nonatomic, readonly) GLViewController *viewController;
-@property (nonatomic, retain) NSDictionary *viewControllerProperties;
 
 - (id) initWithListener:(NSObject<BridgeListener>*)listener;
+- (void) bind:(GLViewController*)viewController;
+
 
 - (void) performSetup;
 - (void) performResize;

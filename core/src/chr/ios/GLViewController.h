@@ -23,12 +23,14 @@ enum
 {
   CrossBridge *crossBridge;
   GLKView *glView;
+  NSDictionary *properties;
 }
 
 @property (nonatomic, readonly) CrossBridge *crossBridge;
 @property (nonatomic, readonly) GLKView *glView;
+@property (nonatomic, retain) NSDictionary *properties;
 @property (nonatomic, readonly) BOOL appeared;
 
-- (id) initWithBridge:(CrossBridge*)bridge properties:(NSDictionary*)properties;
+- (void) bind:(CrossBridge*)bridge;
 
 @end
