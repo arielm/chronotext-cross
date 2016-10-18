@@ -5,19 +5,22 @@
 
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    bridge = [[CrossBridge alloc] init];
-
-    bridge.viewControllerProperties =
+    GLViewController *viewController = [[GLViewController alloc] init];
+    
+    viewController.properties =
     @{
         GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES2),
-        GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskLandscape),
+        GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskPortrait),
         GLViewControllerDepthFormatKey: @(GLKViewDrawableDepthFormat24),
     };
+
+    bridge = [[CrossBridge alloc] init];
+    [bridge bind:viewController];
 
     window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     window.backgroundColor = [UIColor blackColor];
 
-    [window setRootViewController:bridge.viewController];
+    [window setRootViewController:viewController];
     [window makeKeyAndVisible];
 
     return YES;
