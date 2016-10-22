@@ -3,10 +3,6 @@
 #include "chr/cross/CrossSketch.h"
 #include "chr/system/SystemManager.h"
 
-//#include "cinder/Json.h"
-
-#include <atomic>
-
 namespace chr
 {
   class CrossDelegateBase

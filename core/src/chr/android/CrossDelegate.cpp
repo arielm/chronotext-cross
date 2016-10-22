@@ -125,7 +125,7 @@ namespace chr
   
   void CrossDelegate::messageFromBridge(int what, const string &body)
   {
-    LOGI << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl; // LOG: VERBOSE
+    LOGD << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl; // LOG: VERBOSE
     
     sketch->handleMessage(what, body);
   }
@@ -135,7 +135,7 @@ namespace chr
    */
   void CrossDelegate::sendMessageToBridge(int what, const string &body)
   {
-    LOGI << "MESSAGE SENT TO BRIDGE: " << what << " " << body << endl; // LOG: VERBOSE
+    LOGD << "MESSAGE SENT TO BRIDGE: " << what << " " << body << endl; // LOG: VERBOSE
     
     jni::callVoidMethodOnBridge("messageFromSketch", "(ILjava/lang/String;)V", what, jni::toJString(body));
   }

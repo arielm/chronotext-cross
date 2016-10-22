@@ -21,7 +21,9 @@ namespace chr
     void touchesMoved(const std::vector<TouchEvent> &touches);
     void touchesEnded(const std::vector<TouchEvent> &touches);
 
+    void messageFromBridge(int what, const std::string &body = "") final;
     void sendMessageToBridge(int what, const std::string &body = "") final;
+
     void handleEvent(int eventId) final;
 
     void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) final;

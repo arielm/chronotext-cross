@@ -95,10 +95,15 @@ namespace chr
   }
   
 #pragma mark ---------------------------------------- SKETCH <-> BRIDGE COMMUNICATION ----------------------------------------
-  
+
+  void CrossDelegate::messageFromBridge(int what, const string &body)
+  {
+    sketch->handleMessage(what, body);
+  }
+
   void CrossDelegate::sendMessageToBridge(int what, const string &body)
   {
-//    [system::bridge dispatchMessage:what body:[NSString stringWithUTF8String:body.data()]];
+    [system::bridge dispatchMessage:what body:[NSString stringWithUTF8String:body.data()]];
   }
   
   void CrossDelegate::handleEvent(int eventId)
