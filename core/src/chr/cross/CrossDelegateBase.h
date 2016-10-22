@@ -14,7 +14,7 @@ namespace chr
   public:
     virtual ~CrossDelegateBase() {}
     
-    virtual void messageFromBridge(int what, const std::string &body = "");
+    virtual void messageFromBridge(int what, const std::string &body = "") {}
     virtual void sendMessageToBridge(int what, const std::string &body = "") {}
     
     virtual void handleEvent(int eventId) {}

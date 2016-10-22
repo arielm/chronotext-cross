@@ -6,13 +6,6 @@ using namespace std;
 
 namespace chr
 {
-  void CrossDelegateBase::messageFromBridge(int what, const string &body)
-  {
-//    sketch->sendMessage(Message(what, body));
-  }
-  
-  // ---
-  
   namespace intern
   {
     shared_ptr<SystemManager> systemManager;

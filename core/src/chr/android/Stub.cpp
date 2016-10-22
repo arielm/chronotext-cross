@@ -68,7 +68,7 @@ void Java_org_chronotext_cross_CrossRenderer_dispatchEvent(JNIEnv *env, jobject 
   return bridge::dispatchEvent(env, obj, eventId);
 }
 
-void Java_org_chronotext_cross_CrossBridge_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body)
+void Java_org_chronotext_cross_CrossRenderer_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body)
 {
   return bridge::sendMessageToSketch(env, obj, what, body);
 }

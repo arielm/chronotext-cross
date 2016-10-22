@@ -23,5 +23,5 @@ extern "C"
   void Java_org_chronotext_cross_CrossRenderer_removeTouch(JNIEnv *env, jobject obj, jint index, jfloat x, jfloat y);
   
   void Java_org_chronotext_cross_CrossRenderer_dispatchEvent(JNIEnv *env, jobject obj, jint eventId);
-  void Java_org_chronotext_cross_CrossBridge_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body);
+  void Java_org_chronotext_cross_CrossRenderer_sendMessageToSketch(JNIEnv *env, jobject obj, jint what, jstring body);
 }

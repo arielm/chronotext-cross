@@ -211,11 +211,17 @@ public class CrossBridge extends Handler implements BridgeListener
     sendMessage(Message.obtain(this, what, body));
   }
 
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
-   *
-   * TODO: HANDLE MESSAGES SENT "BEFORE LAUNCH"?
-   */
+  public void sendMessageToSketch(final int what, final String body)
+  {
+    view.queueEvent(new Runnable()
+    {
+      public void run()
+      {
+        view.crossRenderer.sendMessageToSketch(what, body);
+      }
+    });
+  }
+
   public void sendMessageToSketch(int what)
   {
     sendMessageToSketch(what, (String) null);
@@ -265,9 +271,4 @@ public class CrossBridge extends Handler implements BridgeListener
 
   protected native void init(Object bridge, Context context, Display display, int displayWidth, int displayHeight, float displayDensity);
   protected native void uninit();
-
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
-   */
-  public native void sendMessageToSketch(int what, String body);
 }

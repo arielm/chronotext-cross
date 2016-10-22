@@ -62,6 +62,7 @@ namespace chr
     virtual void shutdown() {}
 
     virtual void event(int eventId) {}
+    virtual void handleMessage(int what, const std::string &body) {}
 
     virtual void resize() {}
     virtual void start(StartReason reason) {}

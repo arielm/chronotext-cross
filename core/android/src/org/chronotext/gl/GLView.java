@@ -65,7 +65,7 @@ public class GLView extends GLSurfaceView
   // ---
   
   protected CrossBridge crossBridge;
-  protected CrossRenderer crossRenderer;
+  public CrossRenderer crossRenderer;
   Properties properties;
 
   protected boolean attached;

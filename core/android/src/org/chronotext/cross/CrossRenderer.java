@@ -419,4 +419,5 @@ public class CrossRenderer implements GLSurfaceView.Renderer
   protected native void removeTouch(int index, float x, float y);
 
   public native void dispatchEvent(int eventId);
+  public native void sendMessageToSketch(int what, String body);
 }

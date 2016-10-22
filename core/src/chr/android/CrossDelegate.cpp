@@ -123,14 +123,11 @@ namespace chr
    * 3) TEXT-LENGTH LIMITED
    */
   
-  /*
-   * WILL BE QUEUED TO THE RENDERER'S THREAD (VIA CPP-HANDLER)
-   */
   void CrossDelegate::messageFromBridge(int what, const string &body)
   {
     LOGI << "MESSAGE RECEIVED FROM BRIDGE: " << what << " " << body << endl; // LOG: VERBOSE
     
-    CrossDelegateBase::messageFromBridge(what, body);
+    sketch->handleMessage(what, body);
   }
   
   /*
