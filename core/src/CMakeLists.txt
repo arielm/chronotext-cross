@@ -137,6 +137,7 @@ elseif (PLATFORM MATCHES mxe)
 
 elseif (PLATFORM MATCHES ios)
   add_definitions(-DCHR_RUN_APP -DCHR_FS_BUNDLE)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fembed-bitcode")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fembed-bitcode")
 
   list(APPEND LIBRARIES
