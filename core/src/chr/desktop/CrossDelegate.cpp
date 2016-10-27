@@ -72,6 +72,7 @@ namespace chr
           glfwSetCharCallback(initInfo.window, characterCallback);
           glfwSetScrollCallback(initInfo.window, scrollCallback);
 
+          glfwSwapInterval(1);
           glfwMakeContextCurrent(initInfo.window);
           gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
