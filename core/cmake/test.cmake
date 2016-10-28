@@ -1,3 +1,5 @@
+set(CROSS_ROOT "$ENV{CROSS_PATH}/core")
+
 if (NOT SKETCH)
   list(APPEND INCLUDE_DIRS
     "${CROSS_ROOT}/src"
