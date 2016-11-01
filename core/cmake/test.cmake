@@ -30,6 +30,28 @@ list(LENGTH RESOURCE_FILES RESOURCE_COUNT)
 
 # ---
 
+if (PLATFORM MATCHES emscripten)
+  set(ZLIB_INCLUDE_DIRS "$ENV{HOME}/.emscripten_cache/ports-builds/zlib")
+  set(ZLIB_LIBRARIES "$ENV{HOME}/.emscripten_cache/zlib.bc")
+
+elseif (PLATFORM MATCHES ios)
+  set(ZLIB_INCLUDE_DIRS "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include")
+  set(ZLIB_LIBRARIES "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libz.tbd")
+
+else()
+  find_package(ZLIB)
+endif()
+
+list(APPEND INCLUDE_DIRS
+  ${ZLIB_INCLUDE_DIRS}
+)
+
+list(APPEND LIBRARIES
+  ${ZLIB_LIBRARIES}
+)
+
+# ---
+
 if (PLATFORM MATCHES mxe)
   if (RUN MATCHES EXE)
     add_definitions(-DCHR_RUN_EXE)
