@@ -1,8 +1,9 @@
 #include "chr/Log.h"
 #include "chr/Platform.h"
 
+#include <cstdlib>
+
 #if defined(CHR_RUN_APK)
-  #include <cstdlib>
   #include <android/log.h>
 #endif
 
