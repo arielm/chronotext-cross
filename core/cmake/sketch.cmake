@@ -79,7 +79,6 @@ if (PLATFORM MATCHES osx)
 
 elseif (PLATFORM MATCHES mxe)
   list(APPEND LIBRARIES
-    gdi32
     opengl32
   )
 

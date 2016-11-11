@@ -53,6 +53,12 @@ list(APPEND LIBRARIES
 # ---
 
 if (PLATFORM MATCHES mxe)
+  add_definitions(-DUNICODE -D_UNICODE)
+endif()
+
+# ---
+
+if (PLATFORM MATCHES mxe)
   if (RUN MATCHES EXE)
     add_definitions(-DCHR_RUN_EXE)
 
