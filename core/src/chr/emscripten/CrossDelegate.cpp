@@ -426,11 +426,21 @@ namespace chr
       case EMSCRIPTEN_EVENT_KEYDOWN:
         kind = KeyEvent::KIND_DOWN;
         keyCode = e->keyCode;
+
+        if (keyCode != intern::instance->currentKeyCode)
+        {
+          intern::instance->currentKeyCode = keyCode;
+        }
+        else
+        {
+          return 0;
+        }
         break;
 
       case EMSCRIPTEN_EVENT_KEYUP:
         kind = KeyEvent::KIND_UP;
         keyCode = e->keyCode;
+        intern::instance->currentKeyCode = 0;
         break;
      }
 

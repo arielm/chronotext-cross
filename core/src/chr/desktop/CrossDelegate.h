@@ -24,6 +24,7 @@ namespace chr
 
   protected:
     int updateCount = 0;
+    int currentKeyCode = 0;
 
     std::vector<MouseEvent> mouseEvents;
     std::vector<KeyEvent> keyEvents;

@@ -299,10 +299,20 @@ namespace chr
         case GLFW_PRESS:
         case GLFW_REPEAT:
           kind = KeyEvent::KIND_DOWN;
+
+          if (key != intern::instance->currentKeyCode)
+          {
+            intern::instance->currentKeyCode = key;
+          }
+          else
+          {
+            return;
+          }
           break;
 
         case GLFW_RELEASE:
           kind = KeyEvent::KIND_UP;
+          intern::instance->currentKeyCode = 0;
           break;
       }
 
