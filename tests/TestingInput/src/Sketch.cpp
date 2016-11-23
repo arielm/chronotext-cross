@@ -56,6 +56,27 @@ void Sketch::keyUp(int keyCode, int modifiers)
 
   LOGI << "keyUp: " << keyCode << mods << endl;
 }
+
+void Sketch::mouseMoved(float x, float y)
+{
+  LOGI << "mouseMoved: " << x << ", " << y << endl;
+}
+
+void Sketch::mouseDragged(int button, float x, float y)
+{
+  LOGI << "mouseDragged: " << button << " " << x << ", " << y << endl;
+}
+
+void Sketch::mousePressed(int button, float x, float y)
+{
+  LOGI << "mousePressed: " << button << " " << x << ", " << y << endl;
+}
+
+void Sketch::mouseReleased(int button, float x, float y)
+{
+  LOGI << "mouseReleased: " << button << " " << x << ", " << y << endl;
+}
+
 void Sketch::wheelUpdated(float offset)
 {
   LOGI << "wheelUpdated: " << offset << endl;

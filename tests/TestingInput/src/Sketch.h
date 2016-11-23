@@ -16,6 +16,11 @@ public:
   void keyDown(int keyCode, int modifiers) final;
   void keyUp(int keyCode, int modifiers) final;
 
+  void mouseMoved(float x, float y);
+  void mouseDragged(int button, float x, float y);
+  void mousePressed(int button, float x, float y);
+  void mouseReleased(int button, float x, float y);
+
   void wheelUpdated(float offset);
 
 protected:
