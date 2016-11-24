@@ -1,10 +1,8 @@
 #include "chr/Timer.h"
 
-#if defined(CHR_PLATFORM_DESKTOP)
-  #include <GLFW/glfw3.h>
-#elif defined(CHR_PLATFORM_EMSCRIPTEN)
+#if defined(CHR_PLATFORM_EMSCRIPTEN)
   #include <emscripten.h>
-#elif defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
+#else
   #include <chrono>
 #endif
 
@@ -50,17 +48,12 @@ namespace chr
     return stopped;
   }
 
-#if defined(CHR_PLATFORM_DESKTOP)
-  double Timer::getCurrent()
-  {
-    return glfwGetTime();
-  }
-#elif defined(CHR_PLATFORM_EMSCRIPTEN)
+#if defined(CHR_PLATFORM_EMSCRIPTEN)
   double Timer::getCurrent()
   {
     return emscripten_get_now() / 1000.0;
   }
-#elif defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
+#else
   double Timer::getCurrent()
   {
     auto now = std::chrono::steady_clock::now().time_since_epoch();

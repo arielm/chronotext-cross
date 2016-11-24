@@ -65,11 +65,18 @@ list(APPEND SRC_FILES
   "chr/image/Utils.cpp"
 )
 
-if (PLATFORM MATCHES osx|mxe)
+if (PLATFORM MATCHES osx)
   list(APPEND SRC_FILES
-    "chr/desktop/CrossDelegate.cpp"
-    "chr/desktop/system/DisplayHelper.cpp"
-    "chr/desktop/system/SystemManager.cpp"
+    "chr/glfw/CrossDelegate.cpp"
+    "chr/glfw/system/DisplayHelper.cpp"
+    "chr/osx/system/SystemManager.cpp"
+  )
+
+elseif (PLATFORM MATCHES mxe)
+  list(APPEND SRC_FILES
+    "chr/win/CrossDelegate.cpp"
+    "chr/win/system/DisplayHelper.cpp"
+    "chr/win/system/SystemManager.cpp"
   )
 
 elseif (PLATFORM MATCHES emscripten)

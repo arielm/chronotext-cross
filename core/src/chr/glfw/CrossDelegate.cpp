@@ -1,5 +1,5 @@
-#include "chr/desktop/CrossDelegate.h"
-#include "chr/desktop/Keyboard.h"
+#include "chr/glfw/CrossDelegate.h"
+#include "chr/glfw/Keyboard.h"
 
 using namespace std;
 

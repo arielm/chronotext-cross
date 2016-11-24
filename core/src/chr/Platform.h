@@ -25,6 +25,7 @@ namespace chr
     #define CHR_PLATFORM chr::PLATFORM_OSX
     #define CHR_PLATFORM_OSX 1
     #define CHR_PLATFORM_DESKTOP 1
+    #define CHR_PLATFORM_GLFW 1
   #endif // TARGET_OS_IPHONE
 #elif defined(__ANDROID__)
   #define CHR_PLATFORM chr::PLATFORM_ANDROID
