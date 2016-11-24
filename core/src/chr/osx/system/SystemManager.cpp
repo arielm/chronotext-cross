@@ -1,4 +1,4 @@
-#include "chr/desktop/system/SystemManager.h"
+#include "chr/osx/system/SystemManager.h"
 #include "chr/cross/Context.h"
 
 #include <boost/algorithm/string.hpp>
