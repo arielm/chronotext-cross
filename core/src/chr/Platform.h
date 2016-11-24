@@ -11,7 +11,7 @@ namespace chr
     PLATFORM_IOS,
     PLATFORM_ANDROID,
     PLATFORM_EMSCRIPTEN,
-    PLATFORM_MINGW,
+    PLATFORM_WIN,
   };
 }
 
@@ -33,14 +33,14 @@ namespace chr
   #define CHR_PLATFORM chr::PLATFORM_EMSCRIPTEN
   #define CHR_PLATFORM_EMSCRIPTEN 1
 #elif defined(__MINGW32__)
-  #define CHR_PLATFORM chr::PLATFORM_MINGW
-  #define CHR_PLATFORM_MINGW 1
+  #define CHR_PLATFORM chr::PLATFORM_WIN
+  #define CHR_PLATFORM_WIN 1
   #define CHR_PLATFORM_DESKTOP 1
 #else
   #error UNSUPPORTED PLATFORM
 #endif // __APPLE__
 
-#if defined(CHR_PLATFORM_MINGW)
+#if defined(CHR_PLATFORM_WIN)
   #include <windows.h>
   #undef ERROR // SEE https://google-glog.googlecode.com/svn/trunk/doc/glog.html#windows
 #elif defined(CHR_PLATFORM_COCOA)
@@ -54,7 +54,7 @@ namespace chr
 #elif defined(CHR_FS_RC)
   namespace chr
   {
-    namespace mingw
+    namespace win
     {
       extern std::map<std::string, int> RESOURCES;
     }

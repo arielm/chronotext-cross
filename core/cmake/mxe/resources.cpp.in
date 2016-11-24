@@ -5,7 +5,7 @@ using namespace std;
 
 namespace chr
 {
-  namespace mingw
+  namespace win
   {
     map<string, int> RESOURCES = 
     {

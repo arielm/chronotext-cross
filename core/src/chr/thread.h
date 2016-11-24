@@ -7,7 +7,7 @@
 #include <mutex>
 #include <condition_variable>
 
-#if defined(CHR_PLATFORM_MINGW)
+#if defined(CHR_PLATFORM_WIN)
   #include "mingw.thread.h"
   #include "mingw.mutex.h"
   #include "mingw.condition_variable.h"

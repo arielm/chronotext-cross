@@ -26,9 +26,9 @@ namespace chr
       if (!locked)
       {
         auto basePath = fs::path("res") / relativePath;
-        auto found = mingw::RESOURCES.find(basePath.generic_string());
+        auto found = win::RESOURCES.find(basePath.generic_string());
 
-        if (found != mingw::RESOURCES.end())
+        if (found != win::RESOURCES.end())
         {
           int resId = found->second;
           HRSRC infoHandle = ::FindResource(NULL, MAKEINTRESOURCE(resId), RT_RCDATA);
