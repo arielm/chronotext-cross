@@ -20,7 +20,7 @@
   #include <GLES2/gl2ext.h>
 #endif
 
-#if defined (CHR_PLATFORM_GLFW)
+#if defined (CHR_PLATFORM_DESKTOP)
   #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
   #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 

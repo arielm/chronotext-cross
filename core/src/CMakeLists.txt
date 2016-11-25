@@ -111,6 +111,11 @@ endif()
 
 # ---
 
+if (PLATFORM MATCHES mxe)
+  add_definitions(-DUNICODE -D_UNICODE)
+  add_definitions(-DWIN32)
+endif()
+
 if (PLATFORM MATCHES osx)
   set(GLFW_SRC "${DEPS}/glfw/build/src")
 
@@ -130,10 +135,10 @@ elseif (PLATFORM MATCHES mxe)
   )
 
   list(APPEND SRC_FILES
-    "${GLLOAD_SRC}/deps/gl_load.c"
-    "${GLLOAD_SRC}/deps/wgl_load.c"
-    "${GLLOAD_SRC}/deps/gl_load_cpp.c"
-    "${GLLOAD_SRC}/deps/wgl_load_cpp.c"
+    "${GLLOAD_SRC}/gl_load.c"
+    "${GLLOAD_SRC}/wgl_load.c"
+    "${GLLOAD_SRC}/gl_load_cpp.cpp"
+    "${GLLOAD_SRC}/wgl_load_cpp.cpp"
   )
 endif()
 
@@ -153,7 +158,6 @@ elseif (PLATFORM MATCHES mxe)
   add_definitions(-DCHR_RUN_EXE -DCHR_FS_RC)
 
   list(APPEND LIBRARIES
-    gdi32
     opengl32
   )
 

@@ -54,6 +54,7 @@ list(APPEND LIBRARIES
 
 if (PLATFORM MATCHES mxe)
   add_definitions(-DUNICODE -D_UNICODE)
+  add_definitions(-DWIN32)
 endif()
 
 # ---

@@ -1,6 +1,6 @@
 set(BOOST_ROOT "$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}")
 set(GLFW_ROOT "$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}")
-set(GLLOAD_ROOT "${DEPS}/glload")
+set(GLLOAD_ROOT "$ENV{CROSS_PATH}/deps/glload")
 set(GLM_ROOT "$ENV{CROSS_PATH}/deps/glm/dist")
 set(JPEG_ROOT "$ENV{CROSS_PATH}/deps/libjpeg-turbo")
 set(PNG_ROOT "$ENV{CROSS_PATH}/deps/libpng/dist/${PLATFORM}")

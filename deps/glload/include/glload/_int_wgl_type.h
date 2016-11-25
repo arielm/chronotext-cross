@@ -36,7 +36,6 @@ typedef float GLfloat;
 typedef float GLclampf;
 typedef double GLdouble;
 typedef double GLclampd;
-#define GLvoid void
 
 #endif /*GL_LOAD_GEN_BASIC_OPENGL_TYPEDEFS*/
 

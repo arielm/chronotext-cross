@@ -6,6 +6,10 @@
 #if defined(CHR_PLATFORM_GLFW)
   #define GLFW_INCLUDE_NONE
   #include <GLFW/glfw3.h>
+#elif defined(CHR_PLATFORM_WIN)
+  #include <Windows.h>
+  #include <windowsx.h>
+  #include "glload/wgl_all.h"
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
   #include <emscripten.h>
   #include <emscripten/html5.h>
