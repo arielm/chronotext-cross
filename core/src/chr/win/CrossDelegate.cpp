@@ -27,7 +27,10 @@ namespace chr
 
       if (createWindow(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits))
       {
-        setupInfo.windowInfo = WindowInfo(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits); // XXX
+        /*
+         * FIXME: setupInfo.windowInfo.aaSamples SHOULD REFLECT THE VALUE EFFECTIVELY SET DURING createWindow()
+         */
+        setupInfo.windowInfo = WindowInfo(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits);
 
         // ---
 
