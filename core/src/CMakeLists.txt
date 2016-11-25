@@ -6,6 +6,7 @@ set(DEPS "../../deps")
 
 set(BOOST_ROOT "${DEPS}/boost/dist/${PLATFORM}")
 set(GLFW_ROOT "${DEPS}/glfw/dist/${PLATFORM}")
+set(GLLOAD_ROOT "${DEPS}/glload")
 set(GLM_ROOT "${DEPS}/glm/dist")
 set(JPEG_ROOT "${DEPS}/libjpeg-turbo")
 set(PNG_ROOT "${DEPS}/libpng/dist/${PLATFORM}")
@@ -110,7 +111,7 @@ endif()
 
 # ---
 
-if (PLATFORM MATCHES osx|mxe)
+if (PLATFORM MATCHES osx)
   set(GLFW_SRC "${DEPS}/glfw/build/src")
 
   list(APPEND INCLUDE_DIRS
@@ -120,6 +121,20 @@ if (PLATFORM MATCHES osx|mxe)
 
   list(APPEND SRC_FILES "${GLFW_SRC}/deps/glad.c")
   list(APPEND LIBRARIES "${GLFW_ROOT}/lib/libglfw3.a")
+
+elseif (PLATFORM MATCHES mxe)
+  set(GLLOAD_SRC "${GLLOAD_ROOT}/source")
+
+  list(APPEND INCLUDE_DIRS
+    "${GLLOAD_ROOT}/include"
+  )
+
+  list(APPEND SRC_FILES
+    "${GLLOAD_SRC}/deps/gl_load.c"
+    "${GLLOAD_SRC}/deps/wgl_load.c"
+    "${GLLOAD_SRC}/deps/gl_load_cpp.c"
+    "${GLLOAD_SRC}/deps/wgl_load_cpp.c"
+  )
 endif()
 
 if (PLATFORM MATCHES osx)

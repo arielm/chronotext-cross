@@ -6,7 +6,8 @@
 #if defined(CHR_PLATFORM_GLFW)
   #include <glad/glad.h>
 #elif defined(CHR_PLATFORM_WIN)
-  // TODO
+  #include "glload/gl_2_0.h"
+  #include "glload/gl_load.h"
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
