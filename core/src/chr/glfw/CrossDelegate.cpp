@@ -51,7 +51,7 @@ namespace chr
             glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
             glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-            initInfo.window = glfwCreateWindow(targetWidth, targetHeight, "", monitor, NULL);
+            window = glfwCreateWindow(targetWidth, targetHeight, "", monitor, NULL);
           }
         }
         else
@@ -59,21 +59,21 @@ namespace chr
           targetWidth = initInfo.windowInfo.width;
           targetHeight = initInfo.windowInfo.height;
 
-          initInfo.window = glfwCreateWindow(targetWidth, targetHeight, "", NULL, NULL);
+          window = glfwCreateWindow(targetWidth, targetHeight, "", NULL, NULL);
         }
 
-        if (initInfo.window)
+        if (window)
         {
           setupInfo.windowInfo = WindowInfo(targetWidth, targetHeight, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits);
 
-          glfwSetCursorPosCallback(initInfo.window, cursorPosCallback);
-          glfwSetMouseButtonCallback(initInfo.window, mouseButtonCallback);
-          glfwSetKeyCallback(initInfo.window, keyCallback);
-          glfwSetCharCallback(initInfo.window, characterCallback);
-          glfwSetScrollCallback(initInfo.window, scrollCallback);
+          glfwSetCursorPosCallback(window, cursorPosCallback);
+          glfwSetMouseButtonCallback(window, mouseButtonCallback);
+          glfwSetKeyCallback(window, keyCallback);
+          glfwSetCharCallback(window, characterCallback);
+          glfwSetScrollCallback(window, scrollCallback);
 
           glfwSwapInterval(1);
-          glfwMakeContextCurrent(initInfo.window);
+          glfwMakeContextCurrent(window);
           gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
           // ---
@@ -154,7 +154,7 @@ namespace chr
 
     sketch->performStart(CrossSketch::START_REASON_VIEW_SHOWN);
 
-    while (!glfwWindowShouldClose(initInfo.window))
+    while (!glfwWindowShouldClose(window))
     {
       intern::instance->processMouseEvents();
       intern::instance->processKeyEvents();
@@ -163,7 +163,7 @@ namespace chr
       performUpdate();
       performDraw();
 
-      glfwSwapBuffers(initInfo.window);
+      glfwSwapBuffers(window);
 
       intern::instance->clearMouseEvents();
       intern::instance->clearKeyEvents();
@@ -297,17 +297,8 @@ namespace chr
       switch (action)
       {
         case GLFW_PRESS:
-        case GLFW_REPEAT:
           kind = KeyEvent::KIND_DOWN;
-
-          if (key != intern::instance->currentKeyCode)
-          {
-            intern::instance->currentKeyCode = key;
-          }
-          else
-          {
-            return;
-          }
+          intern::instance->currentKeyCode = key;
           break;
 
         case GLFW_RELEASE:

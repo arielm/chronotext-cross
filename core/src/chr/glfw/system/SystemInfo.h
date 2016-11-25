@@ -2,8 +2,6 @@
 
 #include "chr/system/SystemInfoBase.h"
 
-struct GLFWwindow;
-
 namespace chr
 {
   namespace system
@@ -11,7 +9,6 @@ namespace chr
     struct InitInfo
     {
       WindowInfo windowInfo;
-      GLFWwindow* window = nullptr;
 
       InitInfo() = default;
 

@@ -6,6 +6,8 @@
 #include "chr/cross/WheelEvent.h"
 #include "chr/cross/Keyboard.h"
 
+struct GLFWwindow;
+
 namespace chr
 {
   class CrossDelegate : public CrossDelegateBase
@@ -34,6 +36,8 @@ namespace chr
     float mouseY;
     int mouseButton = -1;
     bool mousePressed = false;
+
+    GLFWwindow* window = nullptr;
 
     void processMouseEvents();
     void clearMouseEvents();
