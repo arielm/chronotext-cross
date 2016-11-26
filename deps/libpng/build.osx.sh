@@ -42,6 +42,7 @@ fi
 
 cp "$BUILD_DIR/pnglibconf.h" "$SRC_PATH"
 
+rm -rf   "$TREE_DIR/$PLATFORM/lib"
 mkdir -p "$TREE_DIR/$PLATFORM/lib"
 mv "tmp/$PLATFORM/lib" "$TREE_DIR/$PLATFORM"
 
