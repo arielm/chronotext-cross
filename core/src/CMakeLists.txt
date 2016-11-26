@@ -7,9 +7,9 @@ set(TREE "../../tree")
 
 set(BOOST_ROOT "${TREE}/boost/${PLATFORM}")
 set(GLFW_ROOT "${TREE}/glfw/${PLATFORM}")
-set(GLLOAD_ROOT "${DEPS}/glload")
-set(GLM_ROOT "${DEPS}/glm/dist")
-set(JPEG_ROOT "${DEPS}/libjpeg-turbo")
+set(GLLOAD_ROOT "${TREE}/glload")
+set(GLM_ROOT "${TREE}/glm")
+set(JPEG_ROOT "${TREE}/libjpeg-turbo")
 set(PNG_ROOT "${TREE}/libpng/${PLATFORM}")
 set(LIBTESS2_ROOT "${DEPS}/libtess2/dist/${PLATFORM}")
 

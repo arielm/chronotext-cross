@@ -6,9 +6,9 @@ ARCHIVE_DIR="glm-master"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/glm
+mkdir -p ../../tree/glm
+cd ../../tree/glm
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"
@@ -31,4 +31,4 @@ if [ $? != 0 ] || [ ! -d $ARCHIVE_DIR ]; then
 fi
 
 rm $ARCHIVE_ZIP
-mv $ARCHIVE_DIR src
+mv $ARCHIVE_DIR include
