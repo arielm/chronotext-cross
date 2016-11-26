@@ -6,7 +6,7 @@ set(DEPS "../../deps")
 set(TREE "../../tree")
 
 set(BOOST_ROOT "${TREE}/boost/${PLATFORM}")
-set(GLFW_ROOT "${DEPS}/glfw/dist/${PLATFORM}")
+set(GLFW_ROOT "${TREE}/glfw/${PLATFORM}")
 set(GLLOAD_ROOT "${DEPS}/glload")
 set(GLM_ROOT "${DEPS}/glm/dist")
 set(JPEG_ROOT "${DEPS}/libjpeg-turbo")
@@ -118,7 +118,7 @@ if (PLATFORM MATCHES mxe)
 endif()
 
 if (PLATFORM MATCHES osx)
-  set(GLFW_SRC "${DEPS}/glfw/build/src")
+  set(GLFW_SRC "${TREE}/glfw/src")
 
   list(APPEND INCLUDE_DIRS
     "${GLFW_ROOT}/include"

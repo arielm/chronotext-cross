@@ -1,5 +1,5 @@
 set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
-set(GLFW_ROOT "$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}")
+set(GLFW_ROOT "$ENV{CROSS_PATH}/tree/glfw/${PLATFORM}")
 set(GLLOAD_ROOT "$ENV{CROSS_PATH}/deps/glload")
 set(GLM_ROOT "$ENV{CROSS_PATH}/deps/glm/dist")
 set(JPEG_ROOT "$ENV{CROSS_PATH}/deps/libjpeg-turbo")
@@ -63,7 +63,7 @@ list(APPEND LIBRARIES
 if (PLATFORM MATCHES osx)
   list(APPEND INCLUDE_DIRS
     "${GLFW_ROOT}/include"
-    "$ENV{CROSS_PATH}/deps/glfw/build/src/deps"
+    "$ENV{CROSS_PATH}/tree/glfw/src/deps"
   )
 
   list(APPEND LIBRARIES "${GLFW_ROOT}/lib/libglfw3.a")
