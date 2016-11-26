@@ -2,9 +2,10 @@
 
 PLATFORM="android"
 
-SRC_DIR="build/src"
+TREE_DIR="../../tree/gtest"
+SRC_DIR="$TREE_DIR/src"
 BUILD_DIR="build/$PLATFORM"
-INSTALL_DIR="dist/$PLATFORM"
+INSTALL_DIR="tmp/$PLATFORM"
 
 SRC_PATH="$(pwd)/$SRC_DIR"
 INSTALL_PATH="$(pwd)/$INSTALL_DIR"
@@ -30,7 +31,7 @@ fi
 
 # ---
 
-rm -rf "$INSTALL_PATH" # XXX: REQUIRED?
+rm -rf "$INSTALL_PATH"
 cmake --build "$BUILD_DIR"
 
 if [ $? != 0 ]; then
@@ -38,5 +39,9 @@ if [ $? != 0 ]; then
   exit -1
 fi
 
-cd "$INSTALL_PATH"
+rm -rf   "$TREE_DIR/$PLATFORM/lib"
+mkdir -p "$TREE_DIR/$PLATFORM/lib"
+mv "tmp/$PLATFORM/lib" "$TREE_DIR/$PLATFORM"
+
+cd "$TREE_DIR/$PLATFORM"
 ln -s "$SRC_PATH/include"

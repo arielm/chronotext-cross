@@ -6,9 +6,9 @@ ARCHIVE_DIR="googletest-patches"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/gtest
+mkdir -p ../../tree/gtest
+cd ../../tree/gtest
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"

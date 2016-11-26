@@ -4,7 +4,7 @@ set(GLLOAD_ROOT "$ENV{CROSS_PATH}/tree/glload")
 set(GLM_ROOT "$ENV{CROSS_PATH}/tree/glm")
 set(JPEG_ROOT "$ENV{CROSS_PATH}/tree/libjpeg-turbo")
 set(PNG_ROOT "$ENV{CROSS_PATH}/tree/libpng/${PLATFORM}")
-set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/deps/libtess2/dist/${PLATFORM}")
+set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/tree/libtess2/${PLATFORM}")
 
 # ---
 

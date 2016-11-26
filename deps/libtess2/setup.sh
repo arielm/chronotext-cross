@@ -6,9 +6,9 @@ ARCHIVE_DIR="emscripten-libtess2-master"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/libtess2
+mkdir -p ../../tree/libtess2
+cd ../../tree/libtess2
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"

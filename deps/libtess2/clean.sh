@@ -1,4 +1,5 @@
 #!/bin/sh
 
-rm -rf dist
+rm -rf ../../tree/libtess2
 rm -rf build
+rm -rf tmp
