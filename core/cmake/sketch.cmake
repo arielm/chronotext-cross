@@ -3,7 +3,7 @@ set(GLFW_ROOT "$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}")
 set(GLLOAD_ROOT "$ENV{CROSS_PATH}/deps/glload")
 set(GLM_ROOT "$ENV{CROSS_PATH}/deps/glm/dist")
 set(JPEG_ROOT "$ENV{CROSS_PATH}/deps/libjpeg-turbo")
-set(PNG_ROOT "$ENV{CROSS_PATH}/deps/libpng/dist/${PLATFORM}")
+set(PNG_ROOT "$ENV{CROSS_PATH}/tree/libpng/${PLATFORM}")
 set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/deps/libtess2/dist/${PLATFORM}")
 
 # ---

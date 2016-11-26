@@ -10,7 +10,7 @@ set(GLFW_ROOT "${DEPS}/glfw/dist/${PLATFORM}")
 set(GLLOAD_ROOT "${DEPS}/glload")
 set(GLM_ROOT "${DEPS}/glm/dist")
 set(JPEG_ROOT "${DEPS}/libjpeg-turbo")
-set(PNG_ROOT "${DEPS}/libpng/dist/${PLATFORM}")
+set(PNG_ROOT "${TREE}/libpng/${PLATFORM}")
 set(LIBTESS2_ROOT "${DEPS}/libtess2/dist/${PLATFORM}")
 
 # ---

@@ -2,9 +2,10 @@
 
 PLATFORM="emscripten"
 
-SRC_DIR="build/src"
+TREE_DIR="../../tree/libpng"
+SRC_DIR="$TREE_DIR/src"
 BUILD_DIR="build/$PLATFORM"
-INSTALL_DIR="dist/$PLATFORM"
+INSTALL_DIR="tmp/$PLATFORM"
 
 SRC_PATH="$(pwd)/$SRC_DIR"
 INSTALL_PATH="$(pwd)/$INSTALL_DIR"
@@ -32,7 +33,7 @@ fi
 
 # ---
 
-rm -rf "$INSTALL_PATH" # XXX: REQUIRED?
+rm -rf "$INSTALL_PATH"
 cmake --build "$BUILD_DIR"
 
 if [ $? != 0 ]; then
@@ -42,5 +43,8 @@ fi
 
 cp "$BUILD_DIR/pnglibconf.h" "$SRC_PATH"
 
-cd "$INSTALL_PATH"
+mkdir -p "$TREE_DIR/$PLATFORM/lib"
+mv "tmp/$PLATFORM/lib" "$TREE_DIR/$PLATFORM"
+
+cd "$TREE_DIR/$PLATFORM"
 ln -s "$SRC_PATH" include

@@ -6,9 +6,9 @@ ARCHIVE_DIR="libpng-libpng17"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/libpng
+mkdir -p ../../tree/libpng
+cd ../../tree/libpng
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"
