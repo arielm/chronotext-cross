@@ -2,6 +2,7 @@
 
 PLATFORM="mxe"
 
+TREE_DIR="../../tree/chr"
 BUILD_DIR="build/$PLATFORM"
 INSTALL_DIR="tmp/$PLATFORM/lib/Release"
 INSTALL_PATH="$(pwd)/$INSTALL_DIR"
@@ -31,5 +32,6 @@ if [ $? != 0 ]; then
   exit -1
 fi
 
-mkdir -p "../../tree/chr/$PLATFORM/lib"
-mv "tmp/$PLATFORM/lib/Release" "../../tree/chr/$PLATFORM/lib"
+rm -rf   "$TREE_DIR/$PLATFORM/lib/Release"
+mkdir -p "$TREE_DIR/$PLATFORM/lib/Release"
+mv "tmp/$PLATFORM/lib/Release" "$TREE_DIR/$PLATFORM/lib"
