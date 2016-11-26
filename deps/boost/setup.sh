@@ -6,9 +6,9 @@ ARCHIVE_DIR="android-vendor-boost-1-58-0-master"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/boost
+mkdir -p ../../tree/boost
+cd ../../tree/boost
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"

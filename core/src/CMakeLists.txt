@@ -3,8 +3,9 @@ cmake_minimum_required(VERSION 3.2.2)
 project(chr_cross)
 
 set(DEPS "../../deps")
+set(TREE "../../tree")
 
-set(BOOST_ROOT "${DEPS}/boost/dist/${PLATFORM}")
+set(BOOST_ROOT "${TREE}/boost/${PLATFORM}")
 set(GLFW_ROOT "${DEPS}/glfw/dist/${PLATFORM}")
 set(GLLOAD_ROOT "${DEPS}/glload")
 set(GLM_ROOT "${DEPS}/glm/dist")

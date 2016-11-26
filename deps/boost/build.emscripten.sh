@@ -2,8 +2,8 @@
 
 PLATFORM="emscripten"
 
-SRC_DIR="build/src"
-INSTALL_DIR="dist/$PLATFORM"
+SRC_DIR="../../tree/boost/src"
+INSTALL_DIR="../../tree/boost/$PLATFORM"
 
 SRC_PATH="$(pwd)/$SRC_DIR"
 INSTALL_PATH="$(pwd)/$INSTALL_DIR"

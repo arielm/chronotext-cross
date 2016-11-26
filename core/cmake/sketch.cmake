@@ -1,4 +1,4 @@
-set(BOOST_ROOT "$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}")
+set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
 set(GLFW_ROOT "$ENV{CROSS_PATH}/deps/glfw/dist/${PLATFORM}")
 set(GLLOAD_ROOT "$ENV{CROSS_PATH}/deps/glload")
 set(GLM_ROOT "$ENV{CROSS_PATH}/deps/glm/dist")
