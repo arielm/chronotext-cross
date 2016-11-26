@@ -27,7 +27,7 @@ endif()
 # ---
 
 list(APPEND INCLUDE_DIRS "$ENV{CROSS_PATH}/core/src")
-list(APPEND LIBRARIES "$ENV{CROSS_PATH}/core/src/dist/${PLATFORM}/lib/${CMAKE_BUILD_TYPE}/libchr_cross.a")
+list(APPEND LIBRARIES "$ENV{CROSS_PATH}/tree/chr/${PLATFORM}/lib/${CMAKE_BUILD_TYPE}/libchr_cross.a")
 
 list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
 list(APPEND LIBRARIES

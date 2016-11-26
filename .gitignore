@@ -1,5 +1,6 @@
 .DS_Store
 
+tree/
 dist/
 *.out
 *.out.js
