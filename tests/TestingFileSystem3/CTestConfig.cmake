@@ -33,10 +33,4 @@ elseif (PLATFORM MATCHES mxe)
   )
 endif()
 
-list(APPEND ARGS
-  "-DBOOST_ROOT=$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}"
-  "-DGTEST_ROOT=$ENV{CROSS_PATH}/deps/gtest/dist/${PLATFORM}"
-  "-DPROTOBUF_ROOT=$ENV{CROSS_PATH}/deps/protobuf/dist/${PLATFORM}"
-)
-
-include("${CROSS_ROOT}/cmake/platforms.cmake")
+include("$ENV{CROSS_PATH}/core/cmake/platforms.cmake")

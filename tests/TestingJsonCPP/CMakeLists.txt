@@ -2,22 +2,21 @@ cmake_minimum_required (VERSION 3.2.2)
 
 project(TestingJsonCPP)
 
-set(BOOST_ROOT "$ENV{CROSS_PATH}/deps/boost/dist/${PLATFORM}")
-set(GTEST_ROOT "$ENV{CROSS_PATH}/deps/gtest/dist/${PLATFORM}")
+set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
+set(GTEST_ROOT "$ENV{CROSS_PATH}/tree/gtest/${PLATFORM}")
 set(JSONCPP_ROOT "$ENV{CROSS_PATH}/deps/jsoncpp/dist/${PLATFORM}")
 
-find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
-find_package(GTest REQUIRED)
-
 set(INCLUDE_DIRS
-  ${Boost_INCLUDE_DIRS}
-  ${GTEST_INCLUDE_DIRS}
+  "${BOOST_ROOT}/include"
+  "${GTEST_ROOT}/include"
   "${JSONCPP_ROOT}/include"
 )
 
 set(LIBRARIES
-  ${Boost_LIBRARIES}
-  ${GTEST_BOTH_LIBRARIES}
+  "${BOOST_ROOT}/lib/libboost_system.a"
+  "${BOOST_ROOT}/lib/libboost_filesystem.a"
+  "${GTEST_ROOT}/lib/libgtest.a"
+  "${GTEST_ROOT}/lib/libgtest_main.a"
   "${JSONCPP_ROOT}/lib/libjsoncpp.a"
 )
 
