@@ -48,4 +48,4 @@ mkdir -p "$TREE_DIR/$PLATFORM/lib"
 mv "tmp/$PLATFORM/lib" "$TREE_DIR/$PLATFORM"
 
 cd "$TREE_DIR/$PLATFORM"
-ln -s "$SRC_PATH" include
+ln -s "../src" include

@@ -2,27 +2,25 @@ cmake_minimum_required (VERSION 3.2.2)
 
 project(TestingGLM)
 
-find_package(Boost 1.58.0 REQUIRED COMPONENTS system filesystem)
-find_package(GTest REQUIRED)
-
-#
-# XXX
-#
-set(GLM_INCLUDE_DIR "${GLM_ROOT}/include")
+set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
+set(GTEST_ROOT "$ENV{CROSS_PATH}/tree/gtest/${PLATFORM}")
+set(GLM_ROOT "$ENV{CROSS_PATH}/tree/glm")
 
 set(INCLUDE_DIRS
-  ${Boost_INCLUDE_DIRS}
-  ${GTEST_INCLUDE_DIRS}
-  ${GLM_INCLUDE_DIR}
+  "${BOOST_ROOT}/include"
+  "${GTEST_ROOT}/include"
+  "${GLM_ROOT}/include"
 )
 
 set(LIBRARIES
-  ${Boost_LIBRARIES}
-  ${GTEST_BOTH_LIBRARIES}
+  "${BOOST_ROOT}/lib/libboost_system.a"
+  "${BOOST_ROOT}/lib/libboost_filesystem.a"
+  "${GTEST_ROOT}/lib/libgtest.a"
+  "${GTEST_ROOT}/lib/libgtest_main.a"
 )
 
 set(SRC_FILES
   src/main.cpp
 )
 
-include("${CROSS_ROOT}/cmake/test.cmake")
+include("$ENV{CROSS_PATH}/core/cmake/test.cmake")

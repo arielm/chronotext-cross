@@ -60,4 +60,4 @@ fi
 # ---
 
 cd "$INSTALL_PATH"
-ln -s "$SRC_PATH" include
+ln -s "../src" include
