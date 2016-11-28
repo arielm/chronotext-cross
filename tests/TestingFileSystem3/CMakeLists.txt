@@ -4,7 +4,7 @@ project(TestingFileSystem3)
 
 set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
 set(GTEST_ROOT "$ENV{CROSS_PATH}/tree/gtest/${PLATFORM}")
-set(PROTOBUF_ROOT "$ENV{CROSS_PATH}/deps/protobuf/dist/${PLATFORM}")
+set(PROTOBUF_ROOT "$ENV{CROSS_PATH}/tree/protobuf/${PLATFORM}")
 
 set(INCLUDE_DIRS
   "${BOOST_ROOT}/include"

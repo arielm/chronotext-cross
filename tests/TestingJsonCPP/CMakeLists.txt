@@ -4,7 +4,7 @@ project(TestingJsonCPP)
 
 set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
 set(GTEST_ROOT "$ENV{CROSS_PATH}/tree/gtest/${PLATFORM}")
-set(JSONCPP_ROOT "$ENV{CROSS_PATH}/deps/jsoncpp/dist/${PLATFORM}")
+set(JSONCPP_ROOT "$ENV{CROSS_PATH}/tree/jsoncpp/${PLATFORM}")
 
 set(INCLUDE_DIRS
   "${BOOST_ROOT}/include"

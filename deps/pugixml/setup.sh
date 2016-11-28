@@ -6,9 +6,9 @@ ARCHIVE_DIR="pugixml-master"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/pugixml
+mkdir -p ../../tree/pugixml
+cd ../../tree/pugixml
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"

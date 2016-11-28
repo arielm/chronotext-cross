@@ -1,4 +1,5 @@
 #!/bin/sh
 
-rm -rf dist
+rm -rf ../../tree/pugixml
 rm -rf build
+rm -rf tmp

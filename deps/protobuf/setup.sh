@@ -6,9 +6,9 @@ ARCHIVE_DIR="protobuf-master"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/protobuf
+mkdir -p ../../tree/protobuf
+cd ../../tree/protobuf
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"

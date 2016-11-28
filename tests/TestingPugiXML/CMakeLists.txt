@@ -4,7 +4,7 @@ project(TestingPugiXML)
 
 set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
 set(GTEST_ROOT "$ENV{CROSS_PATH}/tree/gtest/${PLATFORM}")
-set(PUGIXML_ROOT "$ENV{CROSS_PATH}/deps/pugixml/dist/${PLATFORM}")
+set(PUGIXML_ROOT "$ENV{CROSS_PATH}/tree/pugixml/${PLATFORM}")
 
 set(INCLUDE_DIRS
   "${BOOST_ROOT}/include"

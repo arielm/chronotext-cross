@@ -6,9 +6,9 @@ ARCHIVE_DIR="jsoncpp-master"
 
 # ---
 
-rm -rf build
-mkdir -p build
-cd build
+rm -rf ../../tree/jsoncpp
+mkdir -p ../../tree/jsoncpp
+cd ../../tree/jsoncpp
 
 if [ ! -f $ARCHIVE_ZIP ]; then
   echo "DOWNLOADING $ARCHIVE_SRC"
