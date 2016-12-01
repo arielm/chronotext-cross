@@ -31,4 +31,4 @@ elseif (PLATFORM MATCHES emscripten)
   )
 endif()
 
-include("${CROSS_ROOT}/cmake/platforms.cmake")
+include("$ENV{CROSS_PATH}/core/cmake/platforms.cmake")

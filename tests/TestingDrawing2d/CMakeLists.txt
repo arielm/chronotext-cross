@@ -6,5 +6,5 @@ set(SRC_FILES
   "src/Sketch.cpp"
 )
 
-include("${CROSS_ROOT}/cmake/sketch.cmake")
-include("${CROSS_ROOT}/cmake/test.cmake")
+include("$ENV{CROSS_PATH}/core/cmake/sketch.cmake")
+include("$ENV{CROSS_PATH}/core/cmake/test.cmake")
