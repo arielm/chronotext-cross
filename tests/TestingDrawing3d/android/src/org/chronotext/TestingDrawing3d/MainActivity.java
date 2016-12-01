@@ -21,9 +21,13 @@ public class MainActivity extends Activity
   {
     super.onCreate(savedInstanceState);
 
+    GLView view = new GLView(this);
+    view.setProperties(new GLView.Properties().setEGLConfigChooser(8, 8, 8, 0, 24, 0));
+
     bridge = new CrossBridge(this);
-    bridge.setViewProperties(new GLView.Properties().setEGLConfigChooser(8, 8, 8, 0, 24, 0));
-    setContentView(bridge.getView());
+    bridge.bind(view);
+
+    setContentView(view);
   }
 
   @Override

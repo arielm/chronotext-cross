@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import org.chronotext.cross.CrossBridge;
+import org.chronotext.gl.GLView;
 
 public class MainActivity extends Activity
 {
@@ -20,8 +21,13 @@ public class MainActivity extends Activity
   {
     super.onCreate(savedInstanceState);
 
+    GLView view = new GLView(this);
+    view.setProperties(new GLView.Properties().setEGLConfigChooser(8, 8, 8, 0, 0, 0));
+
     bridge = new CrossBridge(this);
-    setContentView(bridge.getView());
+    bridge.bind(view);
+
+    setContentView(view);
   }
 
   @Override
