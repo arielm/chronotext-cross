@@ -5,7 +5,7 @@
 
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
-    GLViewController *viewController = [[GLViewController alloc] init];
+    GLViewController *viewController = [[[GLViewController alloc] init] autorelease];
     
     viewController.properties =
     @{
