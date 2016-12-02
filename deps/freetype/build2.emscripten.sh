@@ -2,12 +2,14 @@
 
 PLATFORM="emscripten"
 
-SRC_DIR="build/src"
+TREE_DIR="../../tree/freetype"
+SRC_DIR="$TREE_DIR/src"
 BUILD_DIR="build/$PLATFORM"
-INSTALL_DIR="dist/$PLATFORM"
+INSTALL_DIR="tmp/$PLATFORM"
 
 SRC_PATH="$(pwd)/$SRC_DIR"
 INSTALL_PATH="$(pwd)/$INSTALL_DIR"
+HARFBUZZ_PATH="$(pwd)/../../tree/harfbuzz/$PLATFORM"
 
 if [ ! -d "$SRC_PATH" ]; then
   echo "SOURCE NOT FOUND!"
@@ -23,7 +25,7 @@ cmake -H"$SRC_DIR" -B"$BUILD_DIR" \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
   -DWITH_ZLIB=ON -DWITH_BZip2=OFF -DWITH_PNG=OFF -DWITH_HarfBuzz=ON \
-  -DHARFBUZZ_INCLUDE_DIRS="$CROSS_PATH/deps/harfbuzz/dist/$PLATFORM/include" -DHARFBUZZ_LIBRARIES="$CROSS_PATH/deps/harfbuzz/dist/$PLATFORM/lib"
+  -DHARFBUZZ_INCLUDE_DIRS="$HARFBUZZ_PATH/include" -DHARFBUZZ_LIBRARIES="$HARFBUZZ_PATH/lib"
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"
@@ -32,7 +34,7 @@ fi
 
 # ---
 
-rm -rf "$INSTALL_PATH" # XXX: REQUIRED?
+rm -rf "$INSTALL_PATH"
 cmake --build "$BUILD_DIR"
 
 if [ $? != 0 ]; then
@@ -40,5 +42,9 @@ if [ $? != 0 ]; then
   exit -1
 fi
 
-cd "$INSTALL_PATH"
-ln -s "$SRC_PATH/include"
+rm -rf   "$TREE_DIR/$PLATFORM/lib"
+mkdir -p "$TREE_DIR/$PLATFORM/lib"
+mv "tmp/$PLATFORM/lib" "$TREE_DIR/$PLATFORM"
+
+cd "$TREE_DIR/$PLATFORM"
+ln -s "../src/include"

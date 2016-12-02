@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2.2)
 
 project(harfbuzz)
 
-set(FREETYPE_ROOT "$ENV{CROSS_PATH}/deps/freetype/dist/${PLATFORM}")
+set(FREETYPE_ROOT "$ENV{CROSS_PATH}/tree/freetype/${PLATFORM}")
 
 add_definitions(-DHB_NO_MT)
 add_definitions(-DHAVE_OT)

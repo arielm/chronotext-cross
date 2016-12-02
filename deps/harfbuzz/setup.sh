@@ -32,3 +32,10 @@ fi
 
 rm $ARCHIVE_ZIP
 mv $ARCHIVE_DIR src
+
+# ---
+
+cd src
+
+./autogen.sh
+./configure --with-glib=no

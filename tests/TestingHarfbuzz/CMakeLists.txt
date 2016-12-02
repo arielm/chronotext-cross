@@ -4,8 +4,8 @@ project(TestingHarfbuzz)
 
 set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
 set(GTEST_ROOT "$ENV{CROSS_PATH}/tree/gtest/${PLATFORM}")
-set(FREETYPE_ROOT "$ENV{CROSS_PATH}/deps/freetype/dist/${PLATFORM}")
-set(HARFBUZZ_ROOT "$ENV{CROSS_PATH}/deps/harfbuzz/dist/${PLATFORM}")
+set(FREETYPE_ROOT "$ENV{CROSS_PATH}/tree/freetype/${PLATFORM}")
+set(HARFBUZZ_ROOT "$ENV{CROSS_PATH}/tree/harfbuzz/${PLATFORM}")
 
 set(INCLUDE_DIRS
   "${BOOST_ROOT}/include"
