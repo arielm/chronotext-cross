@@ -13,9 +13,7 @@ namespace chr
     namespace android
     {
       /*
-       * FIXME: WILL NOT WORK ANYMORE, STARTING FROM ANDROID LOLLIPOP
-       *
-       * HINT: http://stackoverflow.com/questions/26722040/replacement-for-system-property-get-in-android-l-ndk
+       * XXX: DEPRECATED, STARTING FROM ANDROID LOLLIPOP
        */
       const string getProperty(const char *name)
       {
@@ -34,7 +32,19 @@ namespace chr
       
       LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
     }
-    
+
+    fs::path Manager::getDocumentsFolder()
+    {
+      auto documentsFolder = fs::path(chr::android::externalDataPath) / "Documents";
+
+      if (!boost::filesystem::exists(documentsFolder))
+      {
+        boost::filesystem::create_directory(documentsFolder);
+      }
+
+      return documentsFolder;
+    }
+
     // ---
     
     void Manager::updateInfo()

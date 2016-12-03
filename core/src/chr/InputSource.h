@@ -4,10 +4,7 @@
 
 #include <memory>
 
-#include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-
-namespace fs = boost::filesystem;
 
 namespace chr
 {

@@ -111,6 +111,16 @@ endif()
 
 # ---
 
+if (PLATFORM MATCHES osx)
+  set_source_files_properties(
+    "chr/osx/system/SystemManager.cpp"
+    PROPERTIES
+    COMPILE_FLAGS "-x objective-c++"
+  )
+endif()
+
+# ---
+
 if (PLATFORM MATCHES mxe)
   add_definitions(-DUNICODE -D_UNICODE)
   add_definitions(-DWIN32)

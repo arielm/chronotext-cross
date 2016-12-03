@@ -3,6 +3,10 @@
 #include <map>
 #include <string>
 
+#include <boost/filesystem/path.hpp>
+
+namespace fs = boost::filesystem;
+
 namespace chr
 {
   enum

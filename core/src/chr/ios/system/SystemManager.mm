@@ -31,6 +31,12 @@ namespace chr
       LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
     }
 
+    fs::path Manager::getDocumentsFolder()
+    {
+      NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      return fs::path([path cStringUsingEncoding:NSUTF8StringEncoding]);
+    }
+
     // ---
 
     void Manager::updateInfo()

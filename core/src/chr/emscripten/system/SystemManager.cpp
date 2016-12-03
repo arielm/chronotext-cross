@@ -16,6 +16,11 @@ namespace chr
       LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
     }
 
+    fs::path Manager::getDocumentsFolder()
+    {
+      return "";
+    }
+
     // ---
 
     void Manager::updateInfo()

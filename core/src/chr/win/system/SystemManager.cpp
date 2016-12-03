@@ -1,7 +1,8 @@
 #include "chr/win/system/SystemManager.h"
 #include "chr/cross/Context.h"
 
-#include <boost/algorithm/string.hpp>
+#include <windows.h>
+#include <shlobj.h>
 
 using namespace std;
 
@@ -14,6 +15,13 @@ namespace chr
       updateInfo();
 
       LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
+    }
+
+    fs::path Manager::getDocumentsFolder()
+    {
+      char buffer[MAX_PATH];
+      SHGetFolderPathA(0, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, buffer);
+      return fs::path(string(buffer));
     }
 
     // ---
