@@ -10,7 +10,7 @@
     viewController.properties =
     @{
         GLViewControllerRenderingAPIKey: @(kEAGLRenderingAPIOpenGLES2),
-        GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskLandscape),
+        GLViewControllerInterfaceOrientationMaskKey: @(UIInterfaceOrientationMaskPortrait),
         GLViewControllerDepthFormatKey: @(GLKViewDrawableDepthFormatNone),
     };
 
