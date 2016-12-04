@@ -43,7 +43,7 @@ void Sketch::draw()
 
 void Sketch::writeFile(const fs::path &filePath)
 {
-  int fd = open(filePath.string().data(), O_RDWR | O_CREAT | O_TRUNC);
+  int fd = open(filePath.string().data(), O_RDWR | O_CREAT | O_TRUNC, 0666);
 
   if (fd > 0)
   {
@@ -53,8 +53,8 @@ void Sketch::writeFile(const fs::path &filePath)
     // ---
 
     string text = "Which way to the station?";
-    codedOutput->WriteVarint32(text.size());
-    codedOutput->WriteRaw(text.data(), text.size());
+    codedOutput->WriteVarint32((uint32)text.size());
+    codedOutput->WriteRaw(text.data(), (uint32)text.size());
 
     codedOutput->WriteLittleEndian32(123456789);
     codedOutput->WriteLittleEndian32(encodeFloat(123.456f));

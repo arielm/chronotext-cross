@@ -14,7 +14,6 @@
 		A80E1D921DB3F61200F078D3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A80E1D911DB3F61200F078D3 /* UIKit.framework */; };
 		A80E1D961DB4092F00F078D3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A80E1D951DB4092F00F078D3 /* Default-568h@2x.png */; };
 		A80E1D991DB40ADF00F078D3 /* Application.mm in Sources */ = {isa = PBXBuildFile; fileRef = A80E1D971DB40ADF00F078D3 /* Application.mm */; };
-		A87A99C31DBBCB1400865F1E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A87A99C21DBBCB1400865F1E /* Main.storyboard */; };
 		A88397FF1DB3CF290008844C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A88397FE1DB3CF290008844C /* Assets.xcassets */; };
 		A883980C1DB3D00D0008844C /* DebugConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A88398091DB3D00D0008844C /* DebugConfig.xcconfig */; };
 		A883980D1DB3D00D0008844C /* ReleaseConfig.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A883980A1DB3D00D0008844C /* ReleaseConfig.xcconfig */; };
@@ -31,7 +30,6 @@
 		A80E1D951DB4092F00F078D3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../../res/Default-568h@2x.png"; sourceTree = "<group>"; };
 		A80E1D971DB40ADF00F078D3 /* Application.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Application.mm; path = ../../src/ios/Application.mm; sourceTree = "<group>"; };
 		A80E1D981DB40ADF00F078D3 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Application.h; path = ../../src/ios/Application.h; sourceTree = "<group>"; };
-		A87A99C21DBBCB1400865F1E /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A88397EF1DB3CF290008844C /* TestingIO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestingIO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A88397FE1DB3CF290008844C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A88398031DB3CF290008844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,7 +76,6 @@
 			children = (
 				A80E1D981DB40ADF00F078D3 /* Application.h */,
 				A80E1D971DB40ADF00F078D3 /* Application.mm */,
-				A87A99C21DBBCB1400865F1E /* Main.storyboard */,
 				A883980B1DB3D00D0008844C /* Config.xcconfig */,
 				A88398091DB3D00D0008844C /* DebugConfig.xcconfig */,
 				A883980A1DB3D00D0008844C /* ReleaseConfig.xcconfig */,
@@ -160,7 +157,6 @@
 				A883980C1DB3D00D0008844C /* DebugConfig.xcconfig in Resources */,
 				A883980D1DB3D00D0008844C /* ReleaseConfig.xcconfig in Resources */,
 				A88397FF1DB3CF290008844C /* Assets.xcassets in Resources */,
-				A87A99C31DBBCB1400865F1E /* Main.storyboard in Resources */,
 				A80E1D961DB4092F00F078D3 /* Default-568h@2x.png in Resources */,
 				A883980E1DB3D00D0008844C /* Config.xcconfig in Resources */,
 			);
