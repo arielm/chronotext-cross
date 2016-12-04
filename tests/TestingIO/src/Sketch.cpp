@@ -43,7 +43,7 @@ void Sketch::draw()
 
 void Sketch::writeFile(const fs::path &filePath)
 {
-  int fd = open(filePath.string().data(), O_RDWR | O_CREAT | O_TRUNC, 0666);
+  int fd = open(filePath.string().data(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
 
   if (fd > 0)
   {
