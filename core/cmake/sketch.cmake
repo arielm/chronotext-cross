@@ -5,6 +5,7 @@ set(GLM_ROOT "$ENV{CROSS_PATH}/tree/glm")
 set(JPEG_ROOT "$ENV{CROSS_PATH}/tree/libjpeg-turbo")
 set(PNG_ROOT "$ENV{CROSS_PATH}/tree/libpng/${PLATFORM}")
 set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/tree/libtess2/${PLATFORM}")
+set(PROTOBUF_ROOT "$ENV{CROSS_PATH}/tree/protobuf/${PLATFORM}")
 
 # ---
 
@@ -45,6 +46,9 @@ set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
 
 set(LIBTESS2_INCLUDE_DIR "${LIBTESS2_ROOT}/include")
 set(LIBTESS2_LIBRARY "${LIBTESS2_ROOT}/lib/libtess2.a")
+
+list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
+list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
 
 list(APPEND INCLUDE_DIRS
   ${JPEG_INCLUDE_DIR}

@@ -1,14 +1,12 @@
 #include "Sketch.h"
 
-#include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/io/zero_copy_stream_impl.h>
-
-#include <fcntl.h> // FOR MINGW + O_RDONLY
+#include "chr/io/BinaryInputStream.h"
+#include "chr/io/BinaryOutputStream.h"
 
 using namespace std;
 using namespace chr;
-using namespace gl;
-using namespace google::protobuf;
+using namespace io;
+using namespace google;
 
 void Sketch::setup()
 {
@@ -41,67 +39,29 @@ void Sketch::draw()
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
+static uint32_t encodeFloat(float value)
+{
+  union {float f; uint32_t i;};
+  f = value;
+  return i;
+}
+
 void Sketch::writeFile(const fs::path &filePath)
 {
-  int fd = open(filePath.string().data(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+  BinaryOutputStream outputStream(filePath);
 
-  if (fd > 0)
-  {
-    auto rawOutput = new io::FileOutputStream(fd);
-    auto codedOutput = new io::CodedOutputStream(rawOutput);
-
-    // ---
-
-    string text = "Which way to the station?";
-    codedOutput->WriteVarint32((uint32)text.size());
-    codedOutput->WriteRaw(text.data(), (uint32)text.size());
-
-    codedOutput->WriteLittleEndian32(123456789);
-    codedOutput->WriteLittleEndian32(encodeFloat(123.456f));
-
-    // ---
-
-    delete codedOutput;
-    delete rawOutput;
-    close(fd);
-  }
+  outputStream.writeString("Which way to the station?");
+  outputStream.write<uint32_t>(123456789);
+  outputStream.write<float>(123.456f);
 }
 
 void Sketch::readFile(const fs::path &filePath)
 {
-  int fd = open(filePath.string().data(), O_RDONLY);
+  BinaryInputStream inputStream(InputSource::file(filePath));
 
-  if (fd > 0)
-  {
-    auto rawInput = new io::FileInputStream(fd);
-    auto codedInput = new io::CodedInputStream(rawInput);
+  string text = inputStream.readString();
+  auto i = inputStream.read<uint32_t>();
+  auto f = inputStream.read<float>();
 
-    // ---
-
-    uint32 size;
-    codedInput->ReadVarint32(&size);
-
-    std::string text;
-    text.resize(size);
-
-    codedInput->ReadRaw(&text[0], size);
-
-    //
-
-    uint32_t i;
-    codedInput->ReadLittleEndian32(&i);
-
-    float f;
-    codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&f));
-
-    //
-
-    success = (text == "Which way to the station?") && (i = 123456789) && (f == 123.456f);
-
-    // ---
-
-    delete codedInput;
-    delete rawInput;
-    close(fd);
-  }
+  success = (text == "Which way to the station?") && (i = 123456789) && (f == 123.456f);
 }

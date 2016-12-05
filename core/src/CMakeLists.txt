@@ -11,6 +11,7 @@ set(GLM_ROOT "${TREE}/glm")
 set(JPEG_ROOT "${TREE}/libjpeg-turbo")
 set(PNG_ROOT "${TREE}/libpng/${PLATFORM}")
 set(LIBTESS2_ROOT "${TREE}/libtess2/${PLATFORM}")
+set(PROTOBUF_ROOT "${TREE}/protobuf/${PLATFORM}")
 
 # ---
 
@@ -64,6 +65,8 @@ list(APPEND SRC_FILES
   "chr/math/Rect.cpp"
   "chr/math/Box.cpp"
   "chr/image/Utils.cpp"
+  "chr/io/BinaryInputStream.cpp"
+  "chr/io/BinaryOutputStream.cpp"
 )
 
 if (PLATFORM MATCHES osx)
@@ -214,6 +217,9 @@ list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
 
 list(APPEND INCLUDE_DIRS "${LIBTESS2_ROOT}/include")
 list(APPEND LIBRARIES "${LIBTESS2_ROOT}/lib/libtess2.a")
+
+list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
+list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
 
 # ---
 
