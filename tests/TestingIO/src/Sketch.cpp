@@ -39,13 +39,6 @@ void Sketch::draw()
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-static uint32_t encodeFloat(float value)
-{
-  union {float f; uint32_t i;};
-  f = value;
-  return i;
-}
-
 void Sketch::writeFile(const fs::path &filePath)
 {
   BinaryOutputStream outputStream(filePath);

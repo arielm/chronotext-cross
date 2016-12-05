@@ -30,8 +30,8 @@ namespace chr
 
     protected:
       google::protobuf::io::CodedOutputStream *codedOutput = nullptr;
-      google::protobuf::io::FileOutputStream *rawOutput = nullptr;
-      int fd = 0;
+      google::protobuf::io::OstreamOutputStream *rawOutput = nullptr;
+      fs::ofstream *out = nullptr;
 
       static uint32_t encodeFloat(float value)
       {
