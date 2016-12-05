@@ -104,6 +104,38 @@ namespace chr
     }
 
     template<>
+    uint64_t BinaryInputStream::read()
+    {
+      uint64_t result;
+
+      if (good())
+      {
+        if (!codedInput->ReadLittleEndian64(&result))
+        {
+          fail();
+        }
+      }
+
+      return result;
+    }
+
+    template<>
+    int64_t BinaryInputStream::read()
+    {
+      int64_t result;
+
+      if (good())
+      {
+        if (!codedInput->ReadLittleEndian64(reinterpret_cast<uint64_t*>(&result)))
+        {
+          fail();
+        }
+      }
+
+      return result;
+    }
+
+    template<>
     float BinaryInputStream::read()
     {
       float result;
@@ -111,6 +143,22 @@ namespace chr
       if (good())
       {
         if (!codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result)))
+        {
+          fail();
+        }
+      }
+
+      return result;
+    }
+
+    template<>
+    double BinaryInputStream::read()
+    {
+      double result;
+
+      if (good())
+      {
+        if (!codedInput->ReadLittleEndian64(reinterpret_cast<uint64_t*>(&result)))
         {
           fail();
         }
@@ -173,6 +221,21 @@ namespace chr
       if (good())
       {
         if (!codedInput->ReadVarint32(&result))
+        {
+          fail();
+        }
+      }
+
+      return result;
+    }
+
+    uint64_t BinaryInputStream::readVarint64()
+    {
+      uint64_t result = 0;
+
+      if (good())
+      {
+        if (!codedInput->ReadVarint64(&result))
         {
           fail();
         }

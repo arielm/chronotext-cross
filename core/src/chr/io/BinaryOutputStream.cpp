@@ -50,21 +50,32 @@ namespace chr
       }
     }
 
-//    template<>
-//    int32_t BinaryOutputStream::read()
-//    {
-//      int32_t result;
-//
-//      if (good())
-//      {
-//        if (!codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result)))
-//        {
-//          fail();
-//        }
-//      }
-//
-//      return result;
-//    }
+    template<>
+    void BinaryOutputStream::write(int32_t value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian32(value);
+      }
+    }
+
+    template<>
+    void BinaryOutputStream::write(uint64_t value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian64(value);
+      }
+    }
+
+    template<>
+    void BinaryOutputStream::write(int64_t value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian64(value);
+      }
+    }
 
     template<>
     void BinaryOutputStream::write(float value)
@@ -72,6 +83,15 @@ namespace chr
       if (good())
       {
         codedOutput->WriteLittleEndian32(encodeFloat(value));
+      }
+    }
+
+    template<>
+    void BinaryOutputStream::write(double value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian64(encodeDouble(value));
       }
     }
 
@@ -127,6 +147,14 @@ namespace chr
       if (good())
       {
         codedOutput->WriteVarint32(value);
+      }
+    }
+
+    void BinaryOutputStream::writeVarint64(uint64_t value)
+    {
+      if (good())
+      {
+        codedOutput->WriteVarint64(value);
       }
     }
 

@@ -21,6 +21,8 @@ namespace chr
       T read();
 
       uint32_t readVarint32();
+      uint64_t readVarint64();
+
       void readBytes(uint8_t *data, size_t size);
       std::string readString(size_t size);
       std::string readString();
@@ -29,9 +31,9 @@ namespace chr
       bool good() const;
 
     protected:
+      std::shared_ptr<MemoryBuffer> memoryBuffer;
       google::protobuf::io::CodedInputStream *codedInput = nullptr;
       google::protobuf::io::ZeroCopyInputStream *rawInput = nullptr;
-      std::shared_ptr<MemoryBuffer> memoryBuffer;
       int fd = 0;
 
       bool failed = false;
