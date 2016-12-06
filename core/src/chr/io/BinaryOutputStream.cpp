@@ -95,52 +95,38 @@ namespace chr
       }
     }
 
-//    template<>
-//    glm::vec2 BinaryOutputStream::read()
-//    {
-//      glm::vec2 result;
-//
-//      if (good())
-//      {
-//        if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.x)))
-//        {
-//          if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.y)))
-//          {
-//            goto exit; // RVO-FRIENDLY
-//          }
-//        }
-//
-//        fail();
-//      }
-//
-//      exit:
-//      return result;
-//    }
+    template<>
+    void BinaryOutputStream::write(glm::vec2 value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian32(encodeFloat(value.x));
 
-//    template<>
-//    glm::vec3 BinaryOutputStream::read()
-//    {
-//      glm::vec3 result;
-//
-//      if (good())
-//      {
-//        if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.x)))
-//        {
-//          if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.y)))
-//          {
-//            if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.z)))
-//            {
-//              goto exit; // RVO-FRIENDLY
-//            }
-//          }
-//        }
-//
-//        fail();
-//      }
-//
-//      exit:
-//      return result;
-//    }
+        if (good())
+        {
+          codedOutput->WriteLittleEndian32(encodeFloat(value.y));
+        }
+      }
+    }
+
+    template<>
+    void BinaryOutputStream::write(glm::vec3 value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian32(encodeFloat(value.x));
+
+        if (good())
+        {
+          codedOutput->WriteLittleEndian32(encodeFloat(value.y));
+
+          if (good())
+          {
+            codedOutput->WriteLittleEndian32(encodeFloat(value.z));
+          }
+        }
+      }
+    }
 
     void BinaryOutputStream::writeVarint32(uint32_t value)
     {
@@ -158,31 +144,21 @@ namespace chr
       }
     }
 
-//    void BinaryOutputStream::readBytes(uint8_t *data, size_t size)
-//    {
-//      if (good())
-//      {
-//        if (!codedInput->ReadRaw(data, size))
-//        {
-//          fail();
-//        }
-//      }
-//    }
+    void BinaryOutputStream::writeBytes(uint8_t *data, size_t size)
+    {
+      codedOutput->WriteRaw(data, size);
+    }
 
-//    string BinaryOutputStream::readString(size_t size)
-//    {
-//      string result;
-//
-//      if (good())
-//      {
-//        if (!codedInput->ReadString(&result, size))
-//        {
-//          fail();
-//        }
-//      }
-//
-//      return result;
-//    }
+    void BinaryOutputStream::writeString(const string &value, size_t size)
+    {
+      if (!value.empty())
+      {
+        if (good())
+        {
+          codedOutput->WriteRaw(value.data(), size);
+        }
+      }
+    }
 
     void BinaryOutputStream::writeString(const string &value)
     {

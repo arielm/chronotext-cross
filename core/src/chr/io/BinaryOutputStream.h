@@ -24,8 +24,8 @@ namespace chr
       void writeVarint32(uint32_t value);
       void writeVarint64(uint64_t value);
 
-//      void writeBytes(uint8_t *data, size_t size);
-//      void writeString(const std::string &value, size_t size);
+      void writeBytes(uint8_t *data, size_t size);
+      void writeString(const std::string &value, size_t size);
       void writeString(const std::string &value);
 
       bool good() const;
