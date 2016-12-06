@@ -8,9 +8,11 @@ using namespace chr;
 using namespace io;
 using namespace google;
 
+static constexpr int DATA_SIZE = 100;
+
 void Sketch::setup()
 {
-  data = make_unique<uint8_t[]>(100);
+  data = make_unique<uint8_t[]>(DATA_SIZE);
   populateData();
 
   auto documentsFolder = systemManager().getDocumentsFolder();
@@ -53,7 +55,7 @@ void Sketch::writeFile(const fs::path &filePath)
   outputStream.write(123.456f);
   outputStream.write(M_PI);
   outputStream.write(glm::vec3(0.5f, -1.0f, 0));
-  outputStream.writeBytes(data.get(), 100);
+  outputStream.writeBytes(data.get(), DATA_SIZE);
 }
 
 void Sketch::readFile(const fs::path &filePath)
@@ -68,8 +70,8 @@ void Sketch::readFile(const fs::path &filePath)
   auto f2 = inputStream.read<double>();
   auto v1 = inputStream.read<glm::vec3>();
 
-  uint8_t d1[100];
-  inputStream.readBytes(&d1[0], 100);
+  uint8_t d1[DATA_SIZE];
+  inputStream.readBytes(d1, DATA_SIZE);
 
   success = (s1 == "Which way to the station?") &&
     (s2 == "XMEN4") &&
@@ -78,12 +80,12 @@ void Sketch::readFile(const fs::path &filePath)
     (f1 == 123.456f) &&
     (f2 == M_PI) &&
     (v1 == glm::vec3(0.5f, -1.0f, 0)) &&
-    checkData(&d1[0]);
+    checkData(d1);
 }
 
 void Sketch::populateData()
 {
-  for (int i = 0; i < 100; i++)
+  for (int i = 0; i < DATA_SIZE; i++)
   {
     data[i] = i;
   }
@@ -91,7 +93,7 @@ void Sketch::populateData()
 
 bool Sketch::checkData(uint8_t *d)
 {
-  for (int i = 0; i < 100; i++)
+  for (int i = 0; i < DATA_SIZE; i++)
   {
     if (*d++ != data[i])
     {
