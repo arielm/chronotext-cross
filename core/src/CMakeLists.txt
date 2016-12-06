@@ -124,11 +124,6 @@ endif()
 
 # ---
 
-if (PLATFORM MATCHES mxe)
-  add_definitions(-DUNICODE -D_UNICODE)
-  add_definitions(-DWIN32)
-endif()
-
 if (PLATFORM MATCHES osx)
   set(GLFW_SRC "${TREE}/glfw/src")
 

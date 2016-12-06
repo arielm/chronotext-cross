@@ -5,6 +5,9 @@ endif()
 
 # ---
 
+add_definitions(-DUNICODE -D_UNICODE)
+add_definitions(-DWIN32 -D_WIN32)
+
 set(MXE_TARGET i686-w64-mingw32.static
   CACHE STRING "mxe_target"
 )
