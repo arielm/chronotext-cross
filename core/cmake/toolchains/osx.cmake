@@ -4,7 +4,7 @@ set(OSX_ARCHS
   CACHE STRING "osx_archs"
 )
 
-set(OSX_DEPLOYMENT_TARGET 10.7
+set(OSX_DEPLOYMENT_TARGET 10.8
   CACHE STRING "osx_deployment_target"
 )
 
