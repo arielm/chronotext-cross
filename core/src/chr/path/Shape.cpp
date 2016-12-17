@@ -43,5 +43,11 @@ namespace chr
       paths.emplace_back();
       return paths.back();
     }
+
+    Shape& Shape::addPath(const Path &path)
+    {
+      paths.push_back(path);
+      return *this;
+    }
   }
 }

@@ -28,6 +28,7 @@ namespace chr
       const std::vector<Path>& getPaths() const;
 
       Path& addPath();
+      Shape& addPath(const Path &path);
 
       inline Shape& addPath(std::vector<glm::vec2> &&points)
       {
