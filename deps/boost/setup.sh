@@ -1,8 +1,8 @@
 #!/bin/sh
 
-ARCHIVE_ZIP="master.zip"
-ARCHIVE_SRC="https://github.com/arielm/android-vendor-boost-1-58-0/archive/${ARCHIVE_ZIP}"
-ARCHIVE_DIR="android-vendor-boost-1-58-0-master"
+ARCHIVE_ZIP="1.58.zip"
+ARCHIVE_SRC="https://github.com/arielm/android-vendor-boost/archive/${ARCHIVE_ZIP}"
+ARCHIVE_DIR="android-vendor-boost-1.58"
 
 # ---
 
