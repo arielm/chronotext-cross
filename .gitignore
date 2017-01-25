@@ -33,5 +33,13 @@ install_manifest.txt
 xcuserdata/
 build/
 
-# JetBrains
+# Android Studio
 .idea/
+.gradle/
+build/
+*.iml
+
+# CLION
+.idea/
+cmake-build-debug
+cmake-build-release
