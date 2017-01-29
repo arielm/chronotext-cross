@@ -23,7 +23,8 @@ cmake -H"$SRC_DIR/cmake" -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
-  -DZLIB=ON -DPTHREADS=OFF
+  -DPTHREADS=OFF \
+  -DHAVE_ZLIB=ON -DZLIB_INCLUDE_DIRECTORIES="$HOME/.emscripten_cache/ports-builds/zlib"
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"

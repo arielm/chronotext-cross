@@ -23,7 +23,7 @@ cmake -H"$SRC_DIR/cmake" -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
-  -DZLIB=ON \
+  -DHAVE_ZLIB=ON -DZLIB_INCLUDE_DIRECTORIES="/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include" \
   -DCMAKE_CXX_FLAGS=-fembed-bitcode
 
 if [ $? != 0 ]; then

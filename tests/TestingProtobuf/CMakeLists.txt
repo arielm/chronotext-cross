@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.2.2)
 
 project(TestingProtobuf)
 
+add_definitions(-DHAVE_ZLIB)
+
 set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
 set(GTEST_ROOT "$ENV{CROSS_PATH}/tree/gtest/${PLATFORM}")
 set(PROTOBUF_ROOT "$ENV{CROSS_PATH}/tree/protobuf/${PLATFORM}")
