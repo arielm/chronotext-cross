@@ -18,7 +18,7 @@ namespace chr
 
   protected:
     size_t _size = 0;
-    const void *_data = nullptr;
+    void *_data = nullptr;
     bool locked = false;
 
   #if defined(CHR_FS_APK)

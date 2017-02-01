@@ -2,7 +2,7 @@
 
 #if defined(CHR_FS_APK)
   #include "android/JNI.h"
-#elif defined(FS_JS_EMBED) || defined(FS_JS_PRELOAD)
+#elif defined(CHR_FS_JS_EMBED) || defined(CHR_FS_JS_PRELOAD)
   #include <sys/mman.h>
   #include <sys/stat.h>
   #include <unistd.h>
@@ -59,8 +59,9 @@ namespace chr
         locked = true;
         return true;
       }
-    #elif defined(FS_JS_EMBED) || defined(FS_JS_PRELOAD)
-      auto fd = open(relativePath.c_str(), O_RDONLY);
+    #elif defined(CHR_FS_JS_EMBED) || defined(CHR_FS_JS_PRELOAD)
+      auto basePath = fs::path("res") / relativePath;
+      auto fd = open(basePath.c_str(), O_RDONLY);
 
       if (fd != -1)
       {
@@ -69,7 +70,7 @@ namespace chr
         if ((fstat(fd, &stats) != -1) && (stats.st_size > 0))
         {
           _size = stats.st_size;
-          _data = mmap(nullptr, size, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
+          _data = mmap(nullptr, _size, PROT_READ, MAP_FILE | MAP_PRIVATE, fd, 0);
           
           close(fd);
           
@@ -96,14 +97,14 @@ namespace chr
         AAsset_close(asset);
         asset = nullptr;
       }
-    #elif defined(FS_JS_EMBED) || defined(FS_JS_PRELOAD)
+    #elif defined(CHR_FS_JS_EMBED) || defined(CHR_FS_JS_PRELOAD)
       if (_data && _size)
       {
         munmap(_data, _size);
       }
     #endif
 
-    #if defined(CHR_FS_APK) || defined(FS_JS_EMBED) || defined(FS_JS_PRELOAD)
+    #if defined(CHR_FS_APK) || defined(CHR_FS_JS_EMBED) || defined(CHR_FS_JS_PRELOAD)
       _size = 0;
       _data = nullptr;
 

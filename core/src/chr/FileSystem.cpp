@@ -7,7 +7,7 @@ namespace chr
 {
   bool hasFileResources()
   {
-    #if defined(CHR_FS_APK) || defined(CHR_FS_RC)
+    #if defined(CHR_FS_APK) || defined(CHR_FS_RC) || defined(CHR_FS_JS_EMBED) || defined(CHR_FS_JS_PRELOAD)
       return false;
     #else
       return true;
@@ -16,7 +16,7 @@ namespace chr
 
   bool hasMemoryResources()
   {
-    #if defined(CHR_FS_APK) || defined(CHR_FS_RC) || defined(FS_JS_EMBED) || defined(FS_JS_PRELOAD)
+    #if defined(CHR_FS_APK) || defined(CHR_FS_RC) || defined(CHR_FS_JS_EMBED) || defined(CHR_FS_JS_PRELOAD)
       return true;
     #else
       return false;
@@ -60,7 +60,7 @@ namespace chr
 
   shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath)
   {
-    #if !defined(CHR_FS_APK) && !defined(CHR_FS_RC) && !defined(FS_JS_EMBED) && !defined(FS_JS_PRELOAD)
+    #if !defined(CHR_FS_APK) && !defined(CHR_FS_RC) && !defined(CHR_FS_JS_EMBED) && !defined(CHR_FS_JS_PRELOAD)
       return nullptr;
     #endif
 
