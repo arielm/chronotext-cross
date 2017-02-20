@@ -10,7 +10,6 @@ namespace chr
   static constexpr int _WARNING = -1;
   static constexpr int _INFO    =  0;
   static constexpr int _DEBUG   =  1;
-  static constexpr int _VERBOSE =  2;
 
   class Log
   {
@@ -30,4 +29,9 @@ namespace chr
 #define LOGE chr::Log(chr::_ERROR).stream()
 #define LOGW chr::Log(chr::_WARNING).stream()
 #define LOGI chr::Log(chr::_INFO).stream()
-#define LOGD chr::Log(chr::_DEBUG).stream()
+
+#if !defined(NDEBUG)
+  #define LOGD chr::Log(chr::_DEBUG).stream()
+#else
+  #define LOGD false && chr::Log(chr::_DEBUG).stream()
+#endif
