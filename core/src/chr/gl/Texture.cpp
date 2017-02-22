@@ -45,10 +45,14 @@ namespace chr
     id(other.id),
     element(other.element),
     format(other.format),
+    textureId(other.textureId),
     size(other.size),
     innerSize(other.innerSize),
     coords1(other.coords1),
-    coords2(other.coords2)
+    coords2(other.coords2),
+    requestType(other.requestType),
+    request(other.request),
+    maskedRequest(other.maskedRequest)
     {
       if (element)
       {
@@ -63,10 +67,14 @@ namespace chr
         id = other.id;
         element = other.element;
         format = other.format;
+        textureId = other.textureId;
         size = other.size;
         innerSize = other.innerSize;
         coords1 = other.coords1;
         coords2 = other.coords2;
+        requestType = other.requestType;
+        request = other.request;
+        maskedRequest = other.maskedRequest;
 
         if (element)
         {
