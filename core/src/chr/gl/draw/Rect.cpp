@@ -254,8 +254,8 @@ namespace chr
       {
         auto scaledSize = texture.innerSize * textureScale;
 
-        glm::vec2 coords1 = (bounds.x1y1() - textureOffset) / scaledSize;
-        glm::vec2 coords2 = (bounds.x2y2() - textureOffset) / scaledSize;
+        glm::vec2 coords1 = -textureOffset / scaledSize;
+        glm::vec2 coords2 = (bounds.size() - textureOffset) / scaledSize;
 
         return make_pair(coords1, coords2);
       }
