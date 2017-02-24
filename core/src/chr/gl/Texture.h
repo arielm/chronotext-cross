@@ -165,6 +165,11 @@ namespace chr
 
       ~Texture();
 
+      bool operator<(const Texture &rhs) const
+      {
+        return id < rhs.id;
+      }
+
       int id = -1;
       texture::Element *element = nullptr;
 
