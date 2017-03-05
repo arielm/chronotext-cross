@@ -34,7 +34,7 @@ namespace chr
 
       protected:
         GLenum frontFace = CCW;
-        glm::vec2 textureOffset;
+        glm::vec2 textureOffset = { 0, 0 };
         glm::vec2 textureScale = { 1, 1 };
         glm::vec4 color = { 1, 1, 1, 1 };
         math::Rectf bounds;
