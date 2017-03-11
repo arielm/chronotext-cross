@@ -126,20 +126,29 @@ endif()
 
 if (PLATFORM MATCHES osx)
   set(GLFW_SRC "${TREE}/glfw/src")
+  set(NFD_SRC "nfd")
 
   list(APPEND INCLUDE_DIRS
     "${GLFW_ROOT}/include"
     "${GLFW_SRC}/deps"
+    "${NFD_SRC}"
   )
 
-  list(APPEND SRC_FILES "${GLFW_SRC}/deps/glad.c")
+  list(APPEND SRC_FILES
+    "${GLFW_SRC}/deps/glad.c"
+    "${NFD_SRC}/nfd_common.c"
+    "${NFD_SRC}/nfd_cocoa.m"
+  )
+
   list(APPEND LIBRARIES "${GLFW_ROOT}/lib/libglfw3.a")
 
 elseif (PLATFORM MATCHES mxe)
   set(GLLOAD_SRC "${GLLOAD_ROOT}/source")
+  set(NFD_SRC "nfd")
 
   list(APPEND INCLUDE_DIRS
     "${GLLOAD_ROOT}/include"
+    "${NFD_SRC}"
   )
 
   list(APPEND SRC_FILES
@@ -147,6 +156,8 @@ elseif (PLATFORM MATCHES mxe)
     "${GLLOAD_SRC}/wgl_load.c"
     "${GLLOAD_SRC}/gl_load_cpp.cpp"
     "${GLLOAD_SRC}/wgl_load_cpp.cpp"
+    "${NFD_SRC}/nfd_common.c"
+    "${NFD_SRC}/nfd_win.cpp"
   )
 endif()
 

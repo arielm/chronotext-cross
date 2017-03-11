@@ -9,4 +9,6 @@ public:
 
   void setup() final;
   void draw() final;
+
+  void mousePressed(int button, float x, float y) final;
 };
