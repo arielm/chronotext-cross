@@ -191,7 +191,7 @@ elseif (PLATFORM MATCHES emscripten)
 
     configure_file("${CROSS_ROOT}/cmake/emscripten/template.html.in" template.html)
     set(CMAKE_EXECUTABLE_SUFFIX .html)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 --emrun --shell-file template.html")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 --emrun --shell-file template.html --bind")
 
     if (RESOURCE_COUNT)
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file ../../res")
