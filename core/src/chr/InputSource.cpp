@@ -1,5 +1,7 @@
 #include "chr/InputSource.h"
+#include "chr/MemoryBuffer.h"
 #include "chr/FileSystem.h"
+#include "chr/utils/Utils.h"
 
 using namespace std;
 
@@ -13,6 +15,11 @@ namespace chr
   bool InputSource::isFile() const
   {
     return (type == TYPE_FILE);
+  }
+
+  bool InputSource::isBuffer() const
+  {
+    return (type == TYPE_BUFFER);
   }
 
   fs::path InputSource::getFilePath() const
@@ -40,6 +47,16 @@ namespace chr
     return uri;
   }
 
+  const char* InputSource::getData() const
+  {
+    return data;
+  }
+
+  size_t InputSource::getDataSize() const
+  {
+    return dataSize;
+  }
+
   shared_ptr<istream> InputSource::getStream() const
   {
     switch (type)
@@ -51,7 +68,9 @@ namespace chr
       }
 
       case TYPE_RESOURCE:
-        return getResourceStream(relativePath);
+        return make_shared<imemstream>(data, dataSize);
+
+      case TYPE_BUFFER:
 
       default:
         return nullptr;
@@ -76,6 +95,18 @@ namespace chr
     inputSource.type = TYPE_FILE;
     inputSource.filePath = filePath;
     inputSource.uri = "file://" + filePath.string();
+
+    return inputSource;
+  }
+
+  InputSource InputSource::buffer(const char *data, size_t size)
+  {
+    InputSource inputSource;
+
+    inputSource.type = TYPE_BUFFER;
+    inputSource.data = data;
+    inputSource.dataSize = size;
+    inputSource.uri = "mem://" + utils::toString((uint64_t)data);
 
     return inputSource;
   }
