@@ -22,6 +22,7 @@ list(APPEND INCLUDE_DIRS
 list(APPEND SRC_FILES
   "chr/Log.cpp"
   "chr/InputSource.cpp"
+  "chr/OutputTarget.cpp"
   "chr/FileSystem.cpp"
   "chr/ResourceBuffer.cpp"
   "chr/cross/CrossSketch.cpp"

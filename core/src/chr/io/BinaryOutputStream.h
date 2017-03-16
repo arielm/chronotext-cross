@@ -12,8 +12,7 @@ namespace chr
     class BinaryOutputStream
     {
     public:
-      BinaryOutputStream() = default;
-      BinaryOutputStream(const fs::path &filePath);
+      BinaryOutputStream(OutputTarget &outputTarget);
 
       ~BinaryOutputStream();
       void close();
@@ -31,9 +30,10 @@ namespace chr
       bool good() const;
 
     protected:
+      OutputTarget &outputTarget;
       google::protobuf::io::CodedOutputStream *codedOutput = nullptr;
       google::protobuf::io::OstreamOutputStream *rawOutput = nullptr;
-      fs::ofstream *fileStream = nullptr;
+      std::shared_ptr<std::ostream> stream;
 
       static uint32_t encodeFloat(float value)
       {

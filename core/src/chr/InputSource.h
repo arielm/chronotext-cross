@@ -38,7 +38,7 @@ namespace chr
     static InputSource buffer(const void *data, size_t size);
 
   protected:
-    Type type;
+    Type type = TYPE_UNDEFINED;
     fs::path filePath;
     fs::path relativePath;
     std::string uri;

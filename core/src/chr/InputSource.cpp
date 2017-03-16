@@ -1,6 +1,5 @@
 #include "chr/InputSource.h"
 #include "chr/ResourceBuffer.h"
-#include "chr/FileSystem.h"
 #include "chr/utils/Utils.h"
 
 using namespace std;
@@ -63,7 +62,7 @@ namespace chr
     {
       case TYPE_FILE:
       {
-        fs::ifstream *tmp = new fs::ifstream(filePath, fs::ifstream::binary);
+        auto *tmp = new fs::ifstream(filePath, fs::ifstream::binary);
         return shared_ptr<istream>(tmp);
       }
 

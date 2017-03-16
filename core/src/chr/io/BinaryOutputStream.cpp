@@ -2,6 +2,7 @@
 #include "chr/glm.h"
 
 #include <fcntl.h> // FOR MINGW
+#include <sstream>
 
 using namespace std;
 using namespace google;
@@ -10,6 +11,19 @@ namespace chr
 {
   namespace io
   {
+    BinaryOutputStream::BinaryOutputStream(OutputTarget &outputTarget)
+    :
+    outputTarget(outputTarget)
+    {
+      stream = outputTarget.getStream();
+
+      if (stream->good())
+      {
+        rawOutput = new protobuf::io::OstreamOutputStream(stream.get());
+        codedOutput = new protobuf::io::CodedOutputStream(rawOutput);
+      }
+    }
+
     BinaryOutputStream::~BinaryOutputStream()
     {
       close();
@@ -17,7 +31,7 @@ namespace chr
 
     void BinaryOutputStream::close()
     {
-      if (fileStream)
+      if (rawOutput)
       {
         delete codedOutput;
         codedOutput = nullptr;
@@ -25,19 +39,12 @@ namespace chr
         delete rawOutput;
         rawOutput = nullptr;
 
-        delete fileStream;
-        fileStream = nullptr;
-      }
-    }
+        if (outputTarget.isBuffer())
+        {
+          outputTarget.setBuffer(*static_cast<ostringstream*>(stream.get())); // XXX
+        }
 
-    BinaryOutputStream::BinaryOutputStream(const fs::path &filePath)
-    {
-      fileStream = new fs::ofstream(filePath, ios::out | ios::binary);
-
-      if (fileStream->good())
-      {
-        rawOutput = new protobuf::io::OstreamOutputStream(fileStream);
-        codedOutput = new protobuf::io::CodedOutputStream(rawOutput);
+        stream.reset();
       }
     }
 

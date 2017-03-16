@@ -1,6 +1,7 @@
 #pragma once
 
 #include "chr/InputSource.h"
+#include "chr/OutputTarget.h"
 
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>

@@ -14,8 +14,8 @@ protected:
   bool success = false;
   std::unique_ptr<uint8_t[]> data;
 
-  void writeFile(const fs::path &filePath);
-  void readFile(const fs::path &filePath);
+  void writeFile(chr::OutputTarget &outputTarget);
+  bool readFile(const chr::InputSource &inputSource);
 
   void populateData();
   bool checkData(uint8_t *d);

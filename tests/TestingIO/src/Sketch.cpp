@@ -16,10 +16,24 @@ void Sketch::setup()
   populateData();
 
   auto documentsFolder = systemManager().getDocumentsFolder();
-  LOGI << documentsFolder << endl;
+  fs::path filePath = documentsFolder / "test.dat";
 
-  writeFile(documentsFolder / "test.dat");
-  readFile(documentsFolder / "test.dat");
+  if (true)
+  {
+    auto outputTargetBuffer = OutputTarget::buffer();
+    writeFile(outputTargetBuffer);
+
+    auto inputSourceBuffer = InputSource::buffer(outputTargetBuffer.getData(), outputTargetBuffer.getDataSize());
+    success = readFile(inputSourceBuffer);
+  }
+  else
+  {
+    auto outputTargetFile = OutputTarget::file(filePath);
+    writeFile(outputTargetFile);
+
+    auto inputSourceFile = InputSource::file(filePath);
+    success = readFile(inputSourceFile);
+  }
 
   // ---
 
@@ -34,19 +48,19 @@ void Sketch::draw()
 {
   if (success)
   {
-    glClearColor(1, 0, 0, 1);
+    glClearColor(0, 1, 0, 1);
   }
   else
   {
-    glClearColor(0.5f, 0.5f, 0.5f, 1);
+    glClearColor(1, 0, 0, 1);
   }
 
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void Sketch::writeFile(const fs::path &filePath)
+void Sketch::writeFile(OutputTarget &outputTarget)
 {
-  BinaryOutputStream outputStream(filePath);
+  BinaryOutputStream outputStream(outputTarget);
 
   outputStream.writeString("Which way to the station?");
   outputStream.writeString("XMEN4", 5);
@@ -58,9 +72,9 @@ void Sketch::writeFile(const fs::path &filePath)
   outputStream.writeBytes(data.get(), DATA_SIZE);
 }
 
-void Sketch::readFile(const fs::path &filePath)
+bool Sketch::readFile(const InputSource &inputSource)
 {
-  BinaryInputStream inputStream(InputSource::file(filePath));
+  BinaryInputStream inputStream(inputSource);
 
   auto s1 = inputStream.readString();
   auto s2 = inputStream.readString(5);
@@ -73,7 +87,7 @@ void Sketch::readFile(const fs::path &filePath)
   uint8_t d1[DATA_SIZE];
   inputStream.readBytes(d1, DATA_SIZE);
 
-  success = (s1 == "Which way to the station?") &&
+  return (s1 == "Which way to the station?") &&
     (s2 == "XMEN4") &&
     (l1 == 999999999999999L) &&
     (i1 == -123456789) &&
