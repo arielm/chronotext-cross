@@ -1,5 +1,5 @@
 #include "chr/InputSource.h"
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 #include "chr/FileSystem.h"
 #include "chr/utils/Utils.h"
 

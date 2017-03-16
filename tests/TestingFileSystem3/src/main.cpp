@@ -1,6 +1,6 @@
 #include "chr/Platform.h"
 #include "chr/Log.h"
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 
 #include <gtest/gtest.h>
 
@@ -18,16 +18,16 @@ TEST(TestFileSystem3, ZeroCopyInputStream)
 
   io::CodedInputStream *codedInput = nullptr;
   io::ZeroCopyInputStream *rawInput = nullptr;
-  shared_ptr<chr::MemoryBuffer> memoryBuffer;
+  shared_ptr<chr::ResourceBuffer> resourceBuffer;
   int fd = 0;
 
   if (chr::hasMemoryResources())
   {
-    memoryBuffer = chr::getResourceBuffer(path);
+    resourceBuffer = chr::getResourceBuffer(path);
 
-    if (memoryBuffer)
+    if (resourceBuffer)
     {
-      codedInput = new io::CodedInputStream(reinterpret_cast<const uint8*>(memoryBuffer->data()), memoryBuffer->size());
+      codedInput = new io::CodedInputStream(reinterpret_cast<const uint8*>(resourceBuffer->data()), resourceBuffer->size());
     }
     else
     {

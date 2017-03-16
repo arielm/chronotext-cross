@@ -1,6 +1,6 @@
 #include "chr/Platform.h"
 #include "chr/Log.h"
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 
 #include <gtest/gtest.h>
 #include <experimental/string_view>
@@ -25,11 +25,11 @@ TEST(TestFileSystem2, TextResource)
 
   if (chr::hasMemoryResources())
   {
-    auto memoryBuffer = chr::getResourceBuffer(path);
+    auto resourceBuffer = chr::getResourceBuffer(path);
 
-    if (memoryBuffer)
+    if (resourceBuffer)
     {
-      string_view text(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
+      string_view text(reinterpret_cast<const char*>(resourceBuffer->data()), resourceBuffer->size());
       EXPECT_EQ(expectedText, text);
     }
     else
@@ -68,12 +68,12 @@ TEST(TestFileSystem2, ImageResource)
 
   if (chr::hasMemoryResources())
   {
-    auto memoryBuffer = chr::getResourceBuffer(path);
+    auto resourceBuffer = chr::getResourceBuffer(path);
 
-    if (memoryBuffer)
+    if (resourceBuffer)
     {
       int x, y, comp;
-      stbi_uc *data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(memoryBuffer->data()), memoryBuffer->size(), &x, &y, &comp, 0);
+      stbi_uc *data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(resourceBuffer->data()), resourceBuffer->size(), &x, &y, &comp, 0);
 
       if (data)
       {

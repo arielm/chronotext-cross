@@ -31,7 +31,7 @@ namespace chr
       bool good() const;
 
     protected:
-      std::shared_ptr<MemoryBuffer> memoryBuffer;
+      std::shared_ptr<ResourceBuffer> memoryBuffer;
       google::protobuf::io::CodedInputStream *codedInput = nullptr;
       google::protobuf::io::ZeroCopyInputStream *rawInput = nullptr;
       int fd = 0;

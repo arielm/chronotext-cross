@@ -1,5 +1,5 @@
 #include "chr/io/BinaryInputStream.h"
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 #include "chr/glm.h"
 
 #include <google/protobuf/io/zero_copy_stream_impl.h>

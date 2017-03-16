@@ -1,5 +1,5 @@
 #include "chr/FileSystem.h"
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 
 using namespace std;
 
@@ -58,13 +58,13 @@ namespace chr
     return basePath / relativePath;
   }
 
-  shared_ptr<MemoryBuffer> getResourceBuffer(const fs::path &relativePath)
+  shared_ptr<ResourceBuffer> getResourceBuffer(const fs::path &relativePath)
   {
     #if !defined(CHR_FS_APK) && !defined(CHR_FS_RC) && !defined(CHR_FS_JS_EMBED) && !defined(CHR_FS_JS_PRELOAD)
       return nullptr;
     #endif
 
-    auto buffer = make_shared<MemoryBuffer>();
+    auto buffer = make_shared<ResourceBuffer>();
     buffer->lock(relativePath);
 
     return buffer;

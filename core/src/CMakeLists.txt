@@ -23,7 +23,7 @@ list(APPEND SRC_FILES
   "chr/Log.cpp"
   "chr/InputSource.cpp"
   "chr/FileSystem.cpp"
-  "chr/MemoryBuffer.cpp"
+  "chr/ResourceBuffer.cpp"
   "chr/cross/CrossSketch.cpp"
   "chr/cross/CrossDelegateBase.cpp"
   "chr/system/SystemManagerBase.cpp"

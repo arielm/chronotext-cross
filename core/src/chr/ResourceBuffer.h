@@ -5,10 +5,10 @@
 
 namespace chr
 {
-  class MemoryBuffer
+  class ResourceBuffer
   {
   public:
-    ~MemoryBuffer();
+    ~ResourceBuffer();
 
     bool lock(const fs::path &relativePath);
     void unlock();
@@ -47,7 +47,7 @@ namespace chr
     std::istream(static_cast<std::streambuf*>(this))
     {}
 
-    imemstream(std::shared_ptr<MemoryBuffer> memoryBuffer)
+    imemstream(std::shared_ptr<ResourceBuffer> memoryBuffer)
     :
     membuf(static_cast<char const*>(memoryBuffer->data()), memoryBuffer->size()),
     std::istream(static_cast<std::streambuf*>(this))

@@ -1,4 +1,4 @@
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 
 #if defined(CHR_FS_APK)
   #include "android/JNI.h"
@@ -13,12 +13,12 @@ using namespace std;
 
 namespace chr
 {
-  MemoryBuffer::~MemoryBuffer()
+  ResourceBuffer::~ResourceBuffer()
   {
     unlock();
   }
 
-  bool MemoryBuffer::lock(const fs::path &relativePath)
+  bool ResourceBuffer::lock(const fs::path &relativePath)
   {
     unlock();
 
@@ -89,7 +89,7 @@ namespace chr
     return false;
   }
         
-  void MemoryBuffer::unlock()
+  void ResourceBuffer::unlock()
   {
     #if defined(CHR_FS_APK)
       if (asset)
@@ -112,12 +112,12 @@ namespace chr
     #endif
   }
 
-  size_t MemoryBuffer::size() const
+  size_t ResourceBuffer::size() const
   {
     return _size;
   }
 
-  const void* MemoryBuffer::data() const
+  const void* ResourceBuffer::data() const
   {
     return _data;
   }

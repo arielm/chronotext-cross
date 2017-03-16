@@ -1,5 +1,5 @@
 #include "chr/Platform.h"
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 #include "chr/Log.h"
 
 #include <gtest/gtest.h>

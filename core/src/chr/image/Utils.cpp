@@ -1,6 +1,6 @@
 #include "chr/image/Utils.h"
 #include "chr/math/Utils.h"
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 #include "chr/Log.h"
 
 #include <jpeglib.h>
@@ -44,7 +44,7 @@ namespace chr
       png_structp png_ptr;
       png_infop info_ptr;
 
-      shared_ptr<MemoryBuffer> memoryBuffer;
+      shared_ptr<ResourceBuffer> memoryBuffer;
       FILE *fd = nullptr;
 
       ImageBuffer image;
@@ -238,7 +238,7 @@ namespace chr
       cinfo.err = jpeg_std_error(&jerr);
       jpeg_create_decompress(&cinfo);
 
-      shared_ptr<MemoryBuffer> memoryBuffer;
+      shared_ptr<ResourceBuffer> memoryBuffer;
       FILE *fd = nullptr;
 
       ImageBuffer image;

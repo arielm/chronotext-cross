@@ -1,6 +1,6 @@
 #include "chr/utils/Utils.h"
 
-#include "chr/MemoryBuffer.h"
+#include "chr/ResourceBuffer.h"
 
 #include <chrono> // FOR MINGW
 
