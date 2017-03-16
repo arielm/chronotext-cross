@@ -57,6 +57,10 @@ namespace chr
           codedInput = new protobuf::io::CodedInputStream(reinterpret_cast<const uint8_t*>(memoryBuffer->data()), memoryBuffer->size());
         }
       }
+      else if (inputSource.isBuffer())
+      {
+        codedInput = new protobuf::io::CodedInputStream(reinterpret_cast<const uint8_t*>(inputSource.getData()), inputSource.getDataSize());
+      }
 
       #ifdef CHR_PLATFORM_DESKTOP
         if (codedInput)
