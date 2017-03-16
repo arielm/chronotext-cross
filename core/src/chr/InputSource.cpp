@@ -68,9 +68,10 @@ namespace chr
       }
 
       case TYPE_RESOURCE:
-        return make_shared<imemstream>(data, dataSize);
+        return getResourceStream(relativePath);
 
       case TYPE_BUFFER:
+        return make_shared<imemstream>(data, dataSize);
 
       default:
         return nullptr;
