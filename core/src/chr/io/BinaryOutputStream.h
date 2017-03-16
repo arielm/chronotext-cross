@@ -33,7 +33,7 @@ namespace chr
     protected:
       google::protobuf::io::CodedOutputStream *codedOutput = nullptr;
       google::protobuf::io::OstreamOutputStream *rawOutput = nullptr;
-      fs::ofstream *out = nullptr;
+      fs::ofstream *fileStream = nullptr;
 
       static uint32_t encodeFloat(float value)
       {

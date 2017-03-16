@@ -17,7 +17,7 @@ namespace chr
 
     void BinaryOutputStream::close()
     {
-      if (out)
+      if (fileStream)
       {
         delete codedOutput;
         codedOutput = nullptr;
@@ -25,18 +25,18 @@ namespace chr
         delete rawOutput;
         rawOutput = nullptr;
 
-        delete out;
-        out = nullptr;
+        delete fileStream;
+        fileStream = nullptr;
       }
     }
 
     BinaryOutputStream::BinaryOutputStream(const fs::path &filePath)
     {
-      out = new fs::ofstream(filePath, ios::out | ios::binary);
+      fileStream = new fs::ofstream(filePath, ios::out | ios::binary);
 
-      if (out->good())
+      if (fileStream->good())
       {
-        rawOutput = new protobuf::io::OstreamOutputStream(out);
+        rawOutput = new protobuf::io::OstreamOutputStream(fileStream);
         codedOutput = new protobuf::io::CodedOutputStream(rawOutput);
       }
     }
