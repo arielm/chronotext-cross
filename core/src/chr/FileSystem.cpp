@@ -80,7 +80,7 @@ namespace chr
 
       if (memoryBuffer)
       {
-        stream = new imemstream(memoryBuffer);
+        stream = new imemstream(memoryBuffer); // FIXME: PROBLEMATIC BECAUSE memoryBuffer WILL BE DEALLOCATED
       }
       else
       {
