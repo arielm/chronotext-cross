@@ -41,9 +41,9 @@ namespace chr
 
   struct imemstream : virtual membuf, std::istream
   {
-    imemstream(char const* base, size_t size)
+    imemstream(const void* base, size_t size)
     :
-    membuf(base, size),
+    membuf(static_cast<char const*>(base), size),
     std::istream(static_cast<std::streambuf*>(this))
     {}
 

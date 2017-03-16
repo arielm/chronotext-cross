@@ -47,7 +47,7 @@ namespace chr
     return uri;
   }
 
-  const char* InputSource::getData() const
+  const void* InputSource::getData() const
   {
     return data;
   }
@@ -100,7 +100,7 @@ namespace chr
     return inputSource;
   }
 
-  InputSource InputSource::buffer(const char *data, size_t size)
+  InputSource InputSource::buffer(const void *data, size_t size)
   {
     InputSource inputSource;
 

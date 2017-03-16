@@ -28,21 +28,21 @@ namespace chr
     fs::path getFilePath() const;
     fs::path getRelativePath() const;
     const std::string& getUri() const;
-    const char* getData() const;
+    const void* getData() const;
     size_t getDataSize() const;
 
     std::shared_ptr<std::istream> getStream() const;
 
     static InputSource resource(const fs::path &relativePath);
     static InputSource file(const fs::path &filePath);
-    static InputSource buffer(const char *data, size_t size);
+    static InputSource buffer(const void *data, size_t size);
 
   protected:
     Type type;
     fs::path filePath;
     fs::path relativePath;
     std::string uri;
-    const char *data = nullptr;
+    const void* data = nullptr;
     size_t dataSize = 0;
   };
 }
