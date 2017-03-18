@@ -43,7 +43,7 @@ void Sketch::keyDown(int keyCode, int modifiers)
   if (modifiers & KeyEvent::MODIFIER_ALT) mods += " ALT";
   if (modifiers & KeyEvent::MODIFIER_META) mods += " META";
 
-  LOGI << "keyDown: " << keyCode << mods << endl;
+  LOGI << "keyDown: " << keyCode << " " << mods << endl;
 }
 
 void Sketch::keyUp(int keyCode, int modifiers)
@@ -54,7 +54,7 @@ void Sketch::keyUp(int keyCode, int modifiers)
   if (modifiers & KeyEvent::MODIFIER_ALT) mods += " ALT";
   if (modifiers & KeyEvent::MODIFIER_META) mods += " META";
 
-  LOGI << "keyUp: " << keyCode << mods << endl;
+  LOGI << "keyUp: " << keyCode << " " << mods << endl;
 }
 
 void Sketch::mouseMoved(float x, float y)
