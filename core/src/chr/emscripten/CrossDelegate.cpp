@@ -419,9 +419,16 @@ namespace chr
     switch (eventType)
     {
       case EMSCRIPTEN_EVENT_KEYPRESS:
-        kind = KeyEvent::KIND_PRESSED;
-        codePoint = e->charCode;
-        break;
+        if (e->charCode >= 32)
+        {
+          kind = KeyEvent::KIND_PRESSED;
+          codePoint = e->charCode;
+          break;
+        }
+        else
+        {
+          return 0;
+        }
 
       case EMSCRIPTEN_EVENT_KEYDOWN:
         kind = KeyEvent::KIND_DOWN;

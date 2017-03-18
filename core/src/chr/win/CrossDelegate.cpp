@@ -523,7 +523,10 @@ namespace chr
       case WM_CHAR:
       case WM_SYSCHAR:
       case WM_UNICHAR:
-        instance->keyEvents.emplace_back(KeyEvent::KIND_PRESSED, KeyEvent::MODIFIER_NONE, 0, wParam);      
+        if (wParam >= 32)
+        {
+          instance->keyEvents.emplace_back(KeyEvent::KIND_PRESSED, KeyEvent::MODIFIER_NONE, 0, wParam);
+        }
         break;
 
       case WM_SYSKEYDOWN:
