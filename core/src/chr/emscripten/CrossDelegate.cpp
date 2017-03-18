@@ -420,7 +420,7 @@ namespace chr
     {
       case EMSCRIPTEN_EVENT_KEYPRESS:
         kind = KeyEvent::KIND_PRESSED;
-        codePoint = e->keyCode;
+        codePoint = e->charCode;
         break;
 
       case EMSCRIPTEN_EVENT_KEYDOWN:
