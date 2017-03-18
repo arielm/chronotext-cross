@@ -32,7 +32,6 @@ namespace chr
     std::vector<WheelEvent> wheelEvents;
 
     bool windowShouldClose = false;
-    int currentKeyCode = 0;
     int mouseX, mouseY;
     int mouseButton = -1;
 

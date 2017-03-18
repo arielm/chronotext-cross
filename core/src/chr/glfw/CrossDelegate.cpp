@@ -298,12 +298,10 @@ namespace chr
       {
         case GLFW_PRESS:
           kind = KeyEvent::KIND_DOWN;
-          intern::instance->currentKeyCode = key;
           break;
 
         case GLFW_RELEASE:
           kind = KeyEvent::KIND_UP;
-          intern::instance->currentKeyCode = 0;
           break;
       }
 

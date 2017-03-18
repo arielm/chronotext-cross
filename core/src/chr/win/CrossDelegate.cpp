@@ -589,22 +589,6 @@ namespace chr
     }
     else
     {
-      switch (kind)
-      {
-        case KeyEvent::KIND_DOWN:
-          if (keyCode != currentKeyCode)
-          { 
-            currentKeyCode = keyCode;
-          }
-          break;
-
-        case KeyEvent::KIND_UP:
-          currentKeyCode = 0;
-          break;
-      }
-
-      // ---
-
       int convertedKeyCode = keyCode;
       auto found = KEYMAP.find(keyCode);
 
