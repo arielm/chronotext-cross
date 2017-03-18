@@ -31,9 +31,9 @@ namespace chr
 
     protected:
       OutputTarget &outputTarget;
+      std::shared_ptr<std::ostream> stream;
       google::protobuf::io::CodedOutputStream *codedOutput = nullptr;
       google::protobuf::io::OstreamOutputStream *rawOutput = nullptr;
-      std::shared_ptr<std::ostream> stream;
 
       static uint32_t encodeFloat(float value)
       {
