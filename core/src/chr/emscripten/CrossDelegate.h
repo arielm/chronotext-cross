@@ -28,6 +28,8 @@ namespace chr
     void enableAccelerometer( float updateFrequency = 30, float filterFactor = 0.1f) final;
     void disableAccelerometer() final;
 
+    void measureCanvas();
+
   protected:
     enum
     {
@@ -43,6 +45,8 @@ namespace chr
     std::vector<KeyEvent> keyEvents;
     std::vector<WheelEvent> wheelEvents;
     std::vector<AccelEvent> accelerationEvents;
+
+    math::Rectf canvasBounds;
 
     float mouseX;
     float mouseY;

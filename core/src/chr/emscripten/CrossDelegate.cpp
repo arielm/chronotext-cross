@@ -40,10 +40,8 @@ namespace chr
 
       // ---
 
-      int canvasWidth = EM_ASM_INT_V("return document.getElementById('canvas').clientWidth");
-      int canvasHeight = EM_ASM_INT_V("return document.getElementById('canvas').clientHeight");
-
-      setupInfo.windowInfo = WindowInfo(canvasWidth, canvasHeight, initInfo.windowInfo.aaSamples);
+      measureCanvas();
+      setupInfo.windowInfo = WindowInfo(canvasBounds.width(), canvasBounds.height(), initInfo.windowInfo.aaSamples);
 
       // ---
 
@@ -174,6 +172,17 @@ namespace chr
   void CrossDelegate::disableAccelerometer()
   {
     emscripten_set_devicemotion_callback(0, 1, NULL);
+  }
+
+  void CrossDelegate::measureCanvas()
+  {
+    int x = EM_ASM_INT_V("return document.getElementById('canvas').getBoundingClientRect().left");
+    int y = EM_ASM_INT_V("return document.getElementById('canvas').getBoundingClientRect().top");
+
+    int width = EM_ASM_INT_V("return document.getElementById('canvas').clientWidth");
+    int height = EM_ASM_INT_V("return document.getElementById('canvas').clientHeight");
+
+    canvasBounds = math::Rectf(x,y, width, height);
   }
 
   void CrossDelegate::processMouseEvents()
@@ -328,8 +337,9 @@ namespace chr
 
   EM_BOOL CrossDelegate::resizeCallback(int eventType, const EmscriptenUiEvent *e, void *userData)
   {
-    int canvasWidth = EM_ASM_INT_V("return document.getElementById('canvas').clientWidth");
-    int canvasHeight = EM_ASM_INT_V("return document.getElementById('canvas').clientHeight");
+    intern::instance->measureCanvas();
+    int canvasWidth = intern::instance->canvasBounds.width();
+    int canvasHeight = intern::instance->canvasBounds.height();
 
     if ((canvasWidth != intern::instance->setupInfo.windowInfo.width) || (canvasHeight != intern::instance->setupInfo.windowInfo.height))
     {
@@ -363,10 +373,11 @@ namespace chr
 
       case EMSCRIPTEN_EVENT_MOUSEMOVE:
       {
-        intern::instance->mouseEvents.emplace_back(e->clientX, e->clientY, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
+        intern::instance->mouseX = e->clientX - intern::instance->canvasBounds.x1;
+        intern::instance->mouseY = e->clientY - intern::instance->canvasBounds.y1;
 
-        intern::instance->mouseX = e->clientX;
-        intern::instance->mouseY = e->clientY;
+        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
+
       }
       break;
     }
