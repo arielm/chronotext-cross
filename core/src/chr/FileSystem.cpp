@@ -52,7 +52,14 @@ namespace chr
     #elif defined(CHR_PLATFORM_EMSCRIPTEN)
       basePath = "res";
     #else
-      basePath = fs::current_path() / "res";
+      if (fs::exists(fs::current_path() / relativePath))
+      {
+        return fs::current_path() / relativePath; // RELEVANT WHEN BUILDING OSX APP WITH XCODE
+      }
+      else
+      {
+        return fs::current_path() / "res" / relativePath; // RELEVANT WHEN BUILDING WITH CLION OR COMMAND-LINE
+      }
     #endif
 
     return basePath / relativePath;
