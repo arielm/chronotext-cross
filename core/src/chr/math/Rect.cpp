@@ -20,6 +20,26 @@ namespace chr
 		y2(lowerRight.y)
 		{}
 
+		Rectf& Rectf::operator +=(const glm::vec2 &offset)
+		{
+			x1 += offset.x;
+			y1 += offset.y;
+			x2 += offset.x;
+			y2 += offset.y;
+
+			return *this;
+		}
+
+		Rectf& Rectf::operator -=(const glm::vec2 &offset)
+		{
+			x1 -= offset.x;
+			y1 -= offset.y;
+			x2 -= offset.x;
+			y2 -= offset.y;
+
+			return *this;
+		}
+
 		float Rectf::width() const
 		{
 			return x2 - x1;
