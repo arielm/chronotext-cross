@@ -1,7 +1,6 @@
 #pragma once
 
-#include "chr/glm.h"
-#include "chr/math/Utils.h"
+#include "chr/math/Plane.h"
 
 namespace chr
 {
@@ -9,6 +8,9 @@ namespace chr
   {
     class Ray
     {
+    protected:
+      static constexpr float EPSILON = 0.000001f;
+
     public:
       glm::vec3 origin;
       glm::vec3 direction;
@@ -33,8 +35,6 @@ namespace chr
 
       float triangleIntersection(const glm::vec3 &v1, const glm::vec3 &v2, const glm::vec3 &v3, bool culling = false, int frontFace = CCW) const
       {
-        constexpr float EPSILON = 0.000001f;
-
         // find vectors for two edges sharing v1
         glm::vec3 e1(v2 - v1);
         glm::vec3 e2(v3 - v1);
@@ -51,20 +51,17 @@ namespace chr
           {
             if (det < EPSILON)
             {
-              return 0;
+              return -1;
             }
           }
           else if (det > -EPSILON)
           {
-            return 0;
+            return -1;
           }
         }
-        else
+        else if (fabsf(det) < EPSILON)
         {
-          if (fabsf(det) < EPSILON)
-          {
-            return 0;
-          }
+            return -1;
         }
 
         // calculate distance from v1 to ray origin
@@ -76,7 +73,7 @@ namespace chr
         // the intersection lies outside of the triangle
         if ((u < 0) || (u > 1))
         {
-          return 0;
+          return -1;
         }
 
         glm::vec3 Q(glm::cross(T, e1));
@@ -87,10 +84,24 @@ namespace chr
         // the intersection lies outside of the triangle
         if ((v < 0) || (u + v  > 1))
         {
-          return 0;
+          return -1;
         }
 
         return glm::dot(e2, Q) / det;
+      }
+
+      float planeIntersection(const glm::vec3 &planeOrigin, const glm::vec3 &planeNormal) const
+      {
+        float denom = glm::dot(planeNormal, direction);
+
+        if (fabsf(denom) < EPSILON) // CHECKING IF RAY IS PARALLEL TO PLANE
+        {
+          return -1;
+        }
+        else
+        {
+          return glm::dot(planeNormal, planeOrigin - origin) / denom; // // IF < 0: PLANE IS BEHIND RAY'S ORIGIN
+        }
       }
     };
   }

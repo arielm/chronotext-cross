@@ -148,7 +148,7 @@ void Sketch::processRay(const glm::vec2 &position, int frontFace)
 
     float t = ray.triangleIntersection(v0, v1, v2, true, frontFace);
 
-    if (t > 0)
+    if (t >= 0)
     {
       if (bestT > t) // XXX
       {
