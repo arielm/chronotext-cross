@@ -1,6 +1,7 @@
 #pragma once
 
-#include "chr/math/Plane.h"
+#include "chr/glm.h"
+#include "chr/math/Utils.h"
 
 namespace chr
 {
@@ -98,10 +99,8 @@ namespace chr
         {
           return -1;
         }
-        else
-        {
-          return glm::dot(planeNormal, planeOrigin - origin) / denom; // // IF < 0: PLANE IS BEHIND RAY'S ORIGIN
-        }
+
+        return glm::dot(planeNormal, planeOrigin - origin) / denom; // IF < 0: PLANE IS BEHIND RAY'S ORIGIN
       }
     };
   }
