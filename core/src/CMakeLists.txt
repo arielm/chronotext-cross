@@ -65,6 +65,8 @@ list(APPEND SRC_FILES
   "chr/math/Utils.cpp"
   "chr/math/Rect.cpp"
   "chr/math/Box.cpp"
+  "chr/math/Plane.cpp"
+  "chr/math/Frustum.cpp"
   "chr/image/Utils.cpp"
   "chr/io/BinaryInputStream.cpp"
   "chr/io/BinaryOutputStream.cpp"

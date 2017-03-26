@@ -1,3 +1,7 @@
+/*
+ * MATHS BASED ON https://github.com/cinder/Cinder/blob/master/src/cinder/Plane.cpp
+ */
+
 #pragma once
 
 #include "chr/glm.h"
@@ -14,18 +18,15 @@ namespace chr
       float distance;
 
       Plane() = default;
+      Plane(const glm::vec3 &point, const glm::vec3 &normal);
+      Plane(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec3 &p2);
+      Plane(float a, float b, float c, float d);
 
-      Plane(const glm::vec3 &point, const glm::vec3 &normal)
-      :
-      normal(glm::normalize(normal)),
-      distance(glm::dot(this->normal, point))
-      {}
+      void set(const glm::vec3 &point, const glm::vec3 &normal);
+      void set(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec3 &p2);
+      void set(float a, float b, float c, float d);
 
-      Plane(const glm::vec3 &p0, const glm::vec3 &p1, const glm::vec3 &p2)
-      :
-      normal(glm::normalize(glm::cross(p1 - p0, p2 - p0))),
-      distance(glm::dot(normal, p0))
-      {}
+      float signedDistance(const glm::vec3 &point) const;
     };
   }
 }
