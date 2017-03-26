@@ -26,7 +26,8 @@ namespace chr
       inline glm::mat4 getMVPMatrix() { return getModelViewProjectionMatrix(); }
 
       glm::vec3 getEyePosition();
-      math::Ray getRay(const glm::vec2 &windowPosition);
+      math::Ray getRay(const glm::vec2 &windowPosition); // IN PIXEL COORDINATES; TOP-LEFT CORNER AT 0,0
+      math::Ray getRay(float u, float v); // IN VIEWPORT COORDINATES; TOP-LEFT CORNER AT 0,0
 
       inline Camera& setPan2D(float x, float y) { return setPan2D(glm::vec2(x, y)); }
 

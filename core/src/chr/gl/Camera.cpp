@@ -94,6 +94,20 @@ namespace chr
       return Ray(getEyePosition(), glm::normalize(right * s + up * t - back * viewDistance));
     }
 
+    Ray Camera::getRay(float u, float v)
+    {
+      float aspectRatio = windowSize.x / windowSize.y;
+      float s = (u - 0.5f) * aspectRatio;
+      float t = 1 - v - 0.5f;
+      float viewDistance = aspectRatio / frustumSize.x * nearZ;
+
+      const auto &right = modelViewMatrix.right();
+      const auto &up = modelViewMatrix.up();
+      const auto &back = modelViewMatrix.back();
+
+      return Ray(getEyePosition(), glm::normalize(right * s + up * t - back * viewDistance));
+    }
+
     void Camera::update()
     {
       if (updateRequired)
