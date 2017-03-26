@@ -146,13 +146,13 @@ void Sketch::processRay(const glm::vec2 &position, int frontFace)
     const auto &v1 = vertices[indices[i + 1]].position;
     const auto &v2 = vertices[indices[i + 2]].position;
 
-    float t = ray.triangleIntersection(v0, v1, v2, true, frontFace);
+    auto result = ray.triangleIntersection(v0, v1, v2, true, frontFace);
 
-    if (t >= 0)
+    if (result.first)
     {
-      if (bestT > t) // XXX
+      if (bestT > result.second) // XXX
       {
-        bestT = t;
+        bestT = result.second;
         bestIndex = i;
       }
     }
