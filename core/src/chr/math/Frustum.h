@@ -9,13 +9,6 @@ namespace chr
     class Frustum
     {
     public:
-      Frustum() = default;
-      Frustum(const glm::mat4 &mat); // TAKES A MODEL-VIEW-PROJECTION MATRIX
-
-      void set(const glm::mat4 &mat); // TAKES A MODEL-VIEW-PROJECTION MATRIX
-      bool contains(const glm::vec3 &point) const;
-
-    protected:
       enum
       {
         PLANE_NEAR,
@@ -27,6 +20,16 @@ namespace chr
       };
 
       Plane planes[6];
+
+      Frustum() = default;
+
+      /*
+       * PASS A MODEL-VIEW-PROJECTION MATRIX
+       */
+      Frustum(const glm::mat4 &mat);
+      void set(const glm::mat4 &mat);
+
+      bool contains(const glm::vec3 &point) const;
     };
   }
 }
