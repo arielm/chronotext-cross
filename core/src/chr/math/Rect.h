@@ -18,8 +18,11 @@ namespace chr
       Rectf(float left, float top, float width, float height);
       Rectf(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight);
 
-      Rectf& operator +=(const glm::vec2 &offset);
-      Rectf& operator -=(const glm::vec2 &offset);
+      const Rectf	operator + (const glm::vec2 &offset) const;
+      const Rectf	operator - (const glm::vec2 &offset) const;
+
+      Rectf& operator += (const glm::vec2 &offset);
+      Rectf& operator -= (const glm::vec2 &offset);
 
       float width() const;
       float height() const;

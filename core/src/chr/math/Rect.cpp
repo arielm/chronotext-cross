@@ -20,7 +20,17 @@ namespace chr
 		y2(lowerRight.y)
 		{}
 
-		Rectf& Rectf::operator +=(const glm::vec2 &offset)
+    const Rectf	Rectf::operator + (const glm::vec2 &offset) const
+    {
+      return Rectf(glm::vec2(x1, y1) + offset, glm::vec2(x2, y2) + offset);
+    }
+
+    const Rectf	Rectf::operator - (const glm::vec2 &offset) const
+    {
+      return Rectf(glm::vec2(x1, y1) - offset, glm::vec2(x2, y2) - offset);
+    }
+
+		Rectf& Rectf::operator += (const glm::vec2 &offset)
 		{
 			x1 += offset.x;
 			y1 += offset.y;
@@ -30,7 +40,7 @@ namespace chr
 			return *this;
 		}
 
-		Rectf& Rectf::operator -=(const glm::vec2 &offset)
+		Rectf& Rectf::operator -= (const glm::vec2 &offset)
 		{
 			x1 -= offset.x;
 			y1 -= offset.y;
