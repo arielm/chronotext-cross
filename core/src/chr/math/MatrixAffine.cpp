@@ -16,7 +16,18 @@ namespace chr
     m12(0)
     {}
 
-    MatrixAffine& MatrixAffine::load(const MatrixAffine &matrix)
+    MatrixAffine::MatrixAffine(const Values &values)
+    :
+    m(values)
+    {}
+
+    MatrixAffine& MatrixAffine::set(const Values &values)
+    {
+      m = values;
+      return *this;
+    }
+
+    MatrixAffine& MatrixAffine::set(const MatrixAffine &matrix)
     {
       m = matrix.m;
       return *this;
@@ -94,6 +105,47 @@ namespace chr
       m11 = r11;
 
       return *this;
+    }
+
+    void MatrixAffine::invert()
+    {
+      float determinant = m00 * m11 - m01 * m10;
+
+      if (fabsf(determinant) > 0.000001f) // XXX
+      {
+        float t00 = m00;
+        float t01 = m01;
+        float t02 = m02;
+        float t10 = m10;
+        float t11 = m11;
+        float t12 = m12;
+
+        m00 = +t11 / determinant;
+        m10 = -t10 / determinant;
+        m01 = -t01 / determinant;
+        m11 = +t00 / determinant;
+        m02 = (t01 * t12 - t11 * t02) / determinant;
+        m12 = (t10 * t02 - t00 * t12) / determinant;
+      }
+    }
+
+    MatrixAffine::Values MatrixAffine::getInverse() const
+    {
+      Values result;
+
+      float determinant = m00 * m11 - m01 * m10;
+
+      if (fabsf(determinant) > 0.000001f) // XXX
+      {
+        result[0] = +m11 / determinant;
+        result[1] = -m10 / determinant;
+        result[2] = -m01 / determinant;
+        result[3] = +m00 / determinant;
+        result[4] = (m01 * m12 - m11 * m02) / determinant;
+        result[5] = (m10 * m02 - m00 * m12) / determinant;
+      }
+
+      return result;
     }
 
     glm::vec2 MatrixAffine::transformPoint(float x, float y) const

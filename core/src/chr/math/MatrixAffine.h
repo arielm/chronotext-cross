@@ -27,12 +27,14 @@ namespace chr
       };
       
       MatrixAffine();
+      MatrixAffine(const Values &values);
       MatrixAffine(const MatrixAffine &other) = delete;
       
       operator Values& () { return m; }
       operator const Values& () const { return m; }
 
-      MatrixAffine& load(const MatrixAffine &matrix);
+      MatrixAffine& set(const Values &values);
+      MatrixAffine& set(const MatrixAffine &matrix);
 
       MatrixAffine& push();
       MatrixAffine& pop();
@@ -50,6 +52,9 @@ namespace chr
       MatrixAffine& scale(float x, float y);
 
       MatrixAffine& rotate(float a);
+
+      void invert();
+      Values getInverse() const;
 
       inline glm::vec2 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec2 transformPoint(float x, float y) const;
