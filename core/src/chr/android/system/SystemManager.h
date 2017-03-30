@@ -19,7 +19,6 @@ namespace chr
     {
     public:
       void setup(const InitInfo &initInfo) final;
-      fs::path getDocumentsFolder() final;
 
     protected:
       void updateInfo() final;

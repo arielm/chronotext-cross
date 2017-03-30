@@ -33,18 +33,6 @@ namespace chr
       LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
     }
 
-    fs::path Manager::getDocumentsFolder()
-    {
-      auto documentsFolder = fs::path(chr::android::externalDataPath) / "Documents";
-
-      if (!boost::filesystem::exists(documentsFolder))
-      {
-        boost::filesystem::create_directory(documentsFolder);
-      }
-
-      return documentsFolder;
-    }
-
     // ---
     
     void Manager::updateInfo()

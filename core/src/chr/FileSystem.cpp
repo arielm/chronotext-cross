@@ -1,5 +1,19 @@
+#if defined(CHR_PLATFORM_OSX) || defined(CHR_PLATFORM_IOS)
+  #if !defined(__OBJC__)
+    #error THIS FILE MUST BE COMPILED AS OBJECTIVE-C++
+  #endif
+#endif
+
 #include "chr/FileSystem.h"
 #include "chr/ResourceBuffer.h"
+#include "chr/cross/Context.h"
+
+#if defined(CHR_PLATFORM_OSX) || defined(CHR_PLATFORM_IOS)
+  #import <Foundation/Foundation.h>
+#elif defined(CHR_PLATFORM_WIN)
+  #include <windows.h>
+  #include <shlobj.h>
+#endif
 
 using namespace std;
 
@@ -100,5 +114,31 @@ namespace chr
     }
 
     return shared_ptr<istream>(stream);
+  }
+
+  fs::path getDocumentsFolder()
+  {
+    #if defined(CHR_PLATFORM_OSX)
+      NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      return fs::path([path cStringUsingEncoding:NSUTF8StringEncoding]);
+    #elif defined(CHR_PLATFORM_WIN)
+      char buffer[MAX_PATH];
+      SHGetFolderPathA(0, CSIDL_MYDOCUMENTS, NULL, SHGFP_TYPE_CURRENT, buffer);
+      return fs::path(string(buffer));
+    #elif defined(CHR_PLATFORM_IOS)
+      NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+      return fs::path([path cStringUsingEncoding:NSUTF8StringEncoding]);
+    #elif defined(CHR_PLATFORM_ANDROID)
+      auto documentsFolder = fs::path(chr::android::externalDataPath) / "Documents";
+
+      if (!boost::filesystem::exists(documentsFolder))
+      {
+        boost::filesystem::create_directory(documentsFolder);
+      }
+
+      return documentsFolder;
+    #endif
+
+    return "";
   }
 }

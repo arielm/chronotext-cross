@@ -117,9 +117,9 @@ endif()
 
 # ---
 
-if (PLATFORM MATCHES osx)
+if (PLATFORM MATCHES osx|ios)
   set_source_files_properties(
-    "chr/osx/system/SystemManager.cpp"
+    "chr/FileSystem.cpp"
     PROPERTIES
     COMPILE_FLAGS "-x objective-c++"
   )

@@ -19,7 +19,6 @@ namespace chr
       virtual void shutdown() {}
 
       const Info& getInfo() const;
-      virtual fs::path getDocumentsFolder() = 0;
 
     protected:
       Info info;

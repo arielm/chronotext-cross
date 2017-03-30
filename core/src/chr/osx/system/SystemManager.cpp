@@ -1,9 +1,3 @@
-#if (!defined(__OBJC__))
-  #error THIS FILE MUST BE COMPILED AS OBJECTIVE-C++
-#endif
-
-#import <Foundation/Foundation.h>
-
 #include "chr/osx/system/SystemManager.h"
 #include "chr/cross/Context.h"
 
@@ -18,12 +12,6 @@ namespace chr
       updateInfo();
 
       LOGI << "SYSTEM INFO: " << info << endl; // LOG: VERBOSE
-    }
-
-    fs::path Manager::getDocumentsFolder()
-    {
-      NSString *path = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-      return fs::path([path cStringUsingEncoding:NSUTF8StringEncoding]);
     }
 
     // ---

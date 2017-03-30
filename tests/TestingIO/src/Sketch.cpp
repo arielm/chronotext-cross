@@ -15,10 +15,10 @@ void Sketch::setup()
   data = make_unique<uint8_t[]>(DATA_SIZE);
   populateData();
 
-  auto documentsFolder = systemManager().getDocumentsFolder();
+  auto documentsFolder = getDocumentsFolder();
   fs::path filePath = documentsFolder / "test.dat";
 
-  if (true)
+  if (false)
   {
     auto outputTargetBuffer = OutputTarget::buffer();
     writeFile(outputTargetBuffer);
