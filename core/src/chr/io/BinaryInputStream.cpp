@@ -172,6 +172,22 @@ namespace chr
     }
 
     template<>
+    bool BinaryInputStream::read()
+    {
+      bool result;
+
+      if (good())
+      {
+        if (!codedInput->ReadRaw(&result, 1))
+        {
+          fail();
+        }
+      }
+
+      return result;
+    }
+
+    template<>
     glm::vec2 BinaryInputStream::read()
     {
       glm::vec2 result;

@@ -103,6 +103,15 @@ namespace chr
     }
 
     template<>
+    void BinaryOutputStream::write(bool value)
+    {
+      if (good())
+      {
+        codedOutput->WriteRaw(&value, 1);
+      }
+    }
+
+    template<>
     void BinaryOutputStream::write(glm::vec2 value)
     {
       if (good())

@@ -68,6 +68,7 @@ void Sketch::writeFile(OutputTarget &outputTarget)
   outputStream.write<int32_t>(-123456789);
   outputStream.write(123.456f);
   outputStream.write(M_PI);
+  outputStream.write(true);
   outputStream.write(glm::vec3(0.5f, -1.0f, 0));
   outputStream.writeBytes(data.get(), DATA_SIZE);
 }
@@ -82,6 +83,7 @@ bool Sketch::readFile(const InputSource &inputSource)
   auto i1 = inputStream.read<int32_t>();
   auto f1 = inputStream.read<float>();
   auto f2 = inputStream.read<double>();
+  auto b1 = inputStream.read<bool>();
   auto v1 = inputStream.read<glm::vec3>();
 
   uint8_t d1[DATA_SIZE];
@@ -93,6 +95,7 @@ bool Sketch::readFile(const InputSource &inputSource)
     (i1 == -123456789) &&
     (f1 == 123.456f) &&
     (f2 == M_PI) &&
+    b1 &&
     (v1 == glm::vec3(0.5f, -1.0f, 0)) &&
     checkData(d1);
 }
