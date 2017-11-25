@@ -14,8 +14,4 @@ Cross-platform minimal infrastructure for developing interactive applications wi
 - CMake
 - Terminal or CLION
 
-Under active development, integrating previous work from the following repos:
-- [new-chronotext-toolkit](https://github.com/arielm/new-chronotext-toolkit)
-- [jsp](https://github.com/arielm/jsp)
-- [chronototext-gtest](https://github.com/arielm/chronotext-gtest)
-- [chronotext-boost](https://github.com/arielm/chronotext-boost)
+Check the [wiki](https://github.com/arielm/chronotext-cross/wiki) for more details.
