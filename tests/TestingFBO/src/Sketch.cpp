@@ -54,9 +54,21 @@ void Sketch::setup()
 
   //
 
-  initTextures();
+  glBindFramebuffer(GL_FRAMEBUFFER, fboId);
+  glClearColor(1, 0, 0, 1);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  lightenBatch.setTexture(texture);
+//  fboColorTexture.bind();
+//  glGenerateMipmap(GL_TEXTURE_2D);
+//  fboColorTexture.unbind();
+
+  //
+
+  colorBatch
+    .setShader(colorShader)
+    .setShaderColor(1, 1, 1, 1)
+    .setTexture(fboColorTexture);
 
   // ---
 
@@ -64,7 +76,7 @@ void Sketch::setup()
 
   draw::Cube()
     .setSize(150)
-    .append(lightenBatch, matrix);
+    .append(colorBatch, matrix);
 
   // ---
 
@@ -101,29 +113,6 @@ void Sketch::draw()
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();
 
-  glEnable(GL_POLYGON_OFFSET_FILL);
-  glPolygonOffset(2, 1);
-
-  lightenBatch
-    .setShader(lambertShader)
-    .setShaderColor(0.25f, 0.25f, 0.25f, 1)
+  colorBatch
     .flush();
-
-  glDepthMask(GL_FALSE);
-  glDisable(GL_POLYGON_OFFSET_FILL);
-
-  lightenBatch
-    .setShader(textureAlphaShader)
-    .setShaderColor(1, 1, 1, 0.5f)
-    .flush();
-}
-
-void Sketch::initTextures()
-{
-  texture = Texture(
-    Texture::ImageRequest("lys_32.png")
-      .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-      .setMipmap(true)
-      .setWrap(GL_REPEAT, GL_REPEAT)
-      .setAnisotropy(true));
 }

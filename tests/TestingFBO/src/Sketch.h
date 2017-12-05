@@ -2,8 +2,7 @@
 
 #include "chr/cross/Context.h"
 #include "chr/gl/Batch.h"
-#include "chr/gl/shaders/LambertShader.h"
-#include "chr/gl/shaders/TextureAlphaShader.h"
+#include "chr/gl/shaders/ColorShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -17,14 +16,10 @@ public:
 protected:
   chr::gl::State state;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> lightenBatch;
-  chr::gl::shaders::LambertShader lambertShader;
-  chr::gl::shaders::TextureAlphaShader textureAlphaShader;
-  chr::gl::Texture texture;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> colorBatch;
+  chr::gl::shaders::ColorShader colorShader;
 
   GLuint fboId;
   chr::gl::Texture fboColorTexture;
   chr::gl::Texture fboDepthTexture;
-
-  void initTextures();
 };
