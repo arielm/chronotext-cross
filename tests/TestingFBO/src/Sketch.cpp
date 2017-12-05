@@ -25,39 +25,11 @@ void Sketch::setup()
   glFramebufferTexture2DEXT(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboColorTexture.textureId, 0);
   glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fboDepthTexture.textureId, 0);
 
-  GLenum e = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
-  switch (e)
-  {
-    case GL_FRAMEBUFFER_UNDEFINED:
-      printf("FBO Undefined\n");
-      break;
-    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT :
-      printf("FBO Incomplete Attachment\n");
-      break;
-    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT :
-      printf("FBO Missing Attachment\n");
-      break;
-    case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER :
-      printf("FBO Incomplete Draw Buffer\n");
-      break;
-    case GL_FRAMEBUFFER_UNSUPPORTED :
-      printf("FBO Unsupported\n");
-      break;
-    case GL_FRAMEBUFFER_COMPLETE:
-      printf("FBO OK\n");
-      break;
-    default:
-      printf("FBO Problem?\n");
-  }
-
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
   //
 
-  glBindFramebuffer(GL_FRAMEBUFFER, fboId);
-  glClearColor(1, 0, 0, 1);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  drawScene();
 
 //  fboColorTexture.bind();
 //  glGenerateMipmap(GL_TEXTURE_2D);
@@ -66,7 +38,7 @@ void Sketch::setup()
   //
 
   colorBatch
-    .setShader(colorShader)
+    .setShader(textureShader)
     .setShaderColor(1, 1, 1, 1)
     .setTexture(fboColorTexture);
 
@@ -115,4 +87,12 @@ void Sketch::draw()
 
   colorBatch
     .flush();
+}
+
+void Sketch::drawScene()
+{
+  glBindFramebuffer(GL_FRAMEBUFFER, fboId);
+  glClearColor(1, 0, 0, 1);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
