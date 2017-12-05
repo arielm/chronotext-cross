@@ -10,6 +10,48 @@ namespace chr
     Texture::Texture()
     {}
 
+    Texture::Texture(const EmptyRequest &request)
+    :
+    id(usageCounter++),
+    element(new texture::Element()),
+    format(request.format),
+    size(request.size),
+    innerSize(request.size),
+    coords1(1),
+    coords2(1),
+    requestType(REQUEST_EMPTY)
+    {
+      GLuint textureId;
+      glGenTextures(1, &textureId);
+
+      glBindTexture(GL_TEXTURE_2D, textureId);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, request.minFilter);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, request.magFilter);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, request.wrapS);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, request.wrapT);
+      glTexImage2D(GL_TEXTURE_2D, 0, request.format, request.width, request.height, 0, request.format, request.type, nullptr);
+      glBindTexture(GL_TEXTURE_2D, 0);
+
+      element->textureId = textureId;
+      element->useCount++;
+    }
+
+    Texture::Texture(const ImageRequest &request)
+    :
+    Texture(loadAndUploadTexture(request))
+    {
+      requestType = REQUEST_IMAGE,
+      imageRequest = request;
+    }
+
+    Texture::Texture(const MaskedRequest &request)
+    :
+    Texture(loadAndUploadMaskedTexture(request))
+    {
+      requestType = REQUEST_MASKED,
+      maskedRequest = request;
+    }
+
     Texture::Texture(const Response &response)
     :
     id(usageCounter++),
@@ -24,22 +66,6 @@ namespace chr
       element->useCount++;
     }
 
-    Texture::Texture(const Request &request)
-    :
-    Texture(loadAndUploadTexture(request))
-    {
-      requestType = REQUEST_REGULAR,
-      this->request = request;
-    }
-
-    Texture::Texture(const MaskedRequest &request)
-    :
-    Texture(loadAndUploadMaskedTexture(request))
-    {
-      requestType = REQUEST_MASKED,
-      maskedRequest = request;
-    }
-
     Texture::Texture(const Texture &other)
     :
     id(other.id),
@@ -51,7 +77,7 @@ namespace chr
     coords1(other.coords1),
     coords2(other.coords2),
     requestType(other.requestType),
-    request(other.request),
+    imageRequest(other.imageRequest),
     maskedRequest(other.maskedRequest)
     {
       if (element)
@@ -73,7 +99,7 @@ namespace chr
         coords1 = other.coords1;
         coords2 = other.coords2;
         requestType = other.requestType;
-        request = other.request;
+        imageRequest = other.imageRequest;
         maskedRequest = other.maskedRequest;
 
         if (element)
@@ -123,9 +149,9 @@ namespace chr
     {
       if (element && !element->textureId)
       {
-        if (requestType == REQUEST_REGULAR)
+        if (requestType == REQUEST_IMAGE)
         {
-          const auto response = loadAndUploadTexture(request);
+          const auto response = loadAndUploadTexture(imageRequest);
           element->textureId = response.textureId;
 
           return true;

@@ -6,7 +6,7 @@ namespace chr
 {
   namespace gl
   {
-    Texture::Response loadAndUploadTexture(const Texture::Request &request)
+    Texture::Response loadAndUploadTexture(const Texture::ImageRequest &request)
     {
       return uploadTexture(image::loadImage(request.relativePath, request.imageFlags), request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT);
     }

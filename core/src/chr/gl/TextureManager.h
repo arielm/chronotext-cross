@@ -9,11 +9,11 @@ namespace chr
     class TextureManager
     {
     public:
-      Texture get(const Texture::Request &request);
+      Texture get(const Texture::ImageRequest &request);
       Texture get(const Texture::MaskedRequest &request);
 
     protected:
-      std::map<Texture::Request, Texture> textures;
+      std::map<Texture::ImageRequest, Texture> textures;
       std::map<Texture::MaskedRequest, Texture> maskedTextures;
     };
   }

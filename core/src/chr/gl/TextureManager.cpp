@@ -4,7 +4,7 @@ namespace chr
 {
   namespace gl
   {
-    Texture TextureManager::get(const Texture::Request &request)
+    Texture TextureManager::get(const Texture::ImageRequest &request)
     {
       auto found = textures.find(request);
 

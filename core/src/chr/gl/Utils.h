@@ -11,7 +11,7 @@ namespace chr
 {
   namespace gl
   {
-    Texture::Response loadAndUploadTexture(const Texture::Request &request);
+    Texture::Response loadAndUploadTexture(const Texture::ImageRequest &request);
     Texture::Response uploadTexture(const image::ImageBuffer &image, bool useMipmap = true, bool useAnisotropy = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);
     Texture::Response loadAndUploadMaskedTexture(const Texture::MaskedRequest &request);
     Texture::Response uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap = true, bool useAnisotropy = false, GLenum wrapS = GL_CLAMP_TO_EDGE, GLenum wrapT = GL_CLAMP_TO_EDGE);

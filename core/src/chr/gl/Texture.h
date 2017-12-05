@@ -19,7 +19,62 @@ namespace chr
     class Texture
     {
     public:
-      struct Request
+      struct EmptyRequest
+      {
+        union
+        {
+          glm::ivec2 size;
+          struct { int width, height; };
+        };
+
+        GLenum format = GL_RGBA;
+        GLenum type = GL_UNSIGNED_BYTE;
+        GLint minFilter = GL_LINEAR;
+        GLint magFilter = GL_LINEAR;
+        GLenum wrapS = GL_CLAMP_TO_EDGE;
+        GLenum wrapT = GL_CLAMP_TO_EDGE;
+
+        EmptyRequest() = default;
+
+        EmptyRequest(int width, int height)
+        :
+        width(width),
+        height(height)
+        {}
+
+        EmptyRequest(const glm::ivec2 &size)
+        :
+        size(size)
+        {}
+
+        EmptyRequest& setFormat(GLenum format)
+        {
+          this->format = format;
+          return *this;
+        }
+
+        EmptyRequest& setType(GLenum type)
+        {
+          this->type = type;
+          return *this;
+        }
+
+        EmptyRequest& setWrap(GLint min, GLint mag)
+        {
+          minFilter = min;
+          magFilter = mag;
+          return *this;
+        }
+
+        EmptyRequest& setWrap(GLenum s, GLenum t)
+        {
+          wrapS = s;
+          wrapT = t;
+          return *this;
+        }
+      };
+
+      struct ImageRequest
       {
         fs::path relativePath;
         int imageFlags = image::FLAGS_NONE;
@@ -28,39 +83,39 @@ namespace chr
         GLenum wrapS = GL_CLAMP_TO_EDGE;
         GLenum wrapT = GL_CLAMP_TO_EDGE;
 
-        Request() = default;
+        ImageRequest() = default;
 
-        Request(const fs::path &relativePath)
+        ImageRequest(const fs::path &relativePath)
         :
         relativePath(relativePath)
         {}
 
-        Request& setFlags(int flags = image::FLAGS_NONE)
+        ImageRequest& setFlags(int flags = image::FLAGS_NONE)
         {
           imageFlags = flags;
           return *this;
         }
 
-        Request& setMipmap(bool mipmap)
+        ImageRequest& setMipmap(bool mipmap)
         {
           useMipmap = mipmap;
           return *this;
         }
 
-        Request& setAnisotropy(bool anisotropy)
+        ImageRequest& setAnisotropy(bool anisotropy)
         {
           useAnisotropy = anisotropy;
           return *this;
         }
 
-        Request& setWrap(GLenum s, GLenum t)
+        ImageRequest& setWrap(GLenum s, GLenum t)
         {
           wrapS = s;
           wrapT = t;
           return *this;
         }
 
-        bool operator<(const Request &rhs) const
+        bool operator<(const ImageRequest &rhs) const
         {
           return
             std::tie(relativePath, imageFlags, useMipmap, useAnisotropy, wrapS, wrapT) <
@@ -157,9 +212,10 @@ namespace chr
       // ---
 
       Texture();
-      Texture(const Response &response);
-      Texture(const Request &request);
+      Texture(const EmptyRequest &request);
+      Texture(const ImageRequest &request);
       Texture(const MaskedRequest &request);
+      Texture(const Response &response);
       Texture(const Texture &other);
       Texture& operator=(const Texture &other);
 
@@ -207,12 +263,14 @@ namespace chr
     protected:
       enum RequestType
       {
-        REQUEST_REGULAR = 1,
-        REQUEST_MASKED = 2
+        REQUEST_NONE = 0,
+        REQUEST_EMPTY = 1,
+        REQUEST_IMAGE = 2,
+        REQUEST_MASKED = 3
       };
 
       RequestType requestType;
-      Request request;
+      ImageRequest imageRequest;
       MaskedRequest maskedRequest;
 
       static int usageCounter;
