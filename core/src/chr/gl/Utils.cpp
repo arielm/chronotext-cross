@@ -127,11 +127,6 @@ namespace chr
       if (useMipmap)
       {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-        #if defined(CHR_PLATFORM_DESKTOP)
-          glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
-          glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-        #endif
       }
       else
       {
@@ -142,11 +137,7 @@ namespace chr
 
       if (useMipmap)
       {
-        #if defined(CHR_PLATFORM_DESKTOP)
-          glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-        #elif defined(CHR_PLATFORM_EMSCRIPTEN) || defined(CHR_PLATFORM_IOS) || defined(CHR_PLATFORM_ANDROID)
-          glGenerateMipmap(GL_TEXTURE_2D);
-        #endif
+        glGenerateMipmap(GL_TEXTURE_2D);
       }
     }
 
