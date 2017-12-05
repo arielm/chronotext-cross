@@ -138,7 +138,6 @@ if (PLATFORM MATCHES osx)
   )
 
   list(APPEND SRC_FILES
-    "${GLFW_SRC}/deps/glad.c"
     "${NFD_SRC}/nfd_common.c"
     "${NFD_SRC}/nfd_cocoa.m"
   )

@@ -4,7 +4,8 @@
 #include "chr/Platform.h"
 
 #if defined(CHR_PLATFORM_GLFW)
-  #include <glad/glad.h>
+  #include <OpenGL/gl.h>
+  #include <OpenGL/glext.h>
 #elif defined(CHR_PLATFORM_WIN)
   #include "glload/gl_2_0.h"
   #include "glload/gl_load.h"

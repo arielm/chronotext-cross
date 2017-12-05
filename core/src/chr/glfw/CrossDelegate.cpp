@@ -74,7 +74,7 @@ namespace chr
 
           glfwSwapInterval(1);
           glfwMakeContextCurrent(window);
-          gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+//          gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
 
           // ---
 
