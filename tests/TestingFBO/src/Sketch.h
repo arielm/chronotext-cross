@@ -22,5 +22,9 @@ protected:
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
   chr::gl::Texture texture;
 
+  GLuint fboId;
+  chr::gl::Texture fboColorTexture;
+  chr::gl::Texture fboDepthTexture;
+
   void initTextures();
 };
