@@ -21,7 +21,6 @@ namespace chr
     coords2(1),
     requestType(REQUEST_EMPTY)
     {
-      GLuint textureId;
       glGenTextures(1, &textureId);
 
       glBindTexture(GL_TEXTURE_2D, textureId);
