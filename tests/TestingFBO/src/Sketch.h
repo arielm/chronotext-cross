@@ -3,6 +3,8 @@
 #include "chr/cross/Context.h"
 #include "chr/gl/Batch.h"
 #include "chr/gl/shaders/TextureShader.h"
+#include "chr/gl/shaders/TextureAlphaShader.h"
+#include "chr/gl/shaders/LambertShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -14,14 +16,17 @@ public:
   void draw() final;
 
 protected:
-  chr::gl::State state;
-
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> colorBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV.RGBA> textureBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> lightenBatch;
   chr::gl::shaders::TextureShader textureShader;
+  chr::gl::shaders::LambertShader lambertShader;
+  chr::gl::Texture texture;
 
   GLuint fboId;
   chr::gl::Texture fboColorTexture;
   chr::gl::Texture fboDepthTexture;
 
-  void drawScene();
+  void setupFramebuffer();
+  void drawScene1();
+  void drawScene2();
 };
