@@ -29,5 +29,5 @@ protected:
 
   void setupFramebuffer();
   void drawScene1();
-  void drawScene2();
+  void drawScene2(const glm::ivec2 &size);
 };

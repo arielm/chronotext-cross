@@ -48,7 +48,7 @@ void Sketch::setup()
 void Sketch::draw()
 {
   glBindFramebuffer(GL_FRAMEBUFFER, fboId);
-  drawScene2();
+  drawScene2(fboColorTexture.size);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 //  fboColorTexture.bind();
@@ -68,13 +68,13 @@ void Sketch::setupFramebuffer()
       .setFormat(GL_DEPTH_COMPONENT)
       .setType(GL_FLOAT));
 
-  glGenFramebuffersEXT(1, &fboId);
-  glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, fboId);
+  glGenFramebuffers(1, &fboId);
+  glBindFramebuffer(GL_FRAMEBUFFER, fboId);
 
-  glFramebufferTexture2DEXT(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboColorTexture.textureId, 0);
-  glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fboDepthTexture.textureId, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboColorTexture.textureId, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fboDepthTexture.textureId, 0);
 
-  glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Sketch::drawScene1()
@@ -109,9 +109,9 @@ void Sketch::drawScene1()
   textureBatch.flush();
 }
 
-void Sketch::drawScene2()
+void Sketch::drawScene2(const glm::ivec2 &size)
 {
-  glViewport(0, 0, fboColorTexture.width, fboColorTexture.height);
+  glViewport(0, 0, size.x, size.y);
 
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
@@ -122,7 +122,7 @@ void Sketch::drawScene2()
 
   // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, fboColorTexture.width / fboColorTexture.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, size.x / (float)size.y, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix
