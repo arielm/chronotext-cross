@@ -19,16 +19,12 @@ void Sketch::setup()
     .setMipmap(true)
     .setWrap(GL_REPEAT, GL_REPEAT));
 
-  //
-
   textureBatch
     .setShader(textureShader)
     .setShaderColor(1, 1, 1, 1)
     .setTexture(fboColorTexture);
 
-  lightenBatch
-    .setShader(lambertShader)
-    .setShaderColor(0.25f, 0.25f, 0.25f, 1);
+  lightenBatch.setTexture(texture);
 
   // ---
 
@@ -98,7 +94,7 @@ void Sketch::drawScene1()
 
   Matrix mvMatrix;
   mvMatrix
-    .scale(1, -1, 1)
+    .scale(1, 1, 1)
     .translate(0, 0, -400)
     .rotateY(clock()->getTime() * 0.0f); // XXX
 
@@ -144,5 +140,19 @@ void Sketch::drawScene2()
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();
 
-  lightenBatch.flush();
+  glEnable(GL_POLYGON_OFFSET_FILL);
+  glPolygonOffset(2, 1);
+
+  lightenBatch
+    .setShader(lambertShader)
+    .setShaderColor(0.25f, 0.25f, 0.25f, 1)
+    .flush();
+
+  glDepthMask(GL_FALSE);
+  glDisable(GL_POLYGON_OFFSET_FILL);
+
+  lightenBatch
+    .setShader(textureAlphaShader)
+    .setShaderColor(1, 1, 1, 0.5f)
+    .flush();
 }

@@ -19,6 +19,7 @@ protected:
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV.RGBA> textureBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> lightenBatch;
   chr::gl::shaders::TextureShader textureShader;
+  chr::gl::shaders::TextureAlphaShader textureAlphaShader;
   chr::gl::shaders::LambertShader lambertShader;
   chr::gl::Texture texture;
 
