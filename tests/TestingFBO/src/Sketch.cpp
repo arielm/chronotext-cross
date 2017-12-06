@@ -126,7 +126,7 @@ void Sketch::drawScene2()
 
   // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, fboColorTexture.width / fboColorTexture.height, 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix
