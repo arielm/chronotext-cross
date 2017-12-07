@@ -48,9 +48,12 @@ void Sketch::setup()
 
 void Sketch::draw()
 {
+  GLint defaultFBOId = 0;
+  if (CHR_PLATFORM == PLATFORM_IOS) glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBOId);
+
   glBindFramebuffer(GL_FRAMEBUFFER, fboId);
   drawScene2(fboColorTexture.size);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, defaultFBOId);
 
 //  fboColorTexture.bind();
 //  glGenerateMipmap(GL_TEXTURE_2D);
