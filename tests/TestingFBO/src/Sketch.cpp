@@ -66,7 +66,7 @@ void Sketch::setupFramebuffer()
 
   glGenRenderbuffers(1, &rboId);
   glBindRenderbuffer(GL_RENDERBUFFER, rboId);
-  glRenderbufferStorage(GL_RENDERBUFFER, (CHR_PLATFORM == PLATFORM_EMSCRIPTEN) ? GL_DEPTH_COMPONENT16 : GL_DEPTH_COMPONENT, 512, 512);
+  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, 512, 512);
   glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
   glGenFramebuffers(1, &fboId);
@@ -115,7 +115,7 @@ void Sketch::drawScene1()
   mvMatrix
     .scale(1, 1, 1)
     .translate(0, 0, -400)
-    .rotateY(clock()->getTime() * 0.0f); // XXX
+    .rotateY(clock()->getTime() * 0.25f);
 
   auto mvpMatrix = mvMatrix * projectionMatrix;
 
