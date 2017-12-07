@@ -24,8 +24,8 @@ protected:
   chr::gl::Texture texture;
 
   GLuint fboId;
+  GLuint rboId;
   chr::gl::Texture fboColorTexture;
-  chr::gl::Texture fboDepthTexture;
 
   void setupFramebuffer();
   void drawScene1();
