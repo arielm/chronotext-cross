@@ -40,6 +40,7 @@ list(APPEND SRC_FILES
   "chr/gl/Camera.cpp"
   "chr/gl/Matrix.cpp"
   "chr/gl/Texture.cpp"
+  "chr/gl/FBO.cpp"
   "chr/gl/State.cpp"
   "chr/gl/Buffer.cpp"
   "chr/gl/Vertex.cpp"

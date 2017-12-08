@@ -12,7 +12,7 @@ Sketch::Sketch()
 
 void Sketch::setup()
 {
-  setupFramebuffer();
+  fbo = FBO(512, 512);
 
   texture = Texture(Texture::ImageRequest("lys_32.png")
     .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
@@ -23,7 +23,7 @@ void Sketch::setup()
   textureBatch
     .setShader(textureShader)
     .setShaderColor(1, 1, 1, 1)
-    .setTexture(fboColorTexture);
+    .setTexture(fbo.colorTexture);
 
   lightenBatch.setTexture(texture);
 
@@ -31,7 +31,7 @@ void Sketch::setup()
 
   draw::Rect()
     .setBounds(-200, -200, 400, 400)
-    .setTextureScale(400.0f / fboColorTexture.width)
+    .setTextureScale(400.0f / fbo.colorTexture.width)
     .append(textureBatch, Matrix());
 
   //
@@ -48,55 +48,15 @@ void Sketch::setup()
 
 void Sketch::draw()
 {
-  GLint defaultFBOId = 0;
-  if (CHR_PLATFORM == PLATFORM_IOS) glGetIntegerv(GL_FRAMEBUFFER_BINDING, &defaultFBOId);
+  fbo.bind();
+  drawScene2(fbo.colorTexture.size);
+  fbo.unbind();
 
-  glBindFramebuffer(GL_FRAMEBUFFER, fboId);
-  drawScene2(fboColorTexture.size);
-  glBindFramebuffer(GL_FRAMEBUFFER, defaultFBOId);
-
-//  fboColorTexture.bind();
+//  fbo.colorTexture.bind();
 //  glGenerateMipmap(GL_TEXTURE_2D);
-//  fboColorTexture.unbind();
+//  fbo.colorTexture.unbind();
 
   drawScene1();
-}
-
-void Sketch::setupFramebuffer()
-{
-  fboColorTexture = Texture(
-    Texture::EmptyRequest(512, 512));
-
-  glGenRenderbuffers(1, &rboId);
-  glBindRenderbuffer(GL_RENDERBUFFER, rboId);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, 512, 512);
-  glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-  glGenFramebuffers(1, &fboId);
-  glBindFramebuffer(GL_FRAMEBUFFER, fboId);
-
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboColorTexture.textureId, 0);
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboId);
-
-  switch (glCheckFramebufferStatus(GL_FRAMEBUFFER))
-  {
-    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT :
-      printf("FBO Incomplete Attachment\n");
-      break;
-    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT :
-      printf("FBO Missing Attachment\n");
-      break;
-    case GL_FRAMEBUFFER_UNSUPPORTED :
-      printf("FBO Unsupported\n");
-      break;
-    case GL_FRAMEBUFFER_COMPLETE:
-      printf("FBO OK\n");
-      break;
-    default:
-      printf("FBO Problem?\n");
-  }
-
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Sketch::drawScene1()

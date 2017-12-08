@@ -5,6 +5,7 @@
 #include "chr/gl/shaders/TextureShader.h"
 #include "chr/gl/shaders/TextureAlphaShader.h"
 #include "chr/gl/shaders/LambertShader.h"
+#include "chr/gl/FBO.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -21,13 +22,10 @@ protected:
   chr::gl::shaders::TextureShader textureShader;
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
   chr::gl::shaders::LambertShader lambertShader;
+
   chr::gl::Texture texture;
+  chr::gl::FBO fbo;
 
-  GLuint fboId;
-  GLuint rboId;
-  chr::gl::Texture fboColorTexture;
-
-  void setupFramebuffer();
   void drawScene1();
   void drawScene2(const glm::ivec2 &size);
 };
