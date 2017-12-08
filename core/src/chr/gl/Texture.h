@@ -19,6 +19,9 @@ namespace chr
     class Texture
     {
     public:
+      /*
+       * TODO: Handle mipmap and anisotropy
+       */
       struct EmptyRequest
       {
         union
@@ -59,9 +62,14 @@ namespace chr
           return *this;
         }
 
-        EmptyRequest& setWrap(GLint min, GLint mag)
+        EmptyRequest& setMinFilter(GLint min)
         {
           minFilter = min;
+          return *this;
+        }
+
+        EmptyRequest& setMagFilter(GLint mag)
+        {
           magFilter = mag;
           return *this;
         }
