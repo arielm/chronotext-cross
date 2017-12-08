@@ -1,7 +1,7 @@
 #include "chr/gl/ShaderProgram.h"
 
 #include "chr/gl/Utils.h"
-#include "chr/Utils/Utils.h"
+#include "chr/utils/Utils.h"
 
 using namespace std;
 

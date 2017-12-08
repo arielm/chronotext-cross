@@ -271,10 +271,9 @@ namespace chr
     protected:
       enum RequestType
       {
-        REQUEST_NONE = 0,
-        REQUEST_EMPTY = 1,
-        REQUEST_IMAGE = 2,
-        REQUEST_MASKED = 3
+        REQUEST_EMPTY,
+        REQUEST_IMAGE,
+        REQUEST_MASKED
       };
 
       RequestType requestType;

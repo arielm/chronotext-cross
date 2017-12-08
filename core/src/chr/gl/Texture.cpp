@@ -5,7 +5,7 @@ namespace chr
 {
   namespace gl
   {
-    int Texture ::usageCounter = 0;
+    int Texture::usageCounter = 0;
 
     Texture::Texture()
     {}
