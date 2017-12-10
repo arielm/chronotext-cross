@@ -76,7 +76,7 @@ void Sketch::drawDot(const glm::vec2 &position, float radius)
 
 void Sketch::initTextures()
 {
-  texture = Texture(Texture::Request("dot_112.png")
+  texture = Texture(Texture::ImageRequest("dot_112.png")
     .setFlags(image::FLAGS_TRANSLUCENT)
     .setMipmap(true));
 }

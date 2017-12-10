@@ -93,12 +93,12 @@ void Sketch::initTextures()
     .setFlags(image::FLAGS_RBGA | image::FLAGS_POT, image::FLAGS_TRANSLUCENT)
     .setAnisotropy(true));
 
-  textures[1] = Texture(Texture::Request("camo.jpg")
+  textures[1] = Texture(Texture::ImageRequest("camo.jpg")
     .setFlags(image::FLAGS_TRANSLUCENT)
     .setMipmap(true)
     .setAnisotropy(true)
     .setWrap(GL_REPEAT, GL_REPEAT));
 
-  textures[2] = Texture(Texture::Request("banski.jpg")
+  textures[2] = Texture(Texture::ImageRequest("banski.jpg")
     .setAnisotropy(true));
 }

@@ -89,16 +89,16 @@ void Sketch::draw()
 
 void Sketch::initTextures()
 {
-  textures[0] = Texture(Texture::Request("6980491_UN1_800_MASK.png")
+  textures[0] = Texture(Texture::ImageRequest("6980491_UN1_800_MASK.png")
     .setFlags(image::FLAGS_POT)
     .setAnisotropy(true));
 
-  textures[1] = Texture(Texture::Request("lys_32.png")
+  textures[1] = Texture(Texture::ImageRequest("lys_32.png")
     .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
     .setMipmap(true)
     .setAnisotropy(true)
     .setWrap(GL_REPEAT, GL_REPEAT));
 
-  textures[2] = Texture(Texture::Request("expo67.png")
+  textures[2] = Texture(Texture::ImageRequest("expo67.png")
     .setAnisotropy(true));
 }
