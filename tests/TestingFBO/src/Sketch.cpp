@@ -43,7 +43,7 @@ void Sketch::setup()
   // ---
 
   glEnable(GL_BLEND);
-  glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // https://forum.openframeworks.cc/t/weird-problem-rendering-semi-transparent-image-to-fbo/2215/12
+  glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // https://www.opengl.org/discussion_boards/showthread.php/167554-FBO-and-blending
 }
 
 void Sketch::draw()
