@@ -22,7 +22,6 @@ void Sketch::setup()
 
   textureBatch
     .setShader(textureShader)
-    .setShaderColor(1, 1, 1, 1)
     .setTexture(fbo.colorTexture);
 
   lightenBatch.setTexture(texture);
@@ -31,6 +30,7 @@ void Sketch::setup()
 
   draw::Rect()
     .setBounds(-200, -200, 400, 400)
+    .setColor(1, 1, 1, 1)
     .setTextureScale(400.0f / fbo.colorTexture.width)
     .append(textureBatch, Matrix());
 
@@ -43,7 +43,7 @@ void Sketch::setup()
   // ---
 
   glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // https://forum.openframeworks.cc/t/weird-problem-rendering-semi-transparent-image-to-fbo/2215/12
 }
 
 void Sketch::draw()
