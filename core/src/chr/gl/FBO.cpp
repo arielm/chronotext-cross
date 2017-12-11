@@ -62,7 +62,7 @@ namespace chr
         glGenFramebuffers(1, &element->fboId);
         glBindFramebuffer(GL_FRAMEBUFFER, element->fboId);
 
-        colorTexture = Texture(Texture::EmptyRequest(width, height));
+        colorTexture = Texture(Texture::Format(width, height));
 
         glGenRenderbuffers(1, &element->rboId);
         glBindRenderbuffer(GL_RENDERBUFFER, element->rboId);

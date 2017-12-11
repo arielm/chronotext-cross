@@ -22,7 +22,7 @@ namespace chr
       /*
        * TODO: Handle mipmap and anisotropy
        */
-      struct EmptyRequest
+      struct Format
       {
         union
         {
@@ -37,44 +37,44 @@ namespace chr
         GLenum wrapS = GL_CLAMP_TO_EDGE;
         GLenum wrapT = GL_CLAMP_TO_EDGE;
 
-        EmptyRequest() = default;
+        Format() = default;
 
-        EmptyRequest(int width, int height)
+        Format(int width, int height)
         :
         width(width),
         height(height)
         {}
 
-        EmptyRequest(const glm::ivec2 &size)
+        Format(const glm::ivec2 &size)
         :
         size(size)
         {}
 
-        EmptyRequest& setFormat(GLenum format)
+        Format& setFormat(GLenum format)
         {
           this->format = format;
           return *this;
         }
 
-        EmptyRequest& setType(GLenum type)
+        Format& setType(GLenum type)
         {
           this->type = type;
           return *this;
         }
 
-        EmptyRequest& setMinFilter(GLint min)
+        Format& setMinFilter(GLint min)
         {
           minFilter = min;
           return *this;
         }
 
-        EmptyRequest& setMagFilter(GLint mag)
+        Format& setMagFilter(GLint mag)
         {
           magFilter = mag;
           return *this;
         }
 
-        EmptyRequest& setWrap(GLenum s, GLenum t)
+        Format& setWrap(GLenum s, GLenum t)
         {
           wrapS = s;
           wrapT = t;
@@ -220,7 +220,7 @@ namespace chr
       // ---
 
       Texture();
-      Texture(const EmptyRequest &request);
+      Texture(const Format &format);
       Texture(const ImageRequest &request);
       Texture(const MaskedRequest &request);
       Texture(const Response &response);
@@ -271,12 +271,12 @@ namespace chr
     protected:
       enum RequestType
       {
-        REQUEST_EMPTY,
+        REQUEST_NONE,
         REQUEST_IMAGE,
         REQUEST_MASKED
       };
 
-      RequestType requestType;
+      RequestType requestType = REQUEST_NONE;
       ImageRequest imageRequest;
       MaskedRequest maskedRequest;
 
