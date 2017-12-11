@@ -10,24 +10,24 @@ namespace chr
     Texture::Texture()
     {}
 
-    Texture::Texture(const Format &format)
+    Texture::Texture(const Params &params)
     :
     id(usageCounter++),
     element(new texture::Element()),
-    format(format.format),
-    size(format.size),
-    innerSize(format.size),
+    format(params.format),
+    size(params.size),
+    innerSize(params.size),
     coords1(1),
     coords2(1)
     {
       glGenTextures(1, &textureId);
 
       glBindTexture(GL_TEXTURE_2D, textureId);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, format.minFilter);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, format.magFilter);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format.wrapS);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format.wrapT);
-      glTexImage2D(GL_TEXTURE_2D, 0, format.format, format.width, format.height, 0, format.format, format.type, nullptr);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.minFilter);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.magFilter);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.wrapS);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, params.wrapT);
+      glTexImage2D(GL_TEXTURE_2D, 0, params.format, params.width, params.height, 0, params.format, params.type, nullptr);
       glBindTexture(GL_TEXTURE_2D, 0);
 
       element->textureId = textureId;

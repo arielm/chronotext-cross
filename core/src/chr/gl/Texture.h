@@ -22,7 +22,7 @@ namespace chr
       /*
        * TODO: Handle mipmap and anisotropy
        */
-      struct Format
+      struct Params
       {
         union
         {
@@ -37,44 +37,44 @@ namespace chr
         GLenum wrapS = GL_CLAMP_TO_EDGE;
         GLenum wrapT = GL_CLAMP_TO_EDGE;
 
-        Format() = default;
+        Params() = default;
 
-        Format(int width, int height)
+        Params(int width, int height)
         :
         width(width),
         height(height)
         {}
 
-        Format(const glm::ivec2 &size)
+        Params(const glm::ivec2 &size)
         :
         size(size)
         {}
 
-        Format& setFormat(GLenum format)
+        Params& setFormat(GLenum format)
         {
           this->format = format;
           return *this;
         }
 
-        Format& setType(GLenum type)
+        Params& setType(GLenum type)
         {
           this->type = type;
           return *this;
         }
 
-        Format& setMinFilter(GLint min)
+        Params& setMinFilter(GLint min)
         {
           minFilter = min;
           return *this;
         }
 
-        Format& setMagFilter(GLint mag)
+        Params& setMagFilter(GLint mag)
         {
           magFilter = mag;
           return *this;
         }
 
-        Format& setWrap(GLenum s, GLenum t)
+        Params& setWrap(GLenum s, GLenum t)
         {
           wrapS = s;
           wrapT = t;
@@ -220,7 +220,7 @@ namespace chr
       // ---
 
       Texture();
-      Texture(const Format &format);
+      Texture(const Params &params);
       Texture(const ImageRequest &request);
       Texture(const MaskedRequest &request);
       Texture(const Response &response);
