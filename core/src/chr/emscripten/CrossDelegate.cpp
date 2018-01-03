@@ -387,11 +387,22 @@ namespace chr
 
   EM_BOOL CrossDelegate::touchCallback(int eventType, const EmscriptenTouchEvent *e, void *userData)
   {
+    /*
+     * Hack for Safari on iOS because touch event identifiers are continually incrementing
+     * https://stackoverflow.com/questions/25008690/javascript-ipad-touch-event-identifier-is-continually-incrementing
+     */
+    int firstId;
+
     for (int i = 0; i < e->numTouches; ++i)
     {
       const EmscriptenTouchPoint *t = &e->touches[i];
 
-      int id = t->identifier;
+      if (i == 0)
+      {
+        firstId = t->identifier;
+      }
+
+      int id = t->identifier - firstId;
       float x = t->canvasX;
       float y = t->canvasY;
 
