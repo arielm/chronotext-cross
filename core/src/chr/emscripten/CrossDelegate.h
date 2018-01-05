@@ -7,6 +7,8 @@
 #include "chr/cross/WheelEvent.h"
 #include "chr/cross/Keyboard.h"
 
+#include <array>
+
 #include <emscripten.h>
 
 namespace chr
@@ -31,6 +33,8 @@ namespace chr
     void measureCanvas();
 
   protected:
+    static constexpr int FINGERS_CAPACITY = 10;
+
     enum
     {
       BROWSER_PLATFORM_UNDEFINED,
@@ -53,6 +57,8 @@ namespace chr
     int mouseButton = -1;
     bool mousePressed = false;
 
+    std::array<uint64_t, FINGERS_CAPACITY> fingers;
+
     int browserPlatform = BROWSER_PLATFORM_UNDEFINED;
 
     void processMouseEvents();
@@ -60,6 +66,9 @@ namespace chr
 
     void processTouchEvents();
     void clearTouchEvents();
+    int addFinger(uint64_t identifier);
+    int updateFinger(uint64_t identifier);
+    int removeFinger(uint64_t identifier);
 
     void processKeyEvents();
     void clearKeyEvents();

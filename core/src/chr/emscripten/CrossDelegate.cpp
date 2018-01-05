@@ -77,6 +77,13 @@ namespace chr
 
       // ---
 
+      for (int i = 0; i < FINGERS_CAPACITY; i++)
+      {
+        fingers[i] = 0;
+      }
+
+      // ---
+
       intern::instance = this;
       initialized_ = _init();
     }
@@ -250,6 +257,47 @@ namespace chr
     touchEvents.clear();
   }
 
+  int CrossDelegate::addFinger(uint64_t identifier)
+  {
+    for (int i = 0; i < FINGERS_CAPACITY; i++)
+    {
+      if (fingers[i] == 0)
+      {
+        fingers[i] = identifier;
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  int CrossDelegate::updateFinger(uint64_t identifier)
+  {
+    for (int i = 0; i < FINGERS_CAPACITY; i++)
+    {
+      if (fingers[i] == identifier)
+      {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  int CrossDelegate::removeFinger(uint64_t identifier)
+  {
+    for (int i = 0; i < FINGERS_CAPACITY; i++)
+    {
+      if (fingers[i] == identifier)
+      {
+        fingers[i] = 0;
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
   void CrossDelegate::processKeyEvents()
   {
     for (const auto &event : keyEvents)
@@ -387,39 +435,46 @@ namespace chr
 
   EM_BOOL CrossDelegate::touchCallback(int eventType, const EmscriptenTouchEvent *e, void *userData)
   {
-    /*
-     * Hack for Safari on iOS because touch event identifiers are continually incrementing
-     * https://stackoverflow.com/questions/25008690/javascript-ipad-touch-event-identifier-is-continually-incrementing
-     */
-    int firstId;
-
     for (int i = 0; i < e->numTouches; ++i)
     {
       const EmscriptenTouchPoint *t = &e->touches[i];
 
-      if (i == 0)
-      {
-        firstId = t->identifier;
-      }
-
-      int id = t->identifier - firstId;
+      uint64_t id = t->identifier;
       float x = t->canvasX;
       float y = t->canvasY;
 
       switch (eventType)
       {
         case EMSCRIPTEN_EVENT_TOUCHSTART:
-          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_ADD);
-          break;
+        {
+          int index = intern::instance->addFinger(id);
+          if (index != -1)
+          {
+            intern::instance->touchEvents.emplace_back(x, y, index, TouchEvent::KIND_ADD);
+          }
+        }
+        break;
 
         case EMSCRIPTEN_EVENT_TOUCHMOVE:
-          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_UPDATE);
-          break;
+        {
+          int index = intern::instance->updateFinger(id);
+          if (index != -1)
+          {
+            intern::instance->touchEvents.emplace_back(x, y, index, TouchEvent::KIND_UPDATE);
+          }
+        }
+        break;
 
         case EMSCRIPTEN_EVENT_TOUCHEND:
         case EMSCRIPTEN_EVENT_TOUCHCANCEL:
-          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_REMOVE);
-          break;
+        {
+          int index = intern::instance->removeFinger(id);
+          if (index != -1)
+          {
+            intern::instance->touchEvents.emplace_back(x, y, index, TouchEvent::KIND_REMOVE);
+          }
+        }
+        break;
       }
     }
 
