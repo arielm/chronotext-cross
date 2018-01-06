@@ -77,13 +77,6 @@ namespace chr
 
       // ---
 
-      for (int i = 0; i < FINGERS_CAPACITY; i++)
-      {
-        fingers[i] = 0;
-      }
-
-      // ---
-
       intern::instance = this;
       initialized_ = _init();
     }
@@ -257,47 +250,6 @@ namespace chr
     touchEvents.clear();
   }
 
-  int CrossDelegate::addFinger(uint64_t identifier)
-  {
-    for (int i = 0; i < FINGERS_CAPACITY; i++)
-    {
-      if (fingers[i] == 0)
-      {
-        fingers[i] = identifier;
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  int CrossDelegate::updateFinger(uint64_t identifier)
-  {
-    for (int i = 0; i < FINGERS_CAPACITY; i++)
-    {
-      if (fingers[i] == identifier)
-      {
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  int CrossDelegate::removeFinger(uint64_t identifier)
-  {
-    for (int i = 0; i < FINGERS_CAPACITY; i++)
-    {
-      if (fingers[i] == identifier)
-      {
-        fingers[i] = 0;
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
   void CrossDelegate::processKeyEvents()
   {
     for (const auto &event : keyEvents)
@@ -439,42 +391,24 @@ namespace chr
     {
       const EmscriptenTouchPoint *t = &e->touches[i];
 
-      uint64_t id = t->identifier;
+      int id = t->identifier;
       float x = t->canvasX;
       float y = t->canvasY;
 
       switch (eventType)
       {
         case EMSCRIPTEN_EVENT_TOUCHSTART:
-        {
-          int index = intern::instance->addFinger(id);
-          if (index != -1)
-          {
-            intern::instance->touchEvents.emplace_back(x, y, index, TouchEvent::KIND_ADD);
-          }
-        }
-        break;
+          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_ADD);
+          break;
 
         case EMSCRIPTEN_EVENT_TOUCHMOVE:
-        {
-          int index = intern::instance->updateFinger(id);
-          if (index != -1)
-          {
-            intern::instance->touchEvents.emplace_back(x, y, index, TouchEvent::KIND_UPDATE);
-          }
-        }
-        break;
+          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_UPDATE);
+          break;
 
         case EMSCRIPTEN_EVENT_TOUCHEND:
         case EMSCRIPTEN_EVENT_TOUCHCANCEL:
-        {
-          int index = intern::instance->removeFinger(id);
-          if (index != -1)
-          {
-            intern::instance->touchEvents.emplace_back(x, y, index, TouchEvent::KIND_REMOVE);
-          }
-        }
-        break;
+          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_REMOVE);
+          break;
       }
     }
 
