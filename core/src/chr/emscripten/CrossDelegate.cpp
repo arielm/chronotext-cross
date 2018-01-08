@@ -391,24 +391,27 @@ namespace chr
     {
       const EmscriptenTouchPoint *t = &e->touches[i];
 
-      int id = t->identifier;
-      float x = t->canvasX;
-      float y = t->canvasY;
-
-      switch (eventType)
+      if (t->isChanged)
       {
-        case EMSCRIPTEN_EVENT_TOUCHSTART:
-          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_ADD);
-          break;
+        int id = t->identifier;
+        float x = t->canvasX;
+        float y = t->canvasY;
 
-        case EMSCRIPTEN_EVENT_TOUCHMOVE:
-          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_UPDATE);
-          break;
+        switch (eventType)
+        {
+          case EMSCRIPTEN_EVENT_TOUCHSTART:
+            intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_ADD);
+            break;
 
-        case EMSCRIPTEN_EVENT_TOUCHEND:
-        case EMSCRIPTEN_EVENT_TOUCHCANCEL:
-          intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_REMOVE);
-          break;
+          case EMSCRIPTEN_EVENT_TOUCHMOVE:
+            intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_UPDATE);
+            break;
+
+          case EMSCRIPTEN_EVENT_TOUCHEND:
+          case EMSCRIPTEN_EVENT_TOUCHCANCEL:
+            intern::instance->touchEvents.emplace_back(x, y, id, TouchEvent::KIND_REMOVE);
+            break;
+        }
       }
     }
 
