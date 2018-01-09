@@ -6,7 +6,6 @@
 
 #include "chr/FileSystem.h"
 #include "chr/ResourceBuffer.h"
-#include "chr/cross/Context.h"
 
 #if defined(CHR_PLATFORM_OSX) || defined(CHR_PLATFORM_IOS)
   #import <Foundation/Foundation.h>

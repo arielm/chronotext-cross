@@ -9,7 +9,7 @@ if (NOT SKETCH)
     "${CROSS_ROOT}/src/chr/Log.cpp"
     "${CROSS_ROOT}/src/chr/InputSource.cpp"
     "${CROSS_ROOT}/src/chr/FileSystem.cpp"
-    "${CROSS_ROOT}/src/chr/MemoryBuffer.cpp"
+    "${CROSS_ROOT}/src/chr/ResourceBuffer.cpp"
   )
 
   if (PLATFORM MATCHES android)
