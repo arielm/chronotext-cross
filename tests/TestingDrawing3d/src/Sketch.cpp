@@ -20,9 +20,10 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
+  Matrix::Stack stack;
 
   matrix
-    .push()
+    .push(stack)
     .translate(-50, -75 * 0.5f, - 25 * 0.5f);
 
   draw::Box()
@@ -31,8 +32,8 @@ void Sketch::setup()
     .append(lightenBatch, matrix);
 
   matrix
-    .pop()
-    .push()
+    .pop(stack)
+    .push(stack)
     .translate(50, 0, 0);
 
   draw::Cube()
@@ -40,7 +41,7 @@ void Sketch::setup()
     .append(flatBatch, matrix);
 
   matrix
-    .pop()
+    .pop(stack)
     .translate(-50, 0, 0);
 
   draw::Cube()

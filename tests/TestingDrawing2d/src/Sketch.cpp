@@ -52,8 +52,9 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
+  Matrix::Stack stack;
 
-  matrix.push()
+  matrix.push(stack)
     .translate(200, 100)
     .rotateZ(30 * D2R);
   textureMatrix.set(matrix);
@@ -62,7 +63,7 @@ void Sketch::setup()
     .setColor(1, 1, 0.5f, 1)
     .setBounds(-200, -150, 300, 150)
     .append(backgroundBatch, matrix);
-  matrix.pop();
+  matrix.pop(stack);
 
   draw::Circle()
     .setColor(1, 0.5f, 0, 1)
