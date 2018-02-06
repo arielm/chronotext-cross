@@ -12,6 +12,8 @@
 #elif defined(CHR_PLATFORM_WIN)
   #include <windows.h>
   #include <shlobj.h>
+#elif defined(CHR_PLATFORM_ANDROID)
+  #include "android/JNI.h"
 #endif
 
 using namespace std;
