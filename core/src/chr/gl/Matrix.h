@@ -17,6 +17,8 @@ namespace chr
     class Matrix
     {
     public:
+      typedef std::vector<std::array<float, 16>> Stack;
+
       union
       {
         glm::mat4 m;
@@ -38,8 +40,6 @@ namespace chr
       Matrix(const glm::quat &quat);
       Matrix(const glm::vec3 &right, const glm::vec3 &up, const glm::vec3 &back);
 
-      Matrix(const Matrix &other) = delete;
-      
       operator std::array<float, 16>& () { return values; }
       operator const std::array<float, 16>& () const { return values; }
 
@@ -52,8 +52,8 @@ namespace chr
       Matrix& set(const glm::quat &quat);
       Matrix& set(const glm::vec3 &right, const glm::vec3 &up, const glm::vec3 &back);
 
-      Matrix& push();
-      Matrix& pop();
+      Matrix& push(Stack &stack);
+      Matrix& pop(Stack &stack);
 
       Matrix& setIdentity();
       Matrix& inverse();
@@ -109,9 +109,6 @@ namespace chr
 
       template<int Primitive = GL_TRIANGLES, int FrontFace = CCW, int V = XYZ, typename I = GLushort>
       void addTransformedQuad(const Quad<V> &quad, IndexedVertexBatch<V, I> &output) const;
-
-    protected:
-      std::vector<std::array<float, 16>> stack;
     };
   }
 }

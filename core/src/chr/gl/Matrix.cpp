@@ -98,13 +98,13 @@ namespace chr
       return *this;
     }
 
-    Matrix& Matrix::push()
+    Matrix& Matrix::push(Stack &stack)
     {
       stack.push_back(values);
       return *this;
     }
 
-    Matrix& Matrix::pop()
+    Matrix& Matrix::pop(Stack &stack)
     {
       if (!stack.empty())
       {
