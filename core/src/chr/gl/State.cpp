@@ -11,7 +11,7 @@ namespace chr
       State current;
     }
 
-      State::State()
+    State::State()
     :
     id(usageCounter++),
     element(new state::Element())
@@ -42,9 +42,7 @@ namespace chr
 
     State::~State()
     {
-      element->useCount--;
-
-      if (element->useCount == 0)
+      if (--element->useCount == 0)
       {
         delete element;
       }
@@ -199,6 +197,11 @@ namespace chr
             #endif
             break;
         }
+      }
+
+      if (--state::current->useCount == 0)
+      {
+        delete state::current.element;
       }
 
       state::current = *this;
