@@ -27,10 +27,21 @@ namespace chr
 
       if (createWindow(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits))
       {
+        int width = initInfo.windowInfo.size.x;
+        int height = initInfo.windowInfo.size.y;
+
+        if (width * height == 0)
+        {
+          RECT desktopRect;
+          GetWindowRect(GetDesktopWindow(), &desktopRect);
+          width = desktopRect.right;
+          height = desktopRect.bottom;
+        }
+
         /*
          * FIXME: setupInfo.windowInfo.aaSamples SHOULD REFLECT THE VALUE EFFECTIVELY SET DURING createWindow()
          */
-        setupInfo.windowInfo = WindowInfo(initInfo.windowInfo.size.x, initInfo.windowInfo.size.y, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits);
+        setupInfo.windowInfo = WindowInfo(width, height, initInfo.windowInfo.aaSamples, initInfo.windowInfo.depthBits);
 
         // ---
 
