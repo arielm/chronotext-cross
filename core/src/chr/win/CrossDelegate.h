@@ -7,6 +7,7 @@
 #include "chr/cross/Keyboard.h"
 
 typedef BOOL (__stdcall *PFNWGLCHOOSEPIXELFORMATARBPROC)(HDC hdc, const int*, const FLOAT*, UINT, int*, UINT*); // XXX
+typedef BOOL (APIENTRY *PFNWGLSWAPINTERVALFARPROC)(int);
 
 namespace chr
 {
@@ -39,6 +40,7 @@ namespace chr
     HDC dc;
     HGLRC rc;
     PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = nullptr;
+    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = nullptr;
 
     void processMouseEvents();
     void clearMouseEvents();

@@ -424,6 +424,11 @@ namespace chr
     SetForegroundWindow(wnd);
     SetFocus(wnd);
 
+    if (wglSwapIntervalEXT)
+    {
+      wglSwapIntervalEXT(1);
+    }
+
     return true;
   }
 
@@ -498,6 +503,7 @@ namespace chr
     wglMakeCurrent(tmpDC, tmpRC);
 
     wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)wglGetProcAddress("wglSwapIntervalEXT");
 
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext(tmpRC);
