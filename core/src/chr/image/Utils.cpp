@@ -218,7 +218,7 @@ namespace chr
 
           for (auto i = 0; i < height; i++)
           {
-          rows[i] = data + i * image.components * image.width;
+            rows[i] = data + i * image.components * image.width;
           }
 
           png_read_image(png_ptr, &rows[0]);
