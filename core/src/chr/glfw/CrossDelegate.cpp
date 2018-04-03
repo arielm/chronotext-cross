@@ -25,6 +25,7 @@ namespace chr
       {
         glfwWindowHint(GLFW_SAMPLES, initInfo.windowInfo.aaSamples);
         glfwWindowHint(GLFW_DEPTH_BITS, initInfo.windowInfo.depthBits);
+        glfwWindowHint(GLFW_STENCIL_BITS, 8); // XXX
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);

@@ -341,7 +341,7 @@ namespace chr
         WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
         WGL_COLOR_BITS_ARB, 24,
         WGL_DEPTH_BITS_ARB, (depthBits > 0) ? 16 : 0,
-        WGL_STENCIL_BITS_ARB, 0,
+        WGL_STENCIL_BITS_ARB, 8, // XXX
         WGL_SAMPLE_BUFFERS_ARB, 1,
         WGL_SAMPLES_ARB, 4, // XXX
         0
@@ -376,7 +376,7 @@ namespace chr
         0,                             // No Accumulation Buffer
         0, 0, 0, 0,                    // Accumulation Bits Ignored
         (depthBits > 0) ? 16 : 0,      // depth bits
-        0,                             // stencil bits
+        8,                             // stencil bits
         0,                             // No Auxiliary Buffer
         PFD_MAIN_PLANE,                // Main Drawing Layer
         0,                             // Reserved
