@@ -33,9 +33,10 @@ namespace chr
      * S-SHAPED CROSS-FADE CURVE: 3 * (t ^ 2) - 2 * (t ^ 3)
      */
     float ease(float t);
-
     float easeIn(float t);
     float easeOut(float t);
+
+    float lerp(float a, float b, float u);
 
     int nextPowerOfTwo(int x);
     bool isPowerOfTwo(int x);

@@ -40,7 +40,12 @@ namespace chr
     {
       return (t > 0.5f) ? ease(t) : t;
     }
-    
+
+    float lerp(float a, float b, float u)
+    {
+      return a + ( b - a ) * u;
+    }
+
     int nextPowerOfTwo(int x)
     {
       int result = 1;
