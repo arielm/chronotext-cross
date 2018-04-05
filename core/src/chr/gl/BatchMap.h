@@ -39,7 +39,7 @@ namespace chr
       std::map<Texture, VertexBatch<V>> map;
     };
 
-    template<int V = XYZ, typename I = GLushort>
+    template<int V = XYZ, typename I = GLuint>
     class IndexedBatchMap
     {
     public:

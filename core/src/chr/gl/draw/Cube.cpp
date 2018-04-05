@@ -34,7 +34,7 @@ namespace chr
       }
 
       template <>
-      void Cube::append(IndexedVertexBatch<XYZ, GLushort> &batch, const Matrix &matrix) const
+      void Cube::append(IndexedVertexBatch<XYZ, GLuint> &batch, const Matrix &matrix) const
       {
         float unit = size * 0.5f;
 
@@ -75,7 +75,7 @@ namespace chr
       }
 
       template <>
-      void Cube::append(IndexedVertexBatch<XYZ.N, GLushort> &batch, const Matrix &matrix) const
+      void Cube::append(IndexedVertexBatch<XYZ.N, GLuint> &batch, const Matrix &matrix) const
       {
         float unit = size * 0.5f;
 
@@ -155,7 +155,7 @@ namespace chr
       }
 
       template <>
-      void Cube::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, const Matrix &matrix) const
+      void Cube::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch, const Matrix &matrix) const
       {
         float unit = size * 0.5f;
 
@@ -228,7 +228,7 @@ namespace chr
       }
 
       template <>
-      void Cube::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, const Matrix &matrix) const
+      void Cube::append(IndexedVertexBatch<XYZ.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
         float unit = size * 0.5f;
 
@@ -308,7 +308,7 @@ namespace chr
       }
 
       template <>
-      void Cube::append(IndexedVertexBatch<XYZ.N.UV, GLushort> &batch, const Matrix &matrix) const
+      void Cube::append(IndexedVertexBatch<XYZ.N.UV, GLuint> &batch, const Matrix &matrix) const
       {
         float unit = size * 0.5f;
 
@@ -388,7 +388,7 @@ namespace chr
       }
 
       template <>
-      void Cube::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, const Matrix &matrix) const
+      void Cube::append(IndexedVertexBatch<XYZ.N.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
         float unit = size * 0.5f;
         
