@@ -74,6 +74,7 @@ namespace chr
       Matrix& rotateX(float a);
       Matrix& rotateY(float a);
       Matrix& rotateZ(float a);
+      Matrix& rotateXY(float sx, float sy); // sx: sin(ax), sy: sin(ay)
 
       template<int T = 1>
       Matrix& applyQuat(const glm::quat &q);
