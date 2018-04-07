@@ -138,5 +138,93 @@ namespace chr
 
 			return sqrtf(dx * dx + dy * dy);
 		}
+
+    // ---
+
+    Recti::Recti(int left, int top, int width, int height)
+    :
+    x1(left),
+    y1(top),
+    x2(left + width),
+    y2(top + height)
+    {}
+
+    Recti::Recti(const glm::ivec2 &upperLeft, const glm::ivec2 &lowerRight)
+    :
+    x1(upperLeft.x),
+    y1(upperLeft.y),
+    x2(lowerRight.x),
+    y2(lowerRight.y)
+    {}
+
+    const Recti	Recti::operator + (const glm::ivec2 &offset) const
+    {
+      return Recti(glm::ivec2(x1, y1) + offset, glm::ivec2(x2, y2) + offset);
+    }
+
+    const Recti	Recti::operator - (const glm::ivec2 &offset) const
+    {
+      return Recti(glm::ivec2(x1, y1) - offset, glm::ivec2(x2, y2) - offset);
+    }
+
+    Recti& Recti::operator += (const glm::ivec2 &offset)
+    {
+      x1 += offset.x;
+      y1 += offset.y;
+      x2 += offset.x;
+      y2 += offset.y;
+
+      return *this;
+    }
+
+    Recti& Recti::operator -= (const glm::ivec2 &offset)
+    {
+      x1 -= offset.x;
+      y1 -= offset.y;
+      x2 -= offset.x;
+      y2 -= offset.y;
+
+      return *this;
+    }
+
+    int Recti::width() const
+    {
+      return x2 - x1;
+    }
+
+    int Recti::height() const
+    {
+      return y2 - y1;
+    }
+
+    glm::ivec2 Recti::size() const
+    {
+      return glm::ivec2(x2 - x1, y2 - y1);
+    }
+
+    glm::ivec2 Recti::x1y1() const
+    {
+      return glm::ivec2(x1, y1);
+    }
+
+    glm::ivec2 Recti::x2y1() const
+    {
+      return glm::ivec2(x2, y1);
+    }
+
+    glm::ivec2 Recti::x2y2() const
+    {
+      return glm::ivec2(x2, y2);
+    }
+
+    glm::ivec2 Recti::x1y2() const
+    {
+      return glm::ivec2(x1, y2);
+    }
+
+    bool Recti::isNull() const
+    {
+      return (x1 == x2) || (y1 == y2);
+    }
 	}
 }
