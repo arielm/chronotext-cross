@@ -18,6 +18,9 @@ namespace chr
     
     virtual void enableAccelerometer(float updateFrequency = 30, float filterFactor = 0.1f) {}
     virtual void disableAccelerometer() {}
+
+    virtual void showCursor() {}
+    virtual void hideCursor() {}
     
 //    virtual ci::JsonTree jsonQuery(const char *methodName) { return ci::JsonTree(); }
     
