@@ -332,4 +332,14 @@ namespace chr
      */
     intern::instance->wheelEvents.emplace_back(-yoffset);
   }
+
+  void CrossDelegate::hideCursor()
+  {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+  }
+
+  void CrossDelegate::showCursor()
+  {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  }
 }

@@ -23,6 +23,9 @@ namespace chr
     void performUpdate();
     void performDraw();
 
+    void showCursor() final;
+    void hideCursor() final;
+
     void run(int width, int height, int aaSamples = 0, int depthBits = 0);
 
   protected:
