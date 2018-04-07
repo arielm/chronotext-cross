@@ -44,5 +44,37 @@ namespace chr
       glm::vec2 center() const;
       float distance(const glm::vec2 &point) const;
     };
+
+    // ---
+
+    class Recti
+    {
+    public:
+      int x1;
+      int y1;
+      int x2;
+      int y2;
+
+      Recti() = default;
+      Recti(int left, int top, int width, int height);
+      Recti(const glm::ivec2 &upperLeft, const glm::ivec2 &lowerRight);
+
+      const Recti	operator + (const glm::ivec2 &offset) const;
+      const Recti	operator - (const glm::ivec2 &offset) const;
+
+      Recti& operator += (const glm::ivec2 &offset);
+      Recti& operator -= (const glm::ivec2 &offset);
+
+      int width() const;
+      int height() const;
+      glm::ivec2 size() const;
+
+      glm::ivec2 x1y1() const;
+      glm::ivec2 x2y1() const;
+      glm::ivec2 x2y2() const;
+      glm::ivec2 x1y2() const;
+
+      bool isNull() const;
+    };
   }
 }
