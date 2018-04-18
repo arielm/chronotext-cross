@@ -108,7 +108,7 @@ namespace chr
       template<int Primitive = GL_TRIANGLES, int FrontFace = CCW, int V = XYZ>
       void addTransformedQuad(const Quad<V> &quad, std::vector<Vertex<V>> &output) const;
 
-      template<int Primitive = GL_TRIANGLES, int FrontFace = CCW, int V = XYZ, typename I = GLushort>
+      template<int Primitive = GL_TRIANGLES, int FrontFace = CCW, int V = XYZ, typename I = GLuint>
       void addTransformedQuad(const Quad<V> &quad, IndexedVertexBatch<V, I> &output) const;
     };
   }

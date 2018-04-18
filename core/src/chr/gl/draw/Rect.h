@@ -26,10 +26,10 @@ namespace chr
         Rect& setBounds(const glm::vec2 &upperLeft, const glm::vec2 &lowerRight);
         Rect& setBounds(float left, float top, float width, float height);
 
-        template<int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLuint>
         void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix) const;
 
-        template<int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLuint>
         void append(IndexedVertexBatch<V,I> &batch) const;
 
       protected:

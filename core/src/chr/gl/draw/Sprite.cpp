@@ -49,7 +49,7 @@ namespace chr
       // ---
 
       template <>
-      void Sprite::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, const Matrix &matrix, float x, float y) const
+      void Sprite::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch, const Matrix &matrix, float x, float y) const
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
@@ -66,7 +66,7 @@ namespace chr
       }
 
       template <>
-      void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, const Matrix &matrix, float x, float y) const
+      void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLuint> &batch, const Matrix &matrix, float x, float y) const
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
@@ -85,7 +85,7 @@ namespace chr
       // ---
 
       template <>
-      void Sprite::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, float x, float y) const
+      void Sprite::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch, float x, float y) const
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
@@ -110,7 +110,7 @@ namespace chr
       }
 
       template <>
-      void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLushort> &batch, float x, float y) const
+      void Sprite::append(IndexedVertexBatch<XYZ.UV.RGBA, GLuint> &batch, float x, float y) const
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
