@@ -340,7 +340,7 @@ namespace chr
         WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
         WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
         WGL_COLOR_BITS_ARB, 24,
-        WGL_DEPTH_BITS_ARB, (depthBits > 0) ? 16 : 0,
+        WGL_DEPTH_BITS_ARB, depthBits,
         WGL_STENCIL_BITS_ARB, 8, // XXX
         WGL_SAMPLE_BUFFERS_ARB, 1,
         WGL_SAMPLES_ARB, 4, // XXX
@@ -375,7 +375,7 @@ namespace chr
         0,                             // Shift Bit Ignored
         0,                             // No Accumulation Buffer
         0, 0, 0, 0,                    // Accumulation Bits Ignored
-        (depthBits > 0) ? 16 : 0,      // depth bits
+        depthBits,                     // depth bits
         8,                             // stencil bits
         0,                             // No Auxiliary Buffer
         PFD_MAIN_PLANE,                // Main Drawing Layer
@@ -631,5 +631,29 @@ namespace chr
     if ((GetKeyState(VK_LWIN) | GetKeyState(VK_RWIN)) & (1 << 31)) modifiers |= chr::KeyEvent::MODIFIER_META;
 
     return modifiers;
+  }
+
+  /*
+   * hideCursor() and showCursor() are based on Cinder 8.5
+   */
+
+  void CrossDelegate::hideCursor()
+  {
+    int counter;
+
+    while ((counter = ShowCursor(false)) > -1);
+
+    // when repeatedly calling hideCursor(), keep counter at -1
+    if (counter < -1) while (ShowCursor(true) < -1);
+  }
+
+  void CrossDelegate::showCursor()
+  {
+    int counter;
+
+    while ((counter = ShowCursor(true)) < 0 );
+
+    // when repeatedly calling showCursor(), keep counter at 0
+    if (counter > 0) while (ShowCursor(false) > 0);
   }
 }

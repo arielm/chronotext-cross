@@ -26,10 +26,10 @@ namespace chr
         Circle& setArc(float a1, float a2);
         Circle& setSegmentLength(float length);
 
-        template<int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLuint>
         void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix, float x = 0, float y = 0) const;
 
-        template<int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLuint>
         inline void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix, const glm::vec2 &position) const
         {
           append(batch, matrix, position.x, position.y);

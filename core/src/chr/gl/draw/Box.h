@@ -32,7 +32,7 @@ namespace chr
           return *this;
         }
 
-        template<int V = XYZ, typename I = GLushort>
+        template<int V = XYZ, typename I = GLuint>
         void append(IndexedVertexBatch<V,I> &batch, const Matrix &matrix) const;
 
       protected:

@@ -327,7 +327,7 @@ namespace chr
       }
     };
 
-    template<int V = XYZ, typename I = GLushort>
+    template<int V = XYZ, typename I = GLuint>
     class IndexedVertexBatch : public VertexBatch<V>
     {
     public:

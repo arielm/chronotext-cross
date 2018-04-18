@@ -61,7 +61,7 @@ namespace chr
       }
 
       template <>
-      void Box::append(IndexedVertexBatch<XYZ, GLushort> &batch, const Matrix &matrix) const
+      void Box::append(IndexedVertexBatch<XYZ, GLuint> &batch, const Matrix &matrix) const
       {
         float x0 = 0, x1 = width;
         float y0 = 0, y1 = height;
@@ -108,7 +108,7 @@ namespace chr
       }
 
       template <>
-      void Box::append(IndexedVertexBatch<XYZ.N, GLushort> &batch, const Matrix &matrix) const
+      void Box::append(IndexedVertexBatch<XYZ.N, GLuint> &batch, const Matrix &matrix) const
       {
         float x0 = 0, x1 = width;
         float y0 = 0, y1 = height;
@@ -194,7 +194,7 @@ namespace chr
       }
 
       template <>
-      void Box::append(IndexedVertexBatch<XYZ.UV, GLushort> &batch, const Matrix &matrix) const
+      void Box::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch, const Matrix &matrix) const
       {
         float x0 = 0, x1 = width;
         float y0 = 0, y1 = height;
@@ -273,7 +273,7 @@ namespace chr
       }
 
       template <>
-      void Box::append(IndexedVertexBatch<XYZ.RGBA, GLushort> &batch, const Matrix &matrix) const
+      void Box::append(IndexedVertexBatch<XYZ.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
         float x0 = 0, x1 = width;
         float y0 = 0, y1 = height;
@@ -359,7 +359,7 @@ namespace chr
       }
 
       template <>
-      void Box::append(IndexedVertexBatch<XYZ.N.UV, GLushort> &batch, const Matrix &matrix) const
+      void Box::append(IndexedVertexBatch<XYZ.N.UV, GLuint> &batch, const Matrix &matrix) const
       {
         float x0 = 0, x1 = width;
         float y0 = 0, y1 = height;
@@ -445,7 +445,7 @@ namespace chr
       }
 
       template <>
-      void Box::append(IndexedVertexBatch<XYZ.N.RGBA, GLushort> &batch, const Matrix &matrix) const
+      void Box::append(IndexedVertexBatch<XYZ.N.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
         float x0 = 0, x1 = width;
         float y0 = 0, y1 = height;
