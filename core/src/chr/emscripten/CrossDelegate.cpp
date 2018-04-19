@@ -41,7 +41,7 @@ namespace chr
       // ---
 
       measureCanvas();
-      setupInfo.windowInfo = WindowInfo(canvasBounds.width(), canvasBounds.height(), initInfo.windowInfo.aaSamples);
+      setupInfo.windowInfo = WindowInfo(canvasSize.x, canvasSize.y, initInfo.windowInfo.aaSamples);
 
       // ---
 
@@ -176,13 +176,9 @@ namespace chr
 
   void CrossDelegate::measureCanvas()
   {
-    int x = EM_ASM_INT_V("return document.getElementById('canvas').getBoundingClientRect().left");
-    int y = EM_ASM_INT_V("return document.getElementById('canvas').getBoundingClientRect().top");
-
     int width = EM_ASM_INT_V("return document.getElementById('canvas').clientWidth");
     int height = EM_ASM_INT_V("return document.getElementById('canvas').clientHeight");
-
-    canvasBounds = math::Rectf(x,y, width, height);
+    canvasSize = glm::ivec2(width, height);
   }
 
   void CrossDelegate::processMouseEvents()
@@ -338,8 +334,8 @@ namespace chr
   EM_BOOL CrossDelegate::resizeCallback(int eventType, const EmscriptenUiEvent *e, void *userData)
   {
     intern::instance->measureCanvas();
-    int canvasWidth = intern::instance->canvasBounds.width();
-    int canvasHeight = intern::instance->canvasBounds.height();
+    int canvasWidth = intern::instance->canvasSize.x;
+    int canvasHeight = intern::instance->canvasSize.y;
 
     if ((canvasWidth != intern::instance->setupInfo.windowInfo.width) || (canvasHeight != intern::instance->setupInfo.windowInfo.height))
     {
@@ -373,11 +369,10 @@ namespace chr
 
       case EMSCRIPTEN_EVENT_MOUSEMOVE:
       {
-        intern::instance->mouseX = e->clientX - intern::instance->canvasBounds.x1;
-        intern::instance->mouseY = e->clientY - intern::instance->canvasBounds.y1;
+        intern::instance->mouseX = e->canvasX;
+        intern::instance->mouseY = e->canvasY;
 
         intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
-
       }
       break;
     }
