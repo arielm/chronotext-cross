@@ -46,7 +46,7 @@ namespace chr
     std::vector<WheelEvent> wheelEvents;
     std::vector<AccelEvent> accelerationEvents;
 
-    math::Rectf canvasBounds;
+    glm::ivec2 canvasSize;
 
     float mouseX;
     float mouseY;
