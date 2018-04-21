@@ -36,12 +36,13 @@ namespace chr
     static InputSource resource(const fs::path &relativePath);
     static InputSource file(const fs::path &filePath);
     static InputSource buffer(const void *data, size_t size);
+    static InputSource uri(const std::string uri);
 
   protected:
     Type type = TYPE_UNDEFINED;
     fs::path filePath;
     fs::path relativePath;
-    std::string uri;
+    std::string _uri;
     const void* data = nullptr;
     size_t dataSize = 0;
   };

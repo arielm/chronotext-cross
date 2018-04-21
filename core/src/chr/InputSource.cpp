@@ -43,7 +43,7 @@ namespace chr
 
   const string& InputSource::getUri() const
   {
-    return uri;
+    return _uri;
   }
 
   const void* InputSource::getData() const
@@ -83,7 +83,7 @@ namespace chr
 
     inputSource.type = TYPE_RESOURCE;
     inputSource.relativePath = relativePath;
-    inputSource.uri = "res://" + relativePath.string();
+    inputSource._uri = "res://" + relativePath.string();
 
     return inputSource;
   }
@@ -94,7 +94,7 @@ namespace chr
 
     inputSource.type = TYPE_FILE;
     inputSource.filePath = filePath;
-    inputSource.uri = "file://" + filePath.string();
+    inputSource._uri = "file://" + filePath.string();
 
     return inputSource;
   }
@@ -106,8 +106,34 @@ namespace chr
     inputSource.type = TYPE_BUFFER;
     inputSource.data = data;
     inputSource.dataSize = size;
-    inputSource.uri = "mem://" + utils::toString((uint64_t)data);
+    inputSource._uri = "mem://" + utils::toString((uint64_t)data);
 
     return inputSource;
+  }
+
+  InputSource InputSource::uri(const std::string uri)
+  {
+    auto found = uri.find("://");
+
+    if (found != string::npos)
+    {
+      auto path = uri.substr(found + 3);
+
+      if (!path.empty())
+      {
+        auto scheme = uri.substr(0, found);
+
+        if (scheme == "res")
+        {
+          return InputSource::resource(path);
+        }
+        else if (scheme == "file")
+        {
+          return InputSource::file(path);
+        }
+      }
+    }
+
+    return InputSource();
   }
 }
