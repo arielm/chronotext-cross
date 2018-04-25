@@ -1,6 +1,7 @@
 #pragma once
 
 #include "chr/gl/ShaderProgram.h"
+#include "chr/gl/Matrix.h"
 
 namespace chr
 {
@@ -116,6 +117,14 @@ namespace chr
       State& setShaderMatrix(float *values)
       {
         element->matrices4[T] = glm::make_mat4(values);
+        element->hasMatrix4[T] = true;
+        return *this;
+      }
+
+      template<int T = MV>
+      State& setShaderMatrix(const Matrix &matrix)
+      {
+        element->matrices4[T] = matrix.m;
         element->hasMatrix4[T] = true;
         return *this;
       }
