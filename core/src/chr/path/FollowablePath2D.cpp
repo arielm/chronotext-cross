@@ -72,6 +72,18 @@ namespace chr
       return lengths;
     }
 
+    vector<glm::vec2> FollowablePath2D::getPolyline() const
+    {
+      vector<glm::vec2> polyline;
+
+      for (const auto &point : points)
+      {
+        polyline.push_back(point.position);
+      }
+
+      return polyline;
+    }
+
     FollowablePath2D& FollowablePath2D::begin()
     {
       points.clear();

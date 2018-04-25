@@ -60,6 +60,7 @@ namespace chr
       float getLength() const;
       const std::vector<Point>& getPoints() const;
       const std::vector<float>& getLengths() const;
+      std::vector<glm::vec2> getPolyline() const;
 
       FollowablePath2D& begin();
       FollowablePath2D& end(bool close = false);
