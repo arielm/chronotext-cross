@@ -24,6 +24,9 @@ namespace chr
       Rectf& operator += (const glm::vec2 &offset);
       Rectf& operator -= (const glm::vec2 &offset);
 
+      const Rectf operator * (float s) const;
+      Rectf& operator *= (float s);
+
       float width() const;
       float height() const;
       glm::vec2 size() const;

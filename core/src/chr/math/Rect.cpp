@@ -20,15 +20,15 @@ namespace chr
 		y2(lowerRight.y)
 		{}
 
-    const Rectf	Rectf::operator + (const glm::vec2 &offset) const
-    {
-      return Rectf(glm::vec2(x1, y1) + offset, glm::vec2(x2, y2) + offset);
-    }
+	    const Rectf	Rectf::operator + (const glm::vec2 &offset) const
+	    {
+	      	return Rectf(glm::vec2(x1, y1) + offset, glm::vec2(x2, y2) + offset);
+	    }
 
-    const Rectf	Rectf::operator - (const glm::vec2 &offset) const
-    {
-      return Rectf(glm::vec2(x1, y1) - offset, glm::vec2(x2, y2) - offset);
-    }
+	    const Rectf	Rectf::operator - (const glm::vec2 &offset) const
+	    {
+	      	return Rectf(glm::vec2(x1, y1) - offset, glm::vec2(x2, y2) - offset);
+	    }
 
 		Rectf& Rectf::operator += (const glm::vec2 &offset)
 		{
@@ -49,6 +49,22 @@ namespace chr
 
 			return *this;
 		}
+
+
+      	const Rectf Rectf::operator * (float s) const
+      	{
+      		return Rectf(glm::vec2(x1, y1) * s, glm::vec2(x2, y2) * s);
+      	}
+
+      	Rectf& Rectf::operator *= (float s)
+      	{
+			x1 *= s;
+			y1 *= s;
+			x2 *= s;
+			y2 *= s;
+
+			return *this;
+      	}
 
 		float Rectf::width() const
 		{
@@ -100,7 +116,7 @@ namespace chr
 			x1 -= amount.x;
 			y1 -= amount.y;
 
-		  x2 += amount.x;
+		  	x2 += amount.x;
 			y2 += amount.y;
 		}
 
