@@ -41,6 +41,7 @@ namespace chr
       Triangulator& setContourCapture(int capture);
       bool exportContours(IndexedVertexBatch<XYZ> &batch, const Matrix &matrix) const;
 
+      Triangulator& add(const math::Rectf &rect);
       Triangulator& add(const path::Shape &shape);
       Triangulator& add(const std::vector<glm::vec2> &polyline);
 

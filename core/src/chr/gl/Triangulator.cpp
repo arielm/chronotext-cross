@@ -201,6 +201,18 @@ namespace chr
 
     // ---
 
+    Triangulator& Triangulator::add(const Rectf &rect)
+    {
+      vector<glm::vec2> polyline;
+      polyline.push_back(rect.x1y1());
+      polyline.push_back(rect.x1y2());
+      polyline.push_back(rect.x2y2());
+      polyline.push_back(rect.x1y2());
+      add(polyline);
+
+      return *this;
+    }
+
     Triangulator& Triangulator::add(const Shape &shape)
     {
       windingRule = convert(shape.getFillRule());
