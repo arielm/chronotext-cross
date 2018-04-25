@@ -205,7 +205,7 @@ namespace chr
     {
       vector<glm::vec2> polyline;
       polyline.push_back(rect.x1y1());
-      polyline.push_back(rect.x1y2());
+      polyline.push_back(rect.x2y1());
       polyline.push_back(rect.x2y2());
       polyline.push_back(rect.x1y2());
       add(polyline);
