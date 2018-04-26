@@ -142,4 +142,33 @@ namespace chr
 
     return "";
   }
+
+  #if defined(CHR_PLATFORM_IOS)
+    fs::path getLibraryFolder()
+    {
+	    string path = [NSHomeDirectory() cStringUsingEncoding:NSUTF8StringEncoding];
+	    path += "/Library/";
+	    return path;
+    }
+  #elif defined(CHR_PLATFORM_ANDROID)
+    fs::path getInternalDataPath()
+    {
+      return fs::path(chr::android::internalDataPath);
+    }
+
+    fs::path getExternalDataPath()
+    {
+      return fs::path(chr::android::externalDataPath);
+    }
+  #endif
+
+  fs::path getFolderOrCreateIt(const fs::path &folderPath)
+  {
+    if (!fs::exists(folderPath))
+    {
+      fs::create_directories(folderPath);
+    }
+
+    return folderPath;
+  }
 }

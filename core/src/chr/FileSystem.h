@@ -20,4 +20,13 @@ namespace chr
   std::shared_ptr<std::istream> getResourceStream(const fs::path &relativePath);
 
   fs::path getDocumentsFolder();
+
+  #if defined(CHR_PLATFORM_IOS)
+    fs::path getLibraryFolder();
+  #elif defined(CHR_PLATFORM_ANDROID)
+    fs::path getInternalDataPath();
+    fs::path getExternalDataPath();
+  #endif
+
+  fs::path getFolderOrCreateIt(const fs::path &folderPath);
 }
