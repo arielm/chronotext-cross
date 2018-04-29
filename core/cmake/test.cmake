@@ -289,7 +289,7 @@ if (NOT SKETCH)
     )
   endif()
 else()
-  if (PLATFORM MATCHES ios|osx)
+  if (PLATFORM MATCHES ios)
     list(APPEND LIBRARIES
       "-framework AVFoundation"
       "-framework AudioToolbox"
