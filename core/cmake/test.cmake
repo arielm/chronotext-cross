@@ -288,6 +288,13 @@ if (NOT SKETCH)
       GLESv2
     )
   endif()
+else()
+  if (PLATFORM MATCHES ios|osx)
+    list(APPEND LIBRARIES
+      "-framework AVFoundation"
+      "-framework AudioToolbox"
+    )
+  endif()
 endif()
 
 include_directories(
