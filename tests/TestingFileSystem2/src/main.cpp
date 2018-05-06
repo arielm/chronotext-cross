@@ -40,7 +40,7 @@ TEST(TestFileSystem2, TextResource)
   else if (chr::hasFileResources())
   {
     auto resPath = chr::getResourceFilePath(path);
-    fs::ifstream in(resPath, ios::in | ios::binary | ios::ate);
+    fs::ifstream in(resPath, ios::binary | ios::ate);
     
     if (in)
     {
@@ -59,7 +59,7 @@ TEST(TestFileSystem2, TextResource)
   }
 }
 
-TEST(TestFileSystem2, ImageResource)
+TEST(TestFileSystem2, ImageResource1)
 {
   fs::path path = "2008.547.1crop_4.jpg";
   int expectedX = 850;
@@ -73,15 +73,15 @@ TEST(TestFileSystem2, ImageResource)
     if (resourceBuffer)
     {
       int x, y, comp;
-      stbi_uc *data = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(resourceBuffer->data()), resourceBuffer->size(), &x, &y, &comp, 0);
+      stbi_uc *imageData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(resourceBuffer->data()), resourceBuffer->size(), &x, &y, &comp, 0);
 
-      if (data)
+      if (imageData)
       {
         EXPECT_EQ(expectedX, x);
         EXPECT_EQ(expectedY, y);
         EXPECT_EQ(expectedComp, comp);
 
-        stbi_image_free(data);
+        stbi_image_free(imageData);
       }
       else
       {
@@ -111,6 +111,51 @@ TEST(TestFileSystem2, ImageResource)
     else
     {
       ADD_FAILURE() << "stbi_load";
+    }
+  }
+}
+
+TEST(TestFileSystem2, ImageResource2)
+{
+  if (chr::hasFileResources())
+  {
+    fs::path path = "2008.547.1crop_4.jpg";
+    int expectedX = 850;
+    int expectedY = 850;
+    int expectedComp = 3;
+
+    auto resPath = chr::getResourceFilePath(path);
+    fs::ifstream in(resPath, ios::binary | ios::ate);
+
+    if (in)
+    {
+      auto fileSize = in.tellg();
+      in.seekg(0, ios::beg);
+              
+      char *data = new char[fileSize];
+      in.read(data, fileSize);
+
+      //
+
+      int x, y, comp;
+      stbi_uc *imageData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(data), fileSize, &x, &y, &comp, 0);
+
+      if (imageData)
+      {
+        EXPECT_EQ(expectedX, x);
+        EXPECT_EQ(expectedY, y);
+        EXPECT_EQ(expectedComp, comp);
+
+        stbi_image_free(imageData);
+      }
+      else
+      {
+        ADD_FAILURE() << "stbi_load_from_memory";
+      }
+    }
+    else
+    {
+      ADD_FAILURE() << "fs::ifstream";
     }
   }
 }
