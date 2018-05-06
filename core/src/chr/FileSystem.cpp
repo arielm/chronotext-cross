@@ -82,14 +82,15 @@ namespace chr
 
   shared_ptr<ResourceBuffer> getResourceBuffer(const fs::path &relativePath)
   {
-    #if !defined(CHR_FS_APK) && !defined(CHR_FS_RC) && !defined(CHR_FS_JS_EMBED) && !defined(CHR_FS_JS_PRELOAD)
-      return nullptr;
-    #endif
-
     auto buffer = make_shared<ResourceBuffer>();
-    buffer->lock(relativePath);
-
-    return buffer;
+    if (buffer->lock(relativePath))
+    {
+      return buffer;
+    }
+    else
+    {
+      return nullptr;
+    }
   }
 
   shared_ptr<istream> getResourceStream(const fs::path &relativePath)

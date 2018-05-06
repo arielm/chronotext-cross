@@ -59,7 +59,7 @@ TEST(TestFileSystem2, TextResource)
   }
 }
 
-TEST(TestFileSystem2, ImageResource1)
+TEST(TestFileSystem2, BinaryResource)
 {
   fs::path path = "2008.547.1crop_4.jpg";
   int expectedX = 850;
@@ -115,7 +115,7 @@ TEST(TestFileSystem2, ImageResource1)
   }
 }
 
-TEST(TestFileSystem2, ImageResource2)
+TEST(TestFileSystem2, BinaryFile)
 {
   if (chr::hasFileResources())
   {
@@ -157,5 +157,38 @@ TEST(TestFileSystem2, ImageResource2)
     {
       ADD_FAILURE() << "fs::ifstream";
     }
+  }
+}
+
+TEST(TestFileSystem2, ForcedMemoryLoad)
+{
+  fs::path path = "2008.547.1crop_4.jpg";
+  int expectedX = 850;
+  int expectedY = 850;
+  int expectedComp = 3;
+
+  auto resourceBuffer = chr::getResourceBuffer(path);
+
+  if (resourceBuffer)
+  {
+    int x, y, comp;
+    stbi_uc *imageData = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(resourceBuffer->data()), resourceBuffer->size(), &x, &y, &comp, 0);
+
+    if (imageData)
+    {
+      EXPECT_EQ(expectedX, x);
+      EXPECT_EQ(expectedY, y);
+      EXPECT_EQ(expectedComp, comp);
+
+      stbi_image_free(imageData);
+    }
+    else
+    {
+      ADD_FAILURE() << "stbi_load_from_memory";
+    }
+  }
+  else
+  {
+    ADD_FAILURE() << "chr::getResourceBuffer";
   }
 }

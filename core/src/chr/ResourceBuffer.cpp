@@ -84,6 +84,26 @@ namespace chr
           _data = nullptr;
         }
       }
+    #else
+      assert(hasFileResources());
+
+      auto basePath = getResourceFilePath(relativePath);
+      fs::ifstream in(basePath, ios::binary | ios::ate);
+
+      if (in)
+      {
+        auto fileSize = in.tellg();
+        in.seekg(0, ios::beg);
+
+        char *fileData = new char[fileSize];
+        in.read(fileData, fileSize);
+
+        _size = fileSize;
+        _data = fileData;
+
+        locked = true;
+        return true;
+      }
     #endif
 
     return false;
@@ -102,9 +122,16 @@ namespace chr
       {
         munmap(_data, _size);
       }
+    #elif !defined(CHR_FS_RC)
+      assert(hasFileResources());
+
+      if (_data && _size)
+      {
+        delete[] (char*)_data;
+      }
     #endif
 
-    #if defined(CHR_FS_APK) || defined(CHR_FS_JS_EMBED) || defined(CHR_FS_JS_PRELOAD)
+    #if !defined(CHR_FS_RC)
       _size = 0;
       _data = nullptr;
 
