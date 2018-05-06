@@ -280,6 +280,11 @@ if (NOT SKETCH)
       "-framework Foundation"
     )
 
+    set_source_files_properties(
+      "${CROSS_ROOT}/src/chr/FileSystem.cpp"
+      PROPERTIES COMPILE_FLAGS "-x objective-c++"
+    )
+
   elseif (PLATFORM MATCHES android AND RUN MATCHES APK)
     list(APPEND LIBRARIES
       log
