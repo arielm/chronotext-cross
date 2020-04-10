@@ -39,7 +39,7 @@ namespace chr
      return shader;
     }
 
-    tuple<GLuint, GLuint, GLuint> ShaderHelper::loadProgram(experimental::string_view vertexShaderSource, experimental::string_view fragmentShaderSource)
+    tuple<GLuint, GLuint, GLuint> ShaderHelper::loadProgram(const string &vertexShaderSource, const string &fragmentShaderSource)
     {
       GLuint programId = 0;
       GLuint vertexShaderId = 0;

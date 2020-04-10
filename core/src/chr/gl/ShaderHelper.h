@@ -3,8 +3,6 @@
 #include "chr/gl/Vertex.h"
 #include "chr/gl/ShaderProgram.h"
 
-#include <experimental/string_view>
-
 namespace chr
 {
   namespace gl
@@ -13,7 +11,7 @@ namespace chr
     {
     public:
       static GLuint createShader(GLenum type, const char *source);
-      static std::tuple<GLuint, GLuint, GLuint> loadProgram(std::experimental::string_view vertexShaderSource, std::experimental::string_view fragmentShaderSource);
+      static std::tuple<GLuint, GLuint, GLuint> loadProgram(const std::string &vertexShaderSource, const std::string &fragmentShaderSource);
       static void unloadProgram(GLuint programId, GLuint vertexShaderId, GLuint fragmentShaderId);
 
       template<typename T>
