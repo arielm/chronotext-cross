@@ -237,7 +237,7 @@ elseif (PLATFORM MATCHES ios)
     )
 
     foreach (resource_file ${RESOURCE_FILES})
-      set_source_files_properties(${resource_file} PROPERTIES MACOSX_PACKAGE_LOCATION ${PROJECT_NAME}.app)
+      set_source_files_properties(${resource_file} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     endforeach()
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
