@@ -85,6 +85,7 @@ if (PLATFORM MATCHES osx)
     "-framework OpenGL"
     "-framework IOKit"
     "-framework CoreVideo"
+    "-framework AudioToolbox"
   )
 
 elseif (PLATFORM MATCHES mxe)
@@ -102,6 +103,8 @@ elseif (PLATFORM MATCHES ios)
     "-framework OpenGLES"
     "-framework CoreGraphics"
     "-framework CoreVideo"
+    "-framework AudioToolbox"
+    "-framework AVFoundation"
   )
 
 elseif (PLATFORM MATCHES android)
