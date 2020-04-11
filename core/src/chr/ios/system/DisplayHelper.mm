@@ -88,42 +88,59 @@ namespace chr
         }
         else if (magSize == 320 * 568)
         {
-          if (contentScale == 2)
-          {
-            diagonal = 4.00f; // IPHONE 5
-          }
-          else
-          {
-            diagonal = 4.70f; // IPHONE 6
-          }
+          diagonal = 4.0f; // IPHONE 5, IPHONE 5S, IPHONE 5C, IPHONE SE
         }
         else if (magSize == 375 * 667)
         {
-          if (contentScale == 2)
-          {
-            diagonal = 4.70f; // IPHONE 6
-          }
-          else
-          {
-            diagonal = 5.50f; // IPHONE 6+
-          }
+          diagonal = 4.7f; // IPHONE 6, IPHONE 6S, IPHONE 7, IPHONE 8
         }
         else if (magSize == 414 * 736)
         {
-          diagonal = 5.50f; // IPHONE 6+
+          diagonal = 5.5f; // IPHONE 6+, IPHONE 6S+, IPHONE 7+, IPHONE 8+
+        }
+        else if (magSize == 375 * 812)
+        {
+          diagonal = 5.8f; // IPHONE X, IPHONE XS, IPHONE 11 PRO
+        }
+        else if (magSize == 414 * 896)
+        {
+          if (getSystemInfo().isIPhoneMax)
+          {
+            diagonal = 6.5f; // IPHONE XS MAX, IPHONE 11 PRO MAX
+          }
+          else
+          {
+            diagonal = 6.1f; // IPHONE XR, IPHONE 11
+          }
         }
         else if (magSize == 1024 * 768)
         {
           if (getSystemInfo().isIPadMini)
           {
-            diagonal = 7.90f; // IPAD MINI
+            diagonal = 7.9f; // IPAD MINI
           }
           else
           {
-            diagonal = 9.70f; // IPAD
+            diagonal = 9.7f; // IPAD...
           }
         }
-        
+        else if (magSize == 1080 * 810)
+        {
+          diagonal = 10.2f; // IPAD 7
+        }
+        else if (magSize == 1112 * 834)
+        {
+          diagonal = 10.5f; // IPAD AIR 3, IPAD PRO 10.5"
+        }
+        else if (magSize == 1194 * 834)
+        {
+          diagonal = 11.0f; // IPAD PRO 11"
+        }
+        else if (magSize == 1366 * 1024)
+        {
+          diagonal = 12.9f; // IPAD PRO 12.9"
+        }
+
         intern::displayInfo = DisplayInfo::createWithDiagonal(baseSize.x, baseSize.y, diagonal, contentScale);
         
         // ---

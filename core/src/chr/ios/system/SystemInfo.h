@@ -24,12 +24,25 @@ namespace chr
         GENERATION_IPAD_2,
         GENERATION_IPAD_3,
         GENERATION_IPAD_4,
+        GENERATION_IPAD_5,
+        GENERATION_IPAD_6,
+        GENERATION_IPAD_7,
         GENERATION_IPAD_AIR,
         GENERATION_IPAD_AIR_2,
+        GENERATION_IPAD_AIR_3,
+
+        GENERATION_IPAD_PRO_12_9,
+        GENERATION_IPAD_PRO_9_7,
+        GENERATION_IPAD_PRO_12_9_2,
+        GENERATION_IPAD_PRO_10_5,
+        GENERATION_IPAD_PRO_11,
+        GENERATION_IPAD_PRO_12_9_3,
         
         GENERATION_IPAD_MINI_1G,
         GENERATION_IPAD_MINI_2,
         GENERATION_IPAD_MINI_3,
+        GENERATION_IPAD_MINI_4,
+        GENERATION_IPAD_MINI_5,
         
         GENERATION_IPHONE_3GS,
         GENERATION_IPHONE_4,
@@ -39,10 +52,26 @@ namespace chr
         GENERATION_IPHONE_5S,
         GENERATION_IPHONE_6,
         GENERATION_IPHONE_6_PLUS,
+        GENERATION_IPHONE_6S,
+        GENERATION_IPHONE_6S_PLUS,
+        GENERATION_IPHONE_SE,
+        GENERATION_IPHONE_7,
+        GENERATION_IPHONE_7_PLUS,
+        GENERATION_IPHONE_8,
+        GENERATION_IPHONE_8_PLUS,
+        GENERATION_IPHONE_X,
+        GENERATION_IPHONE_XR,
+        GENERATION_IPHONE_XS,
+        GENERATION_IPHONE_XS_MAX,
+        GENERATION_IPHONE_11,
+        GENERATION_IPHONE_11_PRO,
+        GENERATION_IPHONE_11_PRO_MAX,
         
         GENERATION_IPOD_TOUCH_3G,
         GENERATION_IPOD_TOUCH_4G,
-        GENERATION_IPOD_TOUCH_5G
+        GENERATION_IPOD_TOUCH_5G,
+        GENERATION_IPOD_TOUCH_6G,
+        GENERATION_IPOD_TOUCH_7G
       };
       
       std::string model;
@@ -51,6 +80,7 @@ namespace chr
       
       bool isPodTouch = false;
       bool isIPhone = false;
+      bool isIPhoneMax = false;
       bool isIPad = false;
       bool isIPadMini = false;
       bool isSimulator = false;
