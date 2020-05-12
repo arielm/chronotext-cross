@@ -162,10 +162,14 @@ namespace chr
 
 - (void) performResize
 {
+  float contentScale = UIScreen.mainScreen.scale;
+  float safeAreaInsetsTop = viewController.view.window.safeAreaInsets.top * contentScale;
+  float safeAreaInsetsBottom = viewController.view.window.safeAreaInsets.bottom * contentScale;
+    
   auto size = [self windowSize];
   DLOG(@"CrossBridge:performResize - %dx%d", size.x, size.y);
   
-  crossDelegate->performResize(size);
+  crossDelegate->performResize(size, safeAreaInsetsTop, safeAreaInsetsBottom);
 }
 
 - (void) performUpdate

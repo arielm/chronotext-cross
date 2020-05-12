@@ -52,11 +52,13 @@ namespace chr
     setup();
   }
 
-  void CrossSketch::performResize(const glm::vec2 &size)
+  void CrossSketch::performResize(const glm::vec2 &size, float safeAreaInsetsTop, float safeAreaInsetsBottom)
   {
     if (forceResize || (size != windowInfo.size))
     {
       windowInfo.size = size;
+      windowInfo.safeAreaInsetsTop = safeAreaInsetsTop;
+      windowInfo.safeAreaInsetsBottom = safeAreaInsetsBottom;
       forceResize = false;
 
       resize();

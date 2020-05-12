@@ -93,7 +93,7 @@ namespace chr
     FrameClock::Ref clock() const;
 
     void performSetup(const WindowInfo &windowInfo);
-    void performResize(const glm::vec2 &size);
+    void performResize(const glm::vec2 &size, float safeAreaInsetsTop = 0, float safeAreaInsetsBottom = 0);
     void performStart(StartReason reason);
     void performStop(StopReason reason);
     void performUpdate();

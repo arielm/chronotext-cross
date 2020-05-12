@@ -67,10 +67,10 @@ namespace chr
     }
   }
   
-  void CrossDelegate::performResize(const glm::vec2 &size)
+  void CrossDelegate::performResize(const glm::vec2 &size, float safeAreaInsetsTop, float safeAreaInsetsBottom)
   {
     setupInfo.windowInfo.size = size;
-    sketch->performResize(size);
+    sketch->performResize(size, safeAreaInsetsTop, safeAreaInsetsBottom);
   }
   
   void CrossDelegate::performUpdate()

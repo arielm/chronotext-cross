@@ -13,7 +13,7 @@ namespace chr
     void performSetup(const WindowInfo &windowInfo);
     void performShutdown();
     
-    void performResize(const glm::vec2 &size);
+    void performResize(const glm::vec2 &size, float safeAreaInsetsTop, float safeAreaInsetsBottom);
     void performUpdate();
     void performDraw();
 

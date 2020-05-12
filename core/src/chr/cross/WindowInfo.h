@@ -16,6 +16,8 @@ namespace chr
 
     int aaSamples;
     int depthBits;
+    float safeAreaInsetsTop = 0;
+    float safeAreaInsetsBottom = 0;
 
     static WindowInfo create(int width, int height, int aaSamples = 0, int depthBits = 0)
     {
