@@ -5,7 +5,7 @@ set(IOS_ARCHS
   CACHE STRING "ios_archs"
 )
 
-set(IOS_DEPLOYMENT_TARGET 10.0
+set(IOS_DEPLOYMENT_TARGET 11.0
   CACHE STRING "ios_deployment_target"
 )
 
