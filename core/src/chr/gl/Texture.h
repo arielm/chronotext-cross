@@ -220,7 +220,7 @@ namespace chr
       // ---
 
       Texture();
-      Texture(GLuint textureId, int width, int size, GLenum format = GL_RGBA);
+      Texture(GLuint textureId, int width, int height, GLenum format = GL_RGBA);
       Texture(const Params &params);
       Texture(const ImageRequest &request);
       Texture(const MaskedRequest &request);

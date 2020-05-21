@@ -10,7 +10,7 @@ namespace chr
     Texture::Texture()
     {}
 
-    Texture::Texture(GLuint textureId, int width, int size, GLenum format)
+    Texture::Texture(GLuint textureId, int width, int height, GLenum format)
     :
     id(usageCounter++),
     element(new texture::Element()),
