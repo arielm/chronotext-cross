@@ -20,7 +20,7 @@ namespace chr
     format(format),
     innerWidth(width),
     innerHeight(height),
-    coords1(1),
+    coords1(0),
     coords2(1)
     {
       element->textureId = textureId;
@@ -34,7 +34,7 @@ namespace chr
     format(params.format),
     size(params.size),
     innerSize(params.size),
-    coords1(1),
+    coords1(0),
     coords2(1)
     {
       glGenTextures(1, &textureId);
