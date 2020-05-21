@@ -10,6 +10,23 @@ namespace chr
     Texture::Texture()
     {}
 
+    Texture::Texture(GLuint textureId, int width, int size, GLenum format)
+    :
+    id(usageCounter++),
+    element(new texture::Element()),
+    textureId(textureId),
+    width(width),
+    height(height),
+    format(format),
+    innerWidth(width),
+    innerHeight(height),
+    coords1(1),
+    coords2(1)
+    {
+      element->textureId = textureId;
+      element->useCount++;
+    }
+
     Texture::Texture(const Params &params)
     :
     id(usageCounter++),
