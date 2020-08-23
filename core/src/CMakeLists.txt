@@ -45,7 +45,7 @@ list(APPEND SRC_FILES
   "chr/gl/Buffer.cpp"
   "chr/gl/Vertex.cpp"
   "chr/gl/Triangulator.cpp"
-  "chr/gl/Revolver.cpp"
+# "chr/gl/Revolver.cpp"
   "chr/gl/TextureManager.cpp"
   "chr/gl/draw/Circle.cpp"
   "chr/gl/draw/Rect.cpp"
