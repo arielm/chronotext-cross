@@ -3,7 +3,7 @@
 #include "glm.h"
 #include "chr/Platform.h"
 
-#if defined(CHR_PLATFORM_GLFW)
+#if defined(CHR_PLATFORM_OSX)
   #include <OpenGL/gl.h>
   #include <OpenGL/glext.h>
 #elif defined(CHR_PLATFORM_WIN)
@@ -19,6 +19,8 @@
 #elif defined(CHR_PLATFORM_ANDROID)
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
+#elif defined(CHR_PLATFORM_RPI)
+  #include "glad/gl.h"
 #endif
 
 #if defined (CHR_PLATFORM_DESKTOP)
