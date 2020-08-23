@@ -251,7 +251,7 @@ if (PLATFORM MATCHES rpi)
     -lpng16
     "${JPEG_ROOT}/rpi/lib/libturbojpeg.a"
   )
-else
+else()
   list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
   list(APPEND LIBRARIES
     "${BOOST_ROOT}/lib/libboost_system.a"
