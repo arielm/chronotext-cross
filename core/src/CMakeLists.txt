@@ -114,6 +114,13 @@ elseif (PLATFORM MATCHES android)
     "chr/android/system/DisplayHelper.cpp"
     "chr/android/system/SystemManager.cpp"
   )
+
+elseif (PLATFORM MATCHES rpi)
+  list(APPEND SRC_FILES
+    "chr/glfw/CrossDelegate.cpp"
+    "chr/glfw/system/DisplayHelper.cpp"
+    "chr/rpi/system/SystemManager.cpp"
+  )
 endif()
 
 # ---
@@ -162,6 +169,20 @@ elseif (PLATFORM MATCHES mxe)
     "${NFD_SRC}/nfd_common.c"
     "${NFD_SRC}/nfd_win.cpp"
   )
+
+elseif (PLATFORM MATCHES rpi)
+  set(GLFW_SRC "${TREE}/glfw/src")
+
+  list(APPEND INCLUDE_DIRS
+    "${GLFW_ROOT}/include"
+    "${GLFW_SRC}/deps"
+  )
+
+  list(APPEND SRC_FILES
+    "${GLFW_SRC}/deps/glad_gl.c"
+  )
+
+  list(APPEND LIBRARIES "${GLFW_ROOT}/lib/libglfw3.a")
 endif()
 
 if (PLATFORM MATCHES osx)
@@ -206,23 +227,45 @@ elseif (PLATFORM MATCHES android)
     EGL
     GLESv2
   )
+
+elseif (PLATFORM MATCHES rpi)
+  add_definitions(-DCHR_RUN_EXE)
 endif()
 
 # ---
 
-list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
-list(APPEND LIBRARIES
-  "${BOOST_ROOT}/lib/libboost_system.a"
-  "${BOOST_ROOT}/lib/libboost_filesystem.a"
-)
+if (PLATFORM MATCHES rpi)
+  find_package(Boost COMPONENTS system filesystem REQUIRED)
+  find_package(OpenGL REQUIRED)
+
+  list(APPEND INCLUDE_DIRS
+    ${Boost_INCLUDE_DIRS}
+    "${JPEG_ROOT}/rpi/include"
+  )
+
+  list(APPEND LIBRARIES
+    ${Boost_LIBRARIES}
+    OpenGL::GL
+    -ldl
+    -lpthread
+    -lpng16
+    "${JPEG_ROOT}/rpi/lib/libturbojpeg.a"
+  )
+else
+  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
+  list(APPEND LIBRARIES
+    "${BOOST_ROOT}/lib/libboost_system.a"
+    "${BOOST_ROOT}/lib/libboost_filesystem.a"
+  )
+
+  list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/include")
+  list(APPEND LIBRARIES "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
+
+  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
+  list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
+endif
 
 list(APPEND INCLUDE_DIRS "${GLM_ROOT}/include")
-
-list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/include")
-list(APPEND LIBRARIES "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
-
-list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
-list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
 
 list(APPEND INCLUDE_DIRS "${LIBTESS2_ROOT}/include")
 list(APPEND LIBRARIES "${LIBTESS2_ROOT}/lib/libtess2.a")
