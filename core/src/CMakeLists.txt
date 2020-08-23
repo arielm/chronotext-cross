@@ -263,7 +263,7 @@ else()
 
   list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
   list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
-endif
+endif()
 
 list(APPEND INCLUDE_DIRS "${GLM_ROOT}/include")
 
