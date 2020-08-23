@@ -9,7 +9,7 @@ namespace chr
   {
     const string& platformName()
     {
-      static const string PLATFORM_NAMES[5] = { "OSX", "iOS", "Android", "Emscripten", "Windows" };
+      static const string PLATFORM_NAMES[5] = { "OSX", "iOS", "Android", "Emscripten", "Windows", "Raspberry PI" };
       return PLATFORM_NAMES[CHR_PLATFORM];
     }
 

@@ -28,8 +28,13 @@ namespace chr
         glfwWindowHint(GLFW_STENCIL_BITS, 8); // XXX
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        #if defined(CHR_PLATFORM_RPI)
+          glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+          glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        #else
+          glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+          glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+        #endif
 
         // ---
 
@@ -75,7 +80,10 @@ namespace chr
 
           glfwSwapInterval(1);
           glfwMakeContextCurrent(window);
-//          gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+
+          #if defined(CHR_PLATFORM_RPI)
+            gladLoadGL(glfwGetProcAddress);
+          #endif
 
           // ---
 

@@ -16,6 +16,7 @@ namespace chr
     PLATFORM_ANDROID,
     PLATFORM_EMSCRIPTEN,
     PLATFORM_WIN,
+    PLATFORM_RPI
   };
 }
 
@@ -41,6 +42,11 @@ namespace chr
   #define CHR_PLATFORM chr::PLATFORM_WIN
   #define CHR_PLATFORM_WIN 1
   #define CHR_PLATFORM_DESKTOP 1
+#elif defined(linux) || defined(__linux) || defined(__linux__)
+  #define CHR_PLATFORM chr::PLATFORM_RPI
+  #define CHR_PLATFORM_RPI 1
+  #define CHR_PLATFORM_DESKTOP 1
+  #define CHR_PLATFORM_GLFW 1
 #else
   #error UNSUPPORTED PLATFORM
 #endif // __APPLE__
