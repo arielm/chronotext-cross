@@ -13,6 +13,8 @@
   #include "chr/win/system/SystemManager.h"
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
   #include "chr/emscripten/system/SystemManager.h"
+#elif defined(CHR_PLATFORM_RPI)
+  #include "chr/rpi/system/SystemManager.h"
 #endif
 
 namespace chr
