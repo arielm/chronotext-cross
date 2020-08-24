@@ -13,7 +13,7 @@ namespace chr
 
   int main(int argc, char** argv)
   {
-    chr::CrossSketch::run(1024, 768, 4, 24);
+    chr::CrossSketch::run(0, 0, 4, 24);
     return 0;
   }
 
