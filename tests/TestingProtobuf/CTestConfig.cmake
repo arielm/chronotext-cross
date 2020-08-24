@@ -2,7 +2,7 @@
 set(CTEST_PROJECT_NAME TestingProtobuf)
 set(CTEST_CONFIGURATION_TYPE Release)
 
-if (PLATFORM MATCHES osx)
+if (PLATFORM MATCHES osx|rpi)
   set(ARGS
     -DRUN=EXE
   )
