@@ -29,16 +29,17 @@ void Sketch::setup()
   // ---
 
   Matrix matrix;
+  Matrix::Stack stack;
 
   matrix
-    .push()
+    .push(stack)
     .scale(0.333f);
   draw::Sprite()
     .setAnchor(0.5f, 0.5f)
     .append(textureBatches[0], matrix);
 
   matrix
-    .pop()
+    .pop(stack)
     .translate(0, 0, 5);
   draw::Rect()
     .setBounds(-200, -150, 400, 300)
