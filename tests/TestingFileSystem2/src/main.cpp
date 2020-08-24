@@ -3,7 +3,6 @@
 #include "chr/ResourceBuffer.h"
 
 #include <gtest/gtest.h>
-#include <string_view>
 
 // ---
 
@@ -28,7 +27,7 @@ TEST(TestFileSystem2, TextResource)
 
     if (resourceBuffer)
     {
-      string_view text(reinterpret_cast<const char*>(resourceBuffer->data()), resourceBuffer->size());
+      string text(reinterpret_cast<const char*>(resourceBuffer->data()), resourceBuffer->size());
       EXPECT_EQ(expectedText, text);
     }
     else
