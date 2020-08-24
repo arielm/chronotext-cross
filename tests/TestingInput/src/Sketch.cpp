@@ -2,19 +2,9 @@
 
 using namespace std;
 using namespace chr;
-using namespace gl;
 
 void Sketch::setup()
 {
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
-
-  state
-    .setShader(colorShader)
-    .setShaderColor(1, 1, 1, 1)
-    .setShaderMatrix(projectionMatrix);
-
-  // ---
-
   glDisable(GL_DEPTH_TEST);
   glDepthMask(GL_FALSE);
 
@@ -26,8 +16,6 @@ void Sketch::draw()
 {
   glClearColor(0.5f, 0.5f, 0.5f, 1);
   glClear(GL_COLOR_BUFFER_BIT);
-
-  state.apply();
 }
 
 void Sketch::keyPressed(uint32_t codepoint)

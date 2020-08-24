@@ -1,8 +1,6 @@
 #pragma once
 
 #include "chr/cross/Context.h"
-#include "chr/gl/Batch.h"
-#include "chr/gl/shaders/ColorShader.h"
 
 class Sketch : public chr::CrossSketch
 {
@@ -22,8 +20,4 @@ public:
   void mouseReleased(int button, float x, float y);
 
   void wheelUpdated(float offset);
-
-protected:
-  chr::gl::State state;
-  chr::gl::shaders::ColorShader colorShader;
 };
