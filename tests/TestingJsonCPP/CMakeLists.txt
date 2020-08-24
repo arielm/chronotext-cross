@@ -11,6 +11,7 @@ if (PLATFORM MATCHES rpi)
 
   list(APPEND LIBRARIES
     ${Boost_LIBRARIES}
+    -lpthread
   )
 else()
   set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
