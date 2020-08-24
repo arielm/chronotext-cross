@@ -3,7 +3,7 @@
 #include "chr/ResourceBuffer.h"
 
 #include <gtest/gtest.h>
-#include <experimental/string_view>
+#include <string_view>
 
 // ---
 
@@ -16,7 +16,6 @@
 // ---
 
 using namespace std;
-using string_view = experimental::string_view;
 
 TEST(TestFileSystem2, TextResource)
 {
