@@ -8,6 +8,7 @@ if (NOT SKETCH)
   list(APPEND SRC_FILES
     "${CROSS_ROOT}/src/chr/Log.cpp"
     "${CROSS_ROOT}/src/chr/InputSource.cpp"
+    "${CROSS_ROOT}/src/chr/OutputTarget.cpp"
     "${CROSS_ROOT}/src/chr/FileSystem.cpp"
     "${CROSS_ROOT}/src/chr/ResourceBuffer.cpp"
   )
@@ -256,6 +257,26 @@ elseif (PLATFORM MATCHES osx)
     add_definitions(-DCHR_FS_PURE)
 
     set(CONFIG_RUN "${CROSS_ROOT}/cmake/osx/run.sh.in")
+
+    if (RESOURCE_COUNT)
+      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")
+    else()
+      set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.nop.sh.in")
+    endif()
+
+    add_executable(${PROJECT_NAME}
+      ${SRC_FILES}
+    )
+
+  else()
+    message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
+  endif()
+elseif (PLATFORM MATCHES rpi)
+  if (RUN MATCHES EXE)
+    add_definitions(-DCHR_RUN_EXE)
+    add_definitions(-DCHR_FS_PURE)
+
+    set(CONFIG_RUN "${CROSS_ROOT}/cmake/rpi/run.sh.in")
 
     if (RESOURCE_COUNT)
       set(CONFIG_INSTALL "${CROSS_ROOT}/cmake/install.symlink.sh.in")

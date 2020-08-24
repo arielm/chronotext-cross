@@ -30,41 +30,48 @@ endif()
 list(APPEND INCLUDE_DIRS "$ENV{CROSS_PATH}/core/src")
 list(APPEND LIBRARIES "$ENV{CROSS_PATH}/tree/chr/${PLATFORM}/lib/${CMAKE_BUILD_TYPE}/libchr_cross.a")
 
-list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
-list(APPEND LIBRARIES
-  "${BOOST_ROOT}/lib/libboost_system.a"
-  "${BOOST_ROOT}/lib/libboost_filesystem.a"
-)
+if (PLATFORM MATCHES rpi)
+  find_package(Boost COMPONENTS system filesystem REQUIRED)
+  find_package(OpenGL REQUIRED)
+
+  list(APPEND INCLUDE_DIRS
+    ${Boost_INCLUDE_DIRS}
+    "${JPEG_ROOT}/rpi/include"
+  )
+
+  list(APPEND LIBRARIES
+    ${Boost_LIBRARIES}
+    OpenGL::GL
+    -ldl
+    -lpthread
+    -lpng16
+    "${JPEG_ROOT}/rpi/lib/libturbojpeg.a"
+  )
+else()
+  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
+  list(APPEND LIBRARIES
+    "${BOOST_ROOT}/lib/libboost_system.a"
+    "${BOOST_ROOT}/lib/libboost_filesystem.a"
+  )
+
+  list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/include")
+  list(APPEND LIBRARIES "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
+
+  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
+  list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
+endif()
 
 list(APPEND INCLUDE_DIRS "${GLM_ROOT}/include")
 
-set(JPEG_INCLUDE_DIR "${JPEG_ROOT}/include")
-set(JPEG_LIBRARY "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
-
-set(PNG_INCLUDE_DIRS "${PNG_ROOT}/include")
-set(PNG_LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
-
-set(LIBTESS2_INCLUDE_DIR "${LIBTESS2_ROOT}/include")
-set(LIBTESS2_LIBRARY "${LIBTESS2_ROOT}/lib/libtess2.a")
+list(APPEND INCLUDE_DIRS "${LIBTESS2_ROOT}/include")
+list(APPEND LIBRARIES "${LIBTESS2_ROOT}/lib/libtess2.a")
 
 list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
 list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
 
-list(APPEND INCLUDE_DIRS
-  ${JPEG_INCLUDE_DIR}
-  ${PNG_INCLUDE_DIRS}
-  ${LIBTESS2_INCLUDE_DIR}
-)
-
-list(APPEND LIBRARIES
-  ${JPEG_LIBRARY}
-  ${PNG_LIBRARIES}
-  ${LIBTESS2_LIBRARY}
-)
-
 # ---
 
-if (PLATFORM MATCHES osx)
+if (PLATFORM MATCHES osx|rpi)
   list(APPEND INCLUDE_DIRS
     "${GLFW_ROOT}/include"
     "$ENV{CROSS_PATH}/tree/glfw/src/deps"
