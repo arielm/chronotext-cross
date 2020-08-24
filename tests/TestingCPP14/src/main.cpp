@@ -1,9 +1,8 @@
 #include <gtest/gtest.h>
 
-#include <experimental/string_view>
+#include <string_view>
 
 using namespace std;
-using string_view = experimental::string_view;
 
 static int fooCount = 0;
 

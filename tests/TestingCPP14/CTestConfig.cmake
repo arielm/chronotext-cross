@@ -2,7 +2,7 @@
 set(CTEST_PROJECT_NAME TestingCPP14)
 set(CTEST_CONFIGURATION_TYPE Release)
 
-if (PLATFORM MATCHES osx)
+if (PLATFORM MATCHES osx|rpi)
   set(ARGS
     -DRUN=EXE
   )
