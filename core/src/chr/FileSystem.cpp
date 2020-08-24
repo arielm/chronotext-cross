@@ -1,3 +1,8 @@
+/*
+ * getDocumentsFolder() and getHomeFolder() for Linux are based on:
+ * https://github.com/cinder/Cinder/blob/master/src/cinder/app/linux/PlatformLinux.cpp
+ */
+
 #if defined(CHR_PLATFORM_OSX) || defined(CHR_PLATFORM_IOS)
   #if !defined(__OBJC__)
     #error THIS FILE MUST BE COMPILED AS OBJECTIVE-C++
@@ -14,6 +19,10 @@
   #include <shlobj.h>
 #elif defined(CHR_PLATFORM_ANDROID)
   #include "android/JNI.h"
+#elif defined(CHR_PLATFORM_RPI)
+  #include <sys/types.h>
+  #include <unistd.h>
+  #include <pwd.h>
 #endif
 
 using namespace std;
@@ -139,6 +148,18 @@ namespace chr
       }
 
       return documentsFolder;
+    #elif defined(CHR_PLATFORM_RPI)
+      fs::path result;
+
+      auto homeDir = getHomeFolder();
+      if( ! homeDir.empty() ) {
+        auto docsDir = homeDir / "Documents";
+        if( fs::exists( docsDir ) && fs::is_directory( docsDir ) ) {
+          result = docsDir;
+        }
+      }
+
+      return result;
     #endif
 
     return "";
@@ -160,6 +181,42 @@ namespace chr
     fs::path getExternalDataPath()
     {
       return fs::path(chr::android::externalDataPath);
+    }
+  #elif defined(CHR_PLATFORM_RPI)
+    fs::path getHomeFolder()
+    {
+      fs::path result;
+
+      const char *homeDir = getenv( "HOME" );
+      if( nullptr == homeDir ) {
+        long int len = sysconf( _SC_GETPW_R_SIZE_MAX );
+        if( -1 == len ) {
+          len = 1024;
+        }
+        std::vector<char> buf( len );
+
+        struct passwd pwd = {};
+        struct passwd *pwdPtr = nullptr;
+        int error = 0;
+
+        while( ERANGE == ( error = getpwuid_r( getuid(), &pwd, buf.data(), buf.size(), &pwdPtr ) ) ) {
+          buf.resize( 2*buf.size() );
+          // Bail if the size becomes too big
+          if( buf.size() >= 65536 ) {
+            error = ERANGE;
+            break;
+          }
+        }
+
+        if( 0 == error ) {
+          result = fs::path( pwd.pw_dir );
+        }
+      }
+      else {
+        result = fs::path( homeDir );
+      }
+
+      return result;
     }
   #endif
 

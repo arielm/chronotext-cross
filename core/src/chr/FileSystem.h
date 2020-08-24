@@ -26,6 +26,8 @@ namespace chr
   #elif defined(CHR_PLATFORM_ANDROID)
     fs::path getInternalDataPath();
     fs::path getExternalDataPath();
+  #elif defined(CHR_PLATFORM_RPI)
+    fs::path getHomeFolder();
   #endif
 
   fs::path getFolderOrCreateIt(const fs::path &folderPath);
