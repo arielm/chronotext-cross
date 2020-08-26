@@ -8,9 +8,10 @@ Cross-platform minimal infrastructure for developing interactive applications wi
 - iOS
 - Android
 - Emscripten
+- Raspberry PI
 
 **Development environment:**
-- OSX
+- OSX or Raspberry PI
 - CMake
 - Terminal or CLION
 
