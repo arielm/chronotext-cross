@@ -78,8 +78,8 @@ namespace chr
           glfwSetCharCallback(window, characterCallback);
           glfwSetScrollCallback(window, scrollCallback);
 
-          glfwSwapInterval(1);
           glfwMakeContextCurrent(window);
+          glfwSwapInterval(1);
 
           #if defined(CHR_PLATFORM_RPI)
             gladLoadGL(glfwGetProcAddress);
