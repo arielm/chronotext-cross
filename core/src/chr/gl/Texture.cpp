@@ -1,5 +1,6 @@
 #include "chr/gl/Texture.h"
 #include "chr/gl/Utils.h"
+#include "chr/Log.h"
 
 namespace chr
 {
@@ -188,6 +189,7 @@ namespace chr
       if (element && element->textureId)
       {
         glDeleteTextures(1, &element->textureId);
+        LOGD << "TEXTURE " << element->textureId << " UNLOADED";
         element->textureId = 0;
       }
     }
