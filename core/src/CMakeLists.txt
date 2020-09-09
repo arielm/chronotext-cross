@@ -114,11 +114,11 @@ elseif (PLATFORM MATCHES android)
     "chr/android/system/SystemManager.cpp"
   )
 
-elseif (PLATFORM MATCHES rpi)
+elseif (PLATFORM MATCHES rpi|rpi64)
   list(APPEND SRC_FILES
     "chr/glfw/CrossDelegate.cpp"
     "chr/glfw/system/DisplayHelper.cpp"
-    "chr/rpi/system/SystemManager.cpp"
+    "chr/${PLATFORM}/system/SystemManager.cpp"
   )
 endif()
 
@@ -169,7 +169,7 @@ elseif (PLATFORM MATCHES mxe)
     "${NFD_SRC}/nfd_win.cpp"
   )
 
-elseif (PLATFORM MATCHES rpi)
+elseif (PLATFORM MATCHES rpi|rpi64)
   set(GLFW_SRC "${TREE}/glfw/src")
 
   list(APPEND INCLUDE_DIRS
@@ -227,19 +227,19 @@ elseif (PLATFORM MATCHES android)
     GLESv2
   )
 
-elseif (PLATFORM MATCHES rpi)
+elseif (PLATFORM MATCHES rpi|rpi64)
   add_definitions(-DCHR_RUN_EXE)
 endif()
 
 # ---
 
-if (PLATFORM MATCHES rpi)
+if (PLATFORM MATCHES rpi|rpi64)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
   find_package(OpenGL REQUIRED)
 
   list(APPEND INCLUDE_DIRS
     ${Boost_INCLUDE_DIRS}
-    "${JPEG_ROOT}/rpi/include"
+    "${JPEG_ROOT}/${PLATFORM}/include"
   )
 
   list(APPEND LIBRARIES
@@ -248,7 +248,7 @@ if (PLATFORM MATCHES rpi)
     -ldl
     -lpthread
     -lpng16
-    "${JPEG_ROOT}/rpi/lib/libturbojpeg.a"
+    "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a"
   )
 else()
   list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")

@@ -19,7 +19,7 @@
   #include <shlobj.h>
 #elif defined(CHR_PLATFORM_ANDROID)
   #include "android/JNI.h"
-#elif defined(CHR_PLATFORM_RPI)
+#elif defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
   #include <sys/types.h>
   #include <unistd.h>
   #include <pwd.h>
@@ -148,7 +148,7 @@ namespace chr
       }
 
       return documentsFolder;
-    #elif defined(CHR_PLATFORM_RPI)
+    #elif defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
       fs::path result;
 
       auto homeDir = getHomeFolder();
@@ -182,7 +182,7 @@ namespace chr
     {
       return fs::path(chr::android::externalDataPath);
     }
-  #elif defined(CHR_PLATFORM_RPI)
+  #elif defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
     fs::path getHomeFolder()
     {
       fs::path result;

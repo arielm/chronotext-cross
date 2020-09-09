@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./${PROJECT_NAME} "$@"

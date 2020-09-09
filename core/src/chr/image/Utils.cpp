@@ -3,6 +3,7 @@
 #include "chr/ResourceBuffer.h"
 #include "chr/Log.h"
 
+#include <boost/checked_delete.hpp>
 #include <jpeglib.h>
 
 using namespace std;
@@ -391,7 +392,7 @@ namespace chr
       }
       else
       {
-        LOGE << "UNABLE TO LOAD IMAGE: " << relativePath.filename().string() << endl;
+        LOGD << "UNABLE TO LOAD IMAGE: " << relativePath.filename().string() << endl;
       }
 
       return image;

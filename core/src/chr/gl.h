@@ -19,7 +19,7 @@
 #elif defined(CHR_PLATFORM_ANDROID)
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
-#elif defined(CHR_PLATFORM_RPI)
+#elif defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
   #include "glad/gl.h"
 #endif
 
