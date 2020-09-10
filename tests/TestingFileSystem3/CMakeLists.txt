@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.2.2)
 
 project(TestingFileSystem3)
 
-if (PLATFORM MATCHES rpi)
+if (PLATFORM MATCHES rpi|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
 
   list(APPEND INCLUDE_DIRS
