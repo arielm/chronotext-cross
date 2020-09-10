@@ -114,7 +114,7 @@ elseif (PLATFORM MATCHES android)
     "chr/android/system/SystemManager.cpp"
   )
 
-elseif (PLATFORM MATCHES rpi|rpi64)
+elseif (PLATFORM MATCHES rpi|rpi64|linux)
   list(APPEND SRC_FILES
     "chr/glfw/CrossDelegate.cpp"
     "chr/glfw/system/DisplayHelper.cpp"
@@ -169,7 +169,7 @@ elseif (PLATFORM MATCHES mxe)
     "${NFD_SRC}/nfd_win.cpp"
   )
 
-elseif (PLATFORM MATCHES rpi|rpi64)
+elseif (PLATFORM MATCHES rpi|rpi64|linux)
   set(GLFW_SRC "${TREE}/glfw/src")
 
   list(APPEND INCLUDE_DIRS
@@ -227,13 +227,13 @@ elseif (PLATFORM MATCHES android)
     GLESv2
   )
 
-elseif (PLATFORM MATCHES rpi|rpi64)
+elseif (PLATFORM MATCHES rpi|rpi64|linux)
   add_definitions(-DCHR_RUN_EXE)
 endif()
 
 # ---
 
-if (PLATFORM MATCHES rpi|rpi64)
+if (PLATFORM MATCHES rpi|rpi64|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
   find_package(OpenGL REQUIRED)
 

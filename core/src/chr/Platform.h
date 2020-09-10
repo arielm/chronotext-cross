@@ -17,7 +17,8 @@ namespace chr
     PLATFORM_EMSCRIPTEN,
     PLATFORM_WIN,
     PLATFORM_RPI,
-    PLATFORM_RPI64
+    PLATFORM_RPI64,
+    PLATFORM_LINUX
   };
 }
 
@@ -44,7 +45,10 @@ namespace chr
   #define CHR_PLATFORM_WIN 1
   #define CHR_PLATFORM_DESKTOP 1
 #elif defined(linux) || defined(__linux) || defined(__linux__)
-  #if defined(__aarch64__)
+  #if defined(__x86_64__)
+    #define CHR_PLATFORM chr::PLATFORM_LINUX
+    #define CHR_PLATFORM_LINUX 1
+  #elif defined(__aarch64__)
     #define CHR_PLATFORM chr::PLATFORM_RPI64
     #define CHR_PLATFORM_RPI64 1
   #else

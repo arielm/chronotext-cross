@@ -34,6 +34,10 @@ elseif (PLATFORM MATCHES rpi64)
 elseif (PLATFORM MATCHES rpi)
   set(CTEST_CMAKE_GENERATOR "Ninja")
   set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/rpi.cmake")
+  
+elseif (PLATFORM MATCHES linux)
+  set(CTEST_CMAKE_GENERATOR "Ninja")
+  set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/linux.cmake")
 
 else()
   message(FATAL_ERROR "UNSUPPORTED PLATFORM!")
