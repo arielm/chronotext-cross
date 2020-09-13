@@ -214,6 +214,7 @@ namespace chr
         {
           image.buffer = shared_ptr<uint8_t>(new uint8_t[image.components * image.width * image.height], boost::checked_array_deleter<uint8_t>());
           auto data = image.buffer.get();
+          memset(data, 0, image.components * image.width * image.height);
 
           png_byte *rows[height];
 
@@ -302,6 +303,7 @@ namespace chr
 
           image.buffer = shared_ptr<uint8_t>(new uint8_t[image.components * image.width * image.height], boost::checked_array_deleter<uint8_t>());
           auto data = image.buffer.get();
+          memset(data, 0, image.components * image.width * image.height);
 
           jpeg_start_decompress(&cinfo);
 
