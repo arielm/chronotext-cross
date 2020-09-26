@@ -17,6 +17,8 @@
   #include "chr/rpi/system/SystemManager.h"
 #elif defined(CHR_PLATFORM_RPI64)
   #include "chr/rpi64/system/SystemManager.h"
+#elif defined(CHR_PLATFORM_LINUX)
+  #include "chr/linux/system/SystemManager.h"
 #endif
 
 namespace chr

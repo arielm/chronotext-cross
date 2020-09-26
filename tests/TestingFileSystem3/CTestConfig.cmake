@@ -2,7 +2,7 @@
 set(CTEST_PROJECT_NAME TestingFileSystem3)
 set(CTEST_CONFIGURATION_TYPE Release)
 
-if (PLATFORM MATCHES osx|rpi)
+if (PLATFORM MATCHES osx|rpi|linux)
   set(ARGS
     -DRUN=EXE
   )

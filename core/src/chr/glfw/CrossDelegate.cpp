@@ -81,7 +81,7 @@ namespace chr
           glfwMakeContextCurrent(window);
           glfwSwapInterval(1);
 
-          #if defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
+          #if defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64) || defined(CHR_PLATFORM_LINUX)
             gladLoadGL(glfwGetProcAddress);
           #endif
 

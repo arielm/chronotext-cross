@@ -4,7 +4,7 @@ project(TestingProtobuf)
 
 add_definitions(-DHAVE_ZLIB)
 
-if (PLATFORM MATCHES rpi)
+if (PLATFORM MATCHES rpi|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
 
   list(APPEND INCLUDE_DIRS

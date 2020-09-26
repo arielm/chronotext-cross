@@ -1,7 +1,7 @@
 set(CTEST_PROJECT_NAME TestingInput)
 set(CTEST_CONFIGURATION_TYPE Release)
 
-if (PLATFORM MATCHES osx|rpi)
+if (PLATFORM MATCHES osx|rpi|linux)
   set(ARGS
     -DRUN=EXE
   )

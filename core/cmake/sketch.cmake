@@ -30,7 +30,7 @@ endif()
 list(APPEND INCLUDE_DIRS "$ENV{CROSS_PATH}/core/src")
 list(APPEND LIBRARIES "$ENV{CROSS_PATH}/tree/chr/${PLATFORM}/lib/${CMAKE_BUILD_TYPE}/libchr_cross.a")
 
-if (PLATFORM MATCHES rpi|rpi64)
+if (PLATFORM MATCHES rpi|rpi64|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
   find_package(OpenGL REQUIRED)
 
@@ -42,8 +42,6 @@ if (PLATFORM MATCHES rpi|rpi64)
   list(APPEND LIBRARIES
     ${Boost_LIBRARIES}
     OpenGL::GL
-    -ldl
-    -lpthread
     -lpng16
     "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a"
   )
@@ -71,13 +69,17 @@ list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
 
 # ---
 
-if (PLATFORM MATCHES osx|rpi|rpi64)
+if (PLATFORM MATCHES osx|rpi|rpi64|linux)
   list(APPEND INCLUDE_DIRS
     "${GLFW_ROOT}/include"
     "$ENV{CROSS_PATH}/tree/glfw/src/deps"
   )
 
-  list(APPEND LIBRARIES "${GLFW_ROOT}/lib/libglfw3.a")
+  list(APPEND LIBRARIES
+    "${GLFW_ROOT}/lib/libglfw3.a"
+    -ldl
+    -lpthread
+  )
 
 elseif (PLATFORM MATCHES mxe)
   list(APPEND INCLUDE_DIRS
