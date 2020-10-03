@@ -1,5 +1,9 @@
 #include "chr/gl/Utils.h"
 
+#if defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
+  #include <GL/glu.h>
+#endif
+
 using namespace std;
 
 namespace chr
@@ -133,12 +137,23 @@ namespace chr
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       }
 
-      glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+      #if defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
+        if (useMipmap)
+        {
+          gluBuild2DMipmaps(GL_TEXTURE_2D, format, width, height, format, GL_UNSIGNED_BYTE, data);
+        }
+        else
+        {
+          glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        }
+      #else
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
-      if (useMipmap)
-      {
-        glGenerateMipmap(GL_TEXTURE_2D);
-      }
+        if (useMipmap)
+        {
+          glGenerateMipmap(GL_TEXTURE_2D);
+        }
+      #endif
     }
 
     const glm::mat4 getPerspectiveMatrix(float fovY, float nearZ, float farZ, float width, float height, float panX, float panY, float zoom)

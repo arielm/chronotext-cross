@@ -181,7 +181,11 @@ elseif (PLATFORM MATCHES rpi|rpi64|linux)
     "${GLFW_SRC}/deps/glad_gl.c"
   )
 
-  list(APPEND LIBRARIES "${GLFW_ROOT}/lib/libglfw3.a")
+  list(APPEND LIBRARIES
+    "${GLFW_ROOT}/lib/libglfw3.a"
+    -ldl
+    -lpthread
+  )
 endif()
 
 if (PLATFORM MATCHES osx)
@@ -235,7 +239,6 @@ endif()
 
 if (PLATFORM MATCHES rpi|rpi64|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
-  find_package(OpenGL REQUIRED)
 
   list(APPEND INCLUDE_DIRS
     ${Boost_INCLUDE_DIRS}
@@ -244,9 +247,6 @@ if (PLATFORM MATCHES rpi|rpi64|linux)
 
   list(APPEND LIBRARIES
     ${Boost_LIBRARIES}
-    OpenGL::GL
-    -ldl
-    -lpthread
     -lpng16
     "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a"
   )
@@ -271,6 +271,21 @@ list(APPEND LIBRARIES "${LIBTESS2_ROOT}/lib/libtess2.a")
 
 list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
 list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
+
+# ---
+
+if (PLATFORM MATCHES linux)
+  find_package(OpenGL REQUIRED)
+  list(APPEND LIBRARIES
+    OpenGL::GL
+  )
+elseif (PLATFORM MATCHES rpi|rpi64)
+  find_package(OpenGL REQUIRED)
+  list(APPEND LIBRARIES
+    OpenGL::GLU
+    OpenGL::GL
+  )
+endif()
 
 # ---
 

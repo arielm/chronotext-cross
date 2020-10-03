@@ -32,7 +32,6 @@ list(APPEND LIBRARIES "$ENV{CROSS_PATH}/tree/chr/${PLATFORM}/lib/${CMAKE_BUILD_T
 
 if (PLATFORM MATCHES rpi|rpi64|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
-  find_package(OpenGL REQUIRED)
 
   list(APPEND INCLUDE_DIRS
     ${Boost_INCLUDE_DIRS}
@@ -41,7 +40,6 @@ if (PLATFORM MATCHES rpi|rpi64|linux)
 
   list(APPEND LIBRARIES
     ${Boost_LIBRARIES}
-    OpenGL::GL
     -lpng16
     "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a"
   )
@@ -68,6 +66,19 @@ list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
 list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
 
 # ---
+
+if (PLATFORM MATCHES linux)
+  find_package(OpenGL REQUIRED)
+  list(APPEND LIBRARIES
+    OpenGL::GL
+  )
+elseif (PLATFORM MATCHES rpi|rpi64)
+  find_package(OpenGL REQUIRED)
+  list(APPEND LIBRARIES
+    OpenGL::GLU
+    OpenGL::GL
+  )
+endif()
 
 if (PLATFORM MATCHES osx|rpi|rpi64|linux)
   list(APPEND INCLUDE_DIRS
