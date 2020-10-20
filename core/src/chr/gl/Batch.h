@@ -238,7 +238,12 @@ namespace chr
 
       VertexBatch& clearTexture()
       {
-        hasTexture = false;
+        if (hasTexture)
+        {
+          hasTexture = false;
+          texture.purge();
+        }
+
         return *this;
       }
 

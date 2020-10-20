@@ -131,16 +131,7 @@ namespace chr
 
     Texture::~Texture()
     {
-      if (element)
-      {
-        element->useCount--;
-
-        if (element->useCount == 0)
-        {
-          unload();
-          delete element;
-        }
-      }
+      purge();
     }
 
     bool Texture::bind()
@@ -193,6 +184,21 @@ namespace chr
         glDeleteTextures(1, &element->textureId);
         LOGD << "TEXTURE " << element->textureId << " UNLOADED" << endl;
         element->textureId = 0;
+      }
+    }
+
+    void Texture::purge()
+    {
+      if (element)
+      {
+        element->useCount--;
+
+        if (element->useCount == 0)
+        {
+          unload();
+          delete element;
+          element = nullptr;
+        }
       }
     }
   }

@@ -268,6 +268,7 @@ namespace chr
       bool bind();
       void unbind();
       void unload();
+      void purge();
 
     protected:
       enum RequestType
