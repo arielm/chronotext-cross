@@ -134,6 +134,11 @@ namespace chr
   void CrossDelegate::performResize(const glm::vec2 &size)
   {
     setupInfo.windowInfo.size = size;
+
+    #if defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64) || defined(CHR_PLATFORM_LINUX)
+      glViewport(0, 0, size.x, size.y);
+    #endif
+
     sketch->performResize(size);
   }
 
