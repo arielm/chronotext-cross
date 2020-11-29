@@ -70,6 +70,7 @@ namespace chr
       bool bind();
       void unbind();
       void unload();
+      void purge();
 
       GLuint getUniformLocation(const std::string &name);
 

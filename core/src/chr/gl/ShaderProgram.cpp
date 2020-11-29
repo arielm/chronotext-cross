@@ -50,13 +50,7 @@ namespace chr
 
     ShaderProgram::~ShaderProgram()
     {
-      element->useCount--;
-
-      if (element->useCount == 0)
-      {
-        unload();
-        delete element;
-      }
+      purge();
     }
 
     bool ShaderProgram::bind()
@@ -72,7 +66,7 @@ namespace chr
 
     void ShaderProgram::unbind()
     {
-      if (element->programId)
+      if (element && element->programId)
       {
         glUseProgram(0);
       }
@@ -158,7 +152,7 @@ namespace chr
 
     bool ShaderProgram::load()
     {
-      if (!element->programId)
+      if (element && !element->programId)
       {
         if (!element->vertexShaderSource.empty() && !element->fragmentShaderSource.empty())
         {
@@ -181,7 +175,7 @@ namespace chr
 
     void ShaderProgram::unload()
     {
-      if (element->programId)
+      if (element && element->programId)
       {
         ShaderHelper::unloadProgram(element->programId, element->vertexShaderId, element->fragmentShaderId);
 
@@ -190,6 +184,21 @@ namespace chr
         element->fragmentShaderId = 0;
 
         element->map_uniform.clear();
+      }
+    }
+
+    void ShaderProgram::purge()
+    {
+      if (element)
+      {
+        element->useCount--;
+
+        if (element->useCount == 0)
+        {
+          unload();
+          delete element;
+          element = nullptr;
+        }
       }
     }
 

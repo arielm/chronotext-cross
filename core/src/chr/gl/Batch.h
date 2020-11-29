@@ -159,14 +159,25 @@ namespace chr
 
       VertexBatch& setShader(const ShaderProgram &shader)
       {
+        if (!hasShader)
+        {
+          this->shader.purge();
+        }
+
         this->shader = shader;
         hasShader = true;
+
         return *this;
       }
 
       VertexBatch& clearShader()
       {
-        hasShader = false;
+        if (hasShader)
+        {
+          hasShader = false;
+          shader.purge();
+        }
+
         return *this;
       }
 
@@ -231,8 +242,14 @@ namespace chr
 
       VertexBatch& setTexture(const Texture &texture)
       {
+        if (!hasTexture)
+        {
+          this->texture.purge();
+        }
+
         this->texture = texture;
         hasTexture = true;
+
         return *this;
       }
 
