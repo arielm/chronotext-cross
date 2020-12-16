@@ -1,6 +1,10 @@
 #include "chr/sdl/CrossDelegate.h"
+#include "chr/cross/Context.h"
 
 using namespace std;
+
+SDL_Window *window = nullptr;
+SDL_GLContext glContext;
 
 namespace chr
 {

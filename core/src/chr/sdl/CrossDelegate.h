@@ -1,7 +1,6 @@
 #pragma once
 
 #include "chr/cross/CrossDelegateBase.h"
-#include "chr/cross/Context.h"
 
 namespace chr
 {
@@ -24,8 +23,5 @@ namespace chr
 
   protected:
     int updateCount = 0;
-
-    SDL_Window* window = nullptr;
-    SDL_GLContext glContext;
   };
 }
