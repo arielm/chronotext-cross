@@ -9,6 +9,8 @@
   #include "chr/android/system/DisplayHelper.h"
 #elif defined(CHR_PLATFORM_GLFW)
   #include "chr/glfw/system/DisplayHelper.h"
+#elif defined(CHR_PLATFORM_SDL)
+  #include "chr/sdl/system/DisplayHelper.h"
 #elif defined(CHR_PLATFORM_WIN)
   #include "chr/win/system/DisplayHelper.h"
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)

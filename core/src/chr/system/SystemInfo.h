@@ -9,6 +9,8 @@
   #include "chr/android/system/SystemInfo.h"
 #elif defined(CHR_PLATFORM_GLFW)
   #include "chr/glfw/system/SystemInfo.h"
+#elif defined(CHR_PLATFORM_SDL)
+  #include "chr/sdl/system/SystemInfo.h"
 #elif defined(CHR_PLATFORM_WIN)
   #include "chr/win/system/SystemInfo.h"
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)

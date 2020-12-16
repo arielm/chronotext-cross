@@ -6,6 +6,8 @@
 #if defined(CHR_PLATFORM_GLFW)
   #define GLFW_INCLUDE_NONE
   #include <GLFW/glfw3.h>
+#elif defined(CHR_PLATFORM_SDL)
+  #include <SDL2/SDL.h>
 #elif defined(CHR_PLATFORM_WIN)
   #include <Windows.h>
   #include <windowsx.h>
@@ -21,6 +23,8 @@
   #include "chr/android/CrossDelegate.h"
 #elif defined(CHR_PLATFORM_GLFW)
   #include "chr/glfw/CrossDelegate.h"
+#elif defined(CHR_PLATFORM_SDL)
+  #include "chr/sdl/CrossDelegate.h"
 #elif defined(CHR_PLATFORM_WIN)
   #include "chr/win/CrossDelegate.h"
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)

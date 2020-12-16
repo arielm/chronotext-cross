@@ -19,11 +19,14 @@
 #elif defined(CHR_PLATFORM_ANDROID)
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
-#elif defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64) || defined(CHR_PLATFORM_LINUX)
+#elif defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
+  #define GLEW_STATIC
+  #include <GL/glew.h>
+#elif defined(CHR_PLATFORM_LINUX)
   #include "glad/gl.h"
 #endif
 
-#if defined (CHR_PLATFORM_DESKTOP)
+#if defined(CHR_PLATFORM_DESKTOP)
   #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
   #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #endif

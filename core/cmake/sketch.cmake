@@ -80,7 +80,7 @@ elseif (PLATFORM MATCHES rpi|rpi64)
   )
 endif()
 
-if (PLATFORM MATCHES osx|rpi|rpi64|linux)
+if (PLATFORM MATCHES osx|linux)
   list(APPEND INCLUDE_DIRS
     "${GLFW_ROOT}/include"
     "$ENV{CROSS_PATH}/tree/glfw/src/deps"
@@ -88,8 +88,12 @@ if (PLATFORM MATCHES osx|rpi|rpi64|linux)
 
   list(APPEND LIBRARIES
     "${GLFW_ROOT}/lib/libglfw3.a"
-    -ldl
-    -lpthread
+  )
+
+elseif (PLATFORM MATCHES rpi|rpi64)
+  list(APPEND LIBRARIES
+    -lSDL2
+    -lGLEW
   )
 
 elseif (PLATFORM MATCHES mxe)
@@ -98,7 +102,13 @@ elseif (PLATFORM MATCHES mxe)
   )
 endif()
 
-if (PLATFORM MATCHES osx)
+if (PLATFORM MATCHES rpi|rpi64|linux)
+  list(APPEND LIBRARIES
+    -ldl
+    -lpthread
+  )
+
+elseif (PLATFORM MATCHES osx)
   list(APPEND LIBRARIES
     "-framework CoreFoundation"
     "-framework Cocoa"

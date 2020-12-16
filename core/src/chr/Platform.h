@@ -48,15 +48,17 @@ namespace chr
   #if defined(__x86_64__)
     #define CHR_PLATFORM chr::PLATFORM_LINUX
     #define CHR_PLATFORM_LINUX 1
+    #define CHR_PLATFORM_GLFW 1
   #elif defined(__aarch64__)
     #define CHR_PLATFORM chr::PLATFORM_RPI64
     #define CHR_PLATFORM_RPI64 1
+    #define CHR_PLATFORM_SDL 1
   #else
     #define CHR_PLATFORM chr::PLATFORM_RPI
     #define CHR_PLATFORM_RPI 1
+    #define CHR_PLATFORM_SDL 1
   #endif
   #define CHR_PLATFORM_DESKTOP 1
-  #define CHR_PLATFORM_GLFW 1
 #else
   #error UNSUPPORTED PLATFORM
 #endif // __APPLE__

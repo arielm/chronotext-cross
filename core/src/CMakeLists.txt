@@ -114,11 +114,18 @@ elseif (PLATFORM MATCHES android)
     "chr/android/system/SystemManager.cpp"
   )
 
-elseif (PLATFORM MATCHES rpi|rpi64|linux)
+elseif (PLATFORM MATCHES rpi|rpi64)
+  list(APPEND SRC_FILES
+    "chr/sdl/CrossDelegate.cpp"
+    "chr/sdl/system/DisplayHelper.cpp"
+    "chr/${PLATFORM}/system/SystemManager.cpp"
+  )
+
+elseif (PLATFORM MATCHES linux)
   list(APPEND SRC_FILES
     "chr/glfw/CrossDelegate.cpp"
     "chr/glfw/system/DisplayHelper.cpp"
-    "chr/${PLATFORM}/system/SystemManager.cpp"
+    "chr/linux/system/SystemManager.cpp"
   )
 endif()
 
@@ -169,7 +176,13 @@ elseif (PLATFORM MATCHES mxe)
     "${NFD_SRC}/nfd_win.cpp"
   )
 
-elseif (PLATFORM MATCHES rpi|rpi64|linux)
+elseif (PLATFORM MATCHES rpi|rpi64)
+  list(APPEND LIBRARIES
+    -lSDL2
+    -lGLEW
+  )
+
+elseif (PLATFORM MATCHES linux)
   set(GLFW_SRC "${TREE}/glfw/src")
 
   list(APPEND INCLUDE_DIRS
@@ -183,8 +196,6 @@ elseif (PLATFORM MATCHES rpi|rpi64|linux)
 
   list(APPEND LIBRARIES
     "${GLFW_ROOT}/lib/libglfw3.a"
-    -ldl
-    -lpthread
   )
 endif()
 
@@ -233,6 +244,11 @@ elseif (PLATFORM MATCHES android)
 
 elseif (PLATFORM MATCHES rpi|rpi64|linux)
   add_definitions(-DCHR_RUN_EXE)
+
+  list(APPEND LIBRARIES
+    -ldl
+    -lpthread
+  )
 endif()
 
 # ---
