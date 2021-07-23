@@ -4,14 +4,14 @@ project(chr_cross)
 
 set(TREE "../../tree")
 
-set(BOOST_ROOT "${TREE}/boost/${PLATFORM}")
+set(BOOST_ROOT "${TREE}/boost")
 set(GLFW_ROOT "${TREE}/glfw/${PLATFORM}")
 set(GLLOAD_ROOT "${TREE}/glload")
 set(GLM_ROOT "${TREE}/glm")
 set(JPEG_ROOT "${TREE}/libjpeg-turbo")
-set(PNG_ROOT "${TREE}/libpng/${PLATFORM}")
-set(LIBTESS2_ROOT "${TREE}/libtess2/${PLATFORM}")
-set(PROTOBUF_ROOT "${TREE}/protobuf/${PLATFORM}")
+set(PNG_ROOT "${TREE}/libpng")
+set(LIBTESS2_ROOT "${TREE}/libtess2")
+set(PROTOBUF_ROOT "${TREE}/protobuf")
 
 # ---
 
@@ -237,40 +237,80 @@ endif()
 
 # ---
 
+if (PLATFORM MATCHES android|android64|rpi|rpi64|linux)
+  list(APPEND INCLUDE_DIRS
+    "${JPEG_ROOT}/${PLATFORM}/include"
+  )
+
+  list(APPEND LIBRARIES
+    "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a"
+  )
+
+else()
+  list(APPEND INCLUDE_DIRS
+    "${JPEG_ROOT}/include"
+  )
+
+  list(APPEND LIBRARIES
+    "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a"
+  )
+endif()
+
 if (PLATFORM MATCHES rpi|rpi64|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
 
   list(APPEND INCLUDE_DIRS
     ${Boost_INCLUDE_DIRS}
-    "${JPEG_ROOT}/${PLATFORM}/include"
   )
 
   list(APPEND LIBRARIES
     ${Boost_LIBRARIES}
     -lpng16
-    "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a"
   )
-else()
-  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
+
+elseif (PLATFORM MATCHES android|android64)
+  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/android/include")
   list(APPEND LIBRARIES
-    "${BOOST_ROOT}/lib/libboost_system.a"
-    "${BOOST_ROOT}/lib/libboost_filesystem.a"
+    "${BOOST_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libboost_system.a"
+    "${BOOST_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libboost_filesystem.a"
   )
 
-  list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/include")
-  list(APPEND LIBRARIES "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
+  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/android/include")
+  list(APPEND LIBRARIES "${PNG_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libpng17.a")
 
-  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
-  list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
+else()
+  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/${PLATFORM}/include")
+  list(APPEND LIBRARIES
+    "${BOOST_ROOT}/${PLATFORM}/lib/libboost_system.a"
+    "${BOOST_ROOT}/${PLATFORM}/lib/libboost_filesystem.a"
+  )
+
+  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/${PLATFORM}/include")
+  list(APPEND LIBRARIES "${PNG_ROOT}/${PLATFORM}/lib/libpng17.a")
 endif()
 
-list(APPEND INCLUDE_DIRS "${GLM_ROOT}/include")
+list(APPEND INCLUDE_DIRS
+  "${GLM_ROOT}/include"
+)
 
-list(APPEND INCLUDE_DIRS "${LIBTESS2_ROOT}/include")
-list(APPEND LIBRARIES "${LIBTESS2_ROOT}/lib/libtess2.a")
+if (PLATFORM MATCHES android|android64)
+  list(APPEND INCLUDE_DIRS
+    "${LIBTESS2_ROOT}/android/include"
+    "${PROTOBUF_ROOT}/android/include"
+  )
 
-list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
-list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
+  list(APPEND LIBRARIES "${LIBTESS2_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libtess2.a")
+  list(APPEND LIBRARIES "${PROTOBUF_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libprotobuf.a")
+
+else()
+  list(APPEND INCLUDE_DIRS
+    "${LIBTESS2_ROOT}/${PLATFORM}/include"
+    "${PROTOBUF_ROOT}/${PLATFORM}/include"
+  )
+
+  list(APPEND LIBRARIES "${LIBTESS2_ROOT}/${PLATFORM}/lib/libtess2.a")
+  list(APPEND LIBRARIES "${PROTOBUF_ROOT}/${PLATFORM}/lib/libprotobuf.a")
+endif()
 
 # ---
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PLATFORM="android"
+PLATFORM="android64"
 
 TREE_DIR="../../tree/chr"
 BUILD_DIR="build/$PLATFORM"
@@ -9,14 +9,14 @@ INSTALL_PATH="$(pwd)/$INSTALL_DIR"
 
 # ---
 
-TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/android.cmake"
+TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/android64.cmake"
 
 cmake . -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja -DCMAKE_MAKE_PROGRAM=/usr/local/bin/ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH" \
   -DPLATFORM="$PLATFORM" \
-  -DCMAKE_ANDROID_ARCH_ABI="armeabi-v7a"
+  -DCMAKE_ANDROID_ARCH_ABI="arm64-v8a"
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"

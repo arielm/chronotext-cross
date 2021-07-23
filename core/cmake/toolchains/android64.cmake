@@ -7,7 +7,7 @@ set(ANDROID_NDK "$ENV{NDK_PATH}"
   CACHE STRING "android_ndk"
 )
 
-set(ANDROID_ABI "armeabi-v7a"
+set(ANDROID_ABI "arm64-v8a"
   CACHE STRING "android_abi"
 )
 
