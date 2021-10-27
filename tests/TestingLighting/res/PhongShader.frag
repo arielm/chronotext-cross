@@ -1,11 +1,10 @@
+/*
+ * Based on https://github.com/cinder/Cinder/blob/master/samples/Geometry/assets/phong_es2.frag
+ */
 
 #ifdef GL_ES
   precision highp float;
 #endif
-
-/*
- * BASED ON https://github.com/cinder/Cinder/blob/master/samples/Geometry/assets/phong_es2.frag
- */
 
 varying vec3 v_position;
 varying vec3 v_normal;
@@ -13,11 +12,11 @@ varying vec4 v_color;
 
 void main()
 {
+	vec3 lightPosition = vec3(0.0); // XXX
+
     // set diffuse and specular colors
 	vec3 cDiffuse = v_color.rgb;
 	vec3 cSpecular = vec3(0.3);
-
-  vec3 lightPosition = vec3(0.0);
 
 	// lighting calculations
 	vec3 N = normalize(v_normal);
@@ -36,7 +35,7 @@ void main()
 	vec3 diffuse = phong * cDiffuse;
 
 	// specular coefficient
-  vec3 specular = blinn * cSpecular;
+	vec3 specular = blinn * cSpecular;
 
-    gl_FragColor = vec4(diffuse + specular, 1);
+	gl_FragColor = vec4(diffuse + specular, 1);
 }

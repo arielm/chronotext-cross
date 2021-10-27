@@ -1,81 +1,17 @@
 #include "Sketch.h"
 
-#include "chr/gl/draw/Cube.h"
-#include "chr/gl/Triangulator.h"
-#include "chr/shape/Circle.h"
-
 using namespace std;
 using namespace chr;
 using namespace gl;
-using namespace math;
-using namespace path;
-
-static bool showNormals = true;
-static bool showTube = false;
-static bool showCube = true;
 
 Sketch::Sketch()
 :
-fillBatch(GL_TRIANGLES),
-normalBatch(GL_LINES),
 phongShader(InputSource::resource("PhongShader.vert"), InputSource::resource("PhongShader.frag"))
 {}
 
 void Sketch::setup()
 {
-    camera
-            .setFov(60)
-            .setClip(0.1f, 1000.0f)
-            .setWindowSize(windowInfo.size);
-
-    state
-            .setShaderColor(1, 1, 1, 1)
-            .glLineWidth(2);
-
-    normalBatch.setShader(colorShader);
-
-    // ---
-
-    Matrix matrix;
-
-    if (showTube)
-    {
-        Shape polygons;
-        polygons
-                .addPath(shape::Circle().setRadius(50).append())
-                .addPath(shape::Circle().setRadius(40).append());
-
-        matrix.translate(0, 0, 50);
-
-        Triangulator triangulator;
-        triangulator
-                .setColor(1.0f, 0.0f, 0.0f, 1.0f)
-                .add(polygons)
-                .extrude(fillBatch, matrix, -100);
-    }
-    else if (showCube)
-    {
-        draw::Cube()
-                .setSize(100)
-                .setColors(
-                        glm::vec4(0.75f, 0.75f, 0.75f, 1),
-                        glm::vec4(1, 0, 0, 1),
-                        glm::vec4(0.5f, 1.0f, 0.5f, 1),
-                        glm::vec4(0.25f, 0.25f, 0.25f, 1),
-                        glm::vec4(1, 0.5f, 0, 1),
-                        glm::vec4(1, 1, 0, 1))
-                .append(fillBatch, matrix);
-    }
-
-    // ---
-
-    if (showNormals)
-    {
-        for (auto &vertex : fillBatch.vertices())
-        {
-            normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
-        }
-    }
+    generateTorus(fillBatch, 20, 60, 25, 100);
 
     // ---
 
@@ -85,6 +21,14 @@ void Sketch::setup()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void Sketch::resize()
+{
+    camera
+            .setFov(60)
+            .setClip(0.1f, 1000.0f)
+            .setWindowSize(windowInfo.size);
 }
 
 void Sketch::draw()
@@ -98,42 +42,60 @@ void Sketch::draw()
             .setIdentity()
             .scale(1, -1, 1)
             .translate(0, 0, -300)
-            .rotateY(clock()->getTime())
-            .rotateZ(clock()->getTime() * 0.25f);
+            .rotateY(clock()->getTime() * 0.5f);
 
     // ---
 
-    state.apply();
-
-    if (pressed)
-    {
-        fillBatch
-                .setShader(phongShader)
-                .setShaderMatrix<MV>(camera.getMVMatrix())
-                .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix());
-    }
-    else
-    {
-        fillBatch
-                .setShader(lambertShader)
-                .setShaderMatrix<MVP>(camera.getMVPMatrix());
-    }
+    State()
+            .setShader(phongShader)
+            .setShaderColor(1.0f, 0.5f, 0.0f, 1)
+            .setShaderMatrix<MV>(camera.getMVMatrix())
+            .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
+            .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
+            .apply();
 
     fillBatch
-            .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
-            .flush();
-
-    normalBatch
-            .setShaderMatrix<MVP>(camera.getMVPMatrix())
             .flush();
 }
 
-void Sketch::addTouch(int index, float x, float y)
+void Sketch::generateTorus(IndexedVertexBatch<XYZ.N.UV> &batch, int slices, int loops, float innerRadius, float outerRadius)
 {
-    pressed = true;
-}
+    for (int i = 0; i <= slices; i++)
+    {
+        float v = i / float(slices);
+        float rho = v * TWO_PI;
+        float cosRHO = cosf(rho);
+        float sinRHO = sinf(rho);
 
-void Sketch::removeTouch(int index, float x, float y)
-{
-    pressed = false;
+        for (int j = 0; j <= loops; j++)
+        {
+            float u = j / float(loops);
+            float theta = u * TWO_PI;
+            float cosTHETA = cosf(theta);
+            float sinTHETA = sinf(theta);
+
+            float x = outerRadius * cosTHETA + innerRadius * cosTHETA * cosRHO;
+            float y = outerRadius * sinTHETA + innerRadius * sinTHETA * cosRHO;
+            float z = innerRadius * sinRHO;
+
+            float nx = cosTHETA * cosRHO;
+            float ny = sinTHETA * cosRHO;
+            float nz = sinRHO;
+
+            batch.addVertex(glm::vec3(x, y, z), glm::vec3(nx, ny, nz), glm::vec2(u, v));
+        }
+    }
+
+    for (int i = 0; i < slices; ++i)
+    {
+        int v1 = i * (loops + 1);
+        int v2 = v1 + (loops + 1);
+
+        for (int j = 0; j < loops; ++j)
+        {
+            batch.addIndices(v2, v2 + 1, v1, v1, v2 + 1, v1 + 1);
+            v1 += 1;
+            v2 += 1;
+        }
+    }
 }
