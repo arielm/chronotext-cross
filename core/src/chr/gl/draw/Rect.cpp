@@ -102,7 +102,14 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch, const Matrix &matrix) const
       {
         glm::vec2 coords1, coords2;
-        tie(coords1, coords2) = getTextureCoords(batch.texture);
+        if (batch.hasTexture)
+        {
+          tie(coords1, coords2) = getTextureCoords(batch.texture);
+        }
+        else
+        {
+          tie(coords1, coords2) = getTextureCoords();
+        }
 
         if (frontFace == CW)
         {
@@ -144,7 +151,14 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
         glm::vec2 coords1, coords2;
-        tie(coords1, coords2) = getTextureCoords(batch.texture);
+        if (batch.hasTexture)
+        {
+          tie(coords1, coords2) = getTextureCoords(batch.texture);
+        }
+        else
+        {
+          tie(coords1, coords2) = getTextureCoords();
+        }
 
         if (frontFace == CW)
         {
@@ -183,7 +197,14 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch) const
       {
         glm::vec2 coords1, coords2;
-        tie(coords1, coords2) = getTextureCoords(batch.texture);
+        if (batch.hasTexture)
+        {
+          tie(coords1, coords2) = getTextureCoords(batch.texture);
+        }
+        else
+        {
+          tie(coords1, coords2) = getTextureCoords();
+        }
 
         batch
           .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y)
@@ -228,7 +249,14 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLuint> &batch) const
       {
         glm::vec2 coords1, coords2;
-        tie(coords1, coords2) = getTextureCoords(batch.texture);
+        if (batch.hasTexture)
+        {
+          tie(coords1, coords2) = getTextureCoords(batch.texture);
+        }
+        else
+        {
+          tie(coords1, coords2) = getTextureCoords();
+        }
 
         batch
           .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y, color)
@@ -249,6 +277,11 @@ namespace chr
       }
 
       // ---
+
+      pair<glm::vec2, glm::vec2> Rect::getTextureCoords() const
+      {
+        return make_pair(glm::vec2(0), glm::vec2(1));
+      }
 
       pair<glm::vec2, glm::vec2> Rect::getTextureCoords(const Texture &texture) const
       {

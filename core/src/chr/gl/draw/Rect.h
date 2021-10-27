@@ -39,6 +39,7 @@ namespace chr
         glm::vec4 color = { 1, 1, 1, 1 };
         math::Rectf bounds;
 
+        std::pair<glm::vec2, glm::vec2> getTextureCoords() const;
         std::pair<glm::vec2, glm::vec2> getTextureCoords(const gl::Texture &texture) const;
       };
     }
