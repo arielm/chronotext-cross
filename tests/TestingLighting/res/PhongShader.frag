@@ -17,7 +17,7 @@ void main()
 	vec3 cDiffuse = v_color.rgb;
 	vec3 cSpecular = vec3(0.3);
 
-    vec3 lightPosition = vec3(0.0);
+  vec3 lightPosition = vec3(0.0);
 
 	// lighting calculations
 	vec3 N = normalize(v_normal);
@@ -36,7 +36,7 @@ void main()
 	vec3 diffuse = phong * cDiffuse;
 
 	// specular coefficient
-    vec3 specular = blinn * cSpecular;
+  vec3 specular = blinn * cSpecular;
 
     gl_FragColor = vec4(diffuse + specular, 1);
 }
