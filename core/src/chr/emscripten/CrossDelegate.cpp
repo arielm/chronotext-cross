@@ -38,6 +38,9 @@ namespace chr
 
       emscripten_set_wheel_callback(0, 0, 1, wheelCallback);
 
+      emscripten_set_focus_callback(0, 0, 1, focusCallback);
+      emscripten_set_blur_callback(0, 0, 1, blurCallback);
+
       // ---
 
       measureCanvas();
@@ -455,9 +458,23 @@ namespace chr
     return 0;
   }
 
-  EM_BOOL CrossDelegate::wheelCallback(int eventType, const EmscriptenWheelEvent *wheelEvent, void *userData)
+  EM_BOOL CrossDelegate::wheelCallback(int eventType, const EmscriptenWheelEvent *e, void *userData)
   {
-    intern::instance->wheelEvents.emplace_back(wheelEvent->deltaY);
+    intern::instance->wheelEvents.emplace_back(e->deltaY);
+
+    return 0;
+  }
+
+  EM_BOOL CrossDelegate::focusCallback(int eventType, const EmscriptenFocusEvent *e, void *userData)
+  {
+    intern::instance->sketch->performStart(CrossSketch::START_REASON_APP_RESUMED);
+    
+    return 0;
+  }
+
+  EM_BOOL CrossDelegate::blurCallback(int eventType, const EmscriptenFocusEvent *e, void *userData)
+  {
+    intern::instance->sketch->performStop(CrossSketch::STOP_REASON_APP_PAUSED);
 
     return 0;
   }

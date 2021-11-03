@@ -77,7 +77,9 @@ namespace chr
     static EM_BOOL mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData);
     static EM_BOOL touchCallback(int eventType, const EmscriptenTouchEvent *e, void *userData);
     static EM_BOOL keyCallback(int eventType, const EmscriptenKeyboardEvent *e, void *userData);
-    static EM_BOOL wheelCallback(int eventType, const EmscriptenWheelEvent *wheelEvent, void *userData);
+    static EM_BOOL wheelCallback(int eventType, const EmscriptenWheelEvent *e, void *userData);
+    static EM_BOOL focusCallback(int eventType, const EmscriptenFocusEvent *e, void *userData);
+    static EM_BOOL blurCallback(int eventType, const EmscriptenFocusEvent *e, void *userData);
     static EM_BOOL deviceMotionCallback(int eventType, const EmscriptenDeviceMotionEvent *e, void *userData);
   };
 }
