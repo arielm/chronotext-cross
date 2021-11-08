@@ -204,47 +204,79 @@ namespace chr
         if (y0 > y1) std::swap(y0, y1);
         if (z0 > z1) std::swap(z0, z1);
 
+        glm::vec2 coord0;
+        glm::vec2 coord1;
+        glm::vec2 coord2;
+        glm::vec2 coord3;
+        glm::vec2 coord4;
+        glm::vec2 coord5;
+        glm::vec2 coord6;
+        glm::vec2 coord7;
+
+        if (batch.hasTexture)
+        {
+          coord0 = getTextureCoords(batch.texture, 0, 0);
+          coord1 = getTextureCoords(batch.texture, width, 0);
+          coord2 = getTextureCoords(batch.texture, width, height);
+          coord3 = getTextureCoords(batch.texture, 0, height);
+          coord4 = getTextureCoords(batch.texture, 0, depth);
+          coord5 = getTextureCoords(batch.texture, width, depth);
+          coord6 = getTextureCoords(batch.texture, height, 0);
+          coord7 = getTextureCoords(batch.texture, height, depth);
+        }
+        else
+        {
+          coord0 = {0, 0};
+          coord1 = {1, 0};
+          coord2 = {1, 1};
+          coord3 = {0, 1};
+          coord4 = {0, 1};
+          coord5 = {1, 1};
+          coord6 = {1, 0};
+          coord7 = {1, 1};
+        }
+
         // FRONT
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z1), getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x1, y0, z1), getTextureCoords(batch.texture, width, 0))
-          .addVertex(matrix.transformPoint(x1, y1, z1), getTextureCoords(batch.texture, width, height))
-          .addVertex(matrix.transformPoint(x0, y1, z1), getTextureCoords(batch.texture, 0, height));
+          .addVertex(matrix.transformPoint(x0, y0, z1), coord0)
+          .addVertex(matrix.transformPoint(x1, y0, z1), coord1)
+          .addVertex(matrix.transformPoint(x1, y1, z1), coord2)
+          .addVertex(matrix.transformPoint(x0, y1, z1), coord3);
 
         // BACK
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z0), getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x0, y1, z0), getTextureCoords(batch.texture, 0, height))
-          .addVertex(matrix.transformPoint(x1, y1, z0), getTextureCoords(batch.texture, width, height))
-          .addVertex(matrix.transformPoint(x1, y0, z0), getTextureCoords(batch.texture, width, 0));
+          .addVertex(matrix.transformPoint(x0, y0, z0), coord0)
+          .addVertex(matrix.transformPoint(x0, y1, z0), coord3)
+          .addVertex(matrix.transformPoint(x1, y1, z0), coord2)
+          .addVertex(matrix.transformPoint(x1, y0, z0), coord1);
 
         // TOP
         batch
-          .addVertex(matrix.transformPoint(x0, y1, z0), getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x0, y1, z1), getTextureCoords(batch.texture, 0, depth))
-          .addVertex(matrix.transformPoint(x1, y1, z1), getTextureCoords(batch.texture, width, depth))
-          .addVertex(matrix.transformPoint(x1, y1, z0), getTextureCoords(batch.texture, width, 0));
+          .addVertex(matrix.transformPoint(x0, y1, z0), coord0)
+          .addVertex(matrix.transformPoint(x0, y1, z1), coord4)
+          .addVertex(matrix.transformPoint(x1, y1, z1), coord5)
+          .addVertex(matrix.transformPoint(x1, y1, z0), coord1);
 
         // BOTTOM
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z0), getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x1, y0, z0), getTextureCoords(batch.texture, width, 0))
-          .addVertex(matrix.transformPoint(x1, y0, z1), getTextureCoords(batch.texture, width, depth))
-          .addVertex(matrix.transformPoint(x0, y0, z1), getTextureCoords(batch.texture, 0, depth));
+          .addVertex(matrix.transformPoint(x0, y0, z0), coord0)
+          .addVertex(matrix.transformPoint(x1, y0, z0), coord1)
+          .addVertex(matrix.transformPoint(x1, y0, z1), coord5)
+          .addVertex(matrix.transformPoint(x0, y0, z1), coord4);
 
         // RIGHT
         batch
-          .addVertex(matrix.transformPoint(x1, y0, z0), getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x1, y1, z0), getTextureCoords(batch.texture, height, 0))
-          .addVertex(matrix.transformPoint(x1, y1, z1), getTextureCoords(batch.texture, height, depth))
-          .addVertex(matrix.transformPoint(x1, y0, z1), getTextureCoords(batch.texture, 0, depth));
+          .addVertex(matrix.transformPoint(x1, y0, z0), coord0)
+          .addVertex(matrix.transformPoint(x1, y1, z0), coord6)
+          .addVertex(matrix.transformPoint(x1, y1, z1), coord7)
+          .addVertex(matrix.transformPoint(x1, y0, z1), coord4);
 
         // LEFT
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z0), getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x0, y0, z1), getTextureCoords(batch.texture, 0, depth))
-          .addVertex(matrix.transformPoint(x0, y1, z1), getTextureCoords(batch.texture, height, depth))
-          .addVertex(matrix.transformPoint(x0, y1, z0), getTextureCoords(batch.texture, height, 0));
+          .addVertex(matrix.transformPoint(x0, y0, z0), coord0)
+          .addVertex(matrix.transformPoint(x0, y0, z1), coord4)
+          .addVertex(matrix.transformPoint(x0, y1, z1), coord7)
+          .addVertex(matrix.transformPoint(x0, y1, z0), coord6);
 
         // ---
 
@@ -376,47 +408,79 @@ namespace chr
         auto normal4 = matrix.transformNormal(+1,  0,  0);
         auto normal5 = matrix.transformNormal(-1,  0,  0);
 
+        glm::vec2 coord0;
+        glm::vec2 coord1;
+        glm::vec2 coord2;
+        glm::vec2 coord3;
+        glm::vec2 coord4;
+        glm::vec2 coord5;
+        glm::vec2 coord6;
+        glm::vec2 coord7;
+
+        if (batch.hasTexture)
+        {
+          coord0 = getTextureCoords(batch.texture, 0, 0);
+          coord1 = getTextureCoords(batch.texture, width, 0);
+          coord2 = getTextureCoords(batch.texture, width, height);
+          coord3 = getTextureCoords(batch.texture, 0, height);
+          coord4 = getTextureCoords(batch.texture, 0, depth);
+          coord5 = getTextureCoords(batch.texture, width, depth);
+          coord6 = getTextureCoords(batch.texture, height, 0);
+          coord7 = getTextureCoords(batch.texture, height, depth);
+        }
+        else
+        {
+          coord0 = {0, 0};
+          coord1 = {1, 0};
+          coord2 = {1, 1};
+          coord3 = {0, 1};
+          coord4 = {0, 1};
+          coord5 = {1, 1};
+          coord6 = {1, 0};
+          coord7 = {1, 1};
+        }
+
         // FRONT
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z1), normal0, getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x1, y0, z1), normal0, getTextureCoords(batch.texture, width, 0))
-          .addVertex(matrix.transformPoint(x1, y1, z1), normal0, getTextureCoords(batch.texture, width, height))
-          .addVertex(matrix.transformPoint(x0, y1, z1), normal0, getTextureCoords(batch.texture, 0, height));
+          .addVertex(matrix.transformPoint(x0, y0, z1), normal0, coord0)
+          .addVertex(matrix.transformPoint(x1, y0, z1), normal0, coord1)
+          .addVertex(matrix.transformPoint(x1, y1, z1), normal0, coord2)
+          .addVertex(matrix.transformPoint(x0, y1, z1), normal0, coord3);
 
         // BACK
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z0), normal1, getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x0, y1, z0), normal1, getTextureCoords(batch.texture, 0, height))
-          .addVertex(matrix.transformPoint(x1, y1, z0), normal1, getTextureCoords(batch.texture, width, height))
-          .addVertex(matrix.transformPoint(x1, y0, z0), normal1, getTextureCoords(batch.texture, width, 0));
+          .addVertex(matrix.transformPoint(x0, y0, z0), normal1, coord0)
+          .addVertex(matrix.transformPoint(x0, y1, z0), normal1, coord3)
+          .addVertex(matrix.transformPoint(x1, y1, z0), normal1, coord2)
+          .addVertex(matrix.transformPoint(x1, y0, z0), normal1, coord1);
 
         // TOP
         batch
-          .addVertex(matrix.transformPoint(x0, y1, z0), normal2, getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x0, y1, z1), normal2, getTextureCoords(batch.texture, 0, depth))
-          .addVertex(matrix.transformPoint(x1, y1, z1), normal2, getTextureCoords(batch.texture, width, depth))
-          .addVertex(matrix.transformPoint(x1, y1, z0), normal2, getTextureCoords(batch.texture, width, 0));
+          .addVertex(matrix.transformPoint(x0, y1, z0), normal2, coord0)
+          .addVertex(matrix.transformPoint(x0, y1, z1), normal2, coord4)
+          .addVertex(matrix.transformPoint(x1, y1, z1), normal2, coord5)
+          .addVertex(matrix.transformPoint(x1, y1, z0), normal2, coord1);
 
         // BOTTOM
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z0), normal3, getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x1, y0, z0), normal3, getTextureCoords(batch.texture, width, 0))
-          .addVertex(matrix.transformPoint(x1, y0, z1), normal3, getTextureCoords(batch.texture, width, depth))
-          .addVertex(matrix.transformPoint(x0, y0, z1), normal3, getTextureCoords(batch.texture, 0, depth));
+          .addVertex(matrix.transformPoint(x0, y0, z0), normal3, coord0)
+          .addVertex(matrix.transformPoint(x1, y0, z0), normal3, coord1)
+          .addVertex(matrix.transformPoint(x1, y0, z1), normal3, coord5)
+          .addVertex(matrix.transformPoint(x0, y0, z1), normal3, coord4);
 
         // RIGHT
         batch
-          .addVertex(matrix.transformPoint(x1, y0, z0), normal4, getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x1, y1, z0), normal4, getTextureCoords(batch.texture, height, 0))
-          .addVertex(matrix.transformPoint(x1, y1, z1), normal4, getTextureCoords(batch.texture, height, depth))
-          .addVertex(matrix.transformPoint(x1, y0, z1), normal4, getTextureCoords(batch.texture, 0, depth));
+          .addVertex(matrix.transformPoint(x1, y0, z0), normal4, coord0)
+          .addVertex(matrix.transformPoint(x1, y1, z0), normal4, coord6)
+          .addVertex(matrix.transformPoint(x1, y1, z1), normal4, coord7)
+          .addVertex(matrix.transformPoint(x1, y0, z1), normal4, coord4);
 
         // LEFT
         batch
-          .addVertex(matrix.transformPoint(x0, y0, z0), normal5, getTextureCoords(batch.texture, 0, 0))
-          .addVertex(matrix.transformPoint(x0, y0, z1), normal5, getTextureCoords(batch.texture, 0, depth))
-          .addVertex(matrix.transformPoint(x0, y1, z1), normal5, getTextureCoords(batch.texture, height, depth))
-          .addVertex(matrix.transformPoint(x0, y1, z0), normal5, getTextureCoords(batch.texture, height, 0));
+          .addVertex(matrix.transformPoint(x0, y0, z0), normal5, coord0)
+          .addVertex(matrix.transformPoint(x0, y0, z1), normal5, coord4)
+          .addVertex(matrix.transformPoint(x0, y1, z1), normal5, coord7)
+          .addVertex(matrix.transformPoint(x0, y1, z0), normal5, coord6);
 
         // ---
 
