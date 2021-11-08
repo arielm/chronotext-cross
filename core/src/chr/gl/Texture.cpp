@@ -75,6 +75,7 @@ namespace chr
     id(usageCounter++),
     element(new texture::Element()),
     format(response.format),
+    textureId(response.textureId),
     size(response.size),
     innerSize(response.innerSize),
     coords1(response.coords1),
