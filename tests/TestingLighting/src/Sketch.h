@@ -20,6 +20,4 @@ protected:
 
     chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> fillBatch;
     chr::gl::ShaderProgram phongShader;
-
-    static void generateTorus(chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> &batch, int slices, int loops, float innerRadius, float outerRadius);
 };
