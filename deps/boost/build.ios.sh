@@ -16,7 +16,7 @@ fi
 
 # ---
 
-LIBRARIES="--with-system --with-filesystem --with-iostreams"
+LIBRARIES="--with-system --with-filesystem"
 
 # ---
 

@@ -7,12 +7,12 @@
 
 using clang	: emscripten
 :
-emcc -v -s USE_ZLIB=1
+emcc -v -s WASM=0 -s USE_ZLIB=1
 :
 <archiver>emar
 <ranlib>emranlib
 <linker>emlink
-<cxxflags>-std=c++11
+<cxxflags>-std=gnu11
 ;
 
 import type : change-generated-target-suffix ;

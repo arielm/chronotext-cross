@@ -21,11 +21,10 @@ fi
 
 # ---
 
-LIBRARIES="--with-system --with-filesystem --with-iostreams"
+LIBRARIES="--with-system --with-filesystem"
 
 GCC_VERSION=4.9
-ANDROID_ABI=armeabi-v7a
-ANDROID_API=android-16
+ANDROID_API=android-21
 
 # ---
 
