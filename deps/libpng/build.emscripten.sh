@@ -24,7 +24,7 @@ cmake -H"$SRC_DIR" -B"$BUILD_DIR" \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
   -DPNG_SHARED=OFF -DPNG_TESTS=OFF \
-  -DZLIB_LIBRARY="~/.emscripten_cache/zlib.bc" -DZLIB_INCLUDE_DIR="~/.emscripten_cache/ports-builds/zlib" -DM_LIBRARY=""
+  -DM_LIBRARY=""
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"

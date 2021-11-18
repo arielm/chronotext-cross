@@ -12,7 +12,7 @@
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
-  #include <html5.h>
+  #include <emscripten/html5.h>
 #elif defined(CHR_PLATFORM_IOS)
   #include <OpenGLES/ES2/gl.h>
   #include <OpenGLES/ES2/glext.h>

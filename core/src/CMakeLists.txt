@@ -237,7 +237,7 @@ endif()
 
 # ---
 
-if (PLATFORM MATCHES android|android64|rpi|rpi64|linux)
+if (PLATFORM MATCHES android|android64|rpi|rpi64|linux|emscripten)
   list(APPEND INCLUDE_DIRS
     "${JPEG_ROOT}/${PLATFORM}/include"
   )
@@ -329,11 +329,7 @@ endif()
 
 # ---
 
-if (PLATFORM MATCHES emscripten)
-  set(ZLIB_INCLUDE_DIRS "$ENV{HOME}/.emscripten_cache/ports-builds/zlib")
-  set(ZLIB_LIBRARIES "$ENV{HOME}/.emscripten_cache/zlib.bc")
-
-elseif (PLATFORM MATCHES ios)
+if (PLATFORM MATCHES ios)
   set(ZLIB_INCLUDE_DIRS "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include")
   set(ZLIB_LIBRARIES "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libz.tbd")
 

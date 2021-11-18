@@ -21,25 +21,25 @@ namespace chr
   {
     if (!initialized_)
     {
-      emscripten_set_resize_callback(0, 0, 1, resizeCallback);
+      emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, resizeCallback);
 
-      emscripten_set_mousedown_callback(0, 0, 1, mouseCallback);
-      emscripten_set_mouseup_callback(0, 0, 1, mouseCallback);
-      emscripten_set_mousemove_callback(0, 0, 1, mouseCallback);
+      emscripten_set_mousedown_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, mouseCallback);
+      emscripten_set_mouseup_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, mouseCallback);
+      emscripten_set_mousemove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, mouseCallback);
 
-      emscripten_set_touchstart_callback(0, 0, 1, touchCallback);
-      emscripten_set_touchend_callback(0, 0, 1, touchCallback);
-      emscripten_set_touchmove_callback(0, 0, 1, touchCallback);
-      emscripten_set_touchcancel_callback(0, 0, 1, touchCallback);
+      emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
+      emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
+      emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
+      emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
 
-      emscripten_set_keypress_callback(0, 0, 1, keyCallback);
-      emscripten_set_keyup_callback(0, 0, 1, keyCallback);
-      emscripten_set_keydown_callback(0, 0, 1, keyCallback);
+      emscripten_set_keypress_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, keyCallback);
+      emscripten_set_keyup_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, keyCallback);
+      emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, keyCallback);
 
-      emscripten_set_wheel_callback(0, 0, 1, wheelCallback);
+      emscripten_set_wheel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, wheelCallback);
 
-      emscripten_set_focus_callback(0, 0, 1, focusCallback);
-      emscripten_set_blur_callback(0, 0, 1, blurCallback);
+      emscripten_set_focus_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, focusCallback);
+      emscripten_set_blur_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, blurCallback);
 
       // ---
 
@@ -62,7 +62,7 @@ namespace chr
       EmscriptenWebGLContextAttributes attr;
       emscripten_webgl_init_context_attributes(&attr);
 
-      attr.alpha = attr.stencil = attr.preserveDrawingBuffer = attr.preferLowPowerToHighPerformance = attr.failIfMajorPerformanceCaveat = 0;
+      attr.alpha = attr.stencil = attr.preserveDrawingBuffer = attr.failIfMajorPerformanceCaveat = 0;
       attr.enableExtensionsByDefault = 1;
       attr.antialias = (initInfo.windowInfo.aaSamples > 0) ? 1 : 0;
       attr.depth = (initInfo.windowInfo.depthBits > 0) ? 1 : 0;
@@ -70,7 +70,7 @@ namespace chr
       attr.majorVersion = 1;
       attr.minorVersion = 0;
 
-      EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context(0, &attr);
+      EMSCRIPTEN_WEBGL_CONTEXT_HANDLE ctx = emscripten_webgl_create_context("#canvas", &attr);
       emscripten_webgl_make_context_current(ctx);
 
       // ---

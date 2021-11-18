@@ -30,18 +30,22 @@ endif()
 list(APPEND INCLUDE_DIRS "$ENV{CROSS_PATH}/core/src")
 list(APPEND LIBRARIES "$ENV{CROSS_PATH}/tree/chr/${PLATFORM}/lib/${CMAKE_BUILD_TYPE}/libchr_cross.a")
 
+if (PLATFORM MATCHES rpi|rpi64|linux|emscripten)
+  list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/${PLATFORM}/include")
+  list(APPEND LIBRARIES "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a")
+else()
+  list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/include")
+  list(APPEND LIBRARIES "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
+  endif()
+
 if (PLATFORM MATCHES rpi|rpi64|linux)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
 
-  list(APPEND INCLUDE_DIRS
-    ${Boost_INCLUDE_DIRS}
-    "${JPEG_ROOT}/${PLATFORM}/include"
-  )
+  list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 
   list(APPEND LIBRARIES
     ${Boost_LIBRARIES}
     -lpng16
-    "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a"
   )
 else()
   list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
@@ -49,9 +53,6 @@ else()
     "${BOOST_ROOT}/lib/libboost_system.a"
     "${BOOST_ROOT}/lib/libboost_filesystem.a"
   )
-
-  list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/include")
-  list(APPEND LIBRARIES "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
 
   list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
   list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
@@ -114,7 +115,7 @@ elseif (PLATFORM MATCHES mxe)
   )
 
 elseif (PLATFORM MATCHES emscripten)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s TOTAL_MEMORY=67108864")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s WASM=0 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s TOTAL_MEMORY=67108864")
 
 elseif (PLATFORM MATCHES ios)
   list(APPEND LIBRARIES
