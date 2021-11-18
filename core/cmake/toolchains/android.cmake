@@ -22,7 +22,7 @@ set(ANDROID_NATIVE_API_LEVEL ${ANDROID_API})
 #
 # TODO: AVOID DOUBLE-INCLUSION OF FLAGS
 #
-set(CMAKE_CXX_FLAGS "-std=c++1y"
+set(CMAKE_CXX_FLAGS "-std=c++14"
   CACHE STRING "cmake_cxx_flags/android"
 )
 

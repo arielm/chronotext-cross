@@ -24,7 +24,7 @@ cmake -H"$SRC_DIR/cmake" -B"$BUILD_DIR" \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
   -DPTHREADS=OFF \
-  -DHAVE_ZLIB=ON -DZLIB_INCLUDE_DIRECTORIES="$HOME/.emscripten_cache/ports-builds/zlib"
+  -DHAVE_ZLIB=ON -DZLIB_INCLUDE_DIRECTORIES="$EMSCRIPTEN_PATH/cache/ports-builds/zlib"
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"
