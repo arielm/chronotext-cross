@@ -256,17 +256,11 @@ else()
   )
 endif()
 
-if (PLATFORM MATCHES rpi|rpi64|linux)
+if (PLATFORM MATCHES rpi|rpi64|linux|mxe)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
 
-  list(APPEND INCLUDE_DIRS
-    ${Boost_INCLUDE_DIRS}
-  )
-
-  list(APPEND LIBRARIES
-    ${Boost_LIBRARIES}
-    -lpng16
-  )
+  list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
+  list(APPEND LIBRARIES ${Boost_LIBRARIES})
 
 elseif (PLATFORM MATCHES android|android64)
   list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/android/include")
@@ -275,16 +269,22 @@ elseif (PLATFORM MATCHES android|android64)
     "${BOOST_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libboost_filesystem.a"
   )
 
-  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/android/include")
-  list(APPEND LIBRARIES "${PNG_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libpng17.a")
-
 else()
   list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/${PLATFORM}/include")
   list(APPEND LIBRARIES
     "${BOOST_ROOT}/${PLATFORM}/lib/libboost_system.a"
     "${BOOST_ROOT}/${PLATFORM}/lib/libboost_filesystem.a"
   )
+endif()
 
+if (PLATFORM MATCHES rpi|rpi64|linux)
+  list(APPEND LIBRARIES -lpng16)
+
+elseif (PLATFORM MATCHES android|android64)
+  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/android/include")
+  list(APPEND LIBRARIES "${PNG_ROOT}/android/${CMAKE_ANDROID_ARCH_ABI}/libpng17.a")
+
+else()
   list(APPEND INCLUDE_DIRS "${PNG_ROOT}/${PLATFORM}/include")
   list(APPEND LIBRARIES "${PNG_ROOT}/${PLATFORM}/lib/libpng17.a")
 endif()

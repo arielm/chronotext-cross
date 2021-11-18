@@ -38,22 +38,24 @@ else()
   list(APPEND LIBRARIES "${JPEG_ROOT}/lib/${PLATFORM}/libjpeg.a")
   endif()
 
-if (PLATFORM MATCHES rpi|rpi64|linux)
+if (PLATFORM MATCHES rpi|rpi64|linux|mxe)
   find_package(Boost COMPONENTS system filesystem REQUIRED)
 
   list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
+  list(APPEND LIBRARIES ${Boost_LIBRARIES})
 
-  list(APPEND LIBRARIES
-    ${Boost_LIBRARIES}
-    -lpng16
-  )
 else()
   list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
   list(APPEND LIBRARIES
     "${BOOST_ROOT}/lib/libboost_system.a"
     "${BOOST_ROOT}/lib/libboost_filesystem.a"
   )
+endif()
 
+if (PLATFORM MATCHES rpi|rpi64|linux)
+  list(APPEND LIBRARIES -lpng16)
+
+else()
   list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
   list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
 endif()
