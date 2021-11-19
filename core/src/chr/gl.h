@@ -10,6 +10,7 @@
   #include "glload/gl_2_0.h"
   #include "glload/gl_load.h"
 #elif defined(CHR_PLATFORM_EMSCRIPTEN)
+  #define GL_GLEXT_PROTOTYPES
   #include <GLES2/gl2.h>
   #include <GLES2/gl2ext.h>
   #include <emscripten/html5.h>
