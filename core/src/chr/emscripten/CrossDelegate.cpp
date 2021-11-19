@@ -23,20 +23,20 @@ namespace chr
     {
       emscripten_set_resize_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, resizeCallback);
 
-      emscripten_set_mousedown_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, mouseCallback);
-      emscripten_set_mouseup_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, mouseCallback);
-      emscripten_set_mousemove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, mouseCallback);
+      emscripten_set_mousedown_callback("#canvas", 0, 1, mouseCallback);
+      emscripten_set_mouseup_callback("#canvas", 0, 1, mouseCallback);
+      emscripten_set_mousemove_callback("#canvas", 0, 1, mouseCallback);
 
-      emscripten_set_touchstart_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
-      emscripten_set_touchend_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
-      emscripten_set_touchmove_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
-      emscripten_set_touchcancel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, touchCallback);
+      emscripten_set_touchstart_callback("#canvas", 0, 1, touchCallback);
+      emscripten_set_touchend_callback("#canvas", 0, 1, touchCallback);
+      emscripten_set_touchmove_callback("#canvas", 0, 1, touchCallback);
+      emscripten_set_touchcancel_callback("#canvas", 0, 1, touchCallback);
 
-      emscripten_set_keypress_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, keyCallback);
-      emscripten_set_keyup_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, keyCallback);
-      emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, keyCallback);
+      emscripten_set_keypress_callback("#canvas", 0, 1, keyCallback);
+      emscripten_set_keyup_callback("#canvas", 0, 1, keyCallback);
+      emscripten_set_keydown_callback("#canvas", 0, 1, keyCallback);
 
-      emscripten_set_wheel_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, wheelCallback);
+      emscripten_set_wheel_callback("#canvas", 0, 1, wheelCallback);
 
       emscripten_set_focus_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, focusCallback);
       emscripten_set_blur_callback(EMSCRIPTEN_EVENT_TARGET_WINDOW, 0, 1, blurCallback);
@@ -372,8 +372,8 @@ namespace chr
 
       case EMSCRIPTEN_EVENT_MOUSEMOVE:
       {
-        intern::instance->mouseX = e->canvasX;
-        intern::instance->mouseY = e->canvasY;
+        intern::instance->mouseX = e->targetX;
+        intern::instance->mouseY = e->targetY;
 
         intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, intern::instance->mouseButton, intern::instance->mousePressed ? MouseEvent::KIND_DRAGGED : MouseEvent::KIND_MOVED);
       }
@@ -392,8 +392,8 @@ namespace chr
       if (t->isChanged)
       {
         int id = t->identifier;
-        float x = t->canvasX;
-        float y = t->canvasY;
+        float x = t->targetX;
+        float y = t->targetY;
 
         switch (eventType)
         {
