@@ -8,7 +8,7 @@ endif()
 #
 # TODO: AVOID DOUBLE-INCLUSION OF FLAGS
 #
-set(CMAKE_CXX_FLAGS "-Wno-warn-absolute-paths -std=c++14 -s WASM=0"
+set(CMAKE_CXX_FLAGS "-Wno-warn-absolute-paths -std=c++14 -s WASM=1"
   CACHE STRING "cmake_cxx_flags/emscripten"
 )
 
