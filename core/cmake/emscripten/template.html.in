@@ -30,7 +30,11 @@
         canvas: (function ()
         {
           return document.getElementById('canvas');
-        })()
+        })(),
+        onRuntimeInitialized: function()
+        {
+          document.getElementById('canvas').focus();
+        }
       };
     </script>
 
