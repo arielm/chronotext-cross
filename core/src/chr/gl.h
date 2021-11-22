@@ -18,8 +18,8 @@
   #include <OpenGLES/ES2/gl.h>
   #include <OpenGLES/ES2/glext.h>
 #elif defined(CHR_PLATFORM_ANDROID)
-  #include <GLES2/gl2.h>
-  #include <GLES2/gl2ext.h>
+  #include <GLES3/gl3.h>
+  #include <GLES3/gl3ext.h>
 #elif defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64) || defined(CHR_PLATFORM_LINUX)
   #include "glad/gl.h"
 #endif
