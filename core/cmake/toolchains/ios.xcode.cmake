@@ -4,12 +4,11 @@ if (NOT CMAKE_GENERATOR STREQUAL "Xcode")
 endif()
 
 set(IOS_ARCHS
-  armv7
   arm64
   CACHE STRING "ios_archs"
 )
 
-set(IOS_DEPLOYMENT_TARGET 6.0
+set(IOS_DEPLOYMENT_TARGET 11.0
   CACHE STRING "ios_deployment_target"
 )
 
