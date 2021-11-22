@@ -2,8 +2,6 @@
 
 #include "chr/gl/draw/Sprite.h"
 #include "chr/gl/draw/Rect.h"
-#include "chr/gl/Triangulator.h"
-#include "chr/shape/Rect.h"
 #include "chr/path/SplinePath.h"
 
 using namespace std;
@@ -23,23 +21,16 @@ void Sketch::setup()
 {
   initTextures();
 
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
-
-  lineState
+  lineBatch
     .setShader(colorShader)
-    .setShaderColor(0, 0, 0, 0.67f)
-    .setShaderMatrix(projectionMatrix);
+    .setShaderColor(0, 0, 0, 0.67f);
 
-  dotState
+  dotBatch
     .setShader(textureAlphaShader)
     .setShaderColor(1, 0, 0, 0.85f)
-    .setShaderMatrix(projectionMatrix);
+    .setTexture(dotTexture);
 
-  flatState
-    .setShader(colorShader)
-    .setShaderMatrix(projectionMatrix);
-
-  dotBatch.setTexture(dotTexture);
+  flatBatch.setShader(colorShader);
 
   // ---
 
@@ -132,18 +123,20 @@ void Sketch::draw()
 
   // ---
 
-  lineState.apply();
-  lineBatch.flush();
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
 
-  dotState.apply();
+  State()
+    .setShaderMatrix(projectionMatrix)
+    .apply();
+
+  lineBatch.flush();
   dotBatch.flush();
 
   // ---
 
   flatBatch.clear();
 
-  Matrix matrix1, matrix2;
-  MatrixAffine affine;
+  Matrix matrix1, matrix2, matrix3;
 
   path1
     .offsetToValue(clock()->getTime() * 40, 15)
@@ -155,7 +148,7 @@ void Sketch::draw()
 
   path3
     .offsetToValue(-clock()->getTime() * 30 + 100, 10)
-    .applyToMatrix(affine);
+    .applyToMatrix(matrix3);
 
   draw::Rect()
     .setColor(0, 0.50f, 0.75f, 0.75f)
@@ -167,20 +160,17 @@ void Sketch::draw()
     .setBounds(-10, -10, 20, 20)
     .append(flatBatch, matrix2);
 
-  Triangulator triangulator;
-  triangulator
+  draw::Rect()
     .setColor(1, 0.5f, 0.25f, 1)
-    .add(affine.transformPoints(shape::Rect().setSize(10, 10).append()))
-    .fill(flatBatch);
+    .setBounds(-5, -5, 10, 10)
+    .append(flatBatch, matrix3);
 
-  flatState.apply();
   flatBatch.flush();
 }
 
 void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
 {
   auto size = polyline.size();
-
   if (size > 1)
   {
     for (auto i = 0; i < size - 1; i++)
@@ -193,7 +183,6 @@ void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
 void Sketch::drawPolyline(const vector<FollowablePath2D::Point> &points)
 {
   auto size = points.size();
-
   if (size > 1)
   {
     for (auto i = 0; i < size - 1; i++)

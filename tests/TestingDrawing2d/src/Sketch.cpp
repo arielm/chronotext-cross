@@ -12,8 +12,6 @@ using namespace gl;
 using namespace math;
 
 Sketch::Sketch()
-:
-strokeBatch(GL_LINES)
 {}
 
 void Sketch::setup()
@@ -21,19 +19,6 @@ void Sketch::setup()
   initTextures();
 
   // ---
-
-  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
-
-  Matrix modelViewMatrix;
-  modelViewMatrix
-    .translate(windowInfo.size / 2.0f)
-    .scale(1, -1);
-
-  // ---
-
-  state
-    .setShaderMatrix(modelViewMatrix * projectionMatrix)
-    .glLineWidth(2);
 
   textureBatch
     .setShader(textureAlphaShader)
@@ -46,6 +31,7 @@ void Sketch::setup()
     .setShader(colorShader);
 
   strokeBatch
+    .setPrimitive(GL_LINES)
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 1);
 
@@ -120,7 +106,16 @@ void Sketch::draw()
 
   // ---
 
-  state.apply();
+  glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
+
+  Matrix modelViewMatrix;
+  modelViewMatrix
+    .translate(windowInfo.center())
+    .scale(1, -1);
+
+  State()
+    .setShaderMatrix(modelViewMatrix * projectionMatrix)
+    .apply();
 
   backgroundBatch.flush();
   textureBatch.flush();

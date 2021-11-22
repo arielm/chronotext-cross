@@ -13,19 +13,6 @@ Sketch::Sketch()
 
 void Sketch::setup()
 {
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
-
-  Matrix modelViewMatrix;
-  modelViewMatrix
-    .translate(0, windowInfo.height)
-    .scale(1, -1);
-
-  // ---
-
-  state
-    .setShaderMatrix(modelViewMatrix * projectionMatrix)
-    .glLineWidth(1);
-
   fillBatch
     .setShader(colorShader);
 
@@ -87,7 +74,16 @@ void Sketch::draw()
 
   // ---
 
-  state.apply();
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
+
+  Matrix modelViewMatrix;
+  modelViewMatrix
+    .translate(0, windowInfo.height)
+    .scale(1, -1);
+
+  State()
+    .setShaderMatrix(modelViewMatrix * projectionMatrix)
+    .apply();
 
   fillBatch.flush();
   strokeBatch.flush();
@@ -96,7 +92,6 @@ void Sketch::draw()
 void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
 {
   auto size = polyline.size();
-
   if (size > 1)
   {
     for (auto i = 0; i < size - 1; i++)

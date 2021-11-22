@@ -76,9 +76,7 @@ void Sketch::draw()
 
   auto mvpMatrix = mvMatrix * projectionMatrix;
 
-  // ---
-
-  state
+  State()
     .setShaderMatrix<MVP>(mvpMatrix)
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();

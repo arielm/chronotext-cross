@@ -20,13 +20,10 @@ protected:
   chr::path::FollowablePath2D path1, path2, path3;
 
   chr::gl::Texture dotTexture;
-  chr::gl::State dotState;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> dotBatch;
 
-  chr::gl::State lineState;
   chr::gl::VertexBatch<chr::gl::XYZ> lineBatch;
 
-  chr::gl::State flatState;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> flatBatch;
 
   chr::gl::shaders::ColorShader colorShader;

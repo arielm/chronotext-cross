@@ -13,6 +13,7 @@ public:
   virtual ~Sketch() {}
 
   void setup() final;
+  void resize() final;
   void draw() final;
 
   void addTouch(int index, float x, float y) final;
@@ -20,7 +21,6 @@ public:
   void removeTouch(int index, float x, float y) final;
 
 protected:
-  chr::gl::State state;
   chr::gl::Camera camera;
 
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> lightenBatch;

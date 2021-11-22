@@ -16,8 +16,6 @@ public:
   void draw() final;
 
 protected:
-  chr::gl::State state;
-
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> lightenBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> flatBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ> contourBatch;

@@ -3,8 +3,6 @@
 #include "chr/gl/Triangulator.h"
 #include "chr/math/MatrixAffine.h"
 #include "chr/shape/Rect.h"
-#include "chr/shape/EquilateralTriangle.h"
-#include "chr/shape/Circle.h"
 
 using namespace std;
 using namespace chr;
@@ -20,13 +18,6 @@ normalBatch(GL_LINES)
 
 void Sketch::setup()
 {
-  camera
-    .setFov(60)
-    .setClip(0.1f, 1000.0f)
-    .setWindowSize(windowInfo.size);
-
-  state.glLineWidth(2);
-
   contourBatch
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 0.5f);
@@ -74,6 +65,14 @@ void Sketch::setup()
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void Sketch::resize()
+{
+  camera
+    .setFov(60)
+    .setClip(0.1f, 1000.0f)
+    .setWindowSize(windowInfo.size);
+}
+
 void Sketch::draw()
 {
   glClearColor(0.5f, 0.5f, 0.5f, 1);
@@ -99,7 +98,7 @@ void Sketch::draw()
   glEnable(GL_POLYGON_OFFSET_FILL);
   glPolygonOffset(2, 1);
 
-  state
+  State()
     .setShaderMatrix<MVP>(camera.getMVPMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .apply();

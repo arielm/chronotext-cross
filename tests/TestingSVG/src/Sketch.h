@@ -14,8 +14,6 @@ public:
   void draw() final;
 
 protected:
-  chr::gl::State state;
-
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> fillBatch;
   chr::gl::VertexBatch<chr::gl::XYZ> strokeBatch;
 

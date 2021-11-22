@@ -52,10 +52,6 @@ void Sketch::draw()
   drawScene2(fbo.colorTexture.size);
   fbo.unbind();
 
-//  fbo.colorTexture.bind();
-//  glGenerateMipmap(GL_TEXTURE_2D);
-//  fbo.colorTexture.unbind();
-
   drawScene1();
 }
 

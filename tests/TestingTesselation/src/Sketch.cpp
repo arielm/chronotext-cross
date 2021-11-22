@@ -13,9 +13,6 @@ using namespace math;
 using namespace path;
 
 Sketch::Sketch()
-:
-contourBatch(GL_LINES),
-normalBatch(GL_LINES)
 {}
 
 void Sketch::setup()
@@ -24,13 +21,17 @@ void Sketch::setup()
 
   // ---
 
-  state
-    .setShaderColor(1, 1, 1, 1)
-    .glLineWidth(2);
-
   flatBatch.setShader(colorShader);
-  contourBatch.setShader(colorShader);
-  normalBatch.setShader(colorShader);
+  
+  contourBatch
+    .setPrimitive(GL_LINES)
+    .setShader(colorShader)
+    .setShaderColor(1, 1, 1, 1);
+  
+  normalBatch
+    .setPrimitive(GL_LINES)
+    .setShader(colorShader)
+    .setShaderColor(1, 1, 1, 1);
 
   lightenBatch.setTexture(texture);
 
@@ -157,7 +158,7 @@ void Sketch::draw()
   glEnable(GL_POLYGON_OFFSET_FILL);
   glPolygonOffset(2, 1);
 
-  state
+  State()
     .setShaderMatrix<MVP>(mvMatrix * projectionMatrix)
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();
