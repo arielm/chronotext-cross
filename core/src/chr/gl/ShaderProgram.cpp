@@ -162,12 +162,12 @@ namespace chr
           element->mvpMatrixLocation = glGetUniformLocation(element->programId, "u_mvp_matrix");
           element->projectionMatrixLocation = glGetUniformLocation(element->programId, "u_projection_matrix");
           element->normalMatrixLocation = glGetUniformLocation(element->programId, "u_normal_matrix");
+          element->samplerLocation = glGetUniformLocation(element->programId, "u_sampler"); // XXX
           element->positionLocation = glGetAttribLocation(element->programId, "a_position");
           element->colorLocation = glGetAttribLocation(element->programId, "a_color");
           element->normalLocation = glGetAttribLocation(element->programId, "a_normal");
           element->coordLocation = glGetAttribLocation(element->programId, "a_coord");
           element->matrixLocation = glGetAttribLocation(element->programId, "a_matrix");
-          element->samplerLocation = glGetUniformLocation(element->programId, "u_sampler");
         }
       }
 
