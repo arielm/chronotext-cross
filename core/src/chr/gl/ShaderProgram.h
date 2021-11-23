@@ -43,6 +43,7 @@ namespace chr
         GLuint colorLocation;
         GLuint normalLocation;
         GLuint coordLocation;
+        GLuint matrixLocation;
         GLuint samplerLocation;
 
         std::map<std::string, GLuint> map_uniform;

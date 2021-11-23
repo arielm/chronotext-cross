@@ -4,6 +4,7 @@
 #include "chr/gl/State.h"
 #include "chr/gl/Texture.h"
 #include "chr/gl/Matrix.h"
+#include "chr/gl/InstanceBuffer.h"
 
 #include <array>
 
@@ -19,6 +20,7 @@ namespace chr
       virtual void clear() = 0;
       virtual bool empty() const = 0;
       virtual void bind(ShaderProgram &shader) = 0;
+      virtual void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) = 0;
     };
 
     template<int V = XYZ>
@@ -103,6 +105,27 @@ namespace chr
         {
           apply(state::current->shader);
           bind(state::current->shader);
+        }
+      }
+
+      void flush(InstanceBuffer &instanceBuffer)
+      {
+        if (hasTexture)
+        {
+          texture.bind();
+        }
+
+        if (hasShader)
+        {
+          shader.bind();
+          state::current.apply(shader);
+          apply(shader);
+          bind(shader, instanceBuffer);
+        }
+        else
+        {
+          apply(state::current->shader);
+          bind(state::current->shader, instanceBuffer);
         }
       }
 
@@ -347,6 +370,17 @@ namespace chr
         vertexBuffer.draw(primitive);
         vertexBuffer.unbind(shader);
       }
+
+      void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
+      {
+        vertexBuffer.bind(shader);
+        instanceBuffer.bind(shader);
+
+        vertexBuffer.drawInstanced(primitive, vertexBuffer->storage.size());
+
+        instanceBuffer.unbind(shader);
+        vertexBuffer.unbind(shader);
+      }
     };
 
     template<int V = XYZ, typename I = GLuint>
@@ -478,8 +512,27 @@ namespace chr
 
         VertexBatch<V>::vertexBuffer.bind(shader);
         indexBuffer.bind(shader);
+
         indexBuffer.draw(VertexBatch<V>::primitive);
 
+        VertexBatch<V>::vertexBuffer.unbind(shader);
+        indexBuffer.unbind(shader);
+      }
+
+      void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
+      {
+        if (VertexBatch<V>::hasTexture)
+        {
+          VertexBatch<V>::texture.bind();
+        }
+
+        VertexBatch<V>::vertexBuffer.bind(shader);
+        indexBuffer.bind(shader);
+        instanceBuffer.bind(shader);
+
+        indexBuffer.drawInstanced(VertexBatch<V>::primitive, VertexBatch<V>::vertexBuffer->storage.size());
+
+        instanceBuffer.unbind(shader);
         VertexBatch<V>::vertexBuffer.unbind(shader);
         indexBuffer.unbind(shader);
       }

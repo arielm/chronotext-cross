@@ -28,3 +28,17 @@
   #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
   #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #endif
+
+#if defined(CHR_PLATFORM_EMSCRIPTEN)
+  #define glVertexAttribDivisor glVertexAttribDivisorANGLE
+  #define glDrawArraysInstanced glDrawArraysInstancedANGLE
+  #define glDrawElementsInstanced glDrawElementsInstancedANGLE
+#elif defined(CHR_PLATFORM_IOS)
+  #define glVertexAttribDivisor glVertexAttribDivisorEXT
+  #define glDrawArraysInstanced glDrawArraysInstancedEXT
+  #define glDrawElementsInstanced glDrawElementsInstancedEXT
+#elif defined(CHR_PLATFORM_OSX) || defined(CHR_PLATFORM_WIN)
+  #define glVertexAttribDivisor glVertexAttribDivisorARB
+  #define glDrawArraysInstanced glDrawArraysInstancedARB
+  #define glDrawElementsInstanced glDrawElementsInstancedARB
+#endif

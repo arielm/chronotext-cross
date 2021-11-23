@@ -166,6 +166,7 @@ namespace chr
           element->colorLocation = glGetAttribLocation(element->programId, "a_color");
           element->normalLocation = glGetAttribLocation(element->programId, "a_normal");
           element->coordLocation = glGetAttribLocation(element->programId, "a_coord");
+          element->matrixLocation = glGetAttribLocation(element->programId, "a_matrix");
           element->samplerLocation = glGetUniformLocation(element->programId, "u_sampler");
         }
       }

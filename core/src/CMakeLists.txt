@@ -46,6 +46,7 @@ list(APPEND SRC_FILES
   "chr/gl/Vertex.cpp"
   "chr/gl/Triangulator.cpp"
   "chr/gl/TextureManager.cpp"
+  "chr/gl/InstanceBuffer.cpp"
   "chr/gl/draw/Circle.cpp"
   "chr/gl/draw/Rect.cpp"
   "chr/gl/draw/Sprite.cpp"
