@@ -201,7 +201,7 @@ namespace chr
         {
           case buffer::GLUSHORT:
           case buffer::GLUINT:
-            glDrawElementsInstancedARB(primitive, element->storage.size(), (typeIndex == buffer::GLUSHORT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, 0, count);
+            glDrawElementsInstanced(primitive, element->storage.size(), (typeIndex == buffer::GLUSHORT) ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, 0, count);
             break;
 
           default:
