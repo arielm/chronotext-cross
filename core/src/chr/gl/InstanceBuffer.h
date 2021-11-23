@@ -16,6 +16,8 @@ namespace chr
   	  colorsUsage(colorsUsage)
   	  {}
 
+      ~InstanceBuffer();
+
   	  void bind(const ShaderProgram &shader);
   	  void unbind(const ShaderProgram &shader);
 

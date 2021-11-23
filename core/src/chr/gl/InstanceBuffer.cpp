@@ -6,6 +6,19 @@ namespace chr
 {
   namespace gl
   {
+    InstanceBuffer::~InstanceBuffer()
+    {
+      if (matricesVboId != 0)
+      {
+        glDeleteBuffers(1, &matricesVboId);
+      }
+
+      if (colorsVboId != 0)
+      {
+        glDeleteBuffers(1, &colorsVboId);
+      }
+    }
+
     void InstanceBuffer::bind(const ShaderProgram &shader)
     {
       bindMatrices(shader);
@@ -14,8 +27,16 @@ namespace chr
 
     void InstanceBuffer::unbind(const ShaderProgram &shader)
     {
-      glDisableVertexAttribArray(shader->matrixLocation);
+      for (int i = 0; i < 4; ++i)
+      {
+        auto location = shader->matrixLocation + i;
+        glDisableVertexAttribArray(location);
+        glVertexAttribDivisor(location, 0);
+      }
+
       glDisableVertexAttribArray(shader->colorLocation);
+      glVertexAttribDivisor(shader->colorLocation, 0);
+
       glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
