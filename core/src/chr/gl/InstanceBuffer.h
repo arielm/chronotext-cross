@@ -5,8 +5,8 @@ namespace chr
 {
   namespace gl
   {
-		class InstanceBuffer
-		{
+    class InstanceBuffer
+    {
     public:
   	  InstanceBuffer(GLenum matricesUsage = GL_DYNAMIC_DRAW, GLenum colorsUsage = GL_DYNAMIC_DRAW)
   	  :
@@ -29,23 +29,23 @@ namespace chr
   	  size_t getCount() const;
 
     protected:
-    	GLenum matricesUsage;
-    	GLenum colorsUsage;
+      GLenum matricesUsage;
+      GLenum colorsUsage;
 
-    	GLuint matricesVboId = 0;
-    	GLuint colorsVboId = 0;
+      GLuint matricesVboId = 0;
+      GLuint colorsVboId = 0;
 
       size_t matricesAllocatedSize = 0;
-    	size_t colorsAllocatedSize = 0;
+      size_t colorsAllocatedSize = 0;
 
-    	bool matricesUploadRequired = true;
-    	bool colorsUploadRequired = true;
+      bool matricesUploadRequired = true;
+      bool colorsUploadRequired = true;
 
   	  std::vector<glm::mat4> matrices;
    	  std::vector<glm::vec4> colors;
 
-    	void bindMatrices(const ShaderProgram &shader);
-    	void bindColors(const ShaderProgram &shader);
-		};
+      void bindMatrices(const ShaderProgram &shader);
+      void bindColors(const ShaderProgram &shader);
+    };
   }
 }

@@ -6,11 +6,11 @@ namespace chr
 {
   namespace gl
   {
-  	void InstanceBuffer::bind(const ShaderProgram &shader)
-  	{
-  	  bindMatrices(shader);
-  	  bindColors(shader);
-  	}
+    void InstanceBuffer::bind(const ShaderProgram &shader)
+    {
+      bindMatrices(shader);
+      bindColors(shader);
+    }  
 
     void InstanceBuffer::unbind(const ShaderProgram &shader)
     {
@@ -62,7 +62,7 @@ namespace chr
 
     void InstanceBuffer::bindMatrices(const ShaderProgram &shader)
     {
-    	if (matricesVboId == 0)
+      if (matricesVboId == 0)
       {
         glGenBuffers(1, &matricesVboId);
       }
@@ -77,13 +77,13 @@ namespace chr
 
       glBindBuffer(GL_ARRAY_BUFFER, matricesVboId);
 
-	    for (int i = 0; i < 4; ++i)
-	    {
-	        auto location = shader->matrixLocation + i;
-	        glEnableVertexAttribArray(location);
-	        glVertexAttribPointer(location, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (GLvoid*)(i * 16));
-	        glVertexAttribDivisor(location, 1);
-	    }
+      for (int i = 0; i < 4; ++i)
+      {
+          auto location = shader->matrixLocation + i;
+          glEnableVertexAttribArray(location);
+          glVertexAttribPointer(location, 4, GL_FLOAT, GL_FALSE, 16 * sizeof(float), (GLvoid*)(i * 16));
+          glVertexAttribDivisor(location, 1);
+      }
 
       if (matricesUploadRequired)
       {
@@ -119,12 +119,12 @@ namespace chr
 
     void InstanceBuffer::bindColors(const ShaderProgram &shader)
     {
-    	if (!colors.empty())
-    	{
-	    	if (colorsVboId == 0)
-	      {
-	        glGenBuffers(1, &colorsVboId);
-	      }
+      if (!colors.empty())
+      {
+        if (colorsVboId == 0)
+        {
+          glGenBuffers(1, &colorsVboId);
+        }
         else if (colors.size() > colorsAllocatedSize)
         {
           colorsUploadRequired = true;
@@ -134,10 +134,10 @@ namespace chr
           glGenBuffers(1, &colorsVboId);
         }
 
-	      glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
-	    	glEnableVertexAttribArray(shader->colorLocation);
-	      glVertexAttribPointer(shader->colorLocation, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
-	      glVertexAttribDivisor(shader->colorLocation, 1);
+        glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+        glEnableVertexAttribArray(shader->colorLocation);
+        glVertexAttribPointer(shader->colorLocation, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+        glVertexAttribDivisor(shader->colorLocation, 1);
 
         if (colorsUploadRequired)
         {
