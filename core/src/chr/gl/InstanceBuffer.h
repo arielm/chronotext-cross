@@ -1,3 +1,5 @@
+#pragma once
+
 #include "chr/gl/ShaderProgram.h"
 #include "chr/gl/Matrix.h"
 
