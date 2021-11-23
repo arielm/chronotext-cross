@@ -26,6 +26,8 @@ namespace chr
   	  InstanceBuffer& addColor(const glm::vec4 &color);
   	  InstanceBuffer& addColor(float r, float g, float b, float a);
 
+  	  size_t getCount() const;
+
     protected:
     	GLenum matricesUsage;
     	GLenum colorsUsage;

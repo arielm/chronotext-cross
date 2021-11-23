@@ -55,6 +55,11 @@ namespace chr
       return *this;
     }
 
+    size_t InstanceBuffer::getCount() const
+    {
+      return matrices.size();
+    }
+
     void InstanceBuffer::bindMatrices(const ShaderProgram &shader)
     {
     	if (matricesVboId == 0)

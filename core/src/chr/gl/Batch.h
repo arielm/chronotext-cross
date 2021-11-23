@@ -376,7 +376,7 @@ namespace chr
         vertexBuffer.bind(shader);
         instanceBuffer.bind(shader);
 
-        vertexBuffer.drawInstanced(primitive, vertexBuffer->storage.size());
+        vertexBuffer.drawInstanced(primitive, instanceBuffer.getCount());
 
         instanceBuffer.unbind(shader);
         vertexBuffer.unbind(shader);
@@ -530,7 +530,7 @@ namespace chr
         indexBuffer.bind(shader);
         instanceBuffer.bind(shader);
 
-        indexBuffer.drawInstanced(VertexBatch<V>::primitive, VertexBatch<V>::vertexBuffer->storage.size());
+        indexBuffer.drawInstanced(VertexBatch<V>::primitive, instanceBuffer.getCount());
 
         instanceBuffer.unbind(shader);
         VertexBatch<V>::vertexBuffer.unbind(shader);
