@@ -3,7 +3,6 @@
 #include "chr/gl/Buffer.h"
 #include "chr/gl/State.h"
 #include "chr/gl/Texture.h"
-#include "chr/gl/Matrix.h"
 #include "chr/gl/InstanceBuffer.h"
 
 #include <array>
@@ -35,12 +34,6 @@ namespace chr
 
       glm::vec4 color;
       bool hasColor = false;
-
-      glm::mat3 matrices3[1]; // XXX
-      bool hasMatrix3[1] = { false }; // XXX
-
-      glm::mat4 matrices4[3]; // XXX
-      bool hasMatrix4[3] = { false, false, false }; // XXX
 
       Texture texture;
       bool hasTexture = false;
@@ -224,45 +217,6 @@ namespace chr
         return *this;
       }
 
-      template<int T>
-      VertexBatch& setShaderMatrix(const glm::mat3 &matrix)
-      {
-        matrices3[T] = matrix;
-        hasMatrix3[T] = true;
-        return *this;
-      }
-
-      template<int T = MVP>
-      VertexBatch& setShaderMatrix(const glm::mat4 &matrix)
-      {
-        matrices4[T] = matrix;
-        hasMatrix4[T] = true;
-        return *this;
-      }
-
-      template<int T = MV>
-      VertexBatch& setShaderMatrix(std::array<float, 16> &values)
-      {
-        matrices4[T] = glm::make_mat4(values.data());
-        hasMatrix4[T] = true;
-        return *this;
-      }
-
-      template<int T>
-      VertexBatch& clearShaderMatrix()
-      {
-        if ((T < 3) && hasMatrix4[T]) // XXX
-        {
-          hasMatrix4[T] = false;
-        }
-        else if ((T < 1) && hasMatrix3[T]) // XXX
-        {
-          hasMatrix3[T] = false;
-        }
-
-        return *this;
-      }
-
       VertexBatch& setTexture(const Texture &texture)
       {
         if (!hasTexture)
@@ -321,26 +275,6 @@ namespace chr
         if (hasColor)
         {
           shader.applyColor(color);
-        }
-
-        if (hasMatrix4[MV])
-        {
-          shader.applyMatrix<MV>(matrices4[MV]);
-        }
-
-        if (hasMatrix4[MVP])
-        {
-          shader.applyMatrix<MVP>(matrices4[MVP]);
-        }
-
-        if (hasMatrix4[PROJECTION])
-        {
-          shader.applyMatrix<PROJECTION>(matrices4[PROJECTION]);
-        }
-
-        if (hasMatrix3[NORMAL])
-        {
-          shader.applyMatrix<NORMAL>(matrices3[NORMAL]);
         }
 
         for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
