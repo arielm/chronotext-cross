@@ -15,6 +15,10 @@ elseif (PLATFORM MATCHES ios)
   set(CTEST_CMAKE_GENERATOR "Xcode")
   set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/ios.xcode.cmake")
 
+elseif (PLATFORM MATCHES android64)
+  set(CTEST_CMAKE_GENERATOR "Ninja")
+  set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/android64.cmake")
+
 elseif (PLATFORM MATCHES android)
   set(CTEST_CMAKE_GENERATOR "Ninja")
   set(TOOLCHAIN_FILE "${CMAKE_CURRENT_LIST_DIR}/toolchains/android.cmake")

@@ -1,11 +1,11 @@
-set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost/${PLATFORM}")
+set(BOOST_ROOT "$ENV{CROSS_PATH}/tree/boost")
 set(GLFW_ROOT "$ENV{CROSS_PATH}/tree/glfw/${PLATFORM}")
 set(GLLOAD_ROOT "$ENV{CROSS_PATH}/tree/glload")
 set(GLM_ROOT "$ENV{CROSS_PATH}/tree/glm")
 set(JPEG_ROOT "$ENV{CROSS_PATH}/tree/libjpeg-turbo")
-set(PNG_ROOT "$ENV{CROSS_PATH}/tree/libpng/${PLATFORM}")
-set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/tree/libtess2/${PLATFORM}")
-set(PROTOBUF_ROOT "$ENV{CROSS_PATH}/tree/protobuf/${PLATFORM}")
+set(PNG_ROOT "$ENV{CROSS_PATH}/tree/libpng")
+set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/tree/libtess2")
+set(PROTOBUF_ROOT "$ENV{CROSS_PATH}/tree/protobuf")
 
 # ---
 
@@ -30,7 +30,7 @@ endif()
 list(APPEND INCLUDE_DIRS "$ENV{CROSS_PATH}/core/src")
 list(APPEND LIBRARIES "$ENV{CROSS_PATH}/tree/chr/${PLATFORM}/lib/${CMAKE_BUILD_TYPE}/libchr_cross.a")
 
-if (PLATFORM MATCHES rpi|rpi64|linux|emscripten)
+if (PLATFORM MATCHES android|android64|rpi|rpi64|linux|emscripten)
   list(APPEND INCLUDE_DIRS "${JPEG_ROOT}/${PLATFORM}/include")
   list(APPEND LIBRARIES "${JPEG_ROOT}/${PLATFORM}/lib/libturbojpeg.a")
 else()
@@ -44,29 +44,51 @@ if (PLATFORM MATCHES rpi|rpi64|linux|mxe)
   list(APPEND INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
   list(APPEND LIBRARIES ${Boost_LIBRARIES})
 
-else()
-  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/include")
+elseif (PLATFORM MATCHES android|android64)
+  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/android/include")
   list(APPEND LIBRARIES
-    "${BOOST_ROOT}/lib/libboost_system.a"
-    "${BOOST_ROOT}/lib/libboost_filesystem.a"
+    "${BOOST_ROOT}/android/${ANDROID_ABI}/libboost_system.a"
+    "${BOOST_ROOT}/android/${ANDROID_ABI}/libboost_filesystem.a"
+  )
+
+else()
+  list(APPEND INCLUDE_DIRS "${BOOST_ROOT}/${PLATFORM}/include")
+  list(APPEND LIBRARIES
+    "${BOOST_ROOT}/${PLATFORM}/lib/libboost_system.a"
+    "${BOOST_ROOT}/${PLATFORM}/lib/libboost_filesystem.a"
   )
 endif()
 
 if (PLATFORM MATCHES rpi|rpi64|linux)
   list(APPEND LIBRARIES -lpng16)
 
+elseif (PLATFORM MATCHES android|android64)
+  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/android/include")
+  list(APPEND LIBRARIES "${PNG_ROOT}/android/${ANDROID_ABI}/libpng17.a")
+
 else()
-  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/include")
-  list(APPEND LIBRARIES "${PNG_ROOT}/lib/libpng17.a")
+  list(APPEND INCLUDE_DIRS "${PNG_ROOT}/${PLATFORM}/include")
+  list(APPEND LIBRARIES "${PNG_ROOT}/${PLATFORM}/lib/libpng17.a")
 endif()
 
 list(APPEND INCLUDE_DIRS "${GLM_ROOT}/include")
 
-list(APPEND INCLUDE_DIRS "${LIBTESS2_ROOT}/include")
-list(APPEND LIBRARIES "${LIBTESS2_ROOT}/lib/libtess2.a")
+if (PLATFORM MATCHES android|android64)
+  list(APPEND INCLUDE_DIRS
+    "${LIBTESS2_ROOT}/android/include"
+    "${PROTOBUF_ROOT}/android/include"
+  )
 
-list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/include")
-list(APPEND LIBRARIES "${PROTOBUF_ROOT}/lib/libprotobuf.a")
+  list(APPEND LIBRARIES "${LIBTESS2_ROOT}/android/${ANDROID_ABI}/libtess2.a")
+  list(APPEND LIBRARIES "${PROTOBUF_ROOT}/android/${ANDROID_ABI}/libprotobuf.a")
+
+else()
+  list(APPEND INCLUDE_DIRS "${LIBTESS2_ROOT}/${PLATFORM}/include")
+  list(APPEND LIBRARIES "${LIBTESS2_ROOT}/${PLATFORM}/lib/libtess2.a")
+
+  list(APPEND INCLUDE_DIRS "${PROTOBUF_ROOT}/${PLATFORM}/include")
+  list(APPEND LIBRARIES "${PROTOBUF_ROOT}/${PLATFORM}/lib/libprotobuf.a")
+endif()
 
 # ---
 
@@ -135,6 +157,6 @@ elseif (PLATFORM MATCHES android)
     log
     android
     EGL
-    GLESv2
+    GLESv3
   )
 endif()

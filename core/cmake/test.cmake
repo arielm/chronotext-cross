@@ -315,7 +315,7 @@ if (NOT SKETCH)
       log
       android
       EGL
-      GLESv2
+      GLESv3
     )
   endif()
 endif()
