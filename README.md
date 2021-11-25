@@ -3,8 +3,8 @@
 Cross-platform minimal infrastructure for developing interactive applications with C++11 and OpenGL (including WebGL) while providing the necessary native bridges to Objective-C, Java or JS.
 
 **Target platforms:**
-- OSX
-- Windows/MXE
+- macOS (intel)
+- Windows (mxe)
 - iOS
 - Android
 - Emscripten
@@ -12,8 +12,8 @@ Cross-platform minimal infrastructure for developing interactive applications wi
 - Linux
 
 **Development environment:**
-- OSX, Raspberry Pi or Linux
+- macOS, Raspberry Pi or Linux
 - CMake
 - Terminal or CLION
 
-Check the [wiki](https://github.com/arielm/chronotext-cross/wiki) for more details.
+Check the [wiki](https://github.com/arielm/chronotext-cross/wiki) for more details / See some [WebGL artworks](http://chronotext.org/webgl) made with this technology.
