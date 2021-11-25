@@ -24,7 +24,7 @@
   #include "glad/gl.h"
 #endif
 
-#if defined (CHR_PLATFORM_DESKTOP)
+#if defined(CHR_PLATFORM_DESKTOP) || defined(CHR_PLATFORM_ANDROID)
   #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
   #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #endif

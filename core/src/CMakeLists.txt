@@ -232,7 +232,7 @@ elseif (PLATFORM MATCHES android)
     log
     android
     EGL
-    GLESv2
+    GLESv3
   )
 
 elseif (PLATFORM MATCHES rpi|rpi64|linux)
