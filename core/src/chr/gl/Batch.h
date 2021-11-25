@@ -367,7 +367,7 @@ namespace chr
 
       inline size_t indexCount() const
       {
-        indexBuffer->storage.size();
+        return indexBuffer->storage.size();
       }
 
       inline IndexedVertexBatch& addIndex(I offset)
