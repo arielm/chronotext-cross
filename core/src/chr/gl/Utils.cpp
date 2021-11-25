@@ -12,10 +12,10 @@ namespace chr
   {
     Texture::Response loadAndUploadTexture(const Texture::ImageRequest &request)
     {
-      return uploadTexture(image::loadImage(request.relativePath, request.imageFlags), request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT);
+      return uploadTexture(image::loadImage(request.relativePath, request.imageFlags), request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT, request.minFilter, request.magFilter);
     }
 
-    Texture::Response uploadTexture(const image::ImageBuffer &image, bool useMipmap, bool useAnisotropy, GLenum wrapS, GLenum wrapT)
+    Texture::Response uploadTexture(const image::ImageBuffer &image, bool useMipmap, bool useAnisotropy, GLenum wrapS, GLenum wrapT, GLint minFilter, GLint magFilter)
     {
       Texture::Response response;
 
@@ -52,7 +52,7 @@ namespace chr
           response.v2 = image.innerHeight / (float) image.height;
 
           glBindTexture(GL_TEXTURE_2D, textureId);
-          uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, useAnisotropy, wrapS, wrapT);
+          uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter);
         }
       }
 
@@ -64,10 +64,10 @@ namespace chr
       const auto image = image::loadImage(request.imageRelativePath, request.imageFlags);
       const auto mask = image::loadImage(request.maskRelativePath, request.maskFlags);
 
-      return uploadMaskedTexture(image, mask, request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT);
+      return uploadMaskedTexture(image, mask, request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT, request.minFilter, request.magFilter);
     }
 
-    Texture::Response uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap, bool useAnisotropy, GLenum wrapS, GLenum wrapT)
+    Texture::Response uploadMaskedTexture(const image::ImageBuffer &image, const image::ImageBuffer &mask, bool useMipmap, bool useAnisotropy, GLenum wrapS, GLenum wrapT, GLint minFilter, GLint magFilter)
     {
       Texture::Response response;
 
@@ -109,17 +109,17 @@ namespace chr
         response.v2 = image.innerHeight / (float) image.height;
 
         glBindTexture(GL_TEXTURE_2D, textureId);
-        uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, useAnisotropy, wrapS, wrapT);
+        uploadTexture(response.format, response.width, response.height, image.buffer.get(), useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter);
       }
 
       return  response;
     }
 
-    void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap, bool useAnisotropy, GLenum wrapS, GLenum wrapT)
+    void uploadTexture(GLenum format, GLsizei width, GLsizei height, const GLvoid *data, bool useMipmap, bool useAnisotropy, GLenum wrapS, GLenum wrapT, GLint minFilter, GLint magFilter)
     {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
 
       if (useAnisotropy)
       {
@@ -134,7 +134,7 @@ namespace chr
       }
       else
       {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
       }
 
       #if defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)

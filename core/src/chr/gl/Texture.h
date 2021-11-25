@@ -90,6 +90,8 @@ namespace chr
         bool useAnisotropy = false;
         GLenum wrapS = GL_CLAMP_TO_EDGE;
         GLenum wrapT = GL_CLAMP_TO_EDGE;
+        GLint minFilter = GL_LINEAR;
+        GLint magFilter = GL_LINEAR;
 
         ImageRequest() = default;
 
@@ -123,11 +125,18 @@ namespace chr
           return *this;
         }
 
+        ImageRequest& setFilters(GLint min, GLint mag)
+        {
+          minFilter = min;
+          magFilter = mag;
+          return *this;
+        }
+
         bool operator<(const ImageRequest &rhs) const
         {
           return
-            std::tie(relativePath, imageFlags, useMipmap, useAnisotropy, wrapS, wrapT) <
-            std::tie(rhs.relativePath, rhs.imageFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT);
+            std::tie(relativePath, imageFlags, useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter) <
+            std::tie(rhs.relativePath, rhs.imageFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT, rhs.minFilter, rhs.magFilter);
         }
       };
 
@@ -141,6 +150,8 @@ namespace chr
         bool useAnisotropy = false;
         GLenum wrapS = GL_CLAMP_TO_EDGE;
         GLenum wrapT = GL_CLAMP_TO_EDGE;
+        GLint minFilter = GL_LINEAR;
+        GLint magFilter = GL_LINEAR;
 
         MaskedRequest() = default;
 
@@ -176,11 +187,18 @@ namespace chr
           return *this;
         }
 
+        MaskedRequest& setFilters(GLint min, GLint mag)
+        {
+          minFilter = min;
+          magFilter = mag;
+          return *this;
+        }
+
         bool operator<(const MaskedRequest &rhs) const
         {
           return
-            std::tie(imageRelativePath, maskRelativePath, imageFlags, maskFlags, useMipmap, useAnisotropy, wrapS, wrapT) <
-            std::tie(rhs.imageRelativePath, rhs.maskRelativePath, rhs.imageFlags, rhs.maskFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT);
+            std::tie(imageRelativePath, maskRelativePath, imageFlags, maskFlags, useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter) <
+            std::tie(rhs.imageRelativePath, rhs.maskRelativePath, rhs.imageFlags, rhs.maskFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT, rhs.minFilter, rhs.magFilter);
         }
       };
 
