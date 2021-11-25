@@ -372,28 +372,7 @@ namespace chr
 
     glm::mat3 Matrix::getNormalMatrix() const
     {
-      glm::mat3 M;
-
-      float determinant = getDeterminant3x3();
-
-      if (determinant == 1)
-      {
-        M = glm::mat3(m);
-      }
-      else if (determinant != 0)
-      {
-        M[0][0] = +(m11 * m22 - m21 * m12) / determinant;
-        M[0][1] = -(m01 * m22 - m02 * m21) / determinant;
-        M[0][2] = +(m01 * m12 - m02 * m11) / determinant;
-        M[1][0] = -(m10 * m22 - m12 * m20) / determinant;
-        M[1][1] = +(m00 * m22 - m02 * m20) / determinant;
-        M[1][2] = -(m00 * m12 - m10 * m02) / determinant;
-        M[2][0] = +(m10 * m21 - m20 * m11) / determinant;
-        M[2][1] = -(m00 * m21 - m20 * m01) / determinant;
-        M[2][2] = +(m00 * m11 - m10 * m01) / determinant;
-      }
-
-      return M;
+      return glm::inverseTranspose(glm::mat3(m));
     }
 
     glm::vec3 Matrix::transformPoint(float x, float y) const
@@ -414,39 +393,7 @@ namespace chr
 
     glm::vec3 Matrix::transformNormal(float x, float y, float z) const
     {
-      float determinant = getDeterminant3x3();
-
-      if (determinant == 0)
-      {
-        return glm::zero<glm::vec3>();
-      }
-      else if (determinant == 1)
-      {
-        return glm::normalize(
-          glm::vec3(
-            x * m00 + y * m01 + z * m02,
-            x * m10 + y * m11 + z * m12,
-            x * m20 + y * m21 + z * m22));
-      }
-      else
-      {
-        float M00 = +(m11 * m22 - m21 * m12);
-        float M10 = -(m01 * m22 - m02 * m21);
-        float M20 = +(m01 * m12 - m02 * m11);
-        float M01 = -(m10 * m22 - m12 * m20);
-        float M11 = +(m00 * m22 - m02 * m20);
-        float M21 = -(m00 * m12 - m10 * m02);
-        float M02 = +(m10 * m21 - m20 * m11);
-        float M12 = -(m00 * m21 - m20 * m01);
-        float M22 = +(m00 * m11 - m10 * m01);
-
-        return glm::normalize(
-          glm::vec3(
-            x * M00 + y * M01 + z * M02,
-            x * M10 + y * M11 + z * M12,
-            x * M20 + y * M21 + z * M22)
-            / determinant);
-      }
+      return getNormalMatrix() * glm::vec3(x, y, z);
     }
 
     #define TRANSFORM_QUAD_HEADER \
