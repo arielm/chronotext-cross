@@ -19,7 +19,7 @@ public:
 protected:
   chr::gl::Camera camera;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> modelBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N> modelBatch;
   chr::gl::ShaderProgram shader;
 
   chr::gl::IndexedVertexBatch<chr::gl::XYZ> lightBatch;

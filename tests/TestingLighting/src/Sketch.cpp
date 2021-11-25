@@ -1,6 +1,6 @@
 #include "Sketch.h"
-#include "Torus.h"
 
+#include "chr/gl/draw/Torus.h"
 #include "chr/gl/draw/Cube.h"
 
 using namespace std;

@@ -4,7 +4,6 @@ project(TestingLighting)
 
 set(SRC_FILES
   "src/Sketch.cpp"
-  "src/Torus.cpp"
 )
 
 #
