@@ -1,7 +1,7 @@
 #include "Sketch.h"
 
 #include "chr/gl/draw/Torus.h"
-#include "chr/gl/draw/Cube.h"
+#include "chr/gl/draw/Sphere.h"
 
 using namespace std;
 using namespace chr;
@@ -29,7 +29,7 @@ void Sketch::setup()
 
   lightBatch
       .setShader(colorShader)
-      .setShaderColor(1, 1, 0.5f, 1);
+      .setShaderColor(1, 1, 1, 1);
 
   // ---
 
@@ -77,10 +77,12 @@ void Sketch::draw()
     .apply();
 
   lightBatch.clear();
-  Cube()
+  Sphere()
     .setFrontFace(CW)
-    .setSize(2)
-    .append(lightBatch, Matrix().setTranslate(lightPosition).rotateY(t));
+    .setSectorCount(16)
+    .setStackCount(8)
+    .setRadius(4)
+    .append(lightBatch, Matrix().setTranslate(lightPosition));
   lightBatch.flush();
 
   //

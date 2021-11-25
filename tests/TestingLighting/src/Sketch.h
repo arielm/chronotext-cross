@@ -22,6 +22,6 @@ protected:
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N> modelBatch;
   chr::gl::ShaderProgram shader;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ> lightBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N> lightBatch;
   chr::gl::shaders::ColorShader colorShader;
 };
