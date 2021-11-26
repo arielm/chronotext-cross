@@ -17,18 +17,16 @@ Sketch::Sketch()
 
 void Sketch::setup()
 {
-  initTextures();
-
-  // ---
+    texture = Texture(
+      Texture::ImageRequest("lys.png")
+        .setFlags(image::FLAGS_RBGA)
+        .setMipmap(true)
+        .setWrap(GL_REPEAT, GL_REPEAT)
+        .setAnisotropy(true));
 
   flatBatch.setShader(colorShader);
   
   contourBatch
-    .setPrimitive(GL_LINES)
-    .setShader(colorShader)
-    .setShaderColor(1, 1, 1, 1);
-  
-  normalBatch
     .setPrimitive(GL_LINES)
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 1);
@@ -122,13 +120,6 @@ void Sketch::setup()
 
   // ---
 
-  for (auto &vertex : lightenBatch.vertices())
-  {
-    normalBatch.addVertices(vertex.position, vertex.position + vertex.normal * 5.0f);
-  }
-
-  // ---
-
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
 
@@ -164,7 +155,7 @@ void Sketch::draw()
     .apply();
 
   lightenBatch
-    .setShader(lambertShader)
+    .setShader(textureLambertShader)
     .flush();
 
   flatBatch.flush();
@@ -172,20 +163,5 @@ void Sketch::draw()
   glDepthMask(GL_FALSE);
   glDisable(GL_POLYGON_OFFSET_FILL);
 
-  lightenBatch
-    .setShader(textureAlphaShader)
-    .flush();
-
   contourBatch.flush();
-  normalBatch.flush();
-}
-
-void Sketch::initTextures()
-{
-  texture = Texture(
-    Texture::ImageRequest("lys_32.png")
-      .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-      .setMipmap(true)
-      .setWrap(GL_REPEAT, GL_REPEAT)
-      .setAnisotropy(true));
 }
