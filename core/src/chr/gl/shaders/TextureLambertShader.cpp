@@ -1,4 +1,4 @@
-#include "chr/gl/shaders/LambertShader.h"
+#include "chr/gl/shaders/TextureLambertShader.h"
 
 namespace chr
 {
@@ -10,17 +10,20 @@ namespace chr
       attribute vec4 a_position;
       attribute vec3 a_normal;
       attribute vec4 a_color;
+      attribute vec2 a_coord;
 
       uniform mat4 u_mvp_matrix;
       uniform mat3 u_normal_matrix;
 
       varying vec3 v_normal;
       varying vec4 v_color;
+      varying vec2 v_coord;
 
       void main()
       {
         v_normal = u_normal_matrix * a_normal;
         v_color = a_color;
+        v_coord = a_coord;
 
         gl_Position = u_mvp_matrix * a_position;
       }
@@ -31,8 +34,11 @@ namespace chr
         precision mediump float;
       #endif
 
+      uniform sampler2D u_sampler;
+
       varying vec3 v_normal;
       varying vec4 v_color;
+      varying vec2 v_coord;
 
       void main()
       {
@@ -40,11 +46,12 @@ namespace chr
         vec3 N = normalize(v_normal);
         float lambert = max(dot(N, L), 0.0);
 
-        gl_FragColor = vec4(v_color.rgb * lambert, 1.0);
+        vec4 color = v_color * texture2D(u_sampler, v_coord);
+        gl_FragColor = vec4(color.rgb * lambert, 1.0);
       }
       )";
 
-      LambertShader::LambertShader()
+      TextureLambertShader::TextureLambertShader()
       :
       ShaderProgram()
       {

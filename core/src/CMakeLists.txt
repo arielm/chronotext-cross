@@ -57,6 +57,7 @@ list(APPEND SRC_FILES
   "chr/gl/draw/Torus.cpp"
   "chr/gl/shaders/ColorShader.cpp"
   "chr/gl/shaders/LambertShader.cpp"
+  "chr/gl/shaders/TextureLambertShader.cpp"
   "chr/gl/shaders/TextureAlphaShader.cpp"
   "chr/gl/shaders/TextureShader.cpp"
   "chr/path/ASPC.cpp"
