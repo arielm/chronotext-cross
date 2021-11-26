@@ -31,7 +31,9 @@ void Sketch::setup()
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 1);
 
-  lightenBatch.setTexture(texture);
+  lightenBatch
+    .setShader(textureLambertShader)
+    .setTexture(texture);
 
   // ---
 
@@ -154,10 +156,7 @@ void Sketch::draw()
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();
 
-  lightenBatch
-    .setShader(textureLambertShader)
-    .flush();
-
+  lightenBatch.flush();
   flatBatch.flush();
 
   glDepthMask(GL_FALSE);
