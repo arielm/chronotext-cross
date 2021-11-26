@@ -1,52 +1,45 @@
 #include "Sketch.h"
 
-#include "chr/gl/draw/Box.h"
-#include "chr/gl/draw/Cube.h"
+#include "chr/gl/draw/Sphere.h"
 
 using namespace std;
 using namespace chr;
 using namespace gl;
+using namespace draw;
+
+static constexpr float SUN_EARTH_DISTANCE = 200;
+static constexpr float EARTH_MOON_DISTANCE = 27;
 
 Sketch::Sketch()
 {}
 
 void Sketch::setup()
 {
-  initTextures();
+  sunBatch
+    .setShader(lambertShader)
+    .setShaderColor(1, 1, 0.5f, 1);
 
-  lightenBatch.setTexture(texture);
-  flatBatch.setTexture(texture);
+  earthBatch
+    .setShader(lambertShader)
+    .setShaderColor(0.5f, 0.67f, 1, 1);
 
-  // ---
+  moonBatch
+    .setShader(lambertShader)
+    .setShaderColor(0.75f, 0.75f, 0.75f, 1);
 
-  Matrix matrix;
-  Matrix::Stack stack;
+  Sphere()
+    .setFrontFace(CW)
+    .setRadius(45)
+    .setSectorCount(60)
+    .setStackCount(30)
+    .append(sunBatch, Matrix());
 
-  matrix
-    .push(stack)
-    .translate(-50, -75 * 0.5f, - 25 * 0.5f);
+  pathBatch
+    .setPrimitive(GL_LINE_STRIP)
+    .setShader(colorShader)
+    .setShaderColor(1, 1, 1, 0.25f);
 
-  draw::Box()
-    .setSize(100, 75, 25)
-    .setTextureScale(0.25f)
-    .append(lightenBatch, matrix);
-
-  matrix
-    .pop(stack)
-    .push(stack)
-    .translate(50, 0, 0);
-
-  draw::Cube()
-    .setSize(50)
-    .append(flatBatch, matrix);
-
-  matrix
-    .pop(stack)
-    .translate(-50, 0, 0);
-
-  draw::Cube()
-    .setSize(50)
-    .append(flatBatch, matrix);
+  createPath();
 
   // ---
 
@@ -59,20 +52,17 @@ void Sketch::setup()
 
 void Sketch::draw()
 {
-  glClearColor(0.5f, 0.5f, 0.5f, 1);
-  glDepthMask(GL_TRUE);
+  glClearColor(0.125f, 0.125f, 0.125f, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.aspectRatio(), 0.1f, 1000.0f);
 
   Matrix mvMatrix;
   mvMatrix
-    .scale(1, -1, 1)
-    .translate(0, 0, -300)
-    .rotateY(clock()->getTime())
-    .rotateZ(clock()->getTime() * 0.25f);
+    .translate(0, 0, -400)
+    .rotateX(22 * D2R);
 
   auto mvpMatrix = mvMatrix * projectionMatrix;
 
@@ -81,39 +71,47 @@ void Sketch::draw()
     .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
     .apply();
 
-  glEnable(GL_POLYGON_OFFSET_FILL);
-  glPolygonOffset(2, 1);
+  sunBatch.flush();
 
-  lightenBatch
-    .setShader(lambertShader)
-    .setShaderColor(0.25f, 0.25f, 0.25f, 1)
-    .flush();
+  Matrix::Stack stack;
+  float t = clock()->getTime();
 
-  flatBatch
-    .setShader(colorShader)
-    .setShaderColor(1, 0.25f, 0, 1)
-    .flush();
+  earthBatch.clear();
+  Sphere()
+    .setFrontFace(CW)
+    .setRadius(20)
+    .setSectorCount(40)
+    .setStackCount(20)
+    .append(earthBatch, Matrix()
+      .rotateY(t * 0.5f)
+      .translate(0, 0, SUN_EARTH_DISTANCE)
+      .push(stack));
+  earthBatch.flush();
 
-  glDepthMask(GL_FALSE);
-  glDisable(GL_POLYGON_OFFSET_FILL);
+  moonBatch.clear();
+  Sphere()
+    .setFrontFace(CW)
+    .setRadius(5)
+    .setSectorCount(30)
+    .setStackCount(15)
+    .append(moonBatch, Matrix()
+      .pop(stack)
+      .rotateY(t * 2.0f)
+      .translate(0, 0, EARTH_MOON_DISTANCE));
+  moonBatch.flush();
 
-  lightenBatch
-    .setShader(textureAlphaShader)
-    .setShaderColor(1, 1, 1, 0.5f)
-    .flush();
-
-  flatBatch
-    .setShader(textureAlphaShader)
-    .setShaderColor(1, 1, 1, 1)
-    .flush();
+  pathBatch.flush();
 }
 
-void Sketch::initTextures()
+void Sketch::createPath()
 {
-  texture = Texture(
-    Texture::ImageRequest("lys_32.png")
-      .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-      .setMipmap(true)
-      .setWrap(GL_REPEAT, GL_REPEAT)
-      .setAnisotropy(true));
+  float radius = SUN_EARTH_DISTANCE;
+  float segmentLength = 10;
+  int n = ceilf(TWO_PI * radius / segmentLength) + 1;
+
+  for (int i = 0; i < n; i++)
+  {
+    float d = i * segmentLength / radius;
+    pathBatch.addVertex(sinf(-d) * radius, 0, -cosf(-d) * radius);
+  }
 }
