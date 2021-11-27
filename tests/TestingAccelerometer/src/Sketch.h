@@ -6,22 +6,22 @@
 
 struct Particle
 {
-    glm::vec2 position;
-    glm::vec2 previousPosition;
-    glm::vec2 acceleration;
+  glm::vec2 position;
+  glm::vec2 previousPosition;
+  glm::vec2 acceleration;
 
-    float radius;
-    float mass;
+  float radius;
+  float mass;
 
-    Particle() = default;
+  Particle() = default;
 
-    Particle(const glm::vec2 &position, float radius, float mass = 1)
-    :
-    position(position),
-    previousPosition(position),
-    radius(radius),
-    mass(mass)
-    {}
+  Particle(const glm::vec2 &position, float radius, float mass = 1)
+  :
+  position(position),
+  previousPosition(position),
+  radius(radius),
+  mass(mass)
+  {}
 };
 
 class Sketch : public chr::CrossSketch
@@ -41,7 +41,6 @@ public:
 
 protected:
   chr::gl::Texture texture;
-  chr::gl::State textureState;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> textureBatch;
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 
@@ -55,6 +54,4 @@ protected:
   void accumulateForces();
   void verlet();
   void satisfyConstraints();
-
-  void initTextures();
 };

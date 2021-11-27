@@ -16,17 +16,16 @@ static constexpr float DT = 1.0f;
 void Sketch::setup()
 {
   scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
   particle = Particle(windowInfo.size * 0.5f, scale * DOT_RADIUS_DP);
 
-  initTextures();
+  texture = Texture(Texture::ImageRequest("dot_112.png")
+    .setFlags(image::FLAGS_TRANSLUCENT)
+    .setMipmap(true));
 
-  textureState
+  textureBatch
     .setShader(textureAlphaShader)
     .setShaderColor(1, 1, 1, 1)
-    .setShaderMatrix(projectionMatrix);
-
-  textureBatch.setTexture(texture);
+    .setTexture(texture);
 
   // ---
 
@@ -39,7 +38,7 @@ void Sketch::setup()
 
 void Sketch::start(StartReason reason)
 {
-  acceleration = glm::zero<glm::vec2>();
+  acceleration = glm::vec2(0);
   delegate().enableAccelerometer(15);
 }
 
@@ -62,11 +61,14 @@ void Sketch::draw()
 
   // ---
 
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
+
+  State()
+    .setShaderMatrix(projectionMatrix)
+    .apply();
+
   textureBatch.clear();
-
   drawDot(particle.position, particle.radius);
-
-  textureState.apply();
   textureBatch.flush();
 }
 
@@ -77,14 +79,11 @@ void Sketch::accelerated(AccelEvent event)
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
-  Matrix matrix;
-  matrix
-    .translate(position)
-    .scale(radius / DOT_RADIUS_PIXELS);
-
   draw::Sprite()
     .setAnchor(0.5f, 0.5f)
-    .append(textureBatch, matrix);
+    .append(textureBatch, Matrix()
+      .translate(position)
+      .scale(radius / DOT_RADIUS_PIXELS));
 }
 
 // ---
@@ -127,11 +126,4 @@ void Sketch::satisfyConstraints()
     particle.position.y = bounds.y2 - velocity.y * 0.5f;
     particle.previousPosition.y = bounds.y2;
   }
-}
-
-void Sketch::initTextures()
-{
-  texture = Texture(Texture::ImageRequest("dot_112.png")
-    .setFlags(image::FLAGS_TRANSLUCENT)
-    .setMipmap(true));
 }
