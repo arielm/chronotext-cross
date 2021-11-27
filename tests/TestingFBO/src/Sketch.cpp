@@ -12,125 +12,110 @@ Sketch::Sketch()
 
 void Sketch::setup()
 {
-  fbo = FBO(512, 512);
+    fbo = FBO(512, 512);
 
-  texture = Texture(Texture::ImageRequest("lys_32.png")
-    .setFlags(image::FLAGS_TRANSLUCENT_INVERSE)
-    .setMipmap(true)
-    .setAnisotropy(true)
-    .setWrap(GL_REPEAT, GL_REPEAT));
+    texture = Texture(Texture::ImageRequest("lys.png")
+                              .setFlags(image::FLAGS_RBGA)
+                              .setMipmap(true)
+                              .setAnisotropy(true));
 
-  textureBatch
-    .setShader(textureShader)
-    .setTexture(fbo.colorTexture);
+    textureBatch
+            .setShader(textureShader)
+            .setShaderColor(1, 1, 1, 1)
+            .setTexture(fbo.colorTexture);
 
-  lightenBatch.setTexture(texture);
+    cubeBatch
+            .setTexture(texture)
+            .setShader(textureLambertShader)
+            .setShaderColor(0.25f, 0.25f, 0.25f, 1);
 
-  // ---
+    // ---
 
-  draw::Rect()
-    .setBounds(-200, -200, 400, 400)
-    .setColor(1, 1, 1, 1)
-    .setTextureScale(400.0f / fbo.colorTexture.width)
-    .append(textureBatch, Matrix());
+    draw::Rect()
+            .setBounds(-200, -200, 400, 400)
+            .setTextureScale(400.0f / fbo.colorTexture.width)
+            .append(textureBatch, Matrix());
 
-  //
+    //
 
-  draw::Cube()
-    .setSize(150)
-    .append(lightenBatch, Matrix());
+    draw::Cube()
+            .setSize(150)
+            .append(cubeBatch, Matrix());
 
-  // ---
+    // ---
 
-  glEnable(GL_BLEND);
-  glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // https://www.opengl.org/discussion_boards/showthread.php/167554-FBO-and-blending
+    glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_BLEND);
+    glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA); // https://www.opengl.org/discussion_boards/showthread.php/167554-FBO-and-blending
 }
 
 void Sketch::draw()
 {
-  fbo.bind();
-  drawScene2(fbo.colorTexture.size);
-  fbo.unbind();
+    fbo.bind();
+    drawScene2(fbo.colorTexture.size);
+    fbo.unbind();
 
-  drawScene1();
+    drawScene1();
 }
 
 void Sketch::drawScene1()
 {
-  glViewport(0, 0, windowInfo.width, windowInfo.height);
+    glDisable(GL_CULL_FACE);
 
-  glDisable(GL_CULL_FACE);
-  glDisable(GL_DEPTH_TEST);
-  glDepthMask(GL_FALSE);
+    glViewport(0, 0, windowInfo.width, windowInfo.height);
 
-  glClearColor(1, 0.75f, 0, 1);
-  glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(1, 1, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // ---
+    // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+    auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.aspectRatio(), 0.1f, 1000.0f);
 
-  Matrix mvMatrix;
-  mvMatrix
-    .scale(1, 1, 1)
-    .translate(0, 0, -400)
-    .rotateY(clock()->getTime() * 0.25f);
+    Matrix mvMatrix;
+    mvMatrix
+            .translate(0, 0, -400)
+            .rotateY(clock()->getTime() * 0.25f);
 
-  auto mvpMatrix = mvMatrix * projectionMatrix;
+    auto mvpMatrix = mvMatrix * projectionMatrix;
 
-  // ---
+    // ---
 
-  State()
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .apply();
+    State()
+            .setShaderMatrix<MVP>(mvpMatrix)
+            .apply();
 
-  textureBatch.flush();
+    textureBatch.flush();
 }
 
 void Sketch::drawScene2(const glm::ivec2 &size)
 {
-  glViewport(0, 0, size.x, size.y);
+    glEnable(GL_CULL_FACE);
 
-  glEnable(GL_CULL_FACE);
-  glEnable(GL_DEPTH_TEST);
-  glDepthMask(GL_TRUE);
+    glViewport(0, 0, size.x, size.y);
 
-  glClearColor(0.5f, 0.5f, 0.5f, 1);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(0.5f, 0.5f, 0.5f, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // ---
+    // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, size.x / (float)size.y, 0.1f, 1000.0f);
+    auto projectionMatrix = glm::perspective(60 * D2R, size.x / (float)size.y, 0.1f, 1000.0f);
 
-  Matrix mvMatrix;
-  mvMatrix
-    .scale(1, -1, 1)
-    .translate(0, 0, -300)
-    .rotateY(clock()->getTime())
-    .rotateZ(clock()->getTime() * 0.25f);
+    Matrix mvMatrix;
+    mvMatrix
+            .scale(1, -1, 1)
+            .translate(0, 0, -300)
+            .rotateY(clock()->getTime())
+            .rotateZ(clock()->getTime() * 0.25f);
 
-  auto mvpMatrix = mvMatrix * projectionMatrix;
+    auto mvpMatrix = mvMatrix * projectionMatrix;
 
-  // ---
+    // ---
 
-  State()
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
-    .apply();
+    State()
+            .setShaderMatrix<MVP>(mvpMatrix)
+            .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+            .apply();
 
-  glEnable(GL_POLYGON_OFFSET_FILL);
-  glPolygonOffset(2, 1);
-
-  lightenBatch
-    .setShader(lambertShader)
-    .setShaderColor(0.25f, 0.25f, 0.25f, 1)
-    .flush();
-
-  glDepthMask(GL_FALSE);
-  glDisable(GL_POLYGON_OFFSET_FILL);
-
-  lightenBatch
-    .setShader(textureAlphaShader)
-    .setShaderColor(1, 1, 1, 0.5f)
-    .flush();
+    cubeBatch.flush();
 }
