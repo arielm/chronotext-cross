@@ -1,56 +1,32 @@
 #include "Sketch.h"
 
 #include "chr/gl/draw/Sprite.h"
-#include "chr/gl/draw/Rect.h"
 
 using namespace std;
 using namespace chr;
 using namespace gl;
-using namespace math;
 
 void Sketch::setup()
 {
-  initTextures();
+  loadTextures();
 
-  // ---
+  textureBatches[0]
+    .setShader(textureShader)
+    .setShaderColor(1, 1, 1, 1)
+    .setTexture(textures[0]);
 
-  textureBatches[0].setShader(textureShader);
-  textureBatches[0].setShaderColor(1, 1, 1, 1);
-  textureBatches[0].setTexture(textures[0]);
+  textureBatches[1]
+    .setShader(textureShader)
+    .setShaderColor(1, 1, 1, 1)
+    .setTexture(textures[1]);
 
-  textureBatches[1].setShader(textureAlphaShader);
-  textureBatches[1].setShaderColor(1, 0.5f, 0, 1);
-  textureBatches[1].setTexture(textures[1]);
-
-  textureBatches[2].setShader(textureShader);
-  textureBatches[2].setShaderColor(1, 1, 1, 1);
-  textureBatches[2].setTexture(textures[2]);
-
-  // ---
-
-  Matrix matrix;
-  Matrix::Stack stack;
-
-  matrix
-    .push(stack)
-    .scale(0.333f);
   draw::Sprite()
     .setAnchor(0.5f, 0.5f)
-    .append(textureBatches[0], matrix);
+    .append(textureBatches[0], Matrix().scale(0.4f));
 
-  matrix
-    .pop(stack)
-    .translate(0, 0, 5);
-  draw::Rect()
-    .setBounds(-200, -150, 400, 300)
-    .append(textureBatches[1], matrix);
-
-  matrix
-    .translate(0, 0, 5)
-    .scale(0.75f);
   draw::Sprite()
-    .setAnchor(0.5f, 0.5f)
-    .append(textureBatches[2], matrix, 100, 100);
+    .setAnchor(0.5f, 0)
+    .append(textureBatches[1], Matrix().scale(0.167f).translate(0, 0, 25));
 
   // ---
 
@@ -63,21 +39,19 @@ void Sketch::setup()
 
 void Sketch::draw()
 {
-  glClearColor(0, 0, 1, 1);
+  glClearColor(1, 1, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT);
 
   // ---
 
-  glm::mat4 projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
+  glm::mat4 projectionMatrix = glm::perspective(45 * D2R, windowInfo.aspectRatio(), 0.1f, 1000.0f);
 
   Matrix modelViewMatrix;
   modelViewMatrix
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateX(15 * D2R)
-    .rotateY(clock()->getTime());
-
-  // ---
+    .rotateY(sinf(clock()->getTime() * 2.0f) * 0.25f);
 
   State()
     .setShaderMatrix(modelViewMatrix * projectionMatrix)
@@ -85,21 +59,15 @@ void Sketch::draw()
 
   textureBatches[0].flush();
   textureBatches[1].flush();
-  textureBatches[2].flush();
 }
 
-void Sketch::initTextures()
+void Sketch::loadTextures()
 {
-  textures[0] = Texture(Texture::MaskedRequest("6980491_UN1_800.jpg", "6980491_UN1_800_MASK.png")
-    .setFlags(image::FLAGS_RBGA | image::FLAGS_POT, image::FLAGS_TRANSLUCENT)
+  textures[0] = Texture(Texture::ImageRequest("Louis.jpg")
+    .setFlags(image::FLAGS_RBGA | image::FLAGS_POT)
     .setAnisotropy(true));
 
-  textures[1] = Texture(Texture::ImageRequest("camo.jpg")
-    .setFlags(image::FLAGS_TRANSLUCENT)
-    .setMipmap(true)
-    .setAnisotropy(true)
-    .setWrap(GL_REPEAT, GL_REPEAT));
-
-  textures[2] = Texture(Texture::ImageRequest("banski.jpg")
+  textures[1] = Texture(Texture::MaskedRequest("Gabrielle.jpg", "Gabrielle_mask.png")
+    .setFlags(image::FLAGS_RBGA | image::FLAGS_POT, image::FLAGS_TRANSLUCENT)
     .setAnisotropy(true));
 }
