@@ -10,6 +10,7 @@ public:
   void setup() final;
   void draw() final;
 
+protected:
   void keyPressed(uint32_t codepoint) final;
   void keyDown(int keyCode, int modifiers) final;
   void keyUp(int keyCode, int modifiers) final;

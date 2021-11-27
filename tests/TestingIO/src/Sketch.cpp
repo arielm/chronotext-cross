@@ -6,9 +6,9 @@
 using namespace std;
 using namespace chr;
 using namespace io;
-using namespace google;
 
 static constexpr int DATA_SIZE = 100;
+static constexpr bool TEST_MEMORY_BUFFER = false;
 
 void Sketch::setup()
 {
@@ -18,7 +18,7 @@ void Sketch::setup()
   auto documentsFolder = getDocumentsFolder();
   fs::path filePath = documentsFolder / "test.dat";
 
-  if (false)
+  if (TEST_MEMORY_BUFFER)
   {
     auto outputTargetBuffer = OutputTarget::buffer();
     writeFile(outputTargetBuffer);
@@ -34,14 +34,6 @@ void Sketch::setup()
     auto inputSourceFile = InputSource::file(filePath);
     success = readFile(inputSourceFile);
   }
-
-  // ---
-
-  glDisable(GL_DEPTH_TEST);
-  glDepthMask(GL_FALSE);
-
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Sketch::draw()

@@ -10,5 +10,6 @@ public:
   void setup() final;
   void draw() final;
 
+protected:
   void mousePressed(int button, float x, float y) final;
 };
