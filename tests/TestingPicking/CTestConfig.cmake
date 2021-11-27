@@ -1,4 +1,4 @@
-set(CTEST_PROJECT_NAME TestingCamera)
+set(CTEST_PROJECT_NAME TestingPicking)
 set(CTEST_CONFIGURATION_TYPE Release)
 
 if (PLATFORM MATCHES osx|rpi|linux)
@@ -10,8 +10,6 @@ elseif (PLATFORM MATCHES ios)
   set(ARGS
     -DRUN=APP
     -DIOS_ARCHS=arm64
-#   -DIOS_DEPLOYMENT_TARGET=5.1.1
-#   -DIOS_ARCHS=armv7
   )
 
 elseif (PLATFORM MATCHES android)

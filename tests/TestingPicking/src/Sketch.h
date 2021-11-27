@@ -23,7 +23,7 @@ public:
 protected:
   chr::gl::Camera camera;
 
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> lightenBatch;
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> lightenBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ> contourBatch;
   chr::gl::VertexBatch<chr::gl::XYZ> normalBatch;
 

@@ -26,12 +26,14 @@ void Sketch::setup()
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 1);
 
-  lightenBatch.setShader(lambertShader);
+  lightenBatch
+    .setShader(lambertShader)
+    .setShaderColor(1.0f, 0.5f, 0.0f, 1.0f);
 
   // ---
 
-  Matrix matrix;
   MatrixAffine affine;
+  Matrix matrix;
 
   matrix.translate(0, 0, 75);
 
@@ -48,10 +50,8 @@ void Sketch::setup()
   Triangulator triangulator;
   triangulator
     .setContourCapture(Triangulator::CAPTURE_ALL)
-    .setColor(1.0f, 0.5f, 0.0f, 1.0f)
-    .add(polygons)
-    .setTextureScale(0.125f)
     .setFrontFace(CCW)
+    .add(polygons)
     .extrude(lightenBatch, matrix, -150);
 
   triangulator.exportContours(contourBatch, matrix);

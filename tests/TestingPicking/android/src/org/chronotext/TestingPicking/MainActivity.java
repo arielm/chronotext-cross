@@ -1,4 +1,4 @@
-package org.chronotext.TestingCamera;
+package org.chronotext.TestingPicking;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingCamera");
+    System.loadLibrary("TestingPicking");
   }
 
   CrossBridge bridge;
