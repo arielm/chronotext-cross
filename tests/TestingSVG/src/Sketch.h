@@ -14,10 +14,13 @@ public:
   void draw() final;
 
 protected:
-  chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> fillBatch;
-  chr::gl::VertexBatch<chr::gl::XYZ> strokeBatch;
-
   chr::gl::shaders::ColorShader colorShader;
 
-  void drawPolyline(const std::vector<glm::vec2> &polyline);
+  chr::gl::IndexedVertexBatch<chr::gl::XYZ> girlBatch;
+  chr::gl::VertexBatch<chr::gl::XYZ> lysBatch;
+
+  void createLys();
+  void createGirl();
+
+  static void drawPolyline(chr::gl::VertexBatch<chr::gl::XYZ> &batch, const std::vector<glm::vec2> &polyline);
 };

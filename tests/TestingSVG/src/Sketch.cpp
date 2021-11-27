@@ -13,50 +13,17 @@ Sketch::Sketch()
 
 void Sketch::setup()
 {
-  fillBatch
-    .setShader(colorShader);
-
-  strokeBatch
+  lysBatch
     .setPrimitive(GL_LINES)
     .setShader(colorShader)
     .setShaderColor(0, 0, 0, 0.75f);
 
-  // ---
+  girlBatch
+    .setShader(colorShader)
+    .setShaderColor(1, 0.25f, 0.25f, 1);
 
-  SVGDocument doc1;
-  doc1
-    .setOriginAtBottom(false)
-    .setSamplingTolerance(16)
-    .load(InputSource::resource("256.svg"));
-
-  SVGDocument doc2;
-  doc2.load(InputSource::resource("lys.svg"));
-
-  // ---
-
-  for (auto &shape : doc2.getShapes())
-  {
-    for (auto &path : shape.getPaths())
-    {
-      drawPolyline(path.getPolyline());
-    }
-  }
-
-  // ---
-
-  Triangulator triangulator;
-
-  for (auto &shape : doc1.getShapes())
-  {
-    if (shape.getId() != "rect")
-    {
-      triangulator.add(shape);
-    }
-  }
-
-  triangulator
-    .setColor(1, 0.25f, 0.25f, 1)
-    .fill(fillBatch);
+  createLys();
+  createGirl();
 
   // ---
 
@@ -76,27 +43,56 @@ void Sketch::draw()
 
   auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
 
-  Matrix modelViewMatrix;
-  modelViewMatrix
-    .translate(0, windowInfo.height)
-    .scale(1, -1);
-
   State()
-    .setShaderMatrix(modelViewMatrix * projectionMatrix)
+    .setShaderMatrix(projectionMatrix)
     .apply();
 
-  fillBatch.flush();
-  strokeBatch.flush();
+  lysBatch.flush();
+  girlBatch.flush();
 }
 
-void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
+void Sketch::createLys()
+{
+  SVGDocument doc;
+  doc
+    .setOriginAtBottom(true)
+    .load(InputSource::resource("lys.svg"));
+
+  for (auto &shape : doc.getShapes())
+  {
+    for (auto &path : shape.getPaths())
+    {
+      drawPolyline(lysBatch, path.getPolyline());
+    }
+  }
+}
+
+void Sketch::createGirl()
+{
+  SVGDocument doc;
+  doc
+    .setOriginAtBottom(true)
+    .setSamplingTolerance(16)
+    .load(InputSource::resource("bansky girl heart.svg"));
+
+  Triangulator triangulator;
+
+  for (auto &shape : doc.getShapes())
+  {
+    triangulator.add(shape);
+  }
+
+  triangulator.fill(girlBatch, Matrix().scale(0.33f));
+}
+
+void Sketch::drawPolyline(VertexBatch<XYZ> &batch, const vector<glm::vec2> &polyline)
 {
   auto size = polyline.size();
   if (size > 1)
   {
     for (auto i = 0; i < size - 1; i++)
     {
-      strokeBatch.addVertices(polyline[i], polyline[i + 1]);
+      batch.addVertices(polyline[i], polyline[i + 1]);
     }
   }
 }
