@@ -19,7 +19,6 @@ public:
 
 protected:
   chr::gl::Texture texture;
-  chr::gl::State textureState;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> textureBatch;
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 
@@ -28,5 +27,4 @@ protected:
   std::map<int, glm::vec2> touchPositions;
 
   void drawDot(const glm::vec2 &position, float radius);
-  void initTextures();
 };

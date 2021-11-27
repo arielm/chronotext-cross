@@ -12,16 +12,15 @@ static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 void Sketch::setup()
 {
   scale = getDisplayInfo().density / DisplayInfo::REFERENCE_DENSITY;
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
 
-  initTextures();
+  texture = Texture(Texture::ImageRequest("dot_112.png")
+    .setFlags(image::FLAGS_TRANSLUCENT)
+    .setMipmap(true));
 
-  textureState
+  textureBatch
     .setShader(textureAlphaShader)
     .setShaderColor(1, 1, 1, 1)
-    .setShaderMatrix(projectionMatrix);
-
-  textureBatch.setTexture(texture);
+    .setTexture(texture);
 
   // ---
 
@@ -39,14 +38,18 @@ void Sketch::draw()
 
   // ---
 
-  textureBatch.clear();
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
 
+  State()
+    .setShaderMatrix(projectionMatrix)
+    .apply();
+
+
+  textureBatch.clear();
   for (auto it = touchPositions.begin(); it != touchPositions.end(); ++it)
   {
     drawDot(it->second, scale * DOT_RADIUS_DP);
   }
-
-  textureState.apply();
   textureBatch.flush();
 
   touchPositions.clear();
@@ -64,19 +67,9 @@ void Sketch::updateTouch(int index, float x, float y)
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
-  Matrix matrix;
-  matrix
-    .translate(position)
-    .scale(radius / DOT_RADIUS_PIXELS);
-
   draw::Sprite()
     .setAnchor(0.5f, 0.5f)
-    .append(textureBatch, matrix);
-}
-
-void Sketch::initTextures()
-{
-  texture = Texture(Texture::ImageRequest("dot_112.png")
-    .setFlags(image::FLAGS_TRANSLUCENT)
-    .setMipmap(true));
+    .append(textureBatch, Matrix()
+      .translate(position)
+      .scale(radius / DOT_RADIUS_PIXELS));
 }
