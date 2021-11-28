@@ -64,10 +64,10 @@ void Sketch::draw()
 void Sketch::loadTextures()
 {
   textures[0] = Texture(Texture::ImageRequest("Louis.jpg")
-    .setFlags(image::FLAGS_RBGA | image::FLAGS_POT)
+    .setFlags(image::FLAGS_RBGA)
     .setAnisotropy(true));
 
   textures[1] = Texture(Texture::MaskedRequest("Gabrielle.jpg", "Gabrielle_mask.png")
-    .setFlags(image::FLAGS_RBGA | image::FLAGS_POT, image::FLAGS_TRANSLUCENT)
+    .setFlags(image::FLAGS_RBGA, image::FLAGS_TRANSLUCENT)
     .setAnisotropy(true));
 }

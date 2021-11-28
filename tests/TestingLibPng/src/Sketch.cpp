@@ -69,5 +69,5 @@ void Sketch::loadTextures()
     .setMipmap(true));
 
   textures[1] = Texture(Texture::ImageRequest("Banksy floating balloon girl.png")
-    .setFlags(image::FLAGS_POT | image::FLAGS_TRANSLUCENT));
+    .setFlags(image::FLAGS_TRANSLUCENT));
 }
