@@ -10,13 +10,19 @@ void Sketch::setup()
 {
   loadTextures();
 
-  textureBatches[0].setShader(textureShader);
-  textureBatches[0].setShaderColor(1, 1, 1, 1);
-  textureBatches[0].setTexture(textures[0]);
+  textureBatches[0]
+    .setShader(textureShader)
+    .setShaderColor(1, 1, 1, 1)
+    .setTexture(textures[0]);
 
-  textureBatches[1].setShader(textureAlphaShader);
-  textureBatches[1].setShaderColor(1, 1, 1, 1);
-  textureBatches[1].setTexture(textures[1]);
+  textureBatches[1]
+    .setShader(textureAlphaShader)
+    .setShaderColor(1, 1, 1, 1)
+    .setTexture(textures[1]);
+
+  draw::Sprite()
+    .setAnchor(0.5f, 0.5f)
+    .append(textureBatches[0]);
 
   // ---
 
@@ -38,25 +44,20 @@ void Sketch::draw()
 
   Matrix modelViewMatrix;
   modelViewMatrix
-    .translate(0, windowInfo.height)
+    .translate(windowInfo.center())
     .scale(1, -1);
 
   State()
     .setShaderMatrix(modelViewMatrix * projectionMatrix)
     .apply();
 
-  textureBatches[0].clear();
-  draw::Sprite()
-    .setAnchor(0.5f, 0.5f)
-    .append(textureBatches[0], Matrix()
-      .translate(windowInfo.center()));
   textureBatches[0].flush();
 
   textureBatches[1].clear();
   draw::Sprite()
     .setAnchor(0.5f, 0)
     .append(textureBatches[1], Matrix()
-      .translate(windowInfo.size.x * 0.5f, windowInfo.size.y * 0.5f + sinf(clock()->getTime()) * 20)
+      .translate(0, sinf(clock()->getTime()) * 20)
       .scale(0.75f));
   textureBatches[1].flush();
 }
