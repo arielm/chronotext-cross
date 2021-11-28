@@ -1,4 +1,4 @@
-package org.chronotext.TestingSplines;
+package org.chronotext.TestingMotionOnPath;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingSplines");
+    System.loadLibrary("TestingMotionOnPath");
   }
 
   CrossBridge bridge;

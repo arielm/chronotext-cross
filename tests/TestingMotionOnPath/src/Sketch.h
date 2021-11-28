@@ -13,7 +13,6 @@ public:
   virtual ~Sketch() {}
 
   void setup() final;
-  void shutdown() final;
   void draw() final;
 
 protected:
@@ -23,7 +22,6 @@ protected:
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.UV> dotBatch;
 
   chr::gl::VertexBatch<chr::gl::XYZ> lineBatch;
-
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.RGBA> flatBatch;
 
   chr::gl::shaders::ColorShader colorShader;
@@ -32,6 +30,4 @@ protected:
   void drawPolyline(const std::vector<glm::vec2> &polyline);
   void drawPolyline(const std::vector<chr::path::FollowablePath2D::Point> &points);
   void drawDot(const glm::vec2 &position, float radius);
-
-  void initTextures();
 };

@@ -13,15 +13,17 @@ using namespace path;
 static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 
 Sketch::Sketch()
-:
-lineBatch(GL_LINES)
 {}
 
 void Sketch::setup()
 {
-  initTextures();
+  dotTexture = Texture(
+    Texture::ImageRequest("dot_112.png")
+      .setFlags(image::FLAGS_TRANSLUCENT)
+      .setMipmap(true));
 
   lineBatch
+    .setPrimitive(GL_LINES)
     .setShader(colorShader)
     .setShaderColor(0, 0, 0, 0.67f);
 
@@ -113,9 +115,6 @@ void Sketch::setup()
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Sketch::shutdown()
-{}
-
 void Sketch::draw()
 {
   glClearColor(1, 1, 1, 1);
@@ -161,7 +160,7 @@ void Sketch::draw()
     .append(flatBatch, matrix2);
 
   draw::Rect()
-    .setColor(1, 0.5f, 0.25f, 1)
+    .setColor(1, 0.5f, 0.25f, 0.75f)
     .setBounds(-5, -5, 10, 10)
     .append(flatBatch, matrix3);
 
@@ -194,20 +193,9 @@ void Sketch::drawPolyline(const vector<FollowablePath2D::Point> &points)
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
-  Matrix matrix;
-  matrix
-    .translate(position)
-    .scale(radius / DOT_RADIUS_PIXELS);
-
   draw::Sprite()
     .setAnchor(0.5f, 0.5f)
-    .append(dotBatch, matrix);
-}
-
-void Sketch::initTextures()
-{
-  dotTexture = Texture(
-    Texture::ImageRequest("dot_112.png")
-      .setFlags(image::FLAGS_TRANSLUCENT)
-      .setMipmap(true));
+    .append(dotBatch, Matrix()
+      .translate(position)
+      .scale(radius / DOT_RADIUS_PIXELS));
 }
