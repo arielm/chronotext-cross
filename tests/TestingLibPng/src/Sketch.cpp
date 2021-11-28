@@ -56,7 +56,7 @@ void Sketch::draw()
   draw::Sprite()
     .setAnchor(0.5f, 0)
     .append(textureBatches[1], Matrix()
-      .translate(windowInfo.center())
+      .translate(windowInfo.size.x * 0.5f, windowInfo.size.y * 0.5f + sinf(clock()->getTime()) * 20)
       .scale(0.75f));
   textureBatches[1].flush();
 }
