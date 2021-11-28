@@ -12,7 +12,7 @@ namespace chr
   {
     Texture::Response loadAndUploadTexture(const Texture::ImageRequest &request)
     {
-      return uploadTexture(image::loadImage(request.relativePath, request.imageFlags), request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT, request.minFilter, request.magFilter);
+      return uploadTexture(image::loadImage(request.source, request.imageFlags), request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT, request.minFilter, request.magFilter);
     }
 
     Texture::Response uploadTexture(const image::ImageBuffer &image, bool useMipmap, bool useAnisotropy, GLenum wrapS, GLenum wrapT, GLint minFilter, GLint magFilter)
@@ -61,8 +61,8 @@ namespace chr
 
     Texture::Response loadAndUploadMaskedTexture(const Texture::MaskedRequest &request)
     {
-      const auto image = image::loadImage(request.imageRelativePath, request.imageFlags);
-      const auto mask = image::loadImage(request.maskRelativePath, request.maskFlags);
+      const auto image = image::loadImage(request.imageSource, request.imageFlags);
+      const auto mask = image::loadImage(request.maskSource, request.maskFlags);
 
       return uploadMaskedTexture(image, mask, request.useMipmap, request.useAnisotropy, request.wrapS, request.wrapT, request.minFilter, request.magFilter);
     }

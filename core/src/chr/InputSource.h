@@ -27,6 +27,7 @@ namespace chr
 
     fs::path getFilePath() const;
     fs::path getRelativePath() const;
+    std::string getExtension() const;
     const std::string& getUri() const;
     const void* getData() const;
     size_t getDataSize() const;

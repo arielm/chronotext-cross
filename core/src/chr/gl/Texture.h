@@ -84,7 +84,7 @@ namespace chr
 
       struct ImageRequest
       {
-        fs::path relativePath;
+        InputSource source;
         int imageFlags = image::FLAGS_NONE;
         bool useMipmap = false;
         bool useAnisotropy = false;
@@ -95,9 +95,14 @@ namespace chr
 
         ImageRequest() = default;
 
-        ImageRequest(const fs::path &relativePath)
+        ImageRequest(const InputSource &source)
         :
-        relativePath(relativePath)
+        source(source)
+        {}
+
+        ImageRequest(const fs::path &resourcePath)
+        :
+        ImageRequest(InputSource::resource(resourcePath))
         {}
 
         ImageRequest& setFlags(int flags = image::FLAGS_NONE)
@@ -135,15 +140,15 @@ namespace chr
         bool operator<(const ImageRequest &rhs) const
         {
           return
-            std::tie(relativePath, imageFlags, useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter) <
-            std::tie(rhs.relativePath, rhs.imageFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT, rhs.minFilter, rhs.magFilter);
+            std::tie(source.getUri(), imageFlags, useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter) <
+            std::tie(rhs.source.getUri(), rhs.imageFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT, rhs.minFilter, rhs.magFilter);
         }
       };
 
       struct MaskedRequest
       {
-        fs::path imageRelativePath;
-        fs::path maskRelativePath;
+        InputSource imageSource;
+        InputSource maskSource;
         int imageFlags = image::FLAGS_NONE;
         int maskFlags = image::FLAGS_NONE;
         bool useMipmap = false;
@@ -155,10 +160,15 @@ namespace chr
 
         MaskedRequest() = default;
 
-        MaskedRequest(const fs::path &imageRelativePath, const fs::path &maskRelativePath)
+        MaskedRequest(const InputSource &imageSource, const InputSource &maskSource)
         :
-        imageRelativePath(imageRelativePath),
-        maskRelativePath(maskRelativePath)
+        imageSource(imageSource),
+        maskSource(maskSource)
+        {}
+
+        MaskedRequest(const fs::path &imageResourcePath, const fs::path &maskResourcePath)
+        :
+        MaskedRequest(InputSource::resource(imageResourcePath), InputSource::resource(maskResourcePath))
         {}
 
         MaskedRequest& setFlags(int imageFlags = image::FLAGS_NONE, int maskFlags = image::FLAGS_NONE)
@@ -197,8 +207,8 @@ namespace chr
         bool operator<(const MaskedRequest &rhs) const
         {
           return
-            std::tie(imageRelativePath, maskRelativePath, imageFlags, maskFlags, useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter) <
-            std::tie(rhs.imageRelativePath, rhs.maskRelativePath, rhs.imageFlags, rhs.maskFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT, rhs.minFilter, rhs.magFilter);
+            std::tie(imageSource.getUri(), maskSource.getUri(), imageFlags, maskFlags, useMipmap, useAnisotropy, wrapS, wrapT, minFilter, magFilter) <
+            std::tie(rhs.imageSource.getUri(), rhs.maskSource.getUri(), rhs.imageFlags, rhs.maskFlags, rhs.useMipmap, rhs.useAnisotropy, rhs.wrapS, rhs.wrapT, rhs.minFilter, rhs.magFilter);
         }
       };
 

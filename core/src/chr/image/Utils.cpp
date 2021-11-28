@@ -38,7 +38,7 @@ namespace chr
       return true;
     }
 
-    ImageBuffer loadPngImage(const fs::path &relativePath, int flags)
+    ImageBuffer loadPngImage(const InputSource &source, int flags)
     {
       bool ready = false;
 
@@ -50,10 +50,9 @@ namespace chr
 
       ImageBuffer image;
 
-      if (hasMemoryResources())
+      if (source.isResource())
       {
-        memoryBuffer = getResourceBuffer(relativePath);
-
+        memoryBuffer = getResourceBuffer(source.getRelativePath());
         if (memoryBuffer)
         {
           if ((memoryBuffer->size() > 8) && png_check_sig(reinterpret_cast<png_const_bytep>(memoryBuffer->data()), 8))
@@ -83,10 +82,9 @@ namespace chr
           }
         }
       }
-      else if (hasFileResources())
+      else if (source.isFile())
       {
-        fd = fopen(getResourceFilePath(relativePath).string().data(), "rb");
-
+        fd = fopen(source.getFilePath().string().data(), "rb");
         if (fd)
         {
           uint8_t header[8];
@@ -232,7 +230,7 @@ namespace chr
       return image;
     }
 
-    ImageBuffer loadJpgImage(const fs::path &relativePath, int flags)
+    ImageBuffer loadJpgImage(const InputSource &source, int flags)
     {
       struct jpeg_decompress_struct cinfo;
       struct jpeg_error_mgr jerr;
@@ -245,19 +243,17 @@ namespace chr
 
       ImageBuffer image;
 
-      if (hasMemoryResources())
+      if (source.isResource())
       {
-        memoryBuffer = getResourceBuffer(relativePath);
-
+        memoryBuffer = getResourceBuffer(source.getRelativePath());
         if (memoryBuffer)
         {
           jpeg_mem_src(&cinfo, reinterpret_cast<const unsigned char *>(memoryBuffer->data()), memoryBuffer->size());
         }
       }
-      else if (hasFileResources())
+      else if (source.isFile())
       {
-        fd = fopen(getResourceFilePath(relativePath).string().data(), "rb");
-
+        fd = fopen(source.getFilePath().string().data(), "rb");
         if (fd)
         {
           jpeg_stdio_src(&cinfo, fd);
@@ -375,26 +371,27 @@ namespace chr
       return  image;
     }
 
-    ImageBuffer loadImage(const fs::path &relativePath, int flags)
+    ImageBuffer loadImage(const InputSource &source, int flags)
     {
       ImageBuffer image;
 
-      if (relativePath.extension() == ".png")
+      auto extension = source.getExtension();
+      if (extension == ".png")
       {
-        image = image::loadPngImage(relativePath, flags);
+        image = image::loadPngImage(source, flags);
       }
-      else if ((relativePath.extension() == ".jpg") || (relativePath.extension() == ".jpeg"))
+      else if (extension == ".jpg" || extension == ".jpeg")
       {
-        image = image::loadJpgImage(relativePath, flags);
+        image = image::loadJpgImage(source, flags);
       }
 
       if (image.isValid())
       {
-        LOGD << "IMAGE LOADED: " << relativePath.filename().string() << endl;
+        LOGD << "IMAGE LOADED: " << source.getUri() << endl;
       }
       else
       {
-        LOGD << "UNABLE TO LOAD IMAGE: " << relativePath.filename().string() << endl;
+        LOGD << "UNABLE TO LOAD IMAGE: " << source.getUri() << endl;
       }
 
       return image;

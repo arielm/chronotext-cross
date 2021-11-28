@@ -41,6 +41,21 @@ namespace chr
     return relativePath;
   }
 
+  string InputSource::getExtension() const
+  {
+    switch (type)
+    {
+      case TYPE_FILE:
+        return filePath.extension().string();
+
+      case TYPE_RESOURCE:
+        return relativePath.extension().string();
+
+      default:
+        return "";
+    }
+  }
+
   const string& InputSource::getUri() const
   {
     return _uri;
@@ -106,7 +121,7 @@ namespace chr
     inputSource.type = TYPE_BUFFER;
     inputSource.data = data;
     inputSource.dataSize = size;
-    inputSource._uri = "mem://" + utils::toString((uint64_t)data);
+    inputSource._uri = "mem://" + utils::toString((uint64_t)data); // XXX
 
     return inputSource;
   }
