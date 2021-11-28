@@ -1,4 +1,4 @@
-package org.chronotext.TestingTesselation;
+package org.chronotext.TestingExtruding;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingTesselation");
+    System.loadLibrary("TestingExtruding");
   }
 
   CrossBridge bridge;

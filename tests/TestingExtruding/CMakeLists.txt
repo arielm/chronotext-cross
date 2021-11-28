@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.2.2)
 
-project(TestingTesselation)
+project(TestingExtruding)
 
 set(SRC_FILES
   "src/Sketch.cpp"

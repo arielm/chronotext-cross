@@ -17,12 +17,12 @@ Sketch::Sketch()
 
 void Sketch::setup()
 {
-    texture = Texture(
-      Texture::ImageRequest("lys.png")
-        .setFlags(image::FLAGS_RBGA)
-        .setMipmap(true)
-        .setWrap(GL_REPEAT, GL_REPEAT)
-        .setAnisotropy(true));
+  texture = Texture(
+    Texture::ImageRequest("lys.png")
+      .setFlags(image::FLAGS_RBGA)
+      .setMipmap(true)
+      .setWrap(GL_REPEAT, GL_REPEAT)
+      .setAnisotropy(true));
 
   flatBatch.setShader(colorShader);
   
