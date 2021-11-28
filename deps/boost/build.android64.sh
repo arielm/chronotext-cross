@@ -1,9 +1,13 @@
 #!/bin/sh
 
-PLATFORM="mxe"
+GCC_VERSION=4.9
+ANDROID_API=android-21
+ANDROID_ABI=arm64-v8a
+
+PLATFORM="android64"
 
 SRC_DIR="../../tree/boost/src"
-INSTALL_DIR="../../tree/boost/$PLATFORM"
+INSTALL_DIR="../../tree/boost/android/$ANDROID_ABI"
 
 SRC_PATH="$(pwd)/$SRC_DIR"
 INSTALL_PATH="$(pwd)/$INSTALL_DIR"
@@ -14,9 +18,14 @@ if [ ! -d "$SRC_PATH" ]; then
   exit 1
 fi
 
+if [ -z "$NDK_PATH" ]; then
+  echo "NDK_PATH MUST BE DEFINED!"
+  exit -1  
+fi
+
 # ---
 
-LIBRARIES="--with-system --with-filesystem --with-iostreams"
+LIBRARIES="--with-system --with-filesystem"
 
 # ---
 
@@ -42,16 +51,20 @@ cat "$JAM_CONFIG_PATH" >> project-config.jam
 rm -rf "$INSTALL_PATH"
 
 HOST_NCORES=$(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
+HOST_OS=$(uname -s | tr "[:upper:]" "[:lower:]")
+HOST_ARCH=$(uname -m)
 
-export MXE_TARGET=i686-w64-mingw32.static
-export NO_ZLIB=0  # REQUIRED MXE PACKAGE: zlib
+TOOLCHAIN_PATH="$NDK_PATH/toolchains/aarch64-linux-android-$GCC_VERSION/prebuilt/$HOST_OS-$HOST_ARCH"
+
+export PATH="$TOOLCHAIN_PATH/bin:$PATH"
+export NDK_PATH
+export GCC_VERSION
+export ANDROID_API
 export NO_BZIP2=1
 
 ./b2 -q -j$HOST_NCORES       \
-  threadapi=win32            \
-  architecture=x86           \
-  target-os=windows          \
-  toolset=gcc-mxe            \
+  target-os=android          \
+  toolset=gcc-android        \
   link=static                \
   variant=release            \
   $LIBRARIES                 \
@@ -67,4 +80,5 @@ fi
 # ---
 
 cd "$INSTALL_PATH"
+cd ..
 ln -s "../src" include

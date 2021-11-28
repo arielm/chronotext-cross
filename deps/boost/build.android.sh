@@ -1,9 +1,13 @@
 #!/bin/sh
 
+GCC_VERSION=4.9
+ANDROID_API=android-21
+ANDROID_ABI=armeabi-v7a
+
 PLATFORM="android"
 
 SRC_DIR="../../tree/boost/src"
-INSTALL_DIR="../../tree/boost/$PLATFORM"
+INSTALL_DIR="../../tree/boost/android/$ANDROID_ABI"
 
 SRC_PATH="$(pwd)/$SRC_DIR"
 INSTALL_PATH="$(pwd)/$INSTALL_DIR"
@@ -22,9 +26,6 @@ fi
 # ---
 
 LIBRARIES="--with-system --with-filesystem"
-
-GCC_VERSION=4.9
-ANDROID_API=android-21
 
 # ---
 
@@ -79,4 +80,5 @@ fi
 # ---
 
 cd "$INSTALL_PATH"
+cd ..
 ln -s "../src" include

@@ -6,7 +6,7 @@ local ANDROID_API = [ os.environ ANDROID_API ] ;
 
 using gcc : android
 :
-arm-linux-androideabi-g++ --sysroot="$(NDK_PATH)/platforms/$(ANDROID_API)/arch-arm"
+aarch64-linux-android-g++ --sysroot="$(NDK_PATH)/platforms/$(ANDROID_API)/arch-arm64"
 :
 <compileflags>-I"$(NDK_PATH)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/include"
 <compileflags>-I"$(NDK_PATH)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/libs/armeabi/include"
@@ -16,8 +16,6 @@ arm-linux-androideabi-g++ --sysroot="$(NDK_PATH)/platforms/$(ANDROID_API)/arch-a
 <compileflags>-fexceptions
 <compileflags>-frtti
 
-<compileflags>-march=armv7-a
-<compileflags>-mfpu=vfpv3-d16
-<compileflags>-mfloat-abi=softfp
-<compileflags>-Wl,--fix-cortex-a8
+<compileflags>-march=armv8-a
+<compileflags>-mtune=cortex-a53
 ;
