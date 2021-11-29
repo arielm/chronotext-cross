@@ -299,20 +299,7 @@ namespace chr
       void purge();
 
     protected:
-      enum RequestType
-      {
-        REQUEST_NONE,
-        REQUEST_IMAGE,
-        REQUEST_MASKED
-      };
-
-      RequestType requestType = REQUEST_NONE;
-      ImageRequest imageRequest;
-      MaskedRequest maskedRequest;
-
       static int usageCounter;
-
-      bool load();
     };
   }
 }

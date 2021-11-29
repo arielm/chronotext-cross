@@ -57,18 +57,12 @@ namespace chr
     Texture::Texture(const ImageRequest &request)
     :
     Texture(loadAndUploadTexture(request))
-    {
-      requestType = REQUEST_IMAGE,
-      imageRequest = request;
-    }
+    {}
 
     Texture::Texture(const MaskedRequest &request)
     :
     Texture(loadAndUploadMaskedTexture(request))
-    {
-      requestType = REQUEST_MASKED,
-      maskedRequest = request;
-    }
+    {}
 
     Texture::Texture(const Response &response)
     :
@@ -94,10 +88,7 @@ namespace chr
     size(other.size),
     innerSize(other.innerSize),
     coords1(other.coords1),
-    coords2(other.coords2),
-    requestType(other.requestType),
-    imageRequest(other.imageRequest),
-    maskedRequest(other.maskedRequest)
+    coords2(other.coords2)
     {
       if (element)
       {
@@ -117,9 +108,6 @@ namespace chr
         innerSize = other.innerSize;
         coords1 = other.coords1;
         coords2 = other.coords2;
-        requestType = other.requestType;
-        imageRequest = other.imageRequest;
-        maskedRequest = other.maskedRequest;
 
         if (element)
         {
@@ -137,10 +125,9 @@ namespace chr
 
     bool Texture::bind()
     {
-      if (load())
+      if (element && element->textureId)
       {
         glBindTexture(GL_TEXTURE_2D, element->textureId);
-
         return true;
       }
 
@@ -153,29 +140,6 @@ namespace chr
       {
         glBindTexture(GL_TEXTURE_2D, 0);
       }
-    }
-
-    bool Texture::load()
-    {
-      if (element && !element->textureId)
-      {
-        if (requestType == REQUEST_IMAGE)
-        {
-          const auto response = loadAndUploadTexture(imageRequest);
-          element->textureId = response.textureId;
-
-          return true;
-        }
-        else if (requestType == REQUEST_MASKED)
-        {
-          const auto response = loadAndUploadMaskedTexture(maskedRequest);
-          element->textureId = response.textureId;
-
-          return true;
-        }
-      }
-
-      return (element && element->textureId);
     }
 
     void Texture::unload()
