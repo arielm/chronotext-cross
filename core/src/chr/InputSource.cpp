@@ -121,7 +121,10 @@ namespace chr
     inputSource.type = TYPE_BUFFER;
     inputSource.data = data;
     inputSource.dataSize = size;
-    inputSource._uri = "mem://" + utils::toString((uint64_t)data); // XXX
+
+    stringstream stream;
+    stream << hex << data;
+    inputSource._uri = "mem://" + stream.str() + ":" + utils::toString(size);
 
     return inputSource;
   }
