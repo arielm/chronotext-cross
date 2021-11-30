@@ -75,6 +75,8 @@ list(APPEND SRC_FILES
   "chr/image/Utils.cpp"
   "chr/io/BinaryInputStream.cpp"
   "chr/io/BinaryOutputStream.cpp"
+  "chr/io/GzipBinaryInputStream.cpp"
+  "chr/io/GzipBinaryOutputStream.cpp"
 )
 
 if (PLATFORM MATCHES osx)
