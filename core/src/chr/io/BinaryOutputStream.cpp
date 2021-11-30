@@ -112,6 +112,20 @@ namespace chr
     }
 
     template<>
+    void BinaryOutputStream::write(glm::ivec2 value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian32(value.x);
+
+        if (good())
+        {
+          codedOutput->WriteLittleEndian32(value.y);
+        }
+      }
+    }
+
+    template<>
     void BinaryOutputStream::write(glm::vec2 value)
     {
       if (good())
@@ -139,6 +153,30 @@ namespace chr
           if (good())
           {
             codedOutput->WriteLittleEndian32(encodeFloat(value.z));
+          }
+        }
+      }
+    }
+
+    template<>
+    void BinaryOutputStream::write(glm::vec4 value)
+    {
+      if (good())
+      {
+        codedOutput->WriteLittleEndian32(encodeFloat(value.x));
+
+        if (good())
+        {
+          codedOutput->WriteLittleEndian32(encodeFloat(value.y));
+
+          if (good())
+          {
+            codedOutput->WriteLittleEndian32(encodeFloat(value.z));
+
+            if (good())
+            {
+              codedOutput->WriteLittleEndian32(encodeFloat(value.w));
+            }
           }
         }
       }

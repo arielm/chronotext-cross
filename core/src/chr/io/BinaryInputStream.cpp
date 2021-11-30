@@ -188,6 +188,28 @@ namespace chr
     }
 
     template<>
+    glm::ivec2 BinaryInputStream::read()
+    {
+      glm::ivec2 result;
+
+      if (good())
+      {
+        if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.x)))
+        {
+          if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.y)))
+          {
+            goto exit; // RVO-FRIENDLY
+          }
+        }
+
+        fail();
+      }
+
+      exit:
+      return result;
+    }
+
+    template<>
     glm::vec2 BinaryInputStream::read()
     {
       glm::vec2 result;
@@ -223,6 +245,34 @@ namespace chr
             if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.z)))
             {
               goto exit; // RVO-FRIENDLY
+            }
+          }
+        }
+
+        fail();
+      }
+
+      exit:
+      return result;
+    }
+
+    template<>
+    glm::vec4 BinaryInputStream::read()
+    {
+      glm::vec4 result;
+
+      if (good())
+      {
+        if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.x)))
+        {
+          if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.y)))
+          {
+            if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.z)))
+            {
+              if (codedInput->ReadLittleEndian32(reinterpret_cast<uint32_t*>(&result.w)))
+              {
+                goto exit; // RVO-FRIENDLY
+              }
             }
           }
         }
