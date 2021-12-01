@@ -17,16 +17,15 @@ namespace chr
     :
     id(usageCounter++),
     element(new texture::Element()),
-    textureId(textureId),
     width(width),
     height(height),
-    format(format),
     innerWidth(width),
     innerHeight(height),
     coords1(0),
     coords2(1)
     {
       element->textureId = textureId;
+      element->format = format;
       element->useCount++;
     }
 
@@ -34,15 +33,14 @@ namespace chr
     :
     id(usageCounter++),
     element(new texture::Element()),
-    format(params.format),
     size(params.size),
     innerSize(params.size),
     coords1(0),
     coords2(1)
     {
-      glGenTextures(1, &textureId);
+      glGenTextures(1, &element->textureId);
 
-      glBindTexture(GL_TEXTURE_2D, textureId);
+      glBindTexture(GL_TEXTURE_2D, element->textureId);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.minFilter);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.magFilter);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.wrapS);
@@ -50,7 +48,7 @@ namespace chr
       glTexImage2D(GL_TEXTURE_2D, 0, params.format, params.width, params.height, 0, params.format, params.type, nullptr);
       glBindTexture(GL_TEXTURE_2D, 0);
 
-      element->textureId = textureId;
+      element->format = params.format;
       element->useCount++;
     }
 
@@ -68,14 +66,13 @@ namespace chr
     :
     id(usageCounter++),
     element(new texture::Element()),
-    format(response.format),
-    textureId(response.textureId),
     size(response.size),
     innerSize(response.innerSize),
     coords1(response.coords1),
     coords2(response.coords2)
     {
       element->textureId = response.textureId;
+      element->format = response.format;
       element->useCount++;
     }
 
@@ -83,8 +80,6 @@ namespace chr
     :
     id(other.id),
     element(other.element),
-    format(other.format),
-    textureId(other.textureId),
     size(other.size),
     innerSize(other.innerSize),
     coords1(other.coords1),
@@ -102,8 +97,6 @@ namespace chr
       {
         id = other.id;
         element = other.element;
-        format = other.format;
-        textureId = other.textureId;
         size = other.size;
         innerSize = other.innerSize;
         coords1 = other.coords1;

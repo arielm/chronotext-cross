@@ -12,7 +12,9 @@ namespace chr
       struct Element
       {
         int useCount = 0;
+
         GLuint textureId;
+        GLenum format;
       };
     }
 
@@ -258,6 +260,11 @@ namespace chr
 
       ~Texture();
 
+      texture::Element* operator-> () const
+      {
+        return element;
+      }
+
       bool operator<(const Texture &rhs) const
       {
         return id < rhs.id;
@@ -265,9 +272,6 @@ namespace chr
 
       int id = -1;
       texture::Element *element = nullptr;
-
-      GLenum format;
-      GLuint textureId;
 
       union
       {
