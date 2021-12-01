@@ -500,7 +500,7 @@ namespace chr
 
       bool empty() const override
       {
-        return VertexBatch<V>::element1->vertexBuffer.empty() && element2->indexBuffer.empty();
+        return VertexBatch<V>::vertexBuffer().empty() && element2->indexBuffer.empty();
       }
 
       void extendCapacity(size_t vertexCount, size_t indexCount)
@@ -524,12 +524,12 @@ namespace chr
           VertexBatch<V>::element1->texture.bind();
         }
 
-        VertexBatch<V>::element1->vertexBuffer.bind(shader);
+        VertexBatch<V>::vertexBuffer().bind(shader);
         element2->indexBuffer.bind(shader);
 
         element2->indexBuffer.draw(VertexBatch<V>::element1->primitive);
 
-        VertexBatch<V>::element1->vertexBuffer.unbind(shader);
+        VertexBatch<V>::vertexBuffer().unbind(shader);
         element2->indexBuffer.unbind(shader);
       }
 
@@ -540,14 +540,14 @@ namespace chr
           VertexBatch<V>::element1->texture.bind();
         }
 
-        VertexBatch<V>::element1->vertexBuffer.bind(shader);
+        VertexBatch<V>::vertexBuffer().bind(shader);
         element2->indexBuffer.bind(shader);
         instanceBuffer.bind(shader);
 
         element2->indexBuffer.drawInstanced(VertexBatch<V>::element1->primitive, instanceBuffer.getCount());
 
         instanceBuffer.unbind(shader);
-        VertexBatch<V>::element1->vertexBuffer.unbind(shader);
+        VertexBatch<V>::vertexBuffer().unbind(shader);
         element2->indexBuffer.unbind(shader);
       }
     };
@@ -561,7 +561,6 @@ namespace chr
         int useCount = 0;
 
         GLenum primitive = GL_TRIANGLES;
-        Buffer<Vertex<V>> vertexBuffer;
 
         ShaderProgram shader;
         bool hasShader = false;
@@ -573,6 +572,8 @@ namespace chr
         bool hasTexture = false;
 
       protected:
+        Buffer<Vertex<V>> vertexBuffer;
+
         std::map <std::string, std::vector<int>> uniformi;
         std::map <std::string, std::vector<float>> uniformf;
         std::map <std::string, glm::mat3> uniformm3;
