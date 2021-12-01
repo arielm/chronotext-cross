@@ -21,69 +21,6 @@ namespace chr
     class Texture
     {
     public:
-      /*
-       * TODO: Handle mipmap and anisotropy
-       */
-      struct Params
-      {
-        union
-        {
-          glm::ivec2 size;
-          struct { int width, height; };
-        };
-
-        GLenum format = GL_RGBA;
-        GLenum type = GL_UNSIGNED_BYTE;
-        GLint minFilter = GL_LINEAR;
-        GLint magFilter = GL_LINEAR;
-        GLenum wrapS = GL_CLAMP_TO_EDGE;
-        GLenum wrapT = GL_CLAMP_TO_EDGE;
-
-        Params() = default;
-
-        Params(int width, int height)
-        :
-        width(width),
-        height(height)
-        {}
-
-        Params(const glm::ivec2 &size)
-        :
-        size(size)
-        {}
-
-        Params& setFormat(GLenum format)
-        {
-          this->format = format;
-          return *this;
-        }
-
-        Params& setType(GLenum type)
-        {
-          this->type = type;
-          return *this;
-        }
-
-        Params& setMinFilter(GLint min)
-        {
-          minFilter = min;
-          return *this;
-        }
-
-        Params& setMagFilter(GLint mag)
-        {
-          magFilter = mag;
-          return *this;
-        }
-
-        Params& setWrap(GLenum s, GLenum t)
-        {
-          wrapS = s;
-          wrapT = t;
-          return *this;
-        }
-      };
-
       struct ImageRequest
       {
         InputSource source;
@@ -251,7 +188,6 @@ namespace chr
 
       Texture();
       Texture(GLuint textureId, int width, int height, GLenum format = GL_RGBA);
-      Texture(const Params &params);
       Texture(const ImageRequest &request);
       Texture(const MaskedRequest &request);
       Texture(const Response &response);

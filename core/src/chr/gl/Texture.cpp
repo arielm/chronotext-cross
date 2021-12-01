@@ -1,6 +1,5 @@
 #include "chr/gl/Texture.h"
 #include "chr/gl/Utils.h"
-#include "chr/Log.h"
 
 using namespace std;
 
@@ -26,29 +25,6 @@ namespace chr
     {
       element->textureId = textureId;
       element->format = format;
-      element->useCount++;
-    }
-
-    Texture::Texture(const Params &params)
-    :
-    id(usageCounter++),
-    element(new texture::Element()),
-    size(params.size),
-    innerSize(params.size),
-    coords1(0),
-    coords2(1)
-    {
-      glGenTextures(1, &element->textureId);
-
-      glBindTexture(GL_TEXTURE_2D, element->textureId);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.minFilter);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.magFilter);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.wrapS);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, params.wrapT);
-      glTexImage2D(GL_TEXTURE_2D, 0, params.format, params.width, params.height, 0, params.format, params.type, nullptr);
-      glBindTexture(GL_TEXTURE_2D, 0);
-
-      element->format = params.format;
       element->useCount++;
     }
 
@@ -140,7 +116,6 @@ namespace chr
       if (element && element->textureId)
       {
         glDeleteTextures(1, &element->textureId);
-        LOGD << "TEXTURE " << element->textureId << " UNLOADED" << endl;
         element->textureId = 0;
       }
     }
