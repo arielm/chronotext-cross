@@ -168,6 +168,6 @@ void Sketch::processRay(const glm::vec2 &position, int frontFace)
     glm::vec3 pickedNormal(glm::normalize(glm::cross(v1 - v0, v2 - v0)));
 
     normalBatch.addVertices(pickedPoint, pickedPoint + pickedNormal * 10.0f * (frontFace == CW ? +1.0f : -1.0f));
-    normalBatch.vertexBuffer.requestUpload();
+    normalBatch.vertexBuffer().requestUpload();
   }
 }
