@@ -15,7 +15,6 @@ void Sketch::setup()
     fbo = FBO(512, 512);
 
     texture = Texture(Texture::ImageRequest("lys.png")
-                              .setFlags(image::FLAGS_RBGA)
                               .setMipmap(true)
                               .setAnisotropy(true));
 
