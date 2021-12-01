@@ -102,9 +102,9 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch, const Matrix &matrix) const
       {
         glm::vec2 coords1, coords2;
-        if (batch.hasTexture)
+        if (batch->hasTexture)
         {
-          tie(coords1, coords2) = getTextureCoords(batch.texture);
+          tie(coords1, coords2) = getTextureCoords(batch->texture);
         }
         else
         {
@@ -151,9 +151,9 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
         glm::vec2 coords1, coords2;
-        if (batch.hasTexture)
+        if (batch->hasTexture)
         {
-          tie(coords1, coords2) = getTextureCoords(batch.texture);
+          tie(coords1, coords2) = getTextureCoords(batch->texture);
         }
         else
         {
@@ -197,9 +197,9 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch) const
       {
         glm::vec2 coords1, coords2;
-        if (batch.hasTexture)
+        if (batch->hasTexture)
         {
-          tie(coords1, coords2) = getTextureCoords(batch.texture);
+          tie(coords1, coords2) = getTextureCoords(batch->texture);
         }
         else
         {
@@ -249,9 +249,9 @@ namespace chr
       void Rect::append(IndexedVertexBatch<XYZ.UV.RGBA, GLuint> &batch) const
       {
         glm::vec2 coords1, coords2;
-        if (batch.hasTexture)
+        if (batch->hasTexture)
         {
-          tie(coords1, coords2) = getTextureCoords(batch.texture);
+          tie(coords1, coords2) = getTextureCoords(batch->texture);
         }
         else
         {

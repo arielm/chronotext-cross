@@ -11,6 +11,15 @@ namespace chr
 {
   namespace gl
   {
+    namespace batch
+    {
+      template<int V>
+      class Element1;
+
+      template<int V, class I>
+      class Element2;
+    }
+
     class Batch
     {
     public:
@@ -26,73 +35,100 @@ namespace chr
     class VertexBatch : public Batch
     {
     public:
-      GLenum primitive = GL_TRIANGLES;
-      Buffer<Vertex<V>> vertexBuffer;
-
-      ShaderProgram shader;
-      bool hasShader = false;
-
-      glm::vec4 color;
-      bool hasColor = false;
-
-      Texture texture;
-      bool hasTexture = false;
+      batch::Element1<V>* operator-> () const
+      {
+        return element1;
+      }
 
       VertexBatch()
       :
+      element1(new batch::Element1<V>()),
       Batch()
-      {}
+      {
+        element1->useCount++;
+      }
 
       VertexBatch(GLenum primitive)
       :
-      primitive(primitive),
-      Batch()
-      {}
+      VertexBatch()
+      {
+        element1->primitive = primitive;
+      }
 
       VertexBatch(const Buffer<Vertex<V>> &vertexBuffer)
       :
-      vertexBuffer(vertexBuffer),
-      Batch()
-      {}
+      VertexBatch()
+      {
+        element1->vertexBuffer = vertexBuffer;
+      }
 
       VertexBatch(GLenum primitive, const Buffer<Vertex<V>> &vertexBuffer)
       :
-      primitive(primitive),
-      vertexBuffer(vertexBuffer),
-      Batch()
-      {}
+      VertexBatch()
+      {
+        element1->primitive = primitive;
+        element1->vertexBuffer = vertexBuffer;
+      }
+
+      VertexBatch(const VertexBatch &other)
+      :
+      element1(other.element1)
+      {
+        element1->useCount++;
+      }
+
+      VertexBatch& operator=(const VertexBatch &other)
+      {
+        if (this != &other)
+        {
+          element1 = other.element1;
+          element1->useCount++;
+        }
+
+        return *this;
+      }
+
+      ~VertexBatch()
+      {
+        element1->useCount--;
+
+        if (element1->useCount == 0)
+        {
+          delete element1;
+        }
+      }
 
       // ---
 
       void clear() override
       {
-        vertexBuffer.clear();
-        vertexBuffer.requestUpload();
+        element1->vertexBuffer.clear();
+        element1->vertexBuffer.requestUpload();
       }
 
       bool empty() const override
       {
-        return vertexBuffer.empty();
+        return element1->vertexBuffer.empty();
       }
 
       void extendVertexCapacity(size_t count)
       {
-        vertexBuffer.extendCapacity(count);
+        element1->vertexBuffer.extendCapacity(count);
       }
 
       void flush()
       {
-        if (hasTexture)
+        if (element1->hasTexture)
         {
-          texture.bind();
+          element1->texture.bind();
         }
 
-        if (hasShader)
+        if (element1->hasShader)
         {
-          shader.bind();
-          state::current.apply(shader);
-          apply(shader);
-          bind(shader);
+          element1->shader.bind();
+          state::current.apply(element1->shader);
+          apply(element1->shader);
+          bind(element1->shader);
         }
         else
         {
@@ -103,17 +139,17 @@ namespace chr
 
       void flush(InstanceBuffer &instanceBuffer)
       {
-        if (hasTexture)
+        if (element1->hasTexture)
         {
-          texture.bind();
+          element1->texture.bind();
         }
 
-        if (hasShader)
+        if (element1->hasShader)
         {
-          shader.bind();
-          state::current.apply(shader);
-          apply(shader);
-          bind(shader, instanceBuffer);
+          element1->shader.bind();
+          state::current.apply(element1->shader);
+          apply(element1->shader);
+          bind(element1->shader, instanceBuffer);
         }
         else
         {
@@ -122,31 +158,36 @@ namespace chr
         }
       }
 
+      inline Buffer<Vertex<V>>& vertexBuffer() const
+      {
+        return element1->vertexBuffer;
+      }
+
       inline std::vector<Vertex<V>>& vertices() const
       {
-        return vertexBuffer->storage;
+        return element1->vertexBuffer->storage;
       }
 
       inline Vertex<V>& vertex(size_t i) const
       {
-        return vertexBuffer->storage[i];
+        return element1->vertexBuffer->storage[i];
       }
 
       inline size_t vertexCount() const
       {
-        return vertexBuffer->storage.size();
+        return element1->vertexBuffer->storage.size();
       }
 
       inline VertexBatch& addVertex(const Vertex<V> &vertex)
       {
-        vertexBuffer->storage.push_back(vertex);
+        element1->vertexBuffer->storage.push_back(vertex);
         return *this;
       }
 
       template<typename... Args>
       inline VertexBatch& addVertex(Args&&... args)
       {
-        vertexBuffer->storage.emplace_back(std::forward<Args>(args)...);
+        element1->vertexBuffer->storage.emplace_back(std::forward<Args>(args)...);
         return *this;
       }
 
@@ -155,7 +196,7 @@ namespace chr
       {
         for (Vertex<V>&& vertex : {args...})
         {
-          vertexBuffer->storage.emplace_back(vertex);
+          element1->vertexBuffer->storage.emplace_back(vertex);
         }
 
         return *this;
@@ -163,35 +204,35 @@ namespace chr
 
       inline VertexBatch& addVertices(const std::vector<Vertex<V>> &vertices)
       {
-        vertexBuffer->storage.insert(vertexBuffer->storage.end(), vertices.begin(), vertices.end());
+        element1->vertexBuffer->storage.insert(element1->vertexBuffer->storage.end(), vertices.begin(), vertices.end());
         return *this;
       }
 
       VertexBatch& setPrimitive(GLenum primitive)
       {
-        this->primitive = primitive;
+        element1->primitive = primitive;
         return *this;
       }
 
       VertexBatch& setShader(const ShaderProgram &shader)
       {
-        if (!hasShader)
+        if (!element1->hasShader)
         {
-          this->shader.purge();
+          element1->shader.purge();
         }
 
-        this->shader = shader;
-        hasShader = true;
+        element1->shader = shader;
+        element1->hasShader = true;
 
         return *this;
       }
 
       VertexBatch& clearShader()
       {
-        if (hasShader)
+        if (element1->hasShader)
         {
-          hasShader = false;
-          shader.purge();
+          element1->hasShader = false;
+          element1->shader.purge();
         }
 
         return *this;
@@ -199,43 +240,43 @@ namespace chr
 
       VertexBatch& setShaderColor(const glm::vec4 &color)
       {
-        this->color = color;
-        hasColor = true;
+        element1->color = color;
+        element1->hasColor = true;
         return *this;
       }
 
       VertexBatch& setShaderColor(float r, float g, float b, float a)
       {
-        color = { r, g, b, a };
-        hasColor = true;
+        element1->color = { r, g, b, a };
+        element1->hasColor = true;
         return *this;
       }
 
       VertexBatch& clearShaderColor()
       {
-        hasColor = false;
+        element1->hasColor = false;
         return *this;
       }
 
       VertexBatch& setTexture(const Texture &texture)
       {
-        if (!hasTexture)
+        if (!element1->hasTexture)
         {
-          this->texture.purge();
+          element1->texture.purge();
         }
 
-        this->texture = texture;
-        hasTexture = true;
+        element1->texture = texture;
+        element1->hasTexture = true;
 
         return *this;
       }
 
       VertexBatch& clearTexture()
       {
-        if (hasTexture)
+        if (element1->hasTexture)
         {
-          hasTexture = false;
-          texture.purge();
+          element1->hasTexture = false;
+          element1->texture.purge();
         }
 
         return *this;
@@ -243,56 +284,53 @@ namespace chr
 
       // ---
 
-      inline VertexBatch& setShaderUniform(const std::string &name, int v0) { uniformi[name] = { v0 }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, int v0, int v1) { uniformi[name] = { v0, v1 }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, int v0, int v1, int v2) { uniformi[name] = { v0, v1, v2 }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, int v0, int v1, int v2, int v3) { uniformi[name] = { v0, v1, v2, v3 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, int v0) { element1->uniformi[name] = { v0 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, int v0, int v1) { element1->uniformi[name] = { v0, v1 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, int v0, int v1, int v2) { element1->uniformi[name] = { v0, v1, v2 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, int v0, int v1, int v2, int v3) { element1->uniformi[name] = { v0, v1, v2, v3 }; return *this; }
 
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::ivec2 &v) { uniformi[name] = { v[0], v[1] }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::ivec3 &v) { uniformi[name] = { v[0], v[1], v[2] }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::ivec4 &v) { uniformi[name] = { v[0], v[1], v[2], v[3] }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::ivec2 &v) { element1->uniformi[name] = { v[0], v[1] }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::ivec3 &v) { element1->uniformi[name] = { v[0], v[1], v[2] }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::ivec4 &v) { element1->uniformi[name] = { v[0], v[1], v[2], v[3] }; return *this; }
 
-      inline VertexBatch& setShaderUniform(const std::string &name, float v0) { uniformf[name] = { v0 }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, float v0, float v1) { uniformf[name] = { v0, v1 }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, float v0, float v1, float v2) { uniformf[name] = { v0, v1, v2 }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, float v0, float v1, float v2, float v3) { uniformf[name] = { v0, v1, v2, v3 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, float v0) { element1->uniformf[name] = { v0 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, float v0, float v1) { element1->uniformf[name] = { v0, v1 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, float v0, float v1, float v2) { element1->uniformf[name] = { v0, v1, v2 }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, float v0, float v1, float v2, float v3) { element1->uniformf[name] = { v0, v1, v2, v3 }; return *this; }
 
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec2 &v) { uniformf[name] = { v[0], v[1] }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec3 &v) { uniformf[name] = { v[0], v[1], v[2] }; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec4 &v) { uniformf[name] = { v[0], v[1], v[2], v[3] }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec2 &v) { element1->uniformf[name] = { v[0], v[1] }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec3 &v) { element1->uniformf[name] = { v[0], v[1], v[2] }; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::vec4 &v) { element1->uniformf[name] = { v[0], v[1], v[2], v[3] }; return *this; }
 
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::mat3 &m) { uniformm3[name] = m; return *this; }
-      inline VertexBatch& setShaderUniform(const std::string &name, const glm::mat4 &m) { uniformm4[name] = m; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::mat3 &m) { element1->uniformm3[name] = m; return *this; }
+      inline VertexBatch& setShaderUniform(const std::string &name, const glm::mat4 &m) { element1->uniformm4[name] = m; return *this; }
 
     protected:
-      std::map <std::string, std::vector<int>> uniformi;
-      std::map <std::string, std::vector<float>> uniformf;
-      std::map <std::string, glm::mat3> uniformm3;
-      std::map <std::string, glm::mat4> uniformm4;
+      batch::Element1<V> *element1 = nullptr;
 
       void apply(ShaderProgram &shader)
       {
-        if (hasColor)
+        if (element1->hasColor)
         {
-          shader.applyColor(color);
+          shader.applyColor(element1->color);
         }
 
-        for (auto it = uniformi.begin(); it != uniformi.end(); ++it)
-        {
-          shader.applyUniform(it->first, it->second);
-        }
-
-        for (auto it = uniformf.begin(); it != uniformf.end(); ++it)
+        for (auto it = element1->uniformi.begin(); it != element1->uniformi.end(); ++it)
         {
           shader.applyUniform(it->first, it->second);
         }
 
-        for (auto it = uniformm3.begin(); it != uniformm3.end(); ++it)
+        for (auto it = element1->uniformf.begin(); it != element1->uniformf.end(); ++it)
         {
           shader.applyUniform(it->first, it->second);
         }
 
-        for (auto it = uniformm4.begin(); it != uniformm4.end(); ++it)
+        for (auto it = element1->uniformm3.begin(); it != element1->uniformm3.end(); ++it)
+        {
+          shader.applyUniform(it->first, it->second);
+        }
+
+        for (auto it = element1->uniformm4.begin(); it != element1->uniformm4.end(); ++it)
         {
           shader.applyUniform(it->first, it->second);
         }
@@ -300,20 +338,20 @@ namespace chr
 
       void bind(ShaderProgram &shader) override
       {
-        vertexBuffer.bind(shader);
-        vertexBuffer.draw(primitive);
-        vertexBuffer.unbind(shader);
+        element1->vertexBuffer.bind(shader);
+        element1->vertexBuffer.draw(element1->primitive);
+        element1->vertexBuffer.unbind(shader);
       }
 
       void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
       {
-        vertexBuffer.bind(shader);
+        element1->vertexBuffer.bind(shader);
         instanceBuffer.bind(shader);
 
-        vertexBuffer.drawInstanced(primitive, instanceBuffer.getCount());
+        element1->vertexBuffer.drawInstanced(element1->primitive, instanceBuffer.getCount());
 
         instanceBuffer.unbind(shader);
-        vertexBuffer.unbind(shader);
+        element1->vertexBuffer.unbind(shader);
       }
     };
 
@@ -321,58 +359,100 @@ namespace chr
     class IndexedVertexBatch : public VertexBatch<V>
     {
     public:
-      Buffer<I> indexBuffer;
-
       IndexedVertexBatch()
       :
+      element2(new batch::Element2<V, I>()),
       VertexBatch<V>()
       {}
 
       IndexedVertexBatch(GLenum primitive)
       :
+      element2(new batch::Element2<V, I>()),
       VertexBatch<V>(primitive)
       {}
 
       IndexedVertexBatch(const Buffer<Vertex<V>> &vertexBuffer)
       :
+      element2(new batch::Element2<V, I>()),
       VertexBatch<V>(vertexBuffer)
       {}
 
       IndexedVertexBatch(GLenum primitive, const Buffer<Vertex<V>> &vertexBuffer)
       :
+      element2(new batch::Element2<V, I>()),
       VertexBatch<V>(primitive, vertexBuffer)
       {}
 
       IndexedVertexBatch(const Buffer<Vertex<V>> &vertexBuffer, const Buffer<I> &indexBuffer)
       :
-      indexBuffer(indexBuffer),
+      element2(new batch::Element2<V, I>()),
       VertexBatch<V>(vertexBuffer)
-      {}
+      {
+        element2->indexBuffer = indexBuffer;
+      }
 
       IndexedVertexBatch(GLenum primitive, const Buffer<Vertex<V>> &vertexBuffer, const Buffer<I> &indexBuffer)
       :
-      indexBuffer(indexBuffer),
+      element2(new batch::Element2<V, I>()),
       VertexBatch<V>(primitive, vertexBuffer)
-      {}
+      {
+        element2->indexBuffer = indexBuffer;
+      }
+
+      IndexedVertexBatch(const IndexedVertexBatch &other)
+      :
+      element2(other.element2)
+      {
+        VertexBatch<V>::element1 = other.element1;
+        VertexBatch<V>::element1->useCount++;
+      }
+
+      IndexedVertexBatch& operator=(const IndexedVertexBatch &other)
+      {
+        if (this != &other)
+        {
+          VertexBatch<V>::element1 = other.element1;
+          element2 = other.element2;
+
+          VertexBatch<V>::element1->useCount++;
+        }
+
+        return *this;
+      }
+
+      ~IndexedVertexBatch()
+      {
+        if (VertexBatch<V>::element1->useCount == 1)
+        {
+          delete element2;
+        }
+      }
+
+      // ---
+
+      inline Buffer<I>& indexBuffer() const
+      {
+        return element2->indexBuffer;
+      }
 
       inline std::vector<I>& indices() const
       {
-        return indexBuffer->storage;
+        return element2->indexBuffer->storage;
       }
 
       inline I index(size_t i) const
       {
-        return indexBuffer->storage[i];
+        return element2->indexBuffer->storage[i];
       }
 
       inline size_t indexCount() const
       {
-        return indexBuffer->storage.size();
+        return element2->indexBuffer->storage.size();
       }
 
       inline IndexedVertexBatch& addIndex(I offset)
       {
-        indexBuffer->storage.emplace_back(idx + offset);
+        element2->indexBuffer->storage.emplace_back(element2->idx + offset);
         return *this;
       }
 
@@ -381,7 +461,7 @@ namespace chr
       {
         for (I offset : {args...})
         {
-          indexBuffer->storage.emplace_back(idx + offset);
+          element2->indexBuffer->storage.emplace_back(element2->idx + offset);
         }
 
         return *this;
@@ -389,27 +469,27 @@ namespace chr
 
       inline IndexedVertexBatch& addIndices(const std::vector<I> &indices)
       {
-        indexBuffer->storage.insert(indexBuffer->storage.end(), indices.begin(), indices.end());
+        element2->indexBuffer->storage.insert(element2->indexBuffer->storage.end(), indices.begin(), indices.end());
         return *this;
       }
 
       inline IndexedVertexBatch& incrementIndices(I increment)
       {
-        idx += increment;
+        element2->idx += increment;
         return *this;
       }
 
       inline I currentIndex() const
       {
-        return idx;
+        return element2->idx;
       }
 
       void clearIndices()
       {
-        indexBuffer.clear();
-        indexBuffer.requestUpload();
+        element2->indexBuffer.clear();
+        element2->indexBuffer.requestUpload();
 
-        idx = 0;
+        element2->idx = 0;
       }
 
       void clear() override
@@ -420,56 +500,96 @@ namespace chr
 
       bool empty() const override
       {
-        return VertexBatch<V>::vertexBuffer.empty() || indexBuffer.empty();
+        return VertexBatch<V>::element1->vertexBuffer.empty() && element2->indexBuffer.empty();
       }
 
       void extendCapacity(size_t vertexCount, size_t indexCount)
       {
         VertexBatch<V>::vertexBuffer.extendCapacity(vertexCount);
-        indexBuffer.extendCapacity(indexCount);
+        element2->indexBuffer.extendCapacity(indexCount);
       }
 
       void extendIndexCapacity(size_t count)
       {
-        indexBuffer.extendCapacity(count);
+        element2->indexBuffer.extendCapacity(count);
       }
 
     protected:
-      I idx = 0;
+      batch::Element2<V, I> *element2 = nullptr;
 
       void bind(ShaderProgram &shader) override
       {
-        if (VertexBatch<V>::hasTexture)
+        if (VertexBatch<V>::element1->hasTexture)
         {
-          VertexBatch<V>::texture.bind();
+          VertexBatch<V>::element1->texture.bind();
         }
 
-        VertexBatch<V>::vertexBuffer.bind(shader);
-        indexBuffer.bind(shader);
+        VertexBatch<V>::element1->vertexBuffer.bind(shader);
+        element2->indexBuffer.bind(shader);
 
-        indexBuffer.draw(VertexBatch<V>::primitive);
+        element2->indexBuffer.draw(VertexBatch<V>::element1->primitive);
 
-        VertexBatch<V>::vertexBuffer.unbind(shader);
-        indexBuffer.unbind(shader);
+        VertexBatch<V>::element1->vertexBuffer.unbind(shader);
+        element2->indexBuffer.unbind(shader);
       }
 
       void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
       {
-        if (VertexBatch<V>::hasTexture)
+        if (VertexBatch<V>::element1->hasTexture)
         {
-          VertexBatch<V>::texture.bind();
+          VertexBatch<V>::element1->texture.bind();
         }
 
-        VertexBatch<V>::vertexBuffer.bind(shader);
-        indexBuffer.bind(shader);
+        VertexBatch<V>::element1->vertexBuffer.bind(shader);
+        element2->indexBuffer.bind(shader);
         instanceBuffer.bind(shader);
 
-        indexBuffer.drawInstanced(VertexBatch<V>::primitive, instanceBuffer.getCount());
+        element2->indexBuffer.drawInstanced(VertexBatch<V>::element1->primitive, instanceBuffer.getCount());
 
         instanceBuffer.unbind(shader);
-        VertexBatch<V>::vertexBuffer.unbind(shader);
-        indexBuffer.unbind(shader);
+        VertexBatch<V>::element1->vertexBuffer.unbind(shader);
+        element2->indexBuffer.unbind(shader);
       }
     };
+
+    namespace batch
+    {
+      template<int V>
+      class Element1
+      {
+      public:
+        int useCount = 0;
+
+        GLenum primitive = GL_TRIANGLES;
+        Buffer<Vertex<V>> vertexBuffer;
+
+        ShaderProgram shader;
+        bool hasShader = false;
+
+        glm::vec4 color;
+        bool hasColor = false;
+
+        Texture texture;
+        bool hasTexture = false;
+
+      protected:
+        std::map <std::string, std::vector<int>> uniformi;
+        std::map <std::string, std::vector<float>> uniformf;
+        std::map <std::string, glm::mat3> uniformm3;
+        std::map <std::string, glm::mat4> uniformm4;
+
+        friend class VertexBatch<V>;
+      };
+
+      template<int V, class I>
+      class Element2
+      {
+      protected:
+        Buffer<I> indexBuffer;
+        I idx = 0;
+
+        friend class IndexedVertexBatch<V, I>;
+      };
+    }
   }
 }

@@ -53,7 +53,7 @@ namespace chr
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch->texture, x, y);
 
         if (frontFace == CW)
         {
@@ -70,7 +70,7 @@ namespace chr
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch->texture, x, y);
 
         if (frontFace == CW)
         {
@@ -89,7 +89,7 @@ namespace chr
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch->texture, x, y);
 
         batch
           .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y)
@@ -114,7 +114,7 @@ namespace chr
       {
         Rectf bounds;
         glm::vec2 coords1, coords2;
-        tie(bounds, coords1, coords2) = getTextureQuad(batch.texture, x, y);
+        tie(bounds, coords1, coords2) = getTextureQuad(batch->texture, x, y);
 
         batch
           .addVertex(bounds.x1, bounds.y1, 0, coords1.x, coords1.y, color)

@@ -143,7 +143,7 @@ namespace chr
         {
           batch.addVertex(
             glm::vec3(vertices[i], 0),
-            getTextureCoords(batch.texture, vertices[i]),
+            getTextureCoords(batch->texture, vertices[i]),
             std::forward<Args>(args)...);
         }
 
@@ -232,7 +232,7 @@ namespace chr
         {
           batch.addVertex(
             matrix.transformPoint(vertices[i]),
-            getTextureCoords(batch.texture, vertices[i]),
+            getTextureCoords(batch->texture, vertices[i]),
             std::forward<Args>(args)...);
         }
 
@@ -278,7 +278,7 @@ namespace chr
           batch.addVertex(
             matrix.transformPoint(vertices[i]),
             normal,
-            getTextureCoords(batch.texture, vertices[i]),
+            getTextureCoords(batch->texture, vertices[i]),
             std::forward<Args>(args)...);
         }
 
@@ -529,19 +529,19 @@ namespace chr
             batch
               .addVertex(
                 matrix.transformPoint(p0),
-                getTextureCoords(batch.texture, glm::vec2(length0, 0)),
+                getTextureCoords(batch->texture, glm::vec2(length0, 0)),
                 std::forward<Args>(args)...)
               .addVertex(
                 matrix.transformPoint(p1),
-                getTextureCoords(batch.texture, glm::vec2(length, 0)),
+                getTextureCoords(batch->texture, glm::vec2(length, 0)),
                 std::forward<Args>(args)...)
               .addVertex(
                 matrix.transformPoint(glm::vec3(p1, distance)),
-                getTextureCoords(batch.texture, glm::vec2(length, distance)),
+                getTextureCoords(batch->texture, glm::vec2(length, distance)),
                 std::forward<Args>(args)...)
               .addVertex(
                 matrix.transformPoint(glm::vec3(p0, distance)),
-                getTextureCoords(batch.texture, glm::vec2(length0, distance)),
+                getTextureCoords(batch->texture, glm::vec2(length0, distance)),
                 std::forward<Args>(args)...);
 
             if (cw)
@@ -578,7 +578,7 @@ namespace chr
         {
           batch.addVertex(
             matrix.transformPoint(vertices[i]),
-            getTextureCoords(batch.texture, vertices[i]),
+            getTextureCoords(batch->texture, vertices[i]),
             std::forward<Args>(args)...);
         }
 
@@ -598,7 +598,7 @@ namespace chr
         {
           batch.addVertex(
             matrix.transformPoint(glm::vec3(vertices[i], distance)),
-            getTextureCoords(batch.texture, vertices[i]),
+            getTextureCoords(batch->texture, vertices[i]),
             std::forward<Args>(args)...);
         }
 
@@ -783,22 +783,22 @@ namespace chr
               .addVertex(
                 matrix.transformPoint(p0),
                 normal,
-                getTextureCoords(batch.texture, glm::vec2(length0, 0)),
+                getTextureCoords(batch->texture, glm::vec2(length0, 0)),
                 std::forward<Args>(args)...)
               .addVertex(
                 matrix.transformPoint(p1),
                 normal,
-                getTextureCoords(batch.texture, glm::vec2(length, 0)),
+                getTextureCoords(batch->texture, glm::vec2(length, 0)),
                 std::forward<Args>(args)...)
               .addVertex(
                 matrix.transformPoint(glm::vec3(p1, distance)),
                 normal,
-                getTextureCoords(batch.texture, glm::vec2(length, distance)),
+                getTextureCoords(batch->texture, glm::vec2(length, distance)),
                 std::forward<Args>(args)...)
               .addVertex(
                 matrix.transformPoint(glm::vec3(p0, distance)),
                 normal,
-                getTextureCoords(batch.texture, glm::vec2(length0, distance)),
+                getTextureCoords(batch->texture, glm::vec2(length0, distance)),
                 std::forward<Args>(args)...);
 
             if (cw)
@@ -838,7 +838,7 @@ namespace chr
           batch.addVertex(
             matrix.transformPoint(vertices[i]),
             normal1,
-            getTextureCoords(batch.texture, vertices[i]),
+            getTextureCoords(batch->texture, vertices[i]),
             std::forward<Args>(args)...);
         }
 
@@ -861,7 +861,7 @@ namespace chr
           batch.addVertex(
             matrix.transformPoint(glm::vec3(vertices[i], distance)),
             normal2,
-            getTextureCoords(batch.texture, vertices[i]),
+            getTextureCoords(batch->texture, vertices[i]),
             std::forward<Args>(args)...);
         }
 

@@ -107,7 +107,7 @@ namespace chr
         float aa = fabsf(a2 - a1);
         int n = ceilf(aa * r / segmentLength) + 1;
 
-        batch.addVertex(matrix.transformPoint(x, y), getTextureCoords(batch.texture, 0, 0));
+        batch.addVertex(matrix.transformPoint(x, y), getTextureCoords(batch->texture, 0, 0));
 
         for (int i = 0; i < n; i++)
         {
@@ -115,7 +115,7 @@ namespace chr
           float xx = +sinf(dd) * r;
           float yy = +cosf(dd) * r;
 
-          batch.addVertex(matrix.transformPoint(x + xx, y + yy), getTextureCoords(batch.texture, xx, yy));
+          batch.addVertex(matrix.transformPoint(x + xx, y + yy), getTextureCoords(batch->texture, xx, yy));
 
           if (i < n - 1)
           {
@@ -171,7 +171,7 @@ namespace chr
         float aa = fabsf(a2 - a1);
         int n = ceilf(aa * r / segmentLength) + 1;
 
-        batch.addVertex(matrix.transformPoint(x, y), getTextureCoords(batch.texture, 0, 0), color);
+        batch.addVertex(matrix.transformPoint(x, y), getTextureCoords(batch->texture, 0, 0), color);
 
         for (int i = 0; i < n; i++)
         {
@@ -179,7 +179,7 @@ namespace chr
           float xx = +sinf(dd) * r;
           float yy = +cosf(dd) * r;
 
-          batch.addVertex(matrix.transformPoint(x + xx, y + yy), getTextureCoords(batch.texture, xx, yy), color);
+          batch.addVertex(matrix.transformPoint(x + xx, y + yy), getTextureCoords(batch->texture, xx, yy), color);
 
           if (i < n - 1)
           {

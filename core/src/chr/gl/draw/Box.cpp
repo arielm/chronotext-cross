@@ -213,16 +213,16 @@ namespace chr
         glm::vec2 coord6;
         glm::vec2 coord7;
 
-        if (batch.hasTexture)
+        if (batch->hasTexture)
         {
-          coord0 = getTextureCoords(batch.texture, 0, 0);
-          coord1 = getTextureCoords(batch.texture, width, 0);
-          coord2 = getTextureCoords(batch.texture, width, height);
-          coord3 = getTextureCoords(batch.texture, 0, height);
-          coord4 = getTextureCoords(batch.texture, 0, depth);
-          coord5 = getTextureCoords(batch.texture, width, depth);
-          coord6 = getTextureCoords(batch.texture, height, 0);
-          coord7 = getTextureCoords(batch.texture, height, depth);
+          coord0 = getTextureCoords(batch->texture, 0, 0);
+          coord1 = getTextureCoords(batch->texture, width, 0);
+          coord2 = getTextureCoords(batch->texture, width, height);
+          coord3 = getTextureCoords(batch->texture, 0, height);
+          coord4 = getTextureCoords(batch->texture, 0, depth);
+          coord5 = getTextureCoords(batch->texture, width, depth);
+          coord6 = getTextureCoords(batch->texture, height, 0);
+          coord7 = getTextureCoords(batch->texture, height, depth);
         }
         else
         {
@@ -417,16 +417,16 @@ namespace chr
         glm::vec2 coord6;
         glm::vec2 coord7;
 
-        if (batch.hasTexture)
+        if (batch->hasTexture)
         {
-          coord0 = getTextureCoords(batch.texture, 0, 0);
-          coord1 = getTextureCoords(batch.texture, width, 0);
-          coord2 = getTextureCoords(batch.texture, width, height);
-          coord3 = getTextureCoords(batch.texture, 0, height);
-          coord4 = getTextureCoords(batch.texture, 0, depth);
-          coord5 = getTextureCoords(batch.texture, width, depth);
-          coord6 = getTextureCoords(batch.texture, height, 0);
-          coord7 = getTextureCoords(batch.texture, height, depth);
+          coord0 = getTextureCoords(batch->texture, 0, 0);
+          coord1 = getTextureCoords(batch->texture, width, 0);
+          coord2 = getTextureCoords(batch->texture, width, height);
+          coord3 = getTextureCoords(batch->texture, 0, height);
+          coord4 = getTextureCoords(batch->texture, 0, depth);
+          coord5 = getTextureCoords(batch->texture, width, depth);
+          coord6 = getTextureCoords(batch->texture, height, 0);
+          coord7 = getTextureCoords(batch->texture, height, depth);
         }
         else
         {
@@ -628,16 +628,16 @@ namespace chr
         glm::vec2 coord6;
         glm::vec2 coord7;
 
-        if (batch.hasTexture)
+        if (batch->hasTexture)
         {
-          coord0 = getTextureCoords(batch.texture, 0, 0);
-          coord1 = getTextureCoords(batch.texture, width, 0);
-          coord2 = getTextureCoords(batch.texture, width, height);
-          coord3 = getTextureCoords(batch.texture, 0, height);
-          coord4 = getTextureCoords(batch.texture, 0, depth);
-          coord5 = getTextureCoords(batch.texture, width, depth);
-          coord6 = getTextureCoords(batch.texture, height, 0);
-          coord7 = getTextureCoords(batch.texture, height, depth);
+          coord0 = getTextureCoords(batch->texture, 0, 0);
+          coord1 = getTextureCoords(batch->texture, width, 0);
+          coord2 = getTextureCoords(batch->texture, width, height);
+          coord3 = getTextureCoords(batch->texture, 0, height);
+          coord4 = getTextureCoords(batch->texture, 0, depth);
+          coord5 = getTextureCoords(batch->texture, width, depth);
+          coord6 = getTextureCoords(batch->texture, height, 0);
+          coord7 = getTextureCoords(batch->texture, height, depth);
         }
         else
         {
