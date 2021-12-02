@@ -14,7 +14,9 @@ namespace chr
     {
       MV = 0,
       MVP = 1,
-      PROJECTION = 2
+      PROJECTION = 2,
+      MODEL = 3,
+      VIEW = 4
     };
 
     enum
@@ -38,6 +40,8 @@ namespace chr
         GLuint mvMatrixLocation;
         GLuint mvpMatrixLocation;
         GLuint projectionMatrixLocation;
+        GLuint modelMatrixLocation;
+        GLuint viewMatrixLocation;
         GLuint normalMatrixLocation;
         GLuint positionLocation;
         GLuint colorLocation;

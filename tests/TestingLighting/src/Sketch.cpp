@@ -56,7 +56,7 @@ void Sketch::draw()
 
   // ---
 
-  camera.getMVMatrix()
+  camera.getViewMatrix()
     .setIdentity()
     .translate(0, 0, -300)
     .rotateY(clock()->getTime() * 0.125f);
@@ -73,7 +73,7 @@ void Sketch::draw()
   //
 
   State()
-    .setShaderMatrix<MVP>(camera.getModelViewProjectionMatrix())
+    .setShaderMatrix<MVP>(camera.getViewProjectionMatrix())
     .apply();
 
   lightBatch.clear();
@@ -88,7 +88,7 @@ void Sketch::draw()
   //
 
   State()
-    .setShaderMatrix<MV>(camera.getMVMatrix())
+    .setShaderMatrix<MV>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .setShaderUniform("u_eye_position", camera.getEyePosition())

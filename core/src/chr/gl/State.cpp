@@ -229,6 +229,16 @@ namespace chr
         shader.applyMatrix<PROJECTION>(element->matrices4[PROJECTION]);
       }
 
+      if (element->hasMatrix4[MODEL])
+      {
+        shader.applyMatrix<MODEL>(element->matrices4[MODEL]);
+      }
+
+      if (element->hasMatrix4[VIEW])
+      {
+        shader.applyMatrix<VIEW>(element->matrices4[VIEW]);
+      }
+
       if (element->hasMatrix3[NORMAL])
       {
         shader.applyMatrix<NORMAL>(element->matrices3[NORMAL]);

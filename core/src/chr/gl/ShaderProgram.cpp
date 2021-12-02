@@ -101,6 +101,18 @@ namespace chr
     }
 
     template <>
+    void ShaderProgram::applyMatrix<MODEL>(const glm::mat4 &matrix)
+    {
+      glUniformMatrix4fv(element->modelMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
+    }
+
+    template <>
+    void ShaderProgram::applyMatrix<VIEW>(const glm::mat4 &matrix)
+    {
+      glUniformMatrix4fv(element->viewMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
+    }
+
+    template <>
     void ShaderProgram::applyMatrix<NORMAL>(const glm::mat3 &matrix)
     {
       glUniformMatrix3fv(element->normalMatrixLocation, 1, GL_FALSE, &matrix[0][0]);
@@ -161,6 +173,8 @@ namespace chr
           element->mvMatrixLocation = glGetUniformLocation(element->programId, "u_mv_matrix");
           element->mvpMatrixLocation = glGetUniformLocation(element->programId, "u_mvp_matrix");
           element->projectionMatrixLocation = glGetUniformLocation(element->programId, "u_projection_matrix");
+          element->modelMatrixLocation = glGetUniformLocation(element->programId, "u_model_matrix");
+          element->viewMatrixLocation = glGetUniformLocation(element->programId, "u_view_matrix");
           element->normalMatrixLocation = glGetUniformLocation(element->programId, "u_normal_matrix");
           element->samplerLocation = glGetUniformLocation(element->programId, "u_sampler"); // XXX
           element->positionLocation = glGetAttribLocation(element->programId, "a_position");

@@ -26,8 +26,8 @@ namespace chr
         glm::mat3 matrices3[1];
         bool hasMatrix3[1] = { false };
 
-        glm::mat4 matrices4[3];
-        bool hasMatrix4[3] = { false, false, false };
+        glm::mat4 matrices4[5];
+        bool hasMatrix4[5] = { false, false, false, false, false };
 
         std::map <std::string, std::vector<int>> uniformi;
         std::map <std::string, std::vector<float>> uniformf;
