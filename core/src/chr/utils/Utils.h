@@ -67,9 +67,9 @@ namespace chr
     // ---
     
     template<typename T>
-    size_t search(T *array, T value, size_t min, size_t max)
+    int search(T *array, T value, int min, int max)
     {
-      size_t mid = (min + max) >> 1;
+      int mid = (min + max) >> 1;
       
       while (min < mid)
       {
@@ -93,7 +93,7 @@ namespace chr
     }
     
     template<typename T>
-    inline size_t search(const std::vector<T> &array, T value, size_t min, size_t max)
+    inline int search(const std::vector<T> &array, T value, int min, int max)
     {
       return search(const_cast<T*>(array.data()), value, min, max);
     }
