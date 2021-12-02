@@ -3,7 +3,8 @@ attribute vec3 a_normal;
 attribute vec4 a_color;
 attribute vec2 a_coord;
 
-uniform mat4 u_mv_matrix;
+uniform mat4 u_model_matrix;
+uniform mat4 u_view_matrix;
 uniform mat4 u_projection_matrix;
 uniform mat3 u_normal_matrix;
 uniform vec3 u_eye_position;
@@ -20,8 +21,8 @@ void main() {
   v_color = a_color;
   v_coord = a_coord;
 
-  v_surface_to_light = (u_mv_matrix * (vec4(u_light_position, 1.0) - a_position)).xyz;
-  v_surface_to_view = (u_mv_matrix * (vec4(u_eye_position, 1.0) - a_position)).xyz;
+  v_surface_to_light = (u_view_matrix * (vec4(u_light_position, 1.0) - a_position)).xyz;
+  v_surface_to_view = (u_view_matrix * (vec4(u_eye_position, 1.0) - a_position)).xyz;
 
-  gl_Position = u_projection_matrix * u_mv_matrix * a_position;
+  gl_Position = u_projection_matrix * u_view_matrix * u_model_matrix * a_position;
 }

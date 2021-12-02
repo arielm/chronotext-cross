@@ -19,7 +19,6 @@ shader(InputSource::resource("Shader.vert"), InputSource::resource("Shader.frag"
 void Sketch::setup()
 {
   texture = Texture::ImageRequest("checker.png")
-    .setFlags(image::FLAGS_RBGA)
     .setWrap(GL_REPEAT, GL_REPEAT)
     .setFilters(GL_NEAREST, GL_NEAREST);
 
@@ -69,6 +68,14 @@ void Sketch::setup()
     .setHeight(80)
     .append(geometryBatch, Matrix().translate(-75, -40, -100).rotateX(D2R * 90));
 
+  Torus()
+    .setFrontFace(CCW)
+    .setSliceCount(20)
+    .setLoopCount(60)
+    .setInnerRadius(12)
+    .setOuterRadius(48)
+    .append(torusBatch, Matrix());
+
   // ---
 
   glEnable(GL_CULL_FACE);
@@ -101,9 +108,11 @@ void Sketch::draw()
     .rotateX(-30 * D2R)
     .rotateY(15 * D2R);
 
-  State()
+  State state;
+  state
     .setShader(shader)
-    .setShaderMatrix<MV>(camera.getViewMatrix())
+    .setShaderMatrix<MODEL>(Matrix())
+    .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .setShaderUniform("u_eye_position", camera.getEyePosition())
@@ -113,13 +122,17 @@ void Sketch::draw()
 
   geometryBatch.flush();
 
-  torusBatch.clear();
-  Torus()
-    .setFrontFace(CCW)
-    .setSliceCount(20)
-    .setLoopCount(60)
-    .setInnerRadius(12)
-    .setOuterRadius(48)
-    .append(torusBatch, Matrix().translate(75, -60, 100).rotateY(clock()->getTime()));
+  Matrix modelMatrix;
+  modelMatrix
+    .translate(75, -60, 100)
+    .rotateY(clock()->getTime());
+
+  Matrix modelViewMatrix = modelMatrix * camera.getViewMatrix();
+
+  state
+    .setShaderMatrix<MODEL>(modelMatrix)
+    .setShaderMatrix<NORMAL>(modelViewMatrix.getNormalMatrix())
+    .apply();
+
   torusBatch.flush();
 }
