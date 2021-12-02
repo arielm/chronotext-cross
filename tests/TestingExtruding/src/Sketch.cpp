@@ -138,8 +138,8 @@ void Sketch::draw()
 
   auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.width / windowInfo.height, 0.1f, 1000.0f);
 
-  Matrix mvMatrix;
-  mvMatrix
+  Matrix viewMatrix;
+  viewMatrix
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateY(clock()->getTime())
@@ -151,8 +151,8 @@ void Sketch::draw()
   glPolygonOffset(2, 1);
 
   State()
-    .setShaderMatrix<MVP>(mvMatrix * projectionMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .setShaderMatrix<MVP>(viewMatrix * projectionMatrix)
+    .setShaderMatrix<NORMAL>(viewMatrix.getNormalMatrix())
     .apply();
 
   lightenBatch.flush();

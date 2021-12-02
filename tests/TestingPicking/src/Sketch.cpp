@@ -81,7 +81,7 @@ void Sketch::draw()
 
   // ---
 
-  camera.getMVMatrix()
+  camera.getViewMatrix()
     .setIdentity()
     .scale(1, -1, 1)
     .translate(0, 0, -300)
@@ -99,7 +99,7 @@ void Sketch::draw()
   glPolygonOffset(2, 1);
 
   State()
-    .setShaderMatrix<MVP>(camera.getMVPMatrix())
+    .setShaderMatrix<MVP>(camera.getViewProjectionMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .apply();
 

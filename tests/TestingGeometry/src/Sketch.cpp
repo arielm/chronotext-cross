@@ -19,9 +19,9 @@ shader(InputSource::resource("Shader.vert"), InputSource::resource("Shader.frag"
 void Sketch::setup()
 {
   texture = Texture::ImageRequest("checker.png")
-      .setFlags(image::FLAGS_RBGA)
-      .setWrap(GL_REPEAT, GL_REPEAT)
-      .setFilters(GL_NEAREST, GL_NEAREST);
+    .setFlags(image::FLAGS_RBGA)
+    .setWrap(GL_REPEAT, GL_REPEAT)
+    .setFilters(GL_NEAREST, GL_NEAREST);
 
   geometryBatch.setTexture(texture);
 
@@ -94,18 +94,16 @@ void Sketch::draw()
 
   // ---
 
-  camera.getMVMatrix()
+  camera.getViewMatrix()
     .setIdentity()
     .scale(1, -1, 1)
     .translate(0, 0, -400)
     .rotateX(-30 * D2R)
     .rotateY(15 * D2R);
 
-  // ---
-
   State()
     .setShader(shader)
-    .setShaderMatrix<MV>(camera.getMVMatrix())
+    .setShaderMatrix<MV>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
     .setShaderUniform("u_eye_position", camera.getEyePosition())

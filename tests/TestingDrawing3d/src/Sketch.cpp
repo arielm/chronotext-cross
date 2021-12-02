@@ -59,16 +59,14 @@ void Sketch::draw()
 
   auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.aspectRatio(), 0.1f, 1000.0f);
 
-  Matrix mvMatrix;
-  mvMatrix
+  Matrix viewMatrix;
+  viewMatrix
     .translate(0, 0, -400)
     .rotateX(22 * D2R);
 
-  auto mvpMatrix = mvMatrix * projectionMatrix;
-
   State()
-    .setShaderMatrix<MVP>(mvpMatrix)
-    .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+    .setShaderMatrix<MVP>(viewMatrix * projectionMatrix)
+    .setShaderMatrix<NORMAL>(viewMatrix.getNormalMatrix())
     .apply();
 
   sunBatch.flush();

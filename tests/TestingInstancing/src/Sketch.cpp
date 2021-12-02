@@ -64,14 +64,13 @@ void Sketch::draw()
 
   // ---
 
-  camera.getMVMatrix()
+  camera.getViewMatrix()
     .setIdentity()
     .translate(0, -150, -600)
     .rotateY(clock()->getTime() * 0.125f);
 
-
   State()
-    .setShaderMatrix<MV>(camera.getMVMatrix())
+    .setShaderMatrix<MV>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderUniform("u_eye_position", camera.getEyePosition())
     .setShaderUniform("u_light_position", camera.getEyePosition())

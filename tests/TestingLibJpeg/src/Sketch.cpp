@@ -46,15 +46,15 @@ void Sketch::draw()
 
   glm::mat4 projectionMatrix = glm::perspective(45 * D2R, windowInfo.aspectRatio(), 0.1f, 1000.0f);
 
-  Matrix modelViewMatrix;
-  modelViewMatrix
+  Matrix viewMatrix;
+  viewMatrix
     .scale(1, -1, 1)
     .translate(0, 0, -300)
     .rotateX(15 * D2R)
     .rotateY(sinf(clock()->getTime() * 2.0f) * 0.25f);
 
   State()
-    .setShaderMatrix(modelViewMatrix * projectionMatrix)
+    .setShaderMatrix(viewMatrix * projectionMatrix)
     .apply();
 
   textureBatches[0].flush();

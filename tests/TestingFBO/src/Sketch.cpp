@@ -100,20 +100,16 @@ void Sketch::drawScene2(const glm::ivec2 &size)
 
     auto projectionMatrix = glm::perspective(60 * D2R, size.x / (float)size.y, 0.1f, 1000.0f);
 
-    Matrix mvMatrix;
-    mvMatrix
+    Matrix viewMatrix;
+    viewMatrix
             .scale(1, -1, 1)
             .translate(0, 0, -300)
             .rotateY(clock()->getTime())
             .rotateZ(clock()->getTime() * 0.25f);
 
-    auto mvpMatrix = mvMatrix * projectionMatrix;
-
-    // ---
-
     State()
-            .setShaderMatrix<MVP>(mvpMatrix)
-            .setShaderMatrix<NORMAL>(mvMatrix.getNormalMatrix())
+            .setShaderMatrix<MVP>(viewMatrix * projectionMatrix)
+            .setShaderMatrix<NORMAL>(viewMatrix.getNormalMatrix())
             .apply();
 
     cubeBatch.flush();

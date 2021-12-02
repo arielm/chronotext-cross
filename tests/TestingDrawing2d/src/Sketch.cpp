@@ -61,13 +61,13 @@ void Sketch::draw()
 
   glm::mat4 projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
 
-  Matrix modelViewMatrix;
-  modelViewMatrix
+  Matrix viewMatrix;
+  viewMatrix
     .translate(0, windowInfo.height)
     .scale(1, -1);
 
   State()
-    .setShaderMatrix(modelViewMatrix * projectionMatrix)
+    .setShaderMatrix<MVP>(viewMatrix * projectionMatrix)
     .apply();
 
   gradientBatch.flush();
