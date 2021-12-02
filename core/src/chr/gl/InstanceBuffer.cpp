@@ -46,6 +46,8 @@ namespace chr
         {
           glDeleteBuffers(1, &element->colorsVboId);
         }
+
+        delete element;
       }
     }
 
