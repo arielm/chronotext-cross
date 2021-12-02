@@ -44,6 +44,7 @@ namespace chr
       operator const std::array<float, 16>& () const { return values; }
 
       glm::mat4 operator * (const glm::mat4 &matrix) { return matrix * m; }
+      glm::mat4 operator * (const Matrix &matrix) { return matrix.m * m; }
       Matrix& operator *= (const glm::mat4 &matrix) { m *= matrix; return *this; }
 
       Matrix& set(const Matrix &matrix);
