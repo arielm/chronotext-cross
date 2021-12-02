@@ -17,13 +17,10 @@ namespace chr
       Camera& setPan2D(const glm::vec2 &pan);
       Camera& setZoom2D(float zoom);
 
-      Matrix& getModelViewMatrix();
+      Matrix& getViewMatrix();
       glm::mat4 getProjectionMatrix();
-      glm::mat4 getModelViewProjectionMatrix();
+      glm::mat4 getViewProjectionMatrix();
       glm::mat3 getNormalMatrix();
-
-      inline Matrix& getMVMatrix() { return getModelViewMatrix(); }
-      inline glm::mat4 getMVPMatrix() { return getModelViewProjectionMatrix(); }
 
       glm::vec3 getEyePosition();
       math::Ray getRay(const glm::vec2 &windowPosition); // IN PIXEL COORDINATES; TOP-LEFT CORNER AT 0,0
@@ -44,7 +41,7 @@ namespace chr
       glm::vec2 frustumSize;
 
       glm::mat4 projectionMatrix;
-      Matrix modelViewMatrix;
+      Matrix viewMatrix;
 
       void update();
     };

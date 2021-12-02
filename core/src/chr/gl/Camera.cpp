@@ -56,24 +56,24 @@ namespace chr
       return projectionMatrix;
     }
 
-    glm::mat4 Camera::getModelViewProjectionMatrix()
+    glm::mat4 Camera::getViewProjectionMatrix()
     {
-      return modelViewMatrix * getProjectionMatrix();
+      return viewMatrix * getProjectionMatrix();
     }
 
     glm::mat3 Camera::getNormalMatrix()
     {
-      return modelViewMatrix.getNormalMatrix();
+      return viewMatrix.getNormalMatrix();
     }
 
-    Matrix& Camera::getModelViewMatrix()
+    Matrix& Camera::getViewMatrix()
     {
-      return modelViewMatrix;
+      return viewMatrix;
     }
 
     glm::vec3 Camera::getEyePosition()
     {
-      auto tmp = glm::inverse(getModelViewProjectionMatrix()) * glm::vec4(0, 0, 0, 1);
+      auto tmp = glm::inverse(getViewProjectionMatrix()) * glm::vec4(0, 0, 0, 1);
       return glm::vec3(tmp) / tmp.w;
     }
 
@@ -87,9 +87,9 @@ namespace chr
       float t = (windowSize.y - windowPosition.y) / windowSize.y - 0.5f;
       float viewDistance = aspectRatio / frustumSize.x * nearZ;
 
-      const auto &right = modelViewMatrix.right();
-      const auto &up = modelViewMatrix.up();
-      const auto &back = modelViewMatrix.back();
+      const auto &right = viewMatrix.right();
+      const auto &up = viewMatrix.up();
+      const auto &back = viewMatrix.back();
 
       return Ray(getEyePosition(), glm::normalize(right * s + up * t - back * viewDistance));
     }
@@ -101,9 +101,9 @@ namespace chr
       float t = 1 - v - 0.5f;
       float viewDistance = aspectRatio / frustumSize.x * nearZ;
 
-      const auto &right = modelViewMatrix.right();
-      const auto &up = modelViewMatrix.up();
-      const auto &back = modelViewMatrix.back();
+      const auto &right = viewMatrix.right();
+      const auto &up = viewMatrix.up();
+      const auto &back = viewMatrix.back();
 
       return Ray(getEyePosition(), glm::normalize(right * s + up * t - back * viewDistance));
     }
