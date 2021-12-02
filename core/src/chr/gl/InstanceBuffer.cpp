@@ -6,16 +6,46 @@ namespace chr
 {
   namespace gl
   {
-    InstanceBuffer::~InstanceBuffer()
+    InstanceBuffer::InstanceBuffer(GLenum matricesUsage, GLenum colorsUsage)
+    :
+    element(new instancebuffer::Element())
     {
-      if (matricesVboId != 0)
+      element->matricesUsage = matricesUsage;
+      element->colorsUsage = colorsUsage;
+      element->useCount++;
+    }
+
+    InstanceBuffer::InstanceBuffer(const InstanceBuffer &other)
+    :
+    element(other.element)
+    {
+      element->useCount++;
+    }
+
+    InstanceBuffer& InstanceBuffer::operator=(const InstanceBuffer &other)
+    {
+      if (this != &other)
       {
-        glDeleteBuffers(1, &matricesVboId);
+        element = other.element;
+        element->useCount++;
       }
 
-      if (colorsVboId != 0)
+      return *this;
+    }
+
+    InstanceBuffer::~InstanceBuffer()
+    {
+      if (--element->useCount == 0)
       {
-        glDeleteBuffers(1, &colorsVboId);
+        if (element->matricesVboId != 0)
+        {
+          glDeleteBuffers(1, &element->matricesVboId);
+        }
+
+        if (element->colorsVboId != 0)
+        {
+          glDeleteBuffers(1, &element->colorsVboId);
+        }
       }
     }
 
@@ -42,61 +72,61 @@ namespace chr
 
     void InstanceBuffer::clearMatrices()
     {
-      matrices.clear();
-      matricesUploadRequired = true;
+      element->matrices.clear();
+      element->matricesUploadRequired = true;
     }
 
     void InstanceBuffer::clearColors()
     {
-      colors.clear();
-      colorsUploadRequired = true;
+      element->colors.clear();
+      element->colorsUploadRequired = true;
     }
 
     InstanceBuffer& InstanceBuffer::addMatrix(const glm::mat4 &matrix)
     {
-      matrices.push_back(matrix);
+      element->matrices.push_back(matrix);
       return *this;
     }
 
     InstanceBuffer& InstanceBuffer::addMatrix(const Matrix &matrix)
     {
-      matrices.push_back(matrix.m);
+      element->matrices.push_back(matrix.m);
       return *this;
     }
 
     InstanceBuffer& InstanceBuffer::addColor(const glm::vec4 &color)
     {
-      colors.push_back(color);
+      element->colors.push_back(color);
       return *this;
     }
 
     InstanceBuffer& InstanceBuffer::addColor(float r, float g, float b, float a)
     {
-      colors.emplace_back(r, g, b, a);
+      element->colors.emplace_back(r, g, b, a);
       return *this;
     }
 
-    size_t InstanceBuffer::getCount() const
+    size_t InstanceBuffer::size() const
     {
-      return matrices.size();
+      return element->matrices.size();
     }
 
     void InstanceBuffer::bindMatrices(const ShaderProgram &shader)
     {
-      if (matricesVboId == 0)
+      if (element->matricesVboId == 0)
       {
-        glGenBuffers(1, &matricesVboId);
+        glGenBuffers(1, &element->matricesVboId);
       }
-      else if (matrices.size() > matricesAllocatedSize)
+      else if (element->matrices.size() > element->matricesAllocatedSize)
       {
-        matricesUploadRequired = true;
-        matricesAllocatedSize = 0;
+        element->matricesUploadRequired = true;
+        element->matricesAllocatedSize = 0;
 
-        glDeleteBuffers(1, &matricesVboId);
-        glGenBuffers(1, &matricesVboId);
+        glDeleteBuffers(1, &element->matricesVboId);
+        glGenBuffers(1, &element->matricesVboId);
       }
 
-      glBindBuffer(GL_ARRAY_BUFFER, matricesVboId);
+      glBindBuffer(GL_ARRAY_BUFFER, element->matricesVboId);
 
       for (int i = 0; i < 4; ++i)
       {
@@ -106,18 +136,18 @@ namespace chr
           glVertexAttribDivisor(location, 1);
       }
 
-      if (matricesUploadRequired)
+      if (element->matricesUploadRequired)
       {
-        matricesUploadRequired = false;
+        element->matricesUploadRequired = false;
 
-        switch (matricesUsage)
+        switch (element->matricesUsage)
         {
           case GL_STATIC_DRAW:
           {
-            if (matricesAllocatedSize == 0)
+            if (element->matricesAllocatedSize == 0)
             {
-              matricesAllocatedSize = matrices.size();
-              glBufferData(GL_ARRAY_BUFFER, matrices.size() * sizeof(glm::mat4), matrices.data(), GL_STATIC_DRAW);
+              element->matricesAllocatedSize = element->matrices.size();
+              glBufferData(GL_ARRAY_BUFFER, element->matrices.size() * sizeof(glm::mat4), element->matrices.data(), GL_STATIC_DRAW);
             }
           }
           break;
@@ -125,13 +155,13 @@ namespace chr
           case GL_DYNAMIC_DRAW:
           default:
           {
-            if (matricesAllocatedSize < matrices.size())
+            if (element->matricesAllocatedSize < element->matrices.size())
             {
-              matricesAllocatedSize = matrices.size();
-              glBufferData(GL_ARRAY_BUFFER, matrices.size() * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
+              element->matricesAllocatedSize = element->matrices.size();
+              glBufferData(GL_ARRAY_BUFFER, element->matrices.size() * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
             }
 
-            glBufferSubData(GL_ARRAY_BUFFER, 0, matrices.size() * sizeof(glm::mat4), matrices.data());
+            glBufferSubData(GL_ARRAY_BUFFER, 0, element->matrices.size() * sizeof(glm::mat4), element->matrices.data());
           }
           break;
         }
@@ -140,38 +170,38 @@ namespace chr
 
     void InstanceBuffer::bindColors(const ShaderProgram &shader)
     {
-      if (!colors.empty())
+      if (!element->colors.empty())
       {
-        if (colorsVboId == 0)
+        if (element->colorsVboId == 0)
         {
-          glGenBuffers(1, &colorsVboId);
+          glGenBuffers(1, &element->colorsVboId);
         }
-        else if (colors.size() > colorsAllocatedSize)
+        else if (element->colors.size() > element->colorsAllocatedSize)
         {
-          colorsUploadRequired = true;
-          colorsAllocatedSize = 0;
+          element->colorsUploadRequired = true;
+          element->colorsAllocatedSize = 0;
 
-          glDeleteBuffers(1, &colorsVboId);
-          glGenBuffers(1, &colorsVboId);
+          glDeleteBuffers(1, &element->colorsVboId);
+          glGenBuffers(1, &element->colorsVboId);
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+        glBindBuffer(GL_ARRAY_BUFFER, element->colorsVboId);
         glEnableVertexAttribArray(shader->colorLocation);
         glVertexAttribPointer(shader->colorLocation, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
         glVertexAttribDivisor(shader->colorLocation, 1);
 
-        if (colorsUploadRequired)
+        if (element->colorsUploadRequired)
         {
-          colorsUploadRequired = false;
+          element->colorsUploadRequired = false;
 
-          switch (colorsUsage)
+          switch (element->colorsUsage)
           {
             case GL_STATIC_DRAW:
             {
-              if (colorsAllocatedSize == 0)
+              if (element->colorsAllocatedSize == 0)
               {
-                colorsAllocatedSize = colors.size();
-                glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), colors.data(), GL_STATIC_DRAW);
+                element->colorsAllocatedSize = element->colors.size();
+                glBufferData(GL_ARRAY_BUFFER, element->colors.size() * sizeof(glm::vec4), element->colors.data(), GL_STATIC_DRAW);
               }
             }
             break;
@@ -179,13 +209,13 @@ namespace chr
             case GL_DYNAMIC_DRAW:
             default:
             {
-              if (colorsAllocatedSize < colors.size())
+              if (element->colorsAllocatedSize < element->colors.size())
               {
-                colorsAllocatedSize = colors.size();
-                glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
+                element->colorsAllocatedSize = element->colors.size();
+                glBufferData(GL_ARRAY_BUFFER, element->colors.size() * sizeof(glm::vec4), nullptr, GL_DYNAMIC_DRAW);
               }
 
-              glBufferSubData(GL_ARRAY_BUFFER, 0, colors.size() * sizeof(glm::vec4), colors.data());
+              glBufferSubData(GL_ARRAY_BUFFER, 0, element->colors.size() * sizeof(glm::vec4), element->colors.data());
             }
             break;
           }
