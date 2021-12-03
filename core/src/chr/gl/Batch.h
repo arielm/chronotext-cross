@@ -27,8 +27,8 @@ namespace chr
 
       virtual void clear() = 0;
       virtual bool empty() const = 0;
-      virtual void bind(ShaderProgram &shader) = 0;
-      virtual void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) = 0;
+      virtual void draw(ShaderProgram &shader) = 0;
+      virtual void draw(ShaderProgram &shader, InstanceBuffer &instanceBuffer) = 0;
     };
 
     template<int V = XYZ>
@@ -128,12 +128,12 @@ namespace chr
           element1->shader.bind();
           state::current.apply(element1->shader);
           apply(element1->shader);
-          bind(element1->shader);
+          draw(element1->shader);
         }
         else
         {
           apply(state::current->shader);
-          bind(state::current->shader);
+          draw(state::current->shader);
         }
       }
 
@@ -149,13 +149,31 @@ namespace chr
           element1->shader.bind();
           state::current.apply(element1->shader);
           apply(element1->shader);
-          bind(element1->shader, instanceBuffer);
+          draw(element1->shader, instanceBuffer);
         }
         else
         {
           apply(state::current->shader);
-          bind(state::current->shader, instanceBuffer);
+          draw(state::current->shader, instanceBuffer);
         }
+      }
+
+      void draw(ShaderProgram &shader) override
+      {
+        element1->vertexBuffer.bind(shader);
+        element1->vertexBuffer.draw(element1->primitive);
+        element1->vertexBuffer.unbind(shader);
+      }
+
+      void draw(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
+      {
+        element1->vertexBuffer.bind(shader);
+        instanceBuffer.bind(shader);
+
+        element1->vertexBuffer.drawInstanced(element1->primitive, instanceBuffer.size());
+
+        instanceBuffer.unbind(shader);
+        element1->vertexBuffer.unbind(shader);
       }
 
       inline Buffer<Vertex<V>>& vertexBuffer() const
@@ -335,24 +353,6 @@ namespace chr
           shader.applyUniform(it->first, it->second);
         }
       }
-
-      void bind(ShaderProgram &shader) override
-      {
-        element1->vertexBuffer.bind(shader);
-        element1->vertexBuffer.draw(element1->primitive);
-        element1->vertexBuffer.unbind(shader);
-      }
-
-      void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
-      {
-        element1->vertexBuffer.bind(shader);
-        instanceBuffer.bind(shader);
-
-        element1->vertexBuffer.drawInstanced(element1->primitive, instanceBuffer.size());
-
-        instanceBuffer.unbind(shader);
-        element1->vertexBuffer.unbind(shader);
-      }
     };
 
     template<int V = XYZ, typename I = GLuint>
@@ -514,10 +514,7 @@ namespace chr
         element2->indexBuffer.extendCapacity(count);
       }
 
-    protected:
-      batch::Element2<V, I> *element2 = nullptr;
-
-      void bind(ShaderProgram &shader) override
+      void draw(ShaderProgram &shader) override
       {
         VertexBatch<V>::vertexBuffer().bind(shader);
         element2->indexBuffer.bind(shader);
@@ -528,7 +525,7 @@ namespace chr
         element2->indexBuffer.unbind(shader);
       }
 
-      void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
+      void draw(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
       {
         VertexBatch<V>::vertexBuffer().bind(shader);
         element2->indexBuffer.bind(shader);
@@ -540,6 +537,9 @@ namespace chr
         VertexBatch<V>::vertexBuffer().unbind(shader);
         element2->indexBuffer.unbind(shader);
       }
+
+    protected:
+      batch::Element2<V, I> *element2 = nullptr;
     };
 
     namespace batch
