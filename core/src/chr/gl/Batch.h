@@ -519,11 +519,6 @@ namespace chr
 
       void bind(ShaderProgram &shader) override
       {
-        if (VertexBatch<V>::element1->hasTexture)
-        {
-          VertexBatch<V>::element1->texture.bind();
-        }
-
         VertexBatch<V>::vertexBuffer().bind(shader);
         element2->indexBuffer.bind(shader);
 
@@ -535,11 +530,6 @@ namespace chr
 
       void bind(ShaderProgram &shader, InstanceBuffer &instanceBuffer) override
       {
-        if (VertexBatch<V>::element1->hasTexture)
-        {
-          VertexBatch<V>::element1->texture.bind();
-        }
-
         VertexBatch<V>::vertexBuffer().bind(shader);
         element2->indexBuffer.bind(shader);
         instanceBuffer.bind(shader);
