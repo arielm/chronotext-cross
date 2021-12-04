@@ -311,33 +311,33 @@ namespace chr
       float sz = sin(az);
       float cz = cos(az);
 
-      glm::vec3 right;
-      right.x = -cy*cz;
-      right.y = -sx*sy*cz - cx*sz;
-      right.z = cx*sy*cz - sx*sz;
+      glm::vec3 left;
+      left.x =  cy*cz;
+      left.y =  sx*sy*cz + cx*sz;
+      left.z = -cx*sy*cz + sx*sz;
 
       glm::vec3 up;
       up.x = -cy*sz;
       up.y = -sx*sy*sz + cx*cz;
-      up.z = cx*sy*sz + sx*cz;
+      up.z =  cx*sy*sz + sx*cz;
 
-      glm::vec3 back;
-      back.x = -sy;
-      back.y = sx*cy;
-      back.z = -cx*cy;
+      glm::vec3 forward;
+      forward.x =  sy;
+      forward.y = -sx*cy;
+      forward.z =  cx*cy;
 
       glm::mat4 rotation;
-      rotation[0][0] = right.x;
+      rotation[0][0] = left.x;
       rotation[1][0] = up.x;
-      rotation[2][0] = back.x;
+      rotation[2][0] = forward.x;
       rotation[3][0] = 0;
-      rotation[0][1] = right.y;
+      rotation[0][1] = left.y;
       rotation[1][1] = up.y;
-      rotation[2][1] = back.y;
+      rotation[2][1] = forward.y;
       rotation[3][1] = 0;
-      rotation[0][2] = right.z;
+      rotation[0][2] = left.z;
       rotation[1][2] = up.z;
-      rotation[2][2] = back.z;
+      rotation[2][2] = forward.z;
       rotation[3][2] = 0;
       rotation[0][3] = 0;
       rotation[1][3] = 0;
