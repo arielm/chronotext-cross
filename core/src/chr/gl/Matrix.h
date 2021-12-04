@@ -76,6 +76,7 @@ namespace chr
       Matrix& rotateY(float a);
       Matrix& rotateZ(float a);
       Matrix& rotateXY(float sx, float sy); // sx: sin(ax), sy: sin(ay)
+      Matrix& rotateXYZ(float ax, float ay, float az); // pitch, yaw, roll
 
       template<int T = 1>
       Matrix& applyQuat(const glm::quat &q);

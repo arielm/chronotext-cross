@@ -297,6 +297,58 @@ namespace chr
       return *this;
     }
 
+    /*
+     * Based on http://www.songho.ca/opengl/gl_anglestoaxes.html
+     */
+    Matrix& Matrix::rotateXYZ(float ax, float ay, float az)
+    {
+      float sx = sin(ax);
+      float cx = cos(ax);
+
+      float sy = sin(ay);
+      float cy = cos(ay);
+
+      float sz = sin(az);
+      float cz = cos(az);
+
+      glm::vec3 right;
+      right.x = -cy*cz;
+      right.y = -sx*sy*cz - cx*sz;
+      right.z = cx*sy*cz - sx*sz;
+
+      glm::vec3 up;
+      up.x = -cy*sz;
+      up.y = -sx*sy*sz + cx*cz;
+      up.z = cx*sy*sz + sx*cz;
+
+      glm::vec3 back;
+      back.x = -sy;
+      back.y = sx*cy;
+      back.z = -cx*cy;
+
+      glm::mat4 rotation;
+      rotation[0][0] = right.x;
+      rotation[1][0] = up.x;
+      rotation[2][0] = back.x;
+      rotation[3][0] = 0;
+      rotation[0][1] = right.y;
+      rotation[1][1] = up.y;
+      rotation[2][1] = back.y;
+      rotation[3][1] = 0;
+      rotation[0][2] = right.z;
+      rotation[1][2] = up.z;
+      rotation[2][2] = back.z;
+      rotation[3][2] = 0;
+      rotation[0][3] = 0;
+      rotation[1][3] = 0;
+      rotation[2][3] = 0;
+      rotation[3][3] = 1;
+
+      m *= rotation;
+
+      return *this;
+    }
+
     template <>
     Matrix& Matrix::applyQuat<+1>(const glm::quat &q)
     {
