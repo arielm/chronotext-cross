@@ -53,11 +53,8 @@ namespace chr
 
       TextureLambertShader::TextureLambertShader()
       :
-      ShaderProgram()
-      {
-        element->vertexShaderSource = vertexShaderSource;
-        element->fragmentShaderSource = fragmentShaderSource;
-      }
+      ShaderProgram(vertexShaderSource, fragmentShaderSource)
+      {}
     }
   }
 }

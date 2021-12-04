@@ -61,6 +61,7 @@ namespace chr
       shader::Element *element = nullptr;
 
       ShaderProgram() = default;
+      ShaderProgram(const std::string &vertexShaderSource, const std::string &fragmentShaderSource);
       ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource);
       ShaderProgram(const ShaderProgram &other);
       ShaderProgram& operator=(const ShaderProgram &other);

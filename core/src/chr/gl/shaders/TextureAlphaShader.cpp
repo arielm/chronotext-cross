@@ -43,11 +43,8 @@ namespace chr
 
       TextureAlphaShader::TextureAlphaShader()
       :
-      ShaderProgram()
-      {
-        element->vertexShaderSource = vertexShaderSource;
-        element->fragmentShaderSource = fragmentShaderSource;
-      }
+      ShaderProgram(vertexShaderSource, fragmentShaderSource)
+      {}
     }
   }
 }

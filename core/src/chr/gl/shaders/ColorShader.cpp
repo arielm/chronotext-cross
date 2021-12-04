@@ -34,11 +34,8 @@ namespace chr
 
       ColorShader::ColorShader()
       :
-      ShaderProgram()
-      {
-        element->vertexShaderSource = vertexShaderSource;
-        element->fragmentShaderSource = fragmentShaderSource;
-      }
+      ShaderProgram(vertexShaderSource, fragmentShaderSource)
+      {}
     }
   }
 }

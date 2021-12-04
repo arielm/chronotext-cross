@@ -11,6 +11,15 @@ namespace chr
   {
     int ShaderProgram::usageCounter = 0;
 
+    ShaderProgram::ShaderProgram(const string &vertexShaderSource, const string &fragmentShaderSource)
+    :
+    id(usageCounter++),
+    element(new shader::Element())
+    {
+      element->vertexShaderSource = vertexShaderSource;
+      element->fragmentShaderSource = fragmentShaderSource;
+    }    
+
     ShaderProgram::ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource)
     :
     id(usageCounter++),
@@ -25,7 +34,10 @@ namespace chr
     id(other.id),
     element(other.element)
     {
-      element->useCount++;
+      if (element)
+      {
+        element->useCount++;
+      }
     }
 
     ShaderProgram& ShaderProgram::operator=(const ShaderProgram &other)
@@ -35,7 +47,10 @@ namespace chr
         id = other.id;
         element = other.element;
 
-        element->useCount++;
+        if (element)
+        {
+          element->useCount++;
+        }
       }
 
       return *this;

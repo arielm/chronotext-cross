@@ -42,11 +42,8 @@ namespace chr
 
       TextureShader::TextureShader()
       :
-      ShaderProgram()
-      {
-        element->vertexShaderSource = vertexShaderSource;
-        element->fragmentShaderSource = fragmentShaderSource;
-      }
+      ShaderProgram(vertexShaderSource, fragmentShaderSource)
+      {}
     }
   }
 }
