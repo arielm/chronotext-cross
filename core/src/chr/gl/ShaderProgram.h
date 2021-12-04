@@ -58,7 +58,7 @@ namespace chr
     {
     public:
       int id = -1;
-      shader::Element *element;
+      shader::Element *element = nullptr;
 
       ShaderProgram() = default;
       ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource);
