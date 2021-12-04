@@ -186,26 +186,6 @@ namespace chr
 
       // ---
 
-      Texture();
-      Texture(GLuint textureId, int width, int height, GLenum format = GL_RGBA);
-      Texture(const ImageRequest &request);
-      Texture(const MaskedRequest &request);
-      Texture(const Response &response);
-      Texture(const Texture &other);
-      Texture& operator=(const Texture &other);
-
-      ~Texture();
-
-      texture::Element* operator-> () const
-      {
-        return element;
-      }
-
-      bool operator<(const Texture &rhs) const
-      {
-        return id < rhs.id;
-      }
-
       int id = -1;
       texture::Element *element = nullptr;
 
@@ -232,6 +212,26 @@ namespace chr
         glm::vec2 coords2;
         struct { float u2, v2; };
       };
+
+      Texture();
+      Texture(GLuint textureId, int width, int height, GLenum format = GL_RGBA);
+      Texture(const ImageRequest &request);
+      Texture(const MaskedRequest &request);
+      Texture(const Response &response);
+      Texture(const Texture &other);
+      Texture& operator=(const Texture &other);
+
+      ~Texture();
+
+      texture::Element* operator-> () const
+      {
+        return element;
+      }
+
+      bool operator<(const Texture &rhs) const
+      {
+        return id < rhs.id;
+      }
 
       bool bind();
       void unbind();
