@@ -11,17 +11,10 @@ namespace chr
   {
     int ShaderProgram::usageCounter = 0;
 
-    ShaderProgram::ShaderProgram()
+    ShaderProgram::ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource)
     :
     id(usageCounter++),
     element(new shader::Element())
-    {
-      element->useCount++;
-    }
-
-    ShaderProgram::ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource)
-    :
-    ShaderProgram()
     {
       element->vertexShaderSource = utils::readText<string>(vertexShaderSource);
       element->fragmentShaderSource = utils::readText<string>(fragmentShaderSource);
@@ -46,6 +39,11 @@ namespace chr
       }
 
       return *this;
+    }
+
+    bool ShaderProgram::operator==(const ShaderProgram& other) const
+    {
+      return id == other.id;
     }
 
     ShaderProgram::~ShaderProgram()

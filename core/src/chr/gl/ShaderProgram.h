@@ -57,13 +57,14 @@ namespace chr
     class ShaderProgram
     {
     public:
-      int id;
+      int id = -1;
       shader::Element *element;
 
-      ShaderProgram();
+      ShaderProgram() = default;
       ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource);
       ShaderProgram(const ShaderProgram &other);
       ShaderProgram& operator=(const ShaderProgram &other);
+      bool operator==(const ShaderProgram& other) const;
 
       ~ShaderProgram();
 
