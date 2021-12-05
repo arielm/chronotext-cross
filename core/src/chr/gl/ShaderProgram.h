@@ -33,7 +33,7 @@ namespace chr
         std::string vertexShaderSource;
         std::string fragmentShaderSource;
 
-        GLuint programId;
+        GLuint programId = 0;
         GLuint vertexShaderId;
         GLuint fragmentShaderId;
 

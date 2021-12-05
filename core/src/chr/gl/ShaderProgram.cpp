@@ -18,6 +18,7 @@ namespace chr
     {
       element->vertexShaderSource = vertexShaderSource;
       element->fragmentShaderSource = fragmentShaderSource;
+      element->useCount++;
     }    
 
     ShaderProgram::ShaderProgram(const InputSource &vertexShaderSource, const InputSource &fragmentShaderSource)
@@ -27,6 +28,7 @@ namespace chr
     {
       element->vertexShaderSource = utils::readText<string>(vertexShaderSource);
       element->fragmentShaderSource = utils::readText<string>(fragmentShaderSource);
+      element->useCount++;
     }
 
     ShaderProgram::ShaderProgram(const ShaderProgram &other)
