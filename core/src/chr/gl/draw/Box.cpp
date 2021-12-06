@@ -63,13 +63,9 @@ namespace chr
       template <>
       void Box::append(IndexedVertexBatch<XYZ, GLuint> &batch, const Matrix &matrix) const
       {
-        float x0 = 0, x1 = width;
-        float y0 = 0, y1 = height;
-        float z0 = 0, z1 = depth;
-
-        if (x0 > x1) std::swap(x0, x1);
-        if (y0 > y1) std::swap(y0, y1);
-        if (z0 > z1) std::swap(z0, z1);
+        float x0 = -0.5f * width, x1 = +0.5f * width;
+        float y0 = -0.5f * height, y1 = +0.5f * height;
+        float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
         batch
           .addVertex(matrix.transformPoint(x0, y0, z1))
@@ -110,13 +106,9 @@ namespace chr
       template <>
       void Box::append(IndexedVertexBatch<XYZ.N, GLuint> &batch, const Matrix &matrix) const
       {
-        float x0 = 0, x1 = width;
-        float y0 = 0, y1 = height;
-        float z0 = 0, z1 = depth;
-
-        if (x0 > x1) std::swap(x0, x1);
-        if (y0 > y1) std::swap(y0, y1);
-        if (z0 > z1) std::swap(z0, z1);
+        float x0 = -0.5f * width, x1 = +0.5f * width;
+        float y0 = -0.5f * height, y1 = +0.5f * height;
+        float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
         auto normal0 = matrix.transformNormal( 0,  0, +1);
         auto normal1 = matrix.transformNormal( 0,  0, -1);
@@ -196,13 +188,9 @@ namespace chr
       template <>
       void Box::append(IndexedVertexBatch<XYZ.UV, GLuint> &batch, const Matrix &matrix) const
       {
-        float x0 = 0, x1 = width;
-        float y0 = 0, y1 = height;
-        float z0 = 0, z1 = depth;
-
-        if (x0 > x1) std::swap(x0, x1);
-        if (y0 > y1) std::swap(y0, y1);
-        if (z0 > z1) std::swap(z0, z1);
+        float x0 = -0.5f * width, x1 = +0.5f * width;
+        float y0 = -0.5f * height, y1 = +0.5f * height;
+        float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
         glm::vec2 coord0;
         glm::vec2 coord1;
@@ -307,13 +295,9 @@ namespace chr
       template <>
       void Box::append(IndexedVertexBatch<XYZ.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
-        float x0 = 0, x1 = width;
-        float y0 = 0, y1 = height;
-        float z0 = 0, z1 = depth;
-
-        if (x0 > x1) std::swap(x0, x1);
-        if (y0 > y1) std::swap(y0, y1);
-        if (z0 > z1) std::swap(z0, z1);
+        float x0 = -0.5f * width, x1 = +0.5f * width;
+        float y0 = -0.5f * height, y1 = +0.5f * height;
+        float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
         auto color0 = getFaceColor(0);
         auto color1 = getFaceColor(1);
@@ -393,13 +377,9 @@ namespace chr
       template <>
       void Box::append(IndexedVertexBatch<XYZ.N.UV, GLuint> &batch, const Matrix &matrix) const
       {
-        float x0 = 0, x1 = width;
-        float y0 = 0, y1 = height;
-        float z0 = 0, z1 = depth;
-
-        if (x0 > x1) std::swap(x0, x1);
-        if (y0 > y1) std::swap(y0, y1);
-        if (z0 > z1) std::swap(z0, z1);
+        float x0 = -0.5f * width, x1 = +0.5f * width;
+        float y0 = -0.5f * height, y1 = +0.5f * height;
+        float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
         auto normal0 = matrix.transformNormal( 0,  0, +1);
         auto normal1 = matrix.transformNormal( 0,  0, -1);
@@ -511,13 +491,9 @@ namespace chr
       template <>
       void Box::append(IndexedVertexBatch<XYZ.N.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
-        float x0 = 0, x1 = width;
-        float y0 = 0, y1 = height;
-        float z0 = 0, z1 = depth;
-
-        if (x0 > x1) std::swap(x0, x1);
-        if (y0 > y1) std::swap(y0, y1);
-        if (z0 > z1) std::swap(z0, z1);
+        float x0 = -0.5f * width, x1 = +0.5f * width;
+        float y0 = -0.5f * height, y1 = +0.5f * height;
+        float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
         auto normal0 = matrix.transformNormal( 0,  0, +1);
         auto normal1 = matrix.transformNormal( 0,  0, -1);
@@ -604,13 +580,9 @@ namespace chr
       template <>
       void Box::append(IndexedVertexBatch<XYZ.N.UV.RGBA, GLuint> &batch, const Matrix &matrix) const
       {
-        float x0 = 0, x1 = width;
-        float y0 = 0, y1 = height;
-        float z0 = 0, z1 = depth;
-
-        if (x0 > x1) std::swap(x0, x1);
-        if (y0 > y1) std::swap(y0, y1);
-        if (z0 > z1) std::swap(z0, z1);
+        float x0 = -0.5f * width, x1 = +0.5f * width;
+        float y0 = -0.5f * height, y1 = +0.5f * height;
+        float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
         auto normal0 = matrix.transformNormal( 0,  0, +1);
         auto normal1 = matrix.transformNormal( 0,  0, -1);
