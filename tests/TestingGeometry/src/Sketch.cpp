@@ -4,7 +4,6 @@
 #include "chr/gl/draw/Sphere.h"
 #include "chr/gl/draw/Cylinder.h"
 #include "chr/gl/draw/Box.h"
-#include "chr/gl/draw/Cube.h"
 
 using namespace std;
 using namespace chr;
@@ -34,7 +33,7 @@ void Sketch::setup()
     .setSize(300, 5, 300)
     .append(geometryBatch, Matrix());
 
-  Cube()
+  Box()
     .setFrontFace(CCW)
     .setColor(1, 0.25f, 0, 1)
     .setSize(60)
