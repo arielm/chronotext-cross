@@ -32,7 +32,7 @@ void Sketch::setup()
     .setFrontFace(CCW)
     .setColor(0.75f, 0.75f, 0.75f, 1)
     .setSize(300, 5, 300)
-    .append(geometryBatch, Matrix().translate(-150, -5, -150));
+    .append(geometryBatch, Matrix());
 
   Cube()
     .setFrontFace(CCW)
