@@ -1,6 +1,6 @@
 #include "Sketch.h"
 
-#include "chr/gl/draw/Cube.h"
+#include "chr/gl/draw/Box.h"
 #include "chr/gl/draw/Rect.h"
 
 using namespace std;
@@ -28,16 +28,12 @@ void Sketch::setup()
             .setShader(textureLambertShader)
             .setShaderColor(0.25f, 0.25f, 0.25f, 1);
 
-    // ---
-
     draw::Rect()
             .setBounds(-200, -200, 400, 400)
             .setTextureScale(400.0f / fbo.colorTexture.width)
             .append(textureBatch, Matrix());
 
-    //
-
-    draw::Cube()
+    draw::Box()
             .setSize(150)
             .append(cubeBatch, Matrix());
 
@@ -71,17 +67,13 @@ void Sketch::drawScene1()
 
     auto projectionMatrix = glm::perspective(60 * D2R, windowInfo.aspectRatio(), 0.1f, 1000.0f);
 
-    Matrix mvMatrix;
-    mvMatrix
+    Matrix viewMatrix;
+    viewMatrix
             .translate(0, 0, -400)
             .rotateY(clock()->getTime() * 0.25f);
 
-    auto mvpMatrix = mvMatrix * projectionMatrix;
-
-    // ---
-
     State()
-            .setShaderMatrix<MVP>(mvpMatrix)
+            .setShaderMatrix<MVP>(viewMatrix * projectionMatrix)
             .apply();
 
     textureBatch.flush();
