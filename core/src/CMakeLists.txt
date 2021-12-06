@@ -50,7 +50,6 @@ list(APPEND SRC_FILES
   "chr/gl/draw/Circle.cpp"
   "chr/gl/draw/Rect.cpp"
   "chr/gl/draw/Sprite.cpp"
-  "chr/gl/draw/Cube.cpp"
   "chr/gl/draw/Box.cpp"
   "chr/gl/draw/Sphere.cpp"
   "chr/gl/draw/Cylinder.cpp"

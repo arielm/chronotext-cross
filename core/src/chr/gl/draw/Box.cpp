@@ -24,30 +24,6 @@ namespace chr
         return *this;
       }
 
-      Box& Box::setTextureOffset(const glm::vec2 &offset)
-      {
-        textureOffset = offset;
-        return *this;
-      }
-
-      Box& Box::setTextureOffset(float x, float y)
-      {
-        textureOffset = glm::vec2(x, y);
-        return *this;
-      }
-
-      Box& Box::setTextureScale(float scale)
-      {
-        textureScale = { scale, scale };
-        return *this;
-      }
-
-      Box& Box::setTextureScale(float scaleX, float scaleY)
-      {
-        textureScale = { scaleX, scaleY };
-        return *this;
-      }
-
       Box& Box::setColor(const glm::vec4 &color)
       {
         this->color = color;
@@ -192,37 +168,14 @@ namespace chr
         float y0 = -0.5f * height, y1 = +0.5f * height;
         float z0 = -0.5f * depth, z1 = +0.5f * depth;
 
-        glm::vec2 coord0;
-        glm::vec2 coord1;
-        glm::vec2 coord2;
-        glm::vec2 coord3;
-        glm::vec2 coord4;
-        glm::vec2 coord5;
-        glm::vec2 coord6;
-        glm::vec2 coord7;
-
-        if (batch->hasTexture)
-        {
-          coord0 = getTextureCoords(batch->texture, 0, 0);
-          coord1 = getTextureCoords(batch->texture, width, 0);
-          coord2 = getTextureCoords(batch->texture, width, height);
-          coord3 = getTextureCoords(batch->texture, 0, height);
-          coord4 = getTextureCoords(batch->texture, 0, depth);
-          coord5 = getTextureCoords(batch->texture, width, depth);
-          coord6 = getTextureCoords(batch->texture, height, 0);
-          coord7 = getTextureCoords(batch->texture, height, depth);
-        }
-        else
-        {
-          coord0 = {0, 0};
-          coord1 = {1, 0};
-          coord2 = {1, 1};
-          coord3 = {0, 1};
-          coord4 = {0, 1};
-          coord5 = {1, 1};
-          coord6 = {1, 0};
-          coord7 = {1, 1};
-        }
+        glm::vec2 coord0(0, 0);
+        glm::vec2 coord1(1, 0);
+        glm::vec2 coord2(1, 1);
+        glm::vec2 coord3(0, 1);
+        glm::vec2 coord4(0, 1);
+        glm::vec2 coord5(1, 1);
+        glm::vec2 coord6(1, 0);
+        glm::vec2 coord7(1, 1);
 
         // FRONT
         batch
@@ -388,37 +341,14 @@ namespace chr
         auto normal4 = matrix.transformNormal(+1,  0,  0);
         auto normal5 = matrix.transformNormal(-1,  0,  0);
 
-        glm::vec2 coord0;
-        glm::vec2 coord1;
-        glm::vec2 coord2;
-        glm::vec2 coord3;
-        glm::vec2 coord4;
-        glm::vec2 coord5;
-        glm::vec2 coord6;
-        glm::vec2 coord7;
-
-        if (batch->hasTexture)
-        {
-          coord0 = getTextureCoords(batch->texture, 0, 0);
-          coord1 = getTextureCoords(batch->texture, width, 0);
-          coord2 = getTextureCoords(batch->texture, width, height);
-          coord3 = getTextureCoords(batch->texture, 0, height);
-          coord4 = getTextureCoords(batch->texture, 0, depth);
-          coord5 = getTextureCoords(batch->texture, width, depth);
-          coord6 = getTextureCoords(batch->texture, height, 0);
-          coord7 = getTextureCoords(batch->texture, height, depth);
-        }
-        else
-        {
-          coord0 = {0, 0};
-          coord1 = {1, 0};
-          coord2 = {1, 1};
-          coord3 = {0, 1};
-          coord4 = {0, 1};
-          coord5 = {1, 1};
-          coord6 = {1, 0};
-          coord7 = {1, 1};
-        }
+        glm::vec2 coord0(0, 0);
+        glm::vec2 coord1(1, 0);
+        glm::vec2 coord2(1, 1);
+        glm::vec2 coord3(0, 1);
+        glm::vec2 coord4(0, 1);
+        glm::vec2 coord5(1, 1);
+        glm::vec2 coord6(1, 0);
+        glm::vec2 coord7(1, 1);
 
         // FRONT
         batch
@@ -591,37 +521,14 @@ namespace chr
         auto normal4 = matrix.transformNormal(+1,  0,  0);
         auto normal5 = matrix.transformNormal(-1,  0,  0);
 
-        glm::vec2 coord0;
-        glm::vec2 coord1;
-        glm::vec2 coord2;
-        glm::vec2 coord3;
-        glm::vec2 coord4;
-        glm::vec2 coord5;
-        glm::vec2 coord6;
-        glm::vec2 coord7;
-
-        if (batch->hasTexture)
-        {
-          coord0 = getTextureCoords(batch->texture, 0, 0);
-          coord1 = getTextureCoords(batch->texture, width, 0);
-          coord2 = getTextureCoords(batch->texture, width, height);
-          coord3 = getTextureCoords(batch->texture, 0, height);
-          coord4 = getTextureCoords(batch->texture, 0, depth);
-          coord5 = getTextureCoords(batch->texture, width, depth);
-          coord6 = getTextureCoords(batch->texture, height, 0);
-          coord7 = getTextureCoords(batch->texture, height, depth);
-        }
-        else
-        {
-          coord0 = {0, 0};
-          coord1 = {1, 0};
-          coord2 = {1, 1};
-          coord3 = {0, 1};
-          coord4 = {0, 1};
-          coord5 = {1, 1};
-          coord6 = {1, 0};
-          coord7 = {1, 1};
-        }
+        glm::vec2 coord0(0, 0);
+        glm::vec2 coord1(1, 0);
+        glm::vec2 coord2(1, 1);
+        glm::vec2 coord3(0, 1);
+        glm::vec2 coord4(0, 1);
+        glm::vec2 coord5(1, 1);
+        glm::vec2 coord6(1, 0);
+        glm::vec2 coord7(1, 1);
 
         auto color0 = getFaceColor(0);
         auto color1 = getFaceColor(1);
@@ -710,11 +617,6 @@ namespace chr
         {
           return color;
         }
-      }
-
-      glm::vec2 Box::getTextureCoords(const Texture &texture, float x, float y) const
-      {
-        return (glm::vec2(x, y) - textureOffset) / (texture.innerSize * textureScale);
       }
     }
   }
