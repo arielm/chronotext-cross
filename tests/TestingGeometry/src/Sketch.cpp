@@ -114,9 +114,14 @@ void Sketch::draw()
     .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
-    .setShaderUniform("u_eye_position", camera.getEyePosition())
     .setShaderUniform("u_light_position", camera.getEyePosition())
-    .setShaderUniform("u_shininess", 50.0f)
+    .setShaderUniform("u_light_color", glm::vec3(1.0, 1.0, 1.0))
+    .setShaderUniform("u_light_intensity", 1.0f)
+    .setShaderUniform("u_ambient_color", glm::vec3(0, 0, 0))
+    .setShaderUniform("u_specular_color", glm::vec3(1, 1, 1))
+    .setShaderUniform("u_shininess", 25.0f)
+    .setShaderUniform("u_has_texture", true)
+    .setShaderUniform("u_has_color", true) // i.e. do not use diffuse color but vertex color instead
     .apply();
 
   geometryBatch.flush();

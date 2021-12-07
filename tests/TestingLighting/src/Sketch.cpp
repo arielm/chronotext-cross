@@ -15,10 +15,6 @@ shader(InputSource::resource("Shader.vert"), InputSource::resource("Shader.frag"
 
 void Sketch::setup()
 {
-  modelBatch
-    .setShader(shader)
-    .setShaderColor(1.0f, 0.5f, 0.0f, 1);
-
   Torus()
     .setFrontFace(CW)
     .setSliceCount(20)
@@ -28,8 +24,8 @@ void Sketch::setup()
     .append(modelBatch, Matrix());
 
   lightBatch
-      .setShader(colorShader)
-      .setShaderColor(1, 1, 1, 1);
+    .setShader(colorShader)
+    .setShaderColor(1, 1, 1, 1);
 
   // ---
 
@@ -88,12 +84,18 @@ void Sketch::draw()
   //
 
   State()
-    .setShaderMatrix<MV>(camera.getViewMatrix())
+    .setShader(shader)
+    .setShaderMatrix<MODEL>(Matrix())
+    .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
-    .setShaderUniform("u_eye_position", camera.getEyePosition())
     .setShaderUniform("u_light_position", lightPosition)
-    .setShaderUniform("u_shininess", 50.0f)
+    .setShaderUniform("u_light_color", glm::vec3(1.0, 1.0, 1.0))
+    .setShaderUniform("u_light_intensity", 1.0f)
+    .setShaderUniform("u_ambient_color", glm::vec3(0, 0, 0))
+    .setShaderUniform("u_diffuse_color", glm::vec3(1.0f, 0.5f, 0.0f))
+    .setShaderUniform("u_specular_color", glm::vec3(1, 1, 1))
+    .setShaderUniform("u_shininess", 25.0f)
     .apply();
 
   modelBatch.flush();
