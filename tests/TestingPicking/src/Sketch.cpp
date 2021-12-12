@@ -11,18 +11,17 @@ using namespace math;
 using namespace path;
 
 Sketch::Sketch()
-:
-contourBatch(GL_LINES),
-normalBatch(GL_LINES)
 {}
 
 void Sketch::setup()
 {
   contourBatch
+    .setPrimitive(GL_LINES)
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 0.5f);
 
   normalBatch
+    .setPrimitive(GL_LINES)
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 1);
 

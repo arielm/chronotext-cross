@@ -138,7 +138,7 @@ namespace chr
       State& glFrontFace(GLenum mode);
       State& glLineWidth(float width);
       State& glPointSize(float size);
-      State& glPolygonOffset(GLfloat factor, GLfloat units);
+      State& glPolygonOffset(float factor, float units);
 
       void apply();
       void apply(ShaderProgram &shader);

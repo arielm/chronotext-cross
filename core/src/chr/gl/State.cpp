@@ -125,7 +125,7 @@ namespace chr
       return *this;
     }
 
-    State& State::glPolygonOffset(GLfloat factor, GLfloat units)
+    State& State::glPolygonOffset(float factor, float units)
     {
       element->propf[PROPERTY_GL_POLYGON_OFFSET] = {factor, units};
       return *this;
