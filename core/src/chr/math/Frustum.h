@@ -1,6 +1,7 @@
 #pragma once
 
 #include "chr/math/Plane.h"
+#include "chr/math/Box.h"
 
 namespace chr
 {
@@ -23,13 +24,11 @@ namespace chr
 
       Frustum() = default;
 
-      /*
-       * PASS A MODEL-VIEW-PROJECTION MATRIX
-       */
       Frustum(const glm::mat4 &mat);
       void set(const glm::mat4 &mat);
 
       bool contains(const glm::vec3 &point) const;
+      bool containsOrIntersectsWith(const Box &box) const;
     };
   }
 }

@@ -10,7 +10,7 @@ namespace chr
     }
 
     /*
-     * BASED ON:
+     * Based on:
      * https://github.com/cinder/Cinder/blob/master/src/cinder/Frustum.cpp
      * http://gamedevs.org/uploads/fast-extraction-viewing-frustum-planes-from-world-view-projection-matrix.pdf
      */
@@ -29,6 +29,33 @@ namespace chr
       for (int i = 0; i < 6; ++i)
       {
         if (planes[i].signedDistance(point) < 0)
+        {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    /*
+     * Based on:
+     * https://www.iquilezles.org/www/articles/frustumcorrect/frustumcorrect.htm
+     */
+    bool Frustum::containsOrIntersectsWith(const Box &box) const
+    {
+      for (int i = 0; i < 6; i++)
+      {
+        int out = 0;
+        out += (planes[i].signedDistance(glm::vec3(box.min.x, box.min.y, box.min.z)) < 0) ? 1 : 0;
+        out += (planes[i].signedDistance(glm::vec3(box.max.x, box.min.y, box.min.z)) < 0) ? 1 : 0;
+        out += (planes[i].signedDistance(glm::vec3(box.min.x, box.max.y, box.min.z)) < 0) ? 1 : 0;
+        out += (planes[i].signedDistance(glm::vec3(box.max.x, box.max.y, box.min.z)) < 0) ? 1 : 0;
+        out += (planes[i].signedDistance(glm::vec3(box.min.x, box.min.y, box.max.z)) < 0) ? 1 : 0;
+        out += (planes[i].signedDistance(glm::vec3(box.max.x, box.min.y, box.max.z)) < 0) ? 1 : 0;
+        out += (planes[i].signedDistance(glm::vec3(box.min.x, box.max.y, box.max.z)) < 0) ? 1 : 0;
+        out += (planes[i].signedDistance(glm::vec3(box.max.x, box.max.y, box.max.z)) < 0) ? 1 : 0;
+
+        if (out == 8)
         {
           return false;
         }
