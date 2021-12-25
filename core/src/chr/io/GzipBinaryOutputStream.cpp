@@ -220,13 +220,13 @@ namespace chr
 
     void GzipBinaryOutputStream::writeString(const string &value)
     {
-      if (!value.empty())
+      if (good())
       {
+        codedOutput->WriteVarint32(value.size());
+
         if (good())
         {
-          codedOutput->WriteVarint32(value.size());
-
-          if (good())
+          if (!value.empty())
           {
             codedOutput->WriteRaw(value.data(), value.size());
           }

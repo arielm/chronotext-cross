@@ -364,7 +364,7 @@ namespace chr
         {
           fail();
         }
-        else
+        else if (size > 0)
         {
           result.resize(size);
 
