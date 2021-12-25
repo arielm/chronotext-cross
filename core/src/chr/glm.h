@@ -9,6 +9,7 @@
 #include <glm/gtc/epsilon.hpp>
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtx/norm.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 #include <glm/ext.hpp>
 
 #include <tuple>
