@@ -1,12 +1,9 @@
 #include "Sketch.h"
 #include "BatchImporter.h"
 
-#include "chr/gl/draw/Sphere.h"
-
 using namespace std;
 using namespace chr;
 using namespace gl;
-using namespace draw;
 
 static constexpr float R1 = 250;
 static constexpr float R2 = 150;
@@ -46,7 +43,7 @@ void Sketch::resize()
 
 void Sketch::draw()
 {
-  glClearColor(0.5f, 0.5f, 0.5f, 1);
+  glClearColor(0.4f, 0.8f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   // ---
