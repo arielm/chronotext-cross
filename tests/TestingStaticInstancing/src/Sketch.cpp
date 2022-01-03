@@ -1,4 +1,5 @@
 #include "Sketch.h"
+#include "BatchImporter.h"
 
 #include "chr/gl/draw/Sphere.h"
 
@@ -9,7 +10,7 @@ using namespace draw;
 
 static constexpr float R1 = 250;
 static constexpr float R2 = 150;
-static constexpr float TURNS = 6;
+static constexpr float TURNS = 5;
 static constexpr float H = 350;
 
 Sketch::Sketch()
@@ -19,23 +20,9 @@ shader(InputSource::resource("Shader.vert"), InputSource::resource("Shader.frag"
 
 void Sketch::setup()
 {
-  texture = Texture::ImageRequest("checker.png")
-    .setFlags(image::FLAGS_RBGA)
-    .setFilters(GL_NEAREST, GL_NEAREST);
+  batch = BatchImporter::read(InputSource::resource("duck.model"))[0];
 
-  batch
-    .setShader(shader)
-    .setShaderColor(0.25f, 1.0f, 0.0f, 1)
-    .setTexture(texture);
-
-  Sphere()
-    .setFrontFace(CW)
-    .setSectorCount(40)
-    .setStackCount(20)
-    .setRadius(25)
-    .append(batch, Matrix());
-
-  instanceBuffer = InstanceBuffer(GL_STATIC_DRAW, GL_STATIC_DRAW);
+  instanceBuffer = InstanceBuffer(GL_STATIC_DRAW);
 
   threadHelix(instanceBuffer, R1, R2, TURNS, H, 0, 50);
 
@@ -66,20 +53,16 @@ void Sketch::draw()
 
   camera.getViewMatrix()
     .setIdentity()
-    .translate(0, -150, -600)
+    .translate(0, -200, -600)
     .rotateY(clock()->getTime() * 0.125f);
 
   State()
+    .setShader(shader)
     .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderUniform("u_light_position", camera.getEyePosition())
     .setShaderUniform("u_light_color", glm::vec3(1.0, 1.0, 1.0))
     .setShaderUniform("u_light_intensity", 1.0f)
-    .setShaderUniform("u_ambient_color", glm::vec3(0, 0, 0))
-    .setShaderUniform("u_specular_color", glm::vec3(1, 1, 1))
-    .setShaderUniform("u_shininess", 25.0f)
-    .setShaderUniform("u_has_texture", true)
-    .setShaderUniform("u_has_color", true) // i.e. do not use diffuse color but vertex color instead
     .apply();
 
   batch.flush(instanceBuffer);
@@ -125,8 +108,9 @@ void Sketch::threadHelix(InstanceBuffer &instanceBuffer, float r1, float r2, flo
 
     matrix
       .setTranslate(-cosf(-d) * r, d * dz, +sinf(-d) * r)
-      .rotateY(HALF_PI - d)
-      .rotateZ(ay);
+      .rotateY(HALF_PI - d + 180 * D2R)
+      .rotateZ(ay)
+      .scale(0.5f);
 
     instanceBuffer.addMatrix(matrix);
 

@@ -4,6 +4,7 @@ project(TestingStaticInstancing)
 
 set(SRC_FILES
   "src/Sketch.cpp"
+  "src/BatchImporter.cpp"
 )
 
 #
