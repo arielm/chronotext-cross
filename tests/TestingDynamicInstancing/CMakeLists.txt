@@ -4,6 +4,7 @@ project(TestingDynamicInstancing)
 
 set(SRC_FILES
   "src/Sketch.cpp"
+  "src/BatchImporter.cpp"
   "src/SeaSurface.cpp"
   "src/SeaSurfaceSpiral2.cpp"
 )
