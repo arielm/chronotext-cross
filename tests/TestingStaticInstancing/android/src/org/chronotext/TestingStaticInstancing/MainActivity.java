@@ -1,4 +1,4 @@
-package org.chronotext.TestingInstancing;
+package org.chronotext.TestingStaticInstancing;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ public class MainActivity extends Activity
 {
   static
   {
-    System.loadLibrary("TestingInstancing");
+    System.loadLibrary("TestingStaticInstancing");
   }
 
   CrossBridge bridge;

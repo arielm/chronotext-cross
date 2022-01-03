@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.2.2)
 
-project(TestingInstancing)
+project(TestingStaticInstancing)
 
 set(SRC_FILES
   "src/Sketch.cpp"

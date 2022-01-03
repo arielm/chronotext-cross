@@ -1,5 +1,5 @@
 
-set(CTEST_PROJECT_NAME TestingInstancing)
+set(CTEST_PROJECT_NAME TestingStaticInstancing)
 set(CTEST_CONFIGURATION_TYPE Release)
 
 if (PLATFORM MATCHES osx|rpi|linux)
