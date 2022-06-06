@@ -37,6 +37,10 @@ namespace chr
           result.assign(reinterpret_cast<const char*>(memoryBuffer->data()), memoryBuffer->size());
         }
       }
+      else if (inputSource.isBuffer())
+      {
+        result.assign(reinterpret_cast<const char*>(inputSource.getData()), inputSource.getDataSize());
+      }
 
       return result;
     }
@@ -72,6 +76,13 @@ namespace chr
 
           utf8::unchecked::utf8to16(begin, end, back_inserter(result));
         }
+      }
+      else if (inputSource.isBuffer())
+      {
+        const char *begin = reinterpret_cast<const char*>(inputSource.getData());
+        const char *end = begin + inputSource.getDataSize();
+
+        utf8::unchecked::utf8to16(begin, end, back_inserter(result));
       }
 
       return result;
