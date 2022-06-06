@@ -170,6 +170,29 @@ namespace chr
         }
       }
 
+      template <>
+      void Rect::append(IndexedVertexBatch<XYZ.N.UV, GLuint> &batch, const Matrix &matrix) const
+      {
+        glm::vec2 coords1, coords2;
+        if (batch->hasTexture)
+        {
+          tie(coords1, coords2) = getTextureCoords(batch->texture);
+        }
+        else
+        {
+          tie(coords1, coords2) = getTextureCoords();
+        }
+
+        if (frontFace == CW)
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, CW>(Quad<XYZ.N.UV>(bounds, glm::vec3(0, 0, +1), coords1, coords2), batch);
+        }
+        else
+        {
+          matrix.addTransformedQuad<GL_TRIANGLES, CCW>(Quad<XYZ.N.UV>(bounds, glm::vec3(0, 0, +1), coords1, coords2), batch);
+        }
+      }
+
       // ---
 
       template <>
