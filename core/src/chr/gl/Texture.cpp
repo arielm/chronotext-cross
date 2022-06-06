@@ -96,6 +96,7 @@ namespace chr
     {
       if (element && element->textureId)
       {
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, element->textureId);
         return true;
       }
@@ -107,6 +108,7 @@ namespace chr
     {
       if (element && element->textureId)
       {
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
       }
     }
