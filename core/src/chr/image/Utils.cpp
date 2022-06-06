@@ -82,6 +82,34 @@ namespace chr
           }
         }
       }
+      else if (source.isBuffer())
+      {
+        if ((source.getDataSize() > 8) && png_check_sig(reinterpret_cast<png_const_bytep>(source.getData()), 8))
+        {
+          png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+
+          if (png_ptr)
+          {
+            info_ptr = png_create_info_struct(png_ptr);
+
+            if (info_ptr)
+            {
+              image::PngDataHandle handle(source.getData(), source.getDataSize());
+              png_set_read_fn(png_ptr, &handle, image::readPngDataCallback);
+
+              if (!setjmp(png_jmpbuf(png_ptr)))
+              {
+                png_set_sig_bytes(png_ptr, 0);
+                ready = true;
+              }
+            }
+            else
+            {
+              png_destroy_read_struct(&png_ptr, NULL, NULL);
+            }
+          }
+        }
+      }
       else if (source.isFile())
       {
         fd = fopen(source.getFilePath().string().data(), "rb");
@@ -250,6 +278,10 @@ namespace chr
         {
           jpeg_mem_src(&cinfo, reinterpret_cast<const unsigned char *>(memoryBuffer->data()), memoryBuffer->size());
         }
+      }
+      else if (source.isBuffer())
+      {
+        jpeg_mem_src(&cinfo, reinterpret_cast<const unsigned char *>(source.getData()), source.getDataSize());
       }
       else if (source.isFile())
       {
