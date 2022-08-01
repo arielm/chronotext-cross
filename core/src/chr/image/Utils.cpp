@@ -292,7 +292,7 @@ namespace chr
         }
       }
 
-      if (memoryBuffer || fd)
+      if (memoryBuffer || fd || source.isBuffer())
       {
         jpeg_read_header(&cinfo, true);
 
