@@ -56,6 +56,8 @@ namespace chr
       static void run(int aaSamples = 0, int depthBits = 0);
     #endif
 
+    virtual ~CrossSketch() = default;
+
     virtual bool init() { return true; }
     virtual void uninit() {}
     virtual void setup() {}
