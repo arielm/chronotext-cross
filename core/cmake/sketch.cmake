@@ -6,6 +6,7 @@ set(JPEG_ROOT "$ENV{CROSS_PATH}/tree/libjpeg-turbo")
 set(PNG_ROOT "$ENV{CROSS_PATH}/tree/libpng")
 set(LIBTESS2_ROOT "$ENV{CROSS_PATH}/tree/libtess2")
 set(PROTOBUF_ROOT "$ENV{CROSS_PATH}/tree/protobuf")
+set(STB_ROOT "$ENV{CROSS_PATH}/tree/stb")
 
 # ---
 
@@ -71,7 +72,10 @@ else()
   list(APPEND LIBRARIES "${PNG_ROOT}/${PLATFORM}/lib/libpng17.a")
 endif()
 
-list(APPEND INCLUDE_DIRS "${GLM_ROOT}/include")
+list(APPEND INCLUDE_DIRS
+  "${GLM_ROOT}/include"
+  "${STB_ROOT}"
+)
 
 if (PLATFORM MATCHES android|android64)
   list(APPEND INCLUDE_DIRS

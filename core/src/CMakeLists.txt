@@ -12,6 +12,7 @@ set(JPEG_ROOT "${TREE}/libjpeg-turbo")
 set(PNG_ROOT "${TREE}/libpng")
 set(LIBTESS2_ROOT "${TREE}/libtess2")
 set(PROTOBUF_ROOT "${TREE}/protobuf")
+set(STB_ROOT "${TREE}/stb")
 
 # ---
 
@@ -297,6 +298,7 @@ endif()
 
 list(APPEND INCLUDE_DIRS
   "${GLM_ROOT}/include"
+  "${STB_ROOT}"
 )
 
 if (PLATFORM MATCHES android|android64)

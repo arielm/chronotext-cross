@@ -4,6 +4,11 @@
   #include "chr/cross/CrossDelegate.h"
 #endif
 
+#if defined(CHR_PLATFORM_DESKTOP)
+  #define STB_IMAGE_WRITE_IMPLEMENTATION
+  #include "stb_image_write.h"
+#endif
+
 using namespace std;
 
 namespace chr
@@ -30,11 +35,6 @@ namespace chr
   int CrossSketch::getElapsedFrames()
   {
     return frameCount;
-  }
-
-  const WindowInfo& CrossSketch::getWindowInfo() const
-  {
-    return windowInfo;
   }
 
   FrameClock::Ref CrossSketch::clock() const
@@ -89,4 +89,38 @@ namespace chr
 
     frameCount++;
   }
+
+  #if defined(CHR_PLATFORM_DESKTOP)
+    void CrossSketch::grabScreen(const fs::path &destinationDirectory)
+    {
+      stringstream stream;
+      stream << std::setfill('0') << std::setw(6) << grabbedFrameCount++;
+      fs::path filePath = destinationDirectory / ("IMG_" + stream.str() + ".png");
+
+      performGrabScreen(filePath);
+    }
+
+    void CrossSketch::performGrabScreen(const fs::path &filePath)
+    {
+      int w = windowInfo.width;
+      int h = windowInfo.height;
+
+      uint8_t *pixels = new uint8_t[w * h * 3];
+      glPixelStorei(GL_PACK_ALIGNMENT, 1);
+      glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, (GLvoid*)pixels);
+
+      stbi_flip_vertically_on_write(1);
+
+      if (stbi_write_png(filePath.string().data(), w, h, 3, pixels, 3 * w))
+      {
+        LOGI << "IMAGE WRITTEN: " << filePath.string() << endl;
+      }
+      else
+      {
+        LOGE << "ERROR WRITING IMAGE: " << filePath.string() << endl;
+      }
+
+      delete[] pixels;
+    }
+  #endif
 }

@@ -89,10 +89,13 @@ namespace chr
     virtual void wheelUpdated(float offset) {}
     virtual void accelerated(AccelEvent event) {}
 
-    const WindowInfo& getWindowInfo() const;
     double getElapsedSeconds();
     int getElapsedFrames();
     FrameClock::Ref clock() const;
+
+    #if defined(CHR_PLATFORM_DESKTOP)
+      void grabScreen(const fs::path &destinationDirectory);
+    #endif
 
     void performSetup(const WindowInfo &windowInfo);
     void performResize(const glm::vec2 &size, float safeAreaInsetsTop = 0, float safeAreaInsetsBottom = 0);
@@ -103,8 +106,13 @@ namespace chr
   protected:
     Timer timer;
     int frameCount = 0;
+    int grabbedFrameCount = 0;
     bool forceResize = false;
     WindowInfo windowInfo;
     FrameClock::Ref _clock = FrameClock::create();
+
+    #if defined(CHR_PLATFORM_DESKTOP)
+      void performGrabScreen(const fs::path &filePath);
+    #endif
   };
 }
