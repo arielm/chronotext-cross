@@ -4,10 +4,10 @@ Cross-platform minimal infrastructure for developing interactive applications wi
 
 **Target platforms:**
 - macOS (intel)
-- Windows (mxe)
+- Windows
 - iOS
 - Android
-- Emscripten (wasm, asm.js)
+- Browser
 - Raspberry Pi
 - Linux
 
