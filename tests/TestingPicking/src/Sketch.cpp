@@ -10,9 +10,6 @@ using namespace gl;
 using namespace math;
 using namespace path;
 
-Sketch::Sketch()
-{}
-
 void Sketch::setup()
 {
   contourBatch

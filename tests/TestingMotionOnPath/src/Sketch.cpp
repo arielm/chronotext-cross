@@ -12,9 +12,6 @@ using namespace path;
 
 static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
 
-Sketch::Sketch()
-{}
-
 void Sketch::setup()
 {
   dotTexture = Texture(

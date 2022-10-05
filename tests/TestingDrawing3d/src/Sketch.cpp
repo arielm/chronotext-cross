@@ -10,9 +10,6 @@ using namespace draw;
 static constexpr float SUN_EARTH_DISTANCE = 200;
 static constexpr float EARTH_MOON_DISTANCE = 27;
 
-Sketch::Sketch()
-{}
-
 void Sketch::setup()
 {
   sunBatch

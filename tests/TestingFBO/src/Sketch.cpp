@@ -7,9 +7,6 @@ using namespace std;
 using namespace chr;
 using namespace gl;
 
-Sketch::Sketch()
-{}
-
 void Sketch::setup()
 {
   fbo = FBO(512, 512);

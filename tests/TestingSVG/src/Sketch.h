@@ -7,9 +7,6 @@
 class Sketch : public chr::CrossSketch
 {
 public:
-  Sketch();
-  virtual ~Sketch() {}
-
   void setup() final;
   void draw() final;
 

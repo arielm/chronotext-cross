@@ -13,9 +13,6 @@ using namespace math;
 using namespace path;
 using namespace draw;
 
-Sketch::Sketch()
-{}
-
 void Sketch::setup()
 {
   loadMoon();

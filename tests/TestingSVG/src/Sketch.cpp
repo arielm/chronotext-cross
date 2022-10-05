@@ -8,9 +8,6 @@ using namespace chr;
 using namespace gl;
 using namespace path;
 
-Sketch::Sketch()
-{}
-
 void Sketch::setup()
 {
   lysBatch
