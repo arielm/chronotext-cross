@@ -11,4 +11,4 @@ Cross-platform minimal infrastructure for developing interactive applications wi
 - Raspberry Pi
 - Linux
 
-Check the [wiki](https://github.com/arielm/chronotext-cross/wiki) for more details / See some [tech demos](https://github.com/arielm/chronotext-cross/wiki/Tech-demos) or some [WebGL artworks](https://arielmalka.com) made with chronotext-cross.
+Check the [blog](https://arielm.github.io/cross-blog) or the [wiki](https://github.com/arielm/chronotext-cross/wiki) for more details / See some [tech demos](https://github.com/arielm/chronotext-cross/wiki/Tech-demos) or some [WebGL artworks](https://arielmalka.com) made with chronotext-cross.
