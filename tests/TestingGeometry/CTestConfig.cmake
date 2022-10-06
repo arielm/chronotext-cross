@@ -1,15 +1,9 @@
 set(CTEST_PROJECT_NAME TestingGeometry)
 set(CTEST_CONFIGURATION_TYPE Release)
 
-if (PLATFORM MATCHES osx|rpi|linux)
+if (PLATFORM MATCHES osx|linux)
   set(ARGS
     -DRUN=EXE
-  )
-
-elseif (PLATFORM MATCHES mxe)
-  set(ARGS
-    -DRUN=EXE
-    -DFS=RC
   )
 
 elseif (PLATFORM MATCHES emscripten)
