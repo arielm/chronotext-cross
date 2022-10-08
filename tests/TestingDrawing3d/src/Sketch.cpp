@@ -68,8 +68,12 @@ void Sketch::draw()
 
   sunBatch.flush();
 
-  Matrix::Stack stack;
+  Matrix matrix;
   float t = clock()->getTime();
+
+  matrix
+    .rotateY(t * 0.5f)
+    .translate(0, 0, SUN_EARTH_DISTANCE);
 
   earthBatch.clear();
   Sphere()
@@ -77,11 +81,12 @@ void Sketch::draw()
     .setRadius(20)
     .setSectorCount(40)
     .setStackCount(20)
-    .append(earthBatch, Matrix()
-      .rotateY(t * 0.5f)
-      .translate(0, 0, SUN_EARTH_DISTANCE)
-      .push(stack));
+    .append(earthBatch, matrix);
   earthBatch.flush();
+
+  matrix
+    .rotateY(t * 2.0f)
+    .translate(0, 0, EARTH_MOON_DISTANCE);
 
   moonBatch.clear();
   Sphere()
@@ -89,10 +94,7 @@ void Sketch::draw()
     .setRadius(5)
     .setSectorCount(30)
     .setStackCount(15)
-    .append(moonBatch, Matrix()
-      .pop(stack)
-      .rotateY(t * 2.0f)
-      .translate(0, 0, EARTH_MOON_DISTANCE));
+    .append(moonBatch, matrix);
   moonBatch.flush();
 
   pathBatch.flush();
