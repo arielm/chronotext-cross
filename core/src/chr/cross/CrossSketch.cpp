@@ -9,6 +9,8 @@
   #include "stb_image_write.h"
 #endif
 
+#include <iomanip>
+
 using namespace std;
 
 namespace chr
