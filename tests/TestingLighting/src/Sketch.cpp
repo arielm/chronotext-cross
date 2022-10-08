@@ -23,6 +23,8 @@ void Sketch::setup()
     .setOuterRadius(100)
     .append(modelBatch, Matrix());
 
+  modelBatch.setShader(shader);
+
   lightBatch
     .setShader(colorShader)
     .setShaderColor(1, 1, 1, 1);
@@ -78,13 +80,12 @@ void Sketch::draw()
     .setSectorCount(16)
     .setStackCount(8)
     .setRadius(4)
-    .append(lightBatch, Matrix().setTranslate(lightPosition));
+    .append(lightBatch, Matrix().translate(lightPosition));
   lightBatch.flush();
 
   //
 
   State()
-    .setShader(shader)
     .setShaderMatrix<MODEL>(Matrix())
     .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
