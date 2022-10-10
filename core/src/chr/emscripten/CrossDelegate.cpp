@@ -126,8 +126,9 @@ namespace chr
   {
     setupInfo.windowInfo.size = size;
 
-    emscripten_set_canvas_size(size.x, size.y);
-    glViewport(0, 0, size.x, size.y);
+    double pixelRatio = emscripten_get_device_pixel_ratio();
+    emscripten_set_canvas_size(size.x * pixelRatio, size.y * pixelRatio);
+    glViewport(0, 0, size.x * pixelRatio, size.y * pixelRatio);
 
     sketch->performResize(size);
   }

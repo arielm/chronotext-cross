@@ -32,7 +32,10 @@ namespace chr
         glfwGetMonitorPhysicalSize(monitor, &widthMM, &heightMM);
         const double dpi = mode->width / (widthMM / 25.4);
 
-        intern::displayInfo = DisplayInfo::createWithDensity(mode->width, mode->height, dpi);
+        float xscale, yscale;
+        glfwGetMonitorContentScale(monitor, &xscale, &yscale);
+
+        intern::displayInfo = DisplayInfo::createWithDensity(mode->width, mode->height, dpi, xscale);
 
         // ---
         

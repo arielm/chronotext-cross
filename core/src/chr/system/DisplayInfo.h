@@ -119,7 +119,7 @@ namespace chr
         
         if (diagonal == 0)
         {
-          diagonal = glm::length(size) / density;
+          diagonal = glm::length(size / contentScale) / density;
         }
         else if (density == 0)
         {

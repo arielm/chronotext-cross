@@ -25,7 +25,7 @@ namespace chr
 
         int fullscreenWidth = int(pixelRatio * screenWidth + 0.5);
         int fullscreenHeight = int(pixelRatio * screenHeight + 0.5);
-        intern::displayInfo = DisplayInfo::createWithDensity(fullscreenWidth, fullscreenHeight, 96 * pixelRatio); // XXX
+        intern::displayInfo = DisplayInfo::createWithDensity(fullscreenWidth, fullscreenHeight, 96 * pixelRatio, pixelRatio); // XXX: No way to get the density on browsers
 
         // ---
         
