@@ -22,5 +22,5 @@ protected:
   chr::gl::FBO fbo;
 
   void drawScene1();
-  void drawScene2(const glm::ivec2 &size);
+  void drawScene2(const glm::vec2 &size);
 };

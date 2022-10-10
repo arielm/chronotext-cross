@@ -55,7 +55,8 @@ void Sketch::drawScene1()
 {
   glDisable(GL_CULL_FACE);
 
-  glViewport(0, 0, windowInfo.width, windowInfo.height);
+  float contentScale = getDisplayInfo().contentScale;
+  glViewport(0, 0, windowInfo.width * contentScale, windowInfo.height * contentScale);
 
   glClearColor(1, 1, 1, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -76,7 +77,7 @@ void Sketch::drawScene1()
   textureBatch.flush();
 }
 
-void Sketch::drawScene2(const glm::ivec2 &size)
+void Sketch::drawScene2(const glm::vec2 &size)
 {
   glEnable(GL_CULL_FACE);
 
@@ -87,7 +88,7 @@ void Sketch::drawScene2(const glm::ivec2 &size)
 
   // ---
 
-  auto projectionMatrix = glm::perspective(60 * D2R, size.x / (float)size.y, 0.1f, 1000.0f);
+  auto projectionMatrix = glm::perspective(60 * D2R, size.x / size.y, 0.1f, 1000.0f);
 
   Matrix viewMatrix;
   viewMatrix
