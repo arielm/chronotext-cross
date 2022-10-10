@@ -11,8 +11,8 @@ public:
     void setup() final;
     void draw() final;
 
-    void mouseDragged(int button, float x, float y) final;
     void mousePressed(int button, float x, float y) final;
+    void mouseDragged(int button, float x, float y) final;
 
     void keyDown(int keyCode, int modifiers) final;
 

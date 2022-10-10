@@ -15,15 +15,14 @@ void Sketch::setup()
             .setFlags(image::FLAGS_TRANSLUCENT)
             .setMipmap(true));
 
-    lineBatch
-        .setPrimitive(GL_LINES)
-        .setShader(colorShader)
-        .setShaderColor(0, 0, 0, 0.67f);
-
     dotBatch
         .setShader(textureAlphaShader)
-        .setShaderColor(1, 0, 0, 0.85f)
         .setTexture(dotTexture);
+
+    lineBatch
+        .setPrimitive(GL_LINE_STRIP)
+        .setShader(colorShader)
+        .setShaderColor(0, 0, 0, 0.67f);
 
     // ---
 
@@ -65,6 +64,13 @@ void Sketch::draw()
     lineBatch.flush();
     dotBatch.flush();
 }
+
+void Sketch::mousePressed(int button, float x, float y)
+{
+    selectedIndex = getClosestPointIndex(x, y);
+    updateDots();
+}
+
 void Sketch::mouseDragged(int button, float x, float y)
 {
     if (selectedIndex != -1)
@@ -72,12 +78,6 @@ void Sketch::mouseDragged(int button, float x, float y)
         points[selectedIndex] = glm::vec2(x, y);
         updateSpline();
     }
-}
-
-void Sketch::mousePressed(int button, float x, float y)
-{
-    selectedIndex = getClosestPointIndex(x, y);
-    updateDots();
 }
 
 void Sketch::keyDown(int keyCode, int modifiers)
@@ -161,13 +161,9 @@ void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
 {
     lineBatch.clear();
 
-    auto size = polyline.size();
-    if (size > 1)
+    for (const auto &point : polyline)
     {
-        for (auto i = 0; i < size - 1; i++)
-        {
-            lineBatch.addVertices(polyline[i], polyline[i + 1]);
-        }
+        lineBatch.addVertex(point);
     }
 }
 
@@ -176,8 +172,8 @@ void Sketch::drawDot(const glm::vec2 &position, const glm::vec4 &color, float ra
     static constexpr float DOT_RADIUS_PIXELS = 56; // Specific to "dot_112.png"
 
     draw::Sprite()
-        .setColor(color)
         .setAnchor(0.5f, 0.5f)
+        .setColor(color)
         .append(dotBatch, Matrix()
             .translate(position)
             .scale(radius / DOT_RADIUS_PIXELS));
