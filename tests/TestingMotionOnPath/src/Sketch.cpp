@@ -10,8 +10,6 @@ using namespace gl;
 using namespace math;
 using namespace path;
 
-static constexpr float DOT_RADIUS_PIXELS = 56; // SPECIFIC TO "dot_112.png"
-
 void Sketch::setup()
 {
   dotTexture = Texture(
@@ -40,13 +38,13 @@ void Sketch::setup()
     .add(500, 300)
     .add(500, 350)
     .add(450, 350)
-    .end(true); // CLOSED-PATH
+    .end(true);
 
   drawPolyline(path1.getPoints());
 
   for (const auto &point : path1.getPoints())
   {
-    drawDot(point.position, 3);
+    drawDot(point.position, 2);
   }
 
   // ---
@@ -65,14 +63,14 @@ void Sketch::setup()
 
   for (const auto &point : path2.getPoints())
   {
-    drawDot(point.position, 3);
+    drawDot(point.position, 2);
   }
 
   // ---
 
   MatrixAffine matrix;
   matrix
-    .setTranslate(150, 150)
+    .translate(150, 150)
     .rotate(-45 * D2R);
 
   SplinePath<glm::vec2> peanut;
@@ -96,11 +94,11 @@ void Sketch::setup()
     .add(peanut.getPolyline())
     .end();
 
-  drawPolyline(peanut.getPolyline());
+  drawPolyline(path3.getPoints());
 
-  for (const auto &point : peanut.getPoints())
+  for (const auto &point : path3.getPoints())
   {
-    drawDot(point, 3);
+    drawDot(point.position, 2);
   }
 
   // ---
@@ -119,10 +117,15 @@ void Sketch::draw()
 
   // ---
 
-  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, windowInfo.height, 0.0f);
+  auto projectionMatrix = glm::ortho(0.0f, windowInfo.width, 0.0f, windowInfo.height);
+
+  Matrix viewMatrix;
+  viewMatrix
+    .translate(0, windowInfo.height)
+    .scale(1, -1);
 
   State()
-    .setShaderMatrix(projectionMatrix)
+    .setShaderMatrix<MVP>(viewMatrix * projectionMatrix)
     .apply();
 
   lineBatch.flush();
@@ -135,20 +138,20 @@ void Sketch::draw()
   Matrix matrix1, matrix2, matrix3;
 
   path1
-    .offsetToValue(clock()->getTime() * 40, 15)
+    .offsetToValue(clock()->getTime() * 40, 10)
     .applyToMatrix(matrix1);
 
   path2
-    .offsetToValue(clock()->getTime() * -50 - 100, 20)
+    .offsetToValue(clock()->getTime() * -50, 20)
     .applyToMatrix(matrix2);
 
   path3
-    .offsetToValue(-clock()->getTime() * 30 + 100, 10)
+    .offsetToValue(clock()->getTime() * -30, 15)
     .applyToMatrix(matrix3);
 
   draw::Rect()
     .setColor(0, 0.50f, 0.75f, 0.75f)
-    .setBounds(-7.5f, -7.5f, 15, 15)
+    .setBounds(-5, -5, 10, 10)
     .append(flatBatch, matrix1);
 
   draw::Rect()
@@ -158,22 +161,10 @@ void Sketch::draw()
 
   draw::Rect()
     .setColor(1, 0.5f, 0.25f, 0.75f)
-    .setBounds(-5, -5, 10, 10)
+    .setBounds(-7.5f, -7.5f, 15, 15)
     .append(flatBatch, matrix3);
 
   flatBatch.flush();
-}
-
-void Sketch::drawPolyline(const vector<glm::vec2> &polyline)
-{
-  auto size = polyline.size();
-  if (size > 1)
-  {
-    for (auto i = 0; i < size - 1; i++)
-    {
-      lineBatch.addVertices(polyline[i], polyline[i + 1]);
-    }
-  }
 }
 
 void Sketch::drawPolyline(const vector<FollowablePath2D::Point> &points)
@@ -190,6 +181,8 @@ void Sketch::drawPolyline(const vector<FollowablePath2D::Point> &points)
 
 void Sketch::drawDot(const glm::vec2 &position, float radius)
 {
+  static constexpr float DOT_RADIUS_PIXELS = 56; // Specific to "dot_112.png"
+
   draw::Sprite()
     .setAnchor(0.5f, 0.5f)
     .append(dotBatch, Matrix()

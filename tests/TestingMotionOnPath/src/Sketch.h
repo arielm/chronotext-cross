@@ -24,7 +24,6 @@ protected:
   chr::gl::shaders::ColorShader colorShader;
   chr::gl::shaders::TextureAlphaShader textureAlphaShader;
 
-  void drawPolyline(const std::vector<glm::vec2> &polyline);
   void drawPolyline(const std::vector<chr::path::FollowablePath2D::Point> &points);
   void drawDot(const glm::vec2 &position, float radius);
 };
