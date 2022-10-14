@@ -23,10 +23,9 @@ protected:
   chr::gl::ShaderProgram shader;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> batch;
   chr::gl::InstanceBuffer instanceBuffer;
-  chr::gl::Texture texture;
 
   SeaSurface surface;
   SeaSurfaceSpiral2 spiral;
 
-  static void threadSpiral(chr::gl::InstanceBuffer &instanceBuffer, const chr::path::FollowablePath3D &path, float spacing);
+  static void drawSpiral(chr::gl::InstanceBuffer &instanceBuffer, const chr::path::FollowablePath3D &path, int n, float spacing, float scale);
 };

@@ -69,29 +69,35 @@ void Sketch::draw()
     .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderUniform("u_light_position", camera.getEyePosition())
-    .setShaderUniform("u_light_color", glm::vec3(1.0, 1.0, 1.0))
+    .setShaderUniform("u_light_color", glm::vec3(1, 1, 1))
     .setShaderUniform("u_light_intensity", 1.0f)
     .apply();
 
-  threadSpiral(instanceBuffer, spiral.path, 10);
+  drawSpiral(instanceBuffer, spiral.path, NUM_DUCKS, 10, 0.1f);
   batch.flush(instanceBuffer);
 }
 
-void Sketch::threadSpiral(InstanceBuffer &instanceBuffer, const FollowablePath3D &path, float spacing)
+void Sketch::drawSpiral(InstanceBuffer &instanceBuffer, const FollowablePath3D &path, int n, float spacing, float scale)
 {
   instanceBuffer.clearMatrices();
 
   float offset = 0;
+  float half = spacing * 0.5f;
   Matrix matrix;
 
-  for (int i = 0; i < NUM_DUCKS; i++)
+  for (int i = 0; i < n; i++)
   {
+    offset += half;
+
     auto value = path.offsetToValue(offset);
     value.applyToMatrix(matrix);
+
     matrix
-      .rotateX(-90 * D2R)
-      .scale(0.1f);
+      .rotateX(-HALF_PI)
+      .scale(scale);
+
     instanceBuffer.addMatrix(matrix);
-    offset += spacing;
+
+    offset += half;
   }
 }
