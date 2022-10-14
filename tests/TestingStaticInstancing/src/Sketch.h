@@ -21,5 +21,5 @@ protected:
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> batch;
   chr::gl::InstanceBuffer instanceBuffer;
 
-  static void drawHelix(chr::gl::InstanceBuffer &instanceBuffer, float r1, float r2, float turns, float h, float spacing, float scale);
+  static void drawOnHelix(chr::gl::InstanceBuffer &instanceBuffer, float r1, float r2, float turns, float h, float spacing, float scale);
 };

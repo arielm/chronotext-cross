@@ -21,7 +21,7 @@ void Sketch::setup()
 
   instanceBuffer = InstanceBuffer(GL_STATIC_DRAW);
 
-  drawHelix(instanceBuffer, R1, R2, TURNS, H, 33, 0.33f);
+  drawOnHelix(instanceBuffer, R1, R2, TURNS, H, 33, 0.33f);
 
   // ---
 
@@ -65,7 +65,7 @@ void Sketch::draw()
   batch.flush(instanceBuffer);
 }
 
-void Sketch::drawHelix(InstanceBuffer &instanceBuffer, float r1, float r2, float turns, float h, float spacing, float scale)
+void Sketch::drawOnHelix(InstanceBuffer &instanceBuffer, float r1, float r2, float turns, float h, float spacing, float scale)
 {
   float l = TWO_PI * turns;
   float L = PI * turns * (r1 + r2);

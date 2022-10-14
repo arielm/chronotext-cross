@@ -27,5 +27,5 @@ protected:
   SeaSurface surface;
   SeaSurfaceSpiral2 spiral;
 
-  static void drawSpiral(chr::gl::InstanceBuffer &instanceBuffer, const chr::path::FollowablePath3D &path, int n, float spacing, float scale);
+  static void drawOnPath(chr::gl::InstanceBuffer &instanceBuffer, const chr::path::FollowablePath3D &path, int n, float spacing, float scale);
 };

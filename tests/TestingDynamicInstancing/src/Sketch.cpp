@@ -73,14 +73,13 @@ void Sketch::draw()
     .setShaderUniform("u_light_intensity", 1.0f)
     .apply();
 
-  drawSpiral(instanceBuffer, spiral.path, NUM_DUCKS, 10, 0.1f);
+  instanceBuffer.clearMatrices();
+  drawOnPath(instanceBuffer, spiral.path, NUM_DUCKS, 10, 0.1f);
   batch.flush(instanceBuffer);
 }
 
-void Sketch::drawSpiral(InstanceBuffer &instanceBuffer, const FollowablePath3D &path, int n, float spacing, float scale)
+void Sketch::drawOnPath(InstanceBuffer &instanceBuffer, const FollowablePath3D &path, int n, float spacing, float scale)
 {
-  instanceBuffer.clearMatrices();
-
   float offset = 0;
   float half = spacing * 0.5f;
   Matrix matrix;
