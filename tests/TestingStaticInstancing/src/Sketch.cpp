@@ -7,7 +7,7 @@ using namespace gl;
 
 static constexpr float R1 = 250;
 static constexpr float R2 = 150;
-static constexpr float TURNS = 5;
+static constexpr float TURNS = 7.5f;
 static constexpr float H = 350;
 
 Sketch::Sketch()
@@ -21,7 +21,7 @@ void Sketch::setup()
 
   instanceBuffer = InstanceBuffer(GL_STATIC_DRAW);
 
-  threadHelix(instanceBuffer, R1, R2, TURNS, H, 0, 50);
+  drawHelix(instanceBuffer, R1, R2, TURNS, H, 33, 0.33f);
 
   // ---
 
@@ -58,14 +58,14 @@ void Sketch::draw()
     .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
     .setShaderUniform("u_light_position", camera.getEyePosition())
-    .setShaderUniform("u_light_color", glm::vec3(1.0, 1.0, 1.0))
+    .setShaderUniform("u_light_color", glm::vec3(1, 1, 1))
     .setShaderUniform("u_light_intensity", 1.0f)
     .apply();
 
   batch.flush(instanceBuffer);
 }
 
-void Sketch::threadHelix(InstanceBuffer &instanceBuffer, float r1, float r2, float turns, float h, float D, float spacing)
+void Sketch::drawHelix(InstanceBuffer &instanceBuffer, float r1, float r2, float turns, float h, float spacing, float scale)
 {
   float l = TWO_PI * turns;
   float L = PI * turns * (r1 + r2);
@@ -74,7 +74,7 @@ void Sketch::threadHelix(InstanceBuffer &instanceBuffer, float r1, float r2, flo
 
   float r;
   float dr;
-  bool conical = (fabsf(r1 - r2) > 0.00001f); // AVOIDS INFINITY AND DIVISIONS-BY-ZERO WITH CYLINDRICAL HELICES (r1 = r2)
+  bool conical = (fabsf(r1 - r2) > 0.00001f); // Avoids infinity and divisions-by-zeo with cylindrical helices (r1 = r2)
 
   if (conical)
   {
@@ -85,33 +85,34 @@ void Sketch::threadHelix(InstanceBuffer &instanceBuffer, float r1, float r2, flo
     r = r1;
   }
 
-  float d;
+  float offset = 0;
   float half = spacing * 0.5f;
   Matrix matrix;
 
   do
   {
-    D += half;
+    offset += half;
 
+    float d;
     if (conical)
     {
-      r = sqrtf(r1 * r1 + 2 * dr * D);
+      r = sqrtf(r1 * r1 + 2 * dr * offset);
       d = (r - r1) / dr;
     }
     else
     {
-      d = D / r;
+      d = offset / r;
     }
 
     matrix
       .setTranslate(-cosf(-d) * r, d * dz, +sinf(-d) * r)
-      .rotateY(HALF_PI - d + 180 * D2R)
+      .rotateY(HALF_PI - d + PI)
       .rotateZ(ay)
-      .scale(0.5f);
+      .scale(0.33f);
 
     instanceBuffer.addMatrix(matrix);
 
-    D += half;
+    offset += half;
   }
-  while (D < L);
+  while (offset < L);
 }
