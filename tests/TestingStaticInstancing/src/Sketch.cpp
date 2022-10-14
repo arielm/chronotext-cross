@@ -108,7 +108,7 @@ void Sketch::drawHelix(InstanceBuffer &instanceBuffer, float r1, float r2, float
       .setTranslate(-cosf(-d) * r, d * dz, +sinf(-d) * r)
       .rotateY(HALF_PI - d + PI)
       .rotateZ(ay)
-      .scale(0.33f);
+      .scale(scale);
 
     instanceBuffer.addMatrix(matrix);
 
