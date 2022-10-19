@@ -6,6 +6,11 @@ namespace chr
 {
   namespace path
   {
+    Path::Path(const vector<glm::vec2> &polyline)
+    :
+    ASPC<glm::vec2>(polyline)
+    {}
+
     Path::Path(vector<glm::vec2> &&polyline)
     :
     ASPC<glm::vec2>(std::forward<vector<glm::vec2>>(polyline))

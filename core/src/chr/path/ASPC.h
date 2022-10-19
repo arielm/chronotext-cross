@@ -42,6 +42,11 @@ namespace chr
     public:
       ASPC<T>() = default;
 
+      ASPC<T>(const std::vector<T> &polyline)
+      :
+      polyline(polyline)
+      {}
+
       ASPC<T>(std::vector<T> &&polyline)
       :
       polyline(polyline)

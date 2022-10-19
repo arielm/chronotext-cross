@@ -10,6 +10,7 @@ namespace chr
     {
     public:
       Path() = default;
+      Path(const std::vector<glm::vec2> &polyline);
       Path(std::vector<glm::vec2> &&polyline);
 
       const std::vector <glm::vec2> &getPolyline() const;

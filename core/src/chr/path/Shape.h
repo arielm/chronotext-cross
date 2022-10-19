@@ -30,6 +30,12 @@ namespace chr
       Path& addPath();
       Shape& addPath(const Path &path);
 
+      inline Shape& addPath(const std::vector<glm::vec2> &points)
+      {
+        paths.emplace_back(points);
+        return *this;
+      }
+
       inline Shape& addPath(std::vector<glm::vec2> &&points)
       {
         paths.emplace_back(std::forward<std::vector<glm::vec2>>(points));
