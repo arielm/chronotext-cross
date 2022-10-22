@@ -28,16 +28,13 @@ namespace chr
       
       MatrixAffine();
       MatrixAffine(const Values &values);
-      MatrixAffine(const MatrixAffine &other) = delete;
+      MatrixAffine(const MatrixAffine &other);
       
       operator Values& () { return m; }
       operator const Values& () const { return m; }
 
       MatrixAffine& set(const Values &values);
       MatrixAffine& set(const MatrixAffine &matrix);
-
-      MatrixAffine& push();
-      MatrixAffine& pop();
 
       MatrixAffine& setIdentity();
 

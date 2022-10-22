@@ -21,6 +21,11 @@ namespace chr
     m(values)
     {}
 
+    MatrixAffine::MatrixAffine(const MatrixAffine &other)
+    :
+    m(other.m)
+    {}
+
     MatrixAffine& MatrixAffine::set(const Values &values)
     {
       m = values;
@@ -30,23 +35,6 @@ namespace chr
     MatrixAffine& MatrixAffine::set(const MatrixAffine &matrix)
     {
       m = matrix.m;
-      return *this;
-    }
-
-    MatrixAffine& MatrixAffine::push()
-    {
-      stack.push_back(m);
-      return *this;
-    }
-
-    MatrixAffine& MatrixAffine::pop()
-    {
-      if (!stack.empty())
-      {
-        m = stack.back();
-        stack.pop_back();
-      }
-
       return *this;
     }
 
