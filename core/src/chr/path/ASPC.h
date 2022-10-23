@@ -26,12 +26,12 @@ namespace chr
     protected:
       float samplingTolerance = 1;
 
-      static std::array<float, 256> randomBase;
+      static std::array<double, 256> randomBase;
       static bool randomBaseGenerated;
       int randomIndex = 0;
 
       void generateRandomBase();
-      float nextRandom();
+      double nextRandom();
     };
 
     // ---

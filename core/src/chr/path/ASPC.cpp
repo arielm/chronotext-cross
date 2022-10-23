@@ -8,7 +8,7 @@ namespace chr
 {
   namespace path
   {
-    array<float, 256> ASPCBase::randomBase;
+    array<double, 256> ASPCBase::randomBase;
     bool ASPCBase::randomBaseGenerated = false;
 
     void ASPCBase::generateRandomBase()
@@ -19,7 +19,7 @@ namespace chr
 
         for (auto i = 0; i < randomBase.size(); i++)
         {
-          randomBase[i] = rand() / float(RAND_MAX);
+          randomBase[i] = rand() / double(RAND_MAX);
         }
 
         randomBaseGenerated = true;
@@ -28,7 +28,7 @@ namespace chr
       randomIndex = 0;
     }
 
-    float ASPCBase::nextRandom()
+    double ASPCBase::nextRandom()
     {
       return randomBase[(randomIndex++) % randomBase.size()];
     }
