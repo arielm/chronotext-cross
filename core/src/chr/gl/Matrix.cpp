@@ -302,14 +302,14 @@ namespace chr
      */
     Matrix& Matrix::rotateXYZ(float ax, float ay, float az)
     {
-      float sx = sin(ax);
-      float cx = cos(ax);
+      float sx = sinf(ax);
+      float cx = cosf(ax);
 
-      float sy = sin(ay);
-      float cy = cos(ay);
+      float sy = sinf(ay);
+      float cy = cosf(ay);
 
-      float sz = sin(az);
-      float cz = cos(az);
+      float sz = sinf(az);
+      float cz = cosf(az);
 
       glm::vec3 left;
       left.x =  cy*cz;
