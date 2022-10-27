@@ -27,6 +27,11 @@ namespace chr
     m33(1)
     {}
 
+    Matrix::Matrix(const array<float, 16> &values)
+    :
+    values(values)
+    {}
+
     Matrix::Matrix(const glm::mat4 &matrix)
     :
     m(matrix)

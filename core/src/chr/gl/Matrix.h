@@ -35,6 +35,7 @@ namespace chr
       };
 
       Matrix();
+      Matrix(const std::array<float, 16> &values);
       Matrix(const glm::mat4 &matrix);
       Matrix(const glm::mat3 &matrix);
       Matrix(const glm::quat &quat);
