@@ -432,6 +432,42 @@ namespace chr
       return glm::inverseTranspose(glm::mat3(m));
     }
 
+    /*
+     * Euler (XYZ) part based on https://github.com/mrdoob/three.js/blob/master/src/math/Euler.js
+     */
+    tuple<glm::vec3, glm::vec3, glm::vec3> Matrix::decompose() const
+    {
+      glm::vec3 translation = glm::vec3(m[3]);
+
+      glm::vec3 scale;
+      scale.x = glm::length(glm::vec3(m[0]));
+      scale.y = glm::length(glm::vec3(m[1]));
+      scale.z = glm::length(glm::vec3(m[2]));
+
+      const glm::mat3 rotation(
+        glm::vec3(m[0]) / scale[0],
+        glm::vec3(m[1]) / scale[1],
+        glm::vec3(m[2]) / scale[2]);
+
+      Matrix r = rotation;
+      glm::vec3 euler;
+
+      euler.y = asinf(math::constrainf(r.m02, -1.0f, 1.0f));
+
+      if (fabsf(r.m02) < 0.9999999f)
+      {
+        euler.x = atan2f(-r.m12, r.m22);
+        euler.z = atan2f(-r.m01, r.m00);
+      }
+      else
+      {
+        euler.x = atan2f(r.m21, r.m11);
+        euler.z = 0;
+      }
+
+      return make_tuple(translation, euler, scale);
+    }
+
     glm::vec3 Matrix::transformPoint(float x, float y) const
     {
       return glm::vec3(
