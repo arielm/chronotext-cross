@@ -96,7 +96,9 @@ namespace chr
       float getDeterminant3x3() const;
       glm::mat3 getNormalMatrix() const;
 
-      std::tuple<glm::vec3, glm::vec3, glm::vec3> decompose() const;
+      void compose(const glm::vec3 &pos, const glm::quat &quat, const glm::vec3 &scale);
+      std::tuple<glm::vec3, glm::vec3, glm::vec3> decomposeEulerXYZ() const;
+      std::tuple<glm::vec3, glm::quat, glm::vec3> decomposeQuaternion() const;
 
       inline glm::vec3 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec3 transformPoint(float x, float y) const;

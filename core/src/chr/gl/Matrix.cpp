@@ -1,5 +1,6 @@
 #include "chr/gl/Matrix.h"
 #include "chr/gl/Batch.h"
+#include "chr/gl/Euler.h"
 
 using namespace std;
 
@@ -432,10 +433,37 @@ namespace chr
       return glm::inverseTranspose(glm::mat3(m));
     }
 
-    /*
-     * Euler (XYZ) part based on https://github.com/mrdoob/three.js/blob/master/src/math/Euler.js
-     */
-    tuple<glm::vec3, glm::vec3, glm::vec3> Matrix::decompose() const
+    void Matrix::compose(const glm::vec3 &pos, const glm::quat &quat, const glm::vec3 &scale)
+    {
+      float x = quat.x, y = quat.y, z = quat.z, w = quat.w;
+      float x2 = x + x, y2 = y + y, z2 = z + z;
+      float xx = x * x2, xy = x * y2, xz = x * z2;
+      float yy = y * y2, yz = y * z2, zz = z * z2;
+      float wx = w * x2, wy = w * y2, wz = w * z2;
+      float sx = scale.x, sy = scale.y, sz = scale.z;
+
+      values[ 0 ] = ( 1 - ( yy + zz ) ) * sx;
+      values[ 1 ] = ( xy + wz ) * sx;
+      values[ 2 ] = ( xz - wy ) * sx;
+      values[ 3 ] = 0;
+
+      values[ 4 ] = ( xy - wz ) * sy;
+      values[ 5 ] = ( 1 - ( xx + zz ) ) * sy;
+      values[ 6 ] = ( yz + wx ) * sy;
+      values[ 7 ] = 0;
+
+      values[ 8 ] = ( xz + wy ) * sz;
+      values[ 9 ] = ( yz - wx ) * sz;
+      values[ 10 ] = ( 1 - ( xx + yy ) ) * sz;
+      values[ 11 ] = 0;
+
+      values[ 12 ] = pos.x;
+      values[ 13 ] = pos.y;
+      values[ 14 ] = pos.z;
+      values[ 15 ] = 1;
+    }
+
+    tuple<glm::vec3, glm::vec3, glm::vec3> Matrix::decomposeEulerXYZ() const
     {
       glm::vec3 translation = glm::vec3(m[3]);
 
@@ -444,28 +472,31 @@ namespace chr
       scale.y = glm::length(glm::vec3(m[1]));
       scale.z = glm::length(glm::vec3(m[2]));
 
-      const glm::mat3 rotation(
+      glm::mat3 rotation(
         glm::vec3(m[0]) / scale[0],
         glm::vec3(m[1]) / scale[1],
         glm::vec3(m[2]) / scale[2]);
 
-      Matrix r = rotation;
-      glm::vec3 euler;
-
-      euler.y = asinf(math::constrainf(r.m02, -1.0f, 1.0f));
-
-      if (fabsf(r.m02) < 0.9999999f)
-      {
-        euler.x = atan2f(-r.m12, r.m22);
-        euler.z = atan2f(-r.m01, r.m00);
-      }
-      else
-      {
-        euler.x = atan2f(r.m21, r.m11);
-        euler.z = 0;
-      }
+      glm::vec3 euler = Euler::fromRotationMatrix(Matrix(rotation));
 
       return make_tuple(translation, euler, scale);
+    }
+
+    tuple<glm::vec3, glm::quat, glm::vec3> Matrix::decomposeQuaternion() const
+    {
+      glm::vec3 translation = glm::vec3(m[3]);
+
+      glm::vec3 scale;
+      scale.x = glm::length(glm::vec3(m[0]));
+      scale.y = glm::length(glm::vec3(m[1]));
+      scale.z = glm::length(glm::vec3(m[2]));
+
+      glm::mat3 rotation(
+        glm::vec3(m[0]) / scale[0],
+        glm::vec3(m[1]) / scale[1],
+        glm::vec3(m[2]) / scale[2]);
+
+      return make_tuple(translation, glm::quat_cast(rotation), scale);
     }
 
     glm::vec3 Matrix::transformPoint(float x, float y) const
