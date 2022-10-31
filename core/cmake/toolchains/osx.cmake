@@ -17,6 +17,6 @@ set(CMAKE_OSX_ARCHITECTURES ${OSX_ARCHS}
 #
 # TODO: AVOID DOUBLE-INCLUSION OF FLAGS
 #
-set(CMAKE_CXX_FLAGS "-mmacosx-version-min=${OSX_DEPLOYMENT_TARGET} -stdlib=libc++ -std=c++14"
+set(CMAKE_CXX_FLAGS "-mmacosx-version-min=${OSX_DEPLOYMENT_TARGET} -stdlib=libc++ -std=c++14 -Wno-deprecated-declarations"
   CACHE STRING "cmake_cxx_flags/osx"
 )
