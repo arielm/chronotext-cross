@@ -99,6 +99,7 @@ namespace chr
       void compose(const glm::vec3 &pos, const glm::quat &quat, const glm::vec3 &scale);
       std::tuple<glm::vec3, glm::vec3, glm::vec3> decomposeEulerXYZ() const;
       std::tuple<glm::vec3, glm::quat, glm::vec3> decomposeQuaternion() const;
+      void extractRotation(const Matrix &matrix);
 
       inline glm::vec3 transformPoint(const glm::vec2 &point) const { return transformPoint(point.x, point.y); }
       glm::vec3 transformPoint(float x, float y) const;

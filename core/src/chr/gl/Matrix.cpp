@@ -499,6 +499,34 @@ namespace chr
       return make_tuple(translation, glm::quat_cast(rotation), scale);
     }
 
+    void Matrix::extractRotation(const Matrix &matrix)
+    {
+        glm::vec3 scale;
+        scale.x = glm::length(glm::vec3(matrix.m[0]));
+        scale.y = glm::length(glm::vec3(matrix.m[1]));
+        scale.z = glm::length(glm::vec3(matrix.m[2]));
+
+        values[ 0 ] = matrix.values[ 0 ] / scale.x;
+        values[ 1 ] = matrix.values[ 1 ] / scale.x;
+        values[ 2 ] = matrix.values[ 2 ] / scale.x;
+        values[ 3 ] = 0;
+
+        values[ 4 ] = matrix.values[ 4 ] / scale.y;
+        values[ 5 ] = matrix.values[ 5 ] / scale.y;
+        values[ 6 ] = matrix.values[ 6 ] / scale.y;
+        values[ 7 ] = 0;
+
+        values[ 8 ] = matrix.values[ 8 ] / scale.z;
+        values[ 9 ] = matrix.values[ 9 ] / scale.z;
+        values[ 10 ] = matrix.values[ 10 ] / scale.z;
+        values[ 11 ] = 0;
+
+        values[ 12 ] = 0;
+        values[ 13 ] = 0;
+        values[ 14 ] = 0;
+        values[ 15 ] = 1;
+    }
+
     glm::vec3 Matrix::transformPoint(float x, float y) const
     {
       return glm::vec3(
