@@ -104,6 +104,33 @@ namespace chr
       return *this;
     }
 
+    Matrix Matrix::extractRotation(const Matrix &matrix)
+    {
+        glm::vec3 scale;
+        scale.x = glm::length(glm::vec3(matrix.m[0]));
+        scale.y = glm::length(glm::vec3(matrix.m[1]));
+        scale.z = glm::length(glm::vec3(matrix.m[2]));
+
+        Matrix result;
+
+        result.values[0] = matrix.values[0] / scale.x;
+        result.values[1] = matrix.values[1] / scale.x;
+        result.values[2] = matrix.values[2] / scale.x;
+        result.values[3] = 0;
+
+        result.values[4] = matrix.values[4] / scale.y;
+        result.values[5] = matrix.values[5] / scale.y;
+        result.values[6] = matrix.values[6] / scale.y;
+        result.values[7] = 0;
+
+        result.values[8] = matrix.values[8] / scale.z;
+        result.values[9] = matrix.values[9] / scale.z;
+        result.values[10] = matrix.values[10] / scale.z;
+        result.values[11] = 0;
+
+        return result;
+    }
+
     Matrix& Matrix::push(Stack &stack)
     {
       stack.push_back(values);
@@ -497,34 +524,6 @@ namespace chr
         glm::vec3(m[2]) / scale[2]);
 
       return make_tuple(translation, glm::quat_cast(rotation), scale);
-    }
-
-    void Matrix::extractRotation(const Matrix &matrix)
-    {
-        glm::vec3 scale;
-        scale.x = glm::length(glm::vec3(matrix.m[0]));
-        scale.y = glm::length(glm::vec3(matrix.m[1]));
-        scale.z = glm::length(glm::vec3(matrix.m[2]));
-
-        values[ 0 ] = matrix.values[ 0 ] / scale.x;
-        values[ 1 ] = matrix.values[ 1 ] / scale.x;
-        values[ 2 ] = matrix.values[ 2 ] / scale.x;
-        values[ 3 ] = 0;
-
-        values[ 4 ] = matrix.values[ 4 ] / scale.y;
-        values[ 5 ] = matrix.values[ 5 ] / scale.y;
-        values[ 6 ] = matrix.values[ 6 ] / scale.y;
-        values[ 7 ] = 0;
-
-        values[ 8 ] = matrix.values[ 8 ] / scale.z;
-        values[ 9 ] = matrix.values[ 9 ] / scale.z;
-        values[ 10 ] = matrix.values[ 10 ] / scale.z;
-        values[ 11 ] = 0;
-
-        values[ 12 ] = 0;
-        values[ 13 ] = 0;
-        values[ 14 ] = 0;
-        values[ 15 ] = 1;
     }
 
     glm::vec3 Matrix::transformPoint(float x, float y) const
