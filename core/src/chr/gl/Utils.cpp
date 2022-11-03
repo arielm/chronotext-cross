@@ -204,5 +204,25 @@ namespace chr
 
       return true;
     }
+
+    void addLineStrip(VertexBatch<XYZ> &batch, const std::vector<glm::vec2> &points)
+    {
+      for (const auto &point : points)
+      {
+        batch.addVertex(point);
+      }
+    }
+
+    void addLines(VertexBatch<XYZ> &batch, const std::vector<glm::vec2> &points)
+    {
+      int size = points.size();
+      if (size > 1)
+      {
+        for (int i = 0; i < size - 1; i++)
+        {
+          batch.addVertices(points[i], points[i + 1]);
+        }
+      }
+    }
   }
 }

@@ -1,8 +1,7 @@
 #pragma once
 
-#include "chr/gl.h"
+#include "chr/gl/Batch.h"
 #include "chr/gl/Quad.h"
-#include "chr/gl/Texture.h"
 #include "chr/gl/ShaderHelper.h"
 #include "chr/math/Utils.h"
 #include "chr/image/Utils.h"
@@ -20,5 +19,8 @@ namespace chr
     const glm::mat4 getPerspectiveMatrix(float fovY, float nearZ, float farZ, float width, float height, float panX = 0, float panY = 0, float zoom = 1);
 
     bool clip(Quad<XYZ.UV> &quad, const math::Rectf &clipRect, const glm::vec2 &textureFactor);
+
+    void addLineStrip(VertexBatch<XYZ> &batch, const std::vector<glm::vec2> &points);
+    void addLines(VertexBatch<XYZ> &batch, const std::vector<glm::vec2> &points);
   }
 }
