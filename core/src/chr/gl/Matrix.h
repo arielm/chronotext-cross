@@ -54,6 +54,7 @@ namespace chr
       Matrix& set(const glm::quat &quat);
       Matrix& set(const glm::vec3 &right, const glm::vec3 &up, const glm::vec3 &back);
 
+      static Matrix compose(const glm::vec3 &pos, const glm::quat &quat, const glm::vec3 &scale);
       static Matrix extractRotation(const Matrix &matrix);
 
       Matrix& push(Stack &stack);
@@ -98,7 +99,6 @@ namespace chr
       float getDeterminant3x3() const;
       glm::mat3 getNormalMatrix() const;
 
-      void compose(const glm::vec3 &pos, const glm::quat &quat, const glm::vec3 &scale);
       std::tuple<glm::vec3, glm::vec3, glm::vec3> decomposeEulerXYZ() const;
       std::tuple<glm::vec3, glm::quat, glm::vec3> decomposeQuaternion() const;
 

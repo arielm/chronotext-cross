@@ -104,6 +104,40 @@ namespace chr
       return *this;
     }
 
+    Matrix Matrix::compose(const glm::vec3 &pos, const glm::quat &quat, const glm::vec3 &scale)
+    {
+      float x = quat.x, y = quat.y, z = quat.z, w = quat.w;
+      float x2 = x + x, y2 = y + y, z2 = z + z;
+      float xx = x * x2, xy = x * y2, xz = x * z2;
+      float yy = y * y2, yz = y * z2, zz = z * z2;
+      float wx = w * x2, wy = w * y2, wz = w * z2;
+      float sx = scale.x, sy = scale.y, sz = scale.z;
+
+      Matrix result;
+
+      result.values[ 0 ] = ( 1 - ( yy + zz ) ) * sx;
+      result.values[ 1 ] = ( xy + wz ) * sx;
+      result.values[ 2 ] = ( xz - wy ) * sx;
+      result.values[ 3 ] = 0;
+
+      result.values[ 4 ] = ( xy - wz ) * sy;
+      result.values[ 5 ] = ( 1 - ( xx + zz ) ) * sy;
+      result.values[ 6 ] = ( yz + wx ) * sy;
+      result.values[ 7 ] = 0;
+
+      result.values[ 8 ] = ( xz + wy ) * sz;
+      result.values[ 9 ] = ( yz - wx ) * sz;
+      result.values[ 10 ] = ( 1 - ( xx + yy ) ) * sz;
+      result.values[ 11 ] = 0;
+
+      result.values[ 12 ] = pos.x;
+      result.values[ 13 ] = pos.y;
+      result.values[ 14 ] = pos.z;
+      result.values[ 15 ] = 1;
+
+      return result;
+    }
+
     Matrix Matrix::extractRotation(const Matrix &matrix)
     {
         glm::vec3 scale;
@@ -458,36 +492,6 @@ namespace chr
     glm::mat3 Matrix::getNormalMatrix() const
     {
       return glm::inverseTranspose(glm::mat3(m));
-    }
-
-    void Matrix::compose(const glm::vec3 &pos, const glm::quat &quat, const glm::vec3 &scale)
-    {
-      float x = quat.x, y = quat.y, z = quat.z, w = quat.w;
-      float x2 = x + x, y2 = y + y, z2 = z + z;
-      float xx = x * x2, xy = x * y2, xz = x * z2;
-      float yy = y * y2, yz = y * z2, zz = z * z2;
-      float wx = w * x2, wy = w * y2, wz = w * z2;
-      float sx = scale.x, sy = scale.y, sz = scale.z;
-
-      values[ 0 ] = ( 1 - ( yy + zz ) ) * sx;
-      values[ 1 ] = ( xy + wz ) * sx;
-      values[ 2 ] = ( xz - wy ) * sx;
-      values[ 3 ] = 0;
-
-      values[ 4 ] = ( xy - wz ) * sy;
-      values[ 5 ] = ( 1 - ( xx + zz ) ) * sy;
-      values[ 6 ] = ( yz + wx ) * sy;
-      values[ 7 ] = 0;
-
-      values[ 8 ] = ( xz + wy ) * sz;
-      values[ 9 ] = ( yz - wx ) * sz;
-      values[ 10 ] = ( 1 - ( xx + yy ) ) * sz;
-      values[ 11 ] = 0;
-
-      values[ 12 ] = pos.x;
-      values[ 13 ] = pos.y;
-      values[ 14 ] = pos.z;
-      values[ 15 ] = 1;
     }
 
     tuple<glm::vec3, glm::vec3, glm::vec3> Matrix::decomposeEulerXYZ() const
