@@ -351,22 +351,32 @@ namespace chr
 
   EM_BOOL CrossDelegate::mouseCallback(int eventType, const EmscriptenMouseEvent *e, void *userData)
   {
+    int button = e->button;
+    if (button == 1)
+    {
+      button = 2;
+    }
+    else if (button == 2)
+    {
+      button = 1;
+    }
+
     switch (eventType)
     {
       case EMSCRIPTEN_EVENT_MOUSEDOWN:
       {
-        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_PRESSED);
+        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, button, MouseEvent::KIND_PRESSED);
 
-        intern::instance->mouseButton = e->button;
+        intern::instance->mouseButton = button;
         intern::instance->mousePressed = true;
       }
       break;
 
       case EMSCRIPTEN_EVENT_MOUSEUP:
       {
-        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, e->button, MouseEvent::KIND_RELEASED);
+        intern::instance->mouseEvents.emplace_back(intern::instance->mouseX, intern::instance->mouseY, button, MouseEvent::KIND_RELEASED);
 
-        intern::instance->mouseButton = e->button;
+        intern::instance->mouseButton = button;
         intern::instance->mousePressed = false;
       }
       break;
