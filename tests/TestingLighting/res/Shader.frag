@@ -1,60 +1,121 @@
 /*
- * Based on http://www.opengl-tutorial.org/beginners-tutorials/tutorial-8-basic-shading
+ * Based on https://learnopengl.com/Lighting/Multiple-lights
  */
 
 #ifdef GL_ES
-    precision highp float;
+    precision mediump float;
 #endif
 
-uniform sampler2D u_sampler;
-uniform vec3 u_light_position;
-uniform vec3 u_light_color;
-uniform float u_light_intensity;
-uniform vec3 u_ambient_color;
-uniform vec3 u_diffuse_color;
-uniform vec3 u_specular_color;
-uniform float u_shininess;
-uniform int u_has_texture;
-uniform int u_has_color;
+struct Material
+{
+    int has_dir_light;
+    int point_light_count;
+    int has_color;
+    int has_texture;
+    sampler2D texture;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
 
-varying vec4 v_color;
+struct DirLight
+{
+    vec3 direction;
+    vec3 color;
+    float intensity;
+};
+
+struct PointLight
+{
+    vec3 position;
+    vec3 color;
+    float intensity;
+};
+
+varying vec3 v_frag_pos;
+varying vec3 v_normal;
 varying vec2 v_coord;
-varying vec3 v_position_worldspace;
-varying vec3 v_normal_cameraspace;
-varying vec3 v_eye_direction_cameraspace;
-varying vec3 v_light_direction_cameraspace;
+varying vec3 v_color;
+
+uniform vec3 u_view_pos;
+uniform DirLight u_dir_light;
+uniform PointLight u_point_lights[3];
+uniform Material u_material;
+
+vec3 calcDirLight(DirLight light, vec3 normal, vec3 view_dir)
+{
+    vec3 light_dir = normalize(-light.direction);
+
+    float diff = max(dot(normal, light_dir), 0.0);
+
+    vec3 reflect_dir = reflect(-light_dir, normal);
+    float spec = pow(max(dot(view_dir, reflect_dir), 0.0), u_material.shininess);
+
+    vec3 ambient = u_material.ambient;
+    vec3 diffuse = ((u_material.has_color == 1) ? v_color : u_material.diffuse) * diff * light.color * light.intensity;
+    vec3 specular = u_material.specular * spec * light.color * light.intensity;
+
+    if (u_material.has_texture == 1)
+    {
+        vec3 sample = vec3(texture2D(u_material.texture, v_coord));
+        ambient *= sample;
+        diffuse *= sample;
+    }
+
+    return (ambient + diffuse + specular);
+}
+
+vec3 calcPointLight(PointLight light, vec3 normal, vec3 view_dir)
+{
+    vec3 light_dir = normalize(light.position - v_frag_pos);
+
+    float diff = max(dot(normal, light_dir), 0.0);
+
+    vec3 reflect_dir = reflect(-light_dir, normal);
+    float spec = pow(max(dot(view_dir, reflect_dir), 0.0), u_material.shininess);
+
+    vec3 ambient = u_material.ambient;
+    vec3 diffuse = ((u_material.has_color == 1) ? v_color : u_material.diffuse) * diff * light.color * light.intensity;
+    vec3 specular = u_material.specular * spec * light.color * light.intensity;
+
+    if (u_material.has_texture == 1)
+    {
+        vec3 sample = vec3(texture2D(u_material.texture, v_coord));
+        ambient *= sample;
+        diffuse *= sample;
+    }
+
+    return (ambient + diffuse + specular);
+}
 
 void main()
 {
-    // Normal of the computed fragment, in camera space
-    vec3 n = normalize(v_normal_cameraspace);
-    // Direction of the light (from the fragment to the light)
-    vec3 l = normalize(v_light_direction_cameraspace);
-    // Cosine of the angle between the normal and the light direction,
-    // clamped above 0
-    //  - light is at the vertical of the triangle -> 1
-    //  - light is perpendicular to the triangle -> 0
-    //  - light is behind the triangle -> 0
-    float cosTheta = clamp(dot(n, l), 0.0, 1.0);
+    vec3 norm = normalize(v_normal);
+    vec3 view_dir = normalize(u_view_pos - v_frag_pos);
 
-    // Eye vector (towards the camera)
-    vec3 E = normalize(v_eye_direction_cameraspace);
-    // Direction in which the triangle reflects the light
-    vec3 R = reflect(-l, n);
-    // Cosine of the angle between the Eye vector and the Reflect vector,
-    // clamped to 0
-    //  - Looking into the reflection -> 1
-    //  - Looking elsewhere -> < 1
-    float cosAlpha = clamp(dot(E, R), 0.0, 1.0);
+    vec3 result = vec3(0);
 
-    vec4 color = (u_has_color == 1) ? v_color : vec4(u_diffuse_color, 1);
-    if (u_has_texture == 1)
+    if (u_material.has_dir_light == 1)
     {
-        color *= texture2D(u_sampler, v_coord);
+        result += calcDirLight(u_dir_light, norm, view_dir);
     }
 
-    gl_FragColor =
-        vec4(u_ambient_color +
-        color.rgb * u_light_color * u_light_intensity * cosTheta +
-        u_specular_color * u_light_color * u_light_intensity * pow(cosAlpha, u_shininess), 1.0);
+    if (u_material.point_light_count == 1)
+    {
+        result += calcPointLight(u_point_lights[0], norm, view_dir);
+    }
+    else if (u_material.point_light_count == 2)
+    {
+        result += calcPointLight(u_point_lights[0], norm, view_dir);
+        result += calcPointLight(u_point_lights[1], norm, view_dir);
+    }
+    else if (u_material.point_light_count == 3)
+    {
+        result += calcPointLight(u_point_lights[0], norm, view_dir);
+        result += calcPointLight(u_point_lights[1], norm, view_dir);
+        result += calcPointLight(u_point_lights[2], norm, view_dir);
+    }
+
+    gl_FragColor = vec4(result, 1.0);
 }

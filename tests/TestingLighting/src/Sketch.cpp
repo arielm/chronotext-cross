@@ -8,6 +8,8 @@ using namespace chr;
 using namespace gl;
 using namespace draw;
 
+static constexpr float RADIUS = 150;
+
 Sketch::Sketch()
 :
 shader(InputSource::resource("Shader.vert"), InputSource::resource("Shader.frag"))
@@ -56,16 +58,14 @@ void Sketch::draw()
 
   camera.getViewMatrix()
     .setIdentity()
-    .translate(0, 0, -300)
-    .rotateY(clock()->getTime() * 0.125f);
+    .translate(0, 0, -300);
 
   //
 
   float t = clock()->getTime() * 1.0f;
-  float radius = 150;
-  float x = cosf(t) * radius;
+  float x = cosf(t) * RADIUS;
   float y = 0;
-  float z = sinf(t) * radius;
+  float z = sinf(t) * RADIUS;
   glm::vec3 lightPosition(x, y, z);
 
   //
@@ -85,18 +85,23 @@ void Sketch::draw()
 
   //
 
+  Matrix modelMatrix;
+  modelMatrix.rotateY(clock()->getTime() * 0.125f);
+
   State()
-    .setShaderMatrix<MODEL>(Matrix())
+    .setShaderMatrix<MODEL>(modelMatrix)
     .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
-    .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
-    .setShaderUniform("u_light_position", lightPosition)
-    .setShaderUniform("u_light_color", glm::vec3(1, 1, 1))
-    .setShaderUniform("u_light_intensity", 1.0f)
-    .setShaderUniform("u_ambient_color", glm::vec3(0, 0, 0))
-    .setShaderUniform("u_diffuse_color", glm::vec3(1.0f, 0.5f, 0.0f))
-    .setShaderUniform("u_specular_color", glm::vec3(1, 1, 1))
-    .setShaderUniform("u_shininess", 25.0f)
+    .setShaderMatrix<NORMAL>(modelMatrix.getNormalMatrix())
+    .setShaderUniform("u_view_pos", camera.getEyePosition())
+    .setShaderUniform("u_material.point_light_count", 1)
+    .setShaderUniform("u_point_lights[0].position", lightPosition)
+    .setShaderUniform("u_point_lights[0].color", glm::vec3(1, 1, 1))
+    .setShaderUniform("u_point_lights[0].intensity", 1.0f)
+    .setShaderUniform("u_material.ambient", glm::vec3(0.1f, 0.1f, 0.1f))
+    .setShaderUniform("u_material.diffuse", glm::vec3(1.0f, 0.5f, 0.0f))
+    .setShaderUniform("u_material.specular", glm::vec3(1, 1, 1))
+    .setShaderUniform("u_material.shininess", 25.0f)
     .apply();
 
   modelBatch.flush();
