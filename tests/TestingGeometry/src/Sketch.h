@@ -17,7 +17,6 @@ public:
 protected:
   chr::gl::Camera camera;
 
-  chr::gl::Texture texture;
   chr::gl::ShaderProgram shader;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV.RGBA> geometryBatch;
   chr::gl::IndexedVertexBatch<chr::gl::XYZ.N.UV> torusBatch;

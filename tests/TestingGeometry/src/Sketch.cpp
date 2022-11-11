@@ -17,7 +17,7 @@ shader(InputSource::resource("Shader.vert"), InputSource::resource("Shader.frag"
 
 void Sketch::setup()
 {
-  texture = Texture::ImageRequest("checker.png")
+  Texture texture = Texture::ImageRequest("checker.png")
     .setWrap(GL_REPEAT, GL_REPEAT)
     .setFilters(GL_NEAREST, GL_NEAREST);
 
@@ -28,47 +28,47 @@ void Sketch::setup()
     .setTexture(texture);
 
   Box()
-    .setFrontFace(CCW)
+    .setFrontFace(CW)
     .setColor(0.75f, 0.75f, 0.75f, 1)
-    .setSize(300, 5, 300)
+    .setSize(300, 0, 300)
     .append(geometryBatch, Matrix());
 
   Box()
-    .setFrontFace(CCW)
+    .setFrontFace(CW)
     .setColor(1, 0.25f, 0, 1)
     .setSize(60)
-    .append(geometryBatch, Matrix().translate(0, -30, 0));
+    .append(geometryBatch, Matrix().translate(0, 30, 0));
 
   Sphere()
-    .setFrontFace(CCW)
+    .setFrontFace(CW)
     .setColor(0.25f, 1.0f, 0.0f, 1)
     .setSectorCount(60)
     .setStackCount(30)
     .setRadius(40)
-    .append(geometryBatch, Matrix().translate(-75, -40, 100));
+    .append(geometryBatch, Matrix().translate(-75, 40, 100));
 
   Cylinder()
-    .setFrontFace(CCW)
+    .setFrontFace(CW)
     .setColor(0.25f, 0.25f, 1.0f, 1)
     .setSectorCount(30)
     .setStackCount(1)
     .setBaseRadius(40)
     .setTopRadius(0)
     .setHeight(80)
-    .append(geometryBatch, Matrix().translate(75, -40, -100).rotateX(D2R * 90));
+    .append(geometryBatch, Matrix().translate(75, 40, -100).rotateX(-HALF_PI));
 
   Cylinder()
-    .setFrontFace(CCW)
+    .setFrontFace(CW)
     .setColor(0.25f, 0.25f, 1.0f, 1)
     .setSectorCount(30)
     .setStackCount(1)
     .setBaseRadius(40)
     .setTopRadius(40)
     .setHeight(80)
-    .append(geometryBatch, Matrix().translate(-75, -40, -100).rotateX(D2R * 90));
+    .append(geometryBatch, Matrix().translate(-75, 40, -100).rotateX(-HALF_PI));
 
   Torus()
-    .setFrontFace(CCW)
+    .setFrontFace(CW)
     .setSliceCount(20)
     .setLoopCount(60)
     .setInnerRadius(12)
@@ -102,40 +102,41 @@ void Sketch::draw()
 
   camera.getViewMatrix()
     .setIdentity()
-    .scale(1, -1, 1)
     .translate(0, 0, -400)
-    .rotateX(-30 * D2R)
+    .rotateX(30 * D2R)
     .rotateY(15 * D2R);
+
+  Matrix modelMatrix;
 
   State state;
   state
     .setShader(shader)
-    .setShaderMatrix<MODEL>(Matrix())
+    .setShaderMatrix<MODEL>(modelMatrix)
     .setShaderMatrix<VIEW>(camera.getViewMatrix())
     .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
-    .setShaderMatrix<NORMAL>(camera.getNormalMatrix())
-    .setShaderUniform("u_light_position", camera.getEyePosition())
-    .setShaderUniform("u_light_color", glm::vec3(1.0, 1.0, 1.0))
-    .setShaderUniform("u_light_intensity", 1.0f)
-    .setShaderUniform("u_ambient_color", glm::vec3(0, 0, 0))
-    .setShaderUniform("u_specular_color", glm::vec3(1, 1, 1))
-    .setShaderUniform("u_shininess", 25.0f)
-    .setShaderUniform("u_has_texture", true)
-    .setShaderUniform("u_has_color", true) // i.e. do not use diffuse color but vertex color instead
+    .setShaderMatrix<NORMAL>(modelMatrix.getNormalMatrix())
+    .setShaderUniform("u_view_pos", camera.getEyePosition())
+    .setShaderUniform("u_material.point_light_count", 1)
+    .setShaderUniform("u_point_lights[0].position", camera.getEyePosition())
+    .setShaderUniform("u_point_lights[0].color", glm::vec3(1, 1, 1))
+    .setShaderUniform("u_point_lights[0].intensity", 1.0f)
+    .setShaderUniform("u_material.ambient", glm::vec3(0.1f, 0.1f, 0.1f))
+    .setShaderUniform("u_material.specular", glm::vec3(1, 1, 1))
+    .setShaderUniform("u_material.shininess", 25.0f)
+    .setShaderUniform("u_material.has_color", true) // i.e. do not use diffuse color but vertex color instead
+    .setShaderUniform("u_material.has_texture", true)
+    .setShaderUniform("u_material.texture", 0)
     .apply();
 
   geometryBatch.flush();
 
-  Matrix modelMatrix;
   modelMatrix
-    .translate(75, -60, 100)
+    .translate(75, 60, 100)
     .rotateY(clock()->getTime());
-
-  Matrix modelViewMatrix = modelMatrix * camera.getViewMatrix();
 
   state
     .setShaderMatrix<MODEL>(modelMatrix)
-    .setShaderMatrix<NORMAL>(modelViewMatrix.getNormalMatrix())
+    .setShaderMatrix<NORMAL>(modelMatrix.getNormalMatrix())
     .apply();
 
   torusBatch.flush();
