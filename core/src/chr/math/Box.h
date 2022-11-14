@@ -23,6 +23,7 @@ namespace chr
       float depth() const;
 
       glm::vec3 center() const;
+      void include(const Box &box);
 
       friend std::ostream& operator<<(std::ostream &stream, const Box &box)
       {

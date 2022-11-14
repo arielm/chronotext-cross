@@ -35,5 +35,11 @@ namespace chr
     {
       return glm::vec3(min + max) * 0.5f;
     }
+
+    void Box::include(const Box &box)
+    {
+      min = glm::min(min, box.min);
+      max = glm::max(max, box.max);
+    }
   }
 }
