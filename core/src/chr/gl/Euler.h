@@ -15,7 +15,7 @@ namespace chr
     class Euler
     {
     public:
-      static glm::vec3 fromRotationMatrix(const Matrix &m); // Assumes the upper 3x3 of r is a pure rotation matrix (i.e. unscaled)
+      static glm::vec3 fromRotationMatrix(const Matrix &m); // Assumes the upper 3x3 of m is a pure rotation matrix (i.e. unscaled)
       static glm::vec3 fromQuaternion(const glm::quat &q);
       static glm::quat toQuaternion(const glm::vec3 &euler);
     };
