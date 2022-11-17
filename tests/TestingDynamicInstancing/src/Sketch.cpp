@@ -22,7 +22,7 @@ shader(InputSource::resource("Shader.vert"), InputSource::resource("Shader.frag"
 
 void Sketch::setup()
 {
-  batch = BatchImporter::read(InputSource::resource("duck.model"))[0];
+  batch = BatchImporter().import(InputSource::resource("duck.model"))[0];
 
   instanceBuffer = InstanceBuffer(GL_DYNAMIC_DRAW);
 
@@ -61,17 +61,19 @@ void Sketch::draw()
   camera.getViewMatrix()
     .setIdentity()
     .translate(0, 0, -300)
-    .rotateX(115 * D2R)
-    .rotateY(0);
+    .rotateX(115 * D2R);
 
-  State()
-    .setShader(shader)
-    .setShaderMatrix<VIEW>(camera.getViewMatrix())
-    .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
-    .setShaderUniform("u_light_position", camera.getEyePosition())
-    .setShaderUniform("u_light_color", glm::vec3(1, 1, 1))
-    .setShaderUniform("u_light_intensity", 1.0f)
-    .apply();
+    State()
+      .setShader(shader)
+      .setShaderMatrix<VIEW>(camera.getViewMatrix())
+      .setShaderMatrix<PROJECTION>(camera.getProjectionMatrix())
+      .setShaderUniform("u_view_pos", camera.getEyePosition())
+      .setShaderUniform("u_material.point_light_count", 1)
+      .setShaderUniform("u_point_lights[0].position", camera.getEyePosition())
+      .setShaderUniform("u_point_lights[0].color", glm::vec3(1, 1, 1))
+      .setShaderUniform("u_point_lights[0].intensity", 1.0f)
+      .setShaderUniform("u_material.texture", 0)
+      .apply();
 
   instanceBuffer.clearMatrices();
   drawOnPath(instanceBuffer, spiral.path, NUM_DUCKS, 10, 0.1f);
