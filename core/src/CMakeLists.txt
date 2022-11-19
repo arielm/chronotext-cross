@@ -351,6 +351,22 @@ list(APPEND LIBRARIES ${ZLIB_LIBRARIES})
 
 # ---
 
+if (PLATFORM MATCHES osx)
+  list(APPEND SRC_FILES
+    "chr/gl/SyphonServer.mm"
+  )
+
+  list(APPEND INCLUDE_DIRS
+    "${TREE}/syphon/Syphon.framework"
+  )
+
+  list(APPEND LIBRARIES
+    "${TREE}/syphon/Syphon.framework"
+  )
+endif()
+
+# ---
+
 include_directories(${INCLUDE_DIRS})
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
