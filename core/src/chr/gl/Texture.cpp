@@ -12,7 +12,7 @@ namespace chr
     Texture::Texture()
     {}
 
-    Texture::Texture(GLuint textureId, int width, int height, GLenum format)
+    Texture::Texture(GLuint textureId, int width, int height, GLenum format, GLenum target)
     :
     id(usageCounter++),
     element(new texture::Element()),
@@ -21,7 +21,8 @@ namespace chr
     innerWidth(width),
     innerHeight(height),
     coords1(0),
-    coords2(1)
+    coords2(1),
+    target(target)
     {
       element->textureId = textureId;
       element->format = format;
@@ -45,7 +46,8 @@ namespace chr
     size(response.size),
     innerSize(response.innerSize),
     coords1(response.coords1),
-    coords2(response.coords2)
+    coords2(response.coords2),
+    target(GL_TEXTURE_2D)
     {
       element->textureId = response.textureId;
       element->format = response.format;
@@ -59,7 +61,8 @@ namespace chr
     size(other.size),
     innerSize(other.innerSize),
     coords1(other.coords1),
-    coords2(other.coords2)
+    coords2(other.coords2),
+    target(other.target)
     {
       if (element)
       {
@@ -77,6 +80,7 @@ namespace chr
         innerSize = other.innerSize;
         coords1 = other.coords1;
         coords2 = other.coords2;
+        target = other.target;
 
         if (element)
         {
@@ -97,7 +101,7 @@ namespace chr
       if (element && element->textureId)
       {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, element->textureId);
+        glBindTexture(target, element->textureId);
         return true;
       }
 
@@ -109,7 +113,7 @@ namespace chr
       if (element && element->textureId)
       {
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(target, 0);
       }
     }
 

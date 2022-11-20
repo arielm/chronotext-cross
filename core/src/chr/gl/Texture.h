@@ -188,6 +188,7 @@ namespace chr
 
       int id = -1;
       texture::Element *element = nullptr;
+      GLenum target;
 
       union
       {
@@ -214,7 +215,7 @@ namespace chr
       };
 
       Texture();
-      Texture(GLuint textureId, int width, int height, GLenum format = GL_RGBA);
+      Texture(GLuint textureId, int width, int height, GLenum format = GL_RGBA, GLenum target = GL_TEXTURE_2D);
       Texture(const ImageRequest &request);
       Texture(const MaskedRequest &request);
       Texture(const Response &response);
