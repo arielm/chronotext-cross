@@ -44,6 +44,20 @@ namespace chr
           binded = false;
         }
       }
+
+      Texture Server::getTexture()
+      {
+        Texture texture;
+
+        if (server)
+        {
+          SyphonImage *image = [(SyphonServer*)server newFrameImage];
+          texture = Texture(image.textureName, image.textureSize.width, image.textureSize.height, GL_RGBA, GL_TEXTURE_RECTANGLE_ARB);
+          [image release];
+        }
+
+        return texture;
+      }
     }
   }
 }

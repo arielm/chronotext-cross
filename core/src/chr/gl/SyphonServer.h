@@ -1,6 +1,6 @@
 #pragma once
 
-#include "chr/glm.h"
+#include "chr/gl/Texture.h"
 
 namespace chr
 {
@@ -16,7 +16,9 @@ namespace chr
 
         bool bind(const glm::vec2 &size);
         void unbind();
-        
+
+        Texture getTexture();
+
       protected:
         void *server = nullptr;
         bool binded = false;
