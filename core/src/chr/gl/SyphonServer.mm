@@ -10,10 +10,9 @@ namespace chr
   {
     namespace syphon
     {
-      void Server::start(const string &name)
+      void Server::start(int aaSamples)
       {
-        NSString *n = [NSString stringWithCString:name.c_str() encoding:[NSString defaultCStringEncoding]];
-        server = [[SyphonServer alloc] initWithName:n context:CGLGetCurrentContext() options:nil];
+        server = [[SyphonServer alloc] initWithName:nil context:CGLGetCurrentContext() options:@{SyphonServerOptionAntialiasSampleCount:[NSNumber numberWithInt:aaSamples]}];
       }
 
       void Server::stop()

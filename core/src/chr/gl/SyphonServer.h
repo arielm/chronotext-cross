@@ -12,7 +12,7 @@ namespace chr
       class Server
       {
       public:
-        void start(const std::string &name = "");
+        void start(int aaSamples = 0);
         void stop();
 
         bool bind(const glm::vec2 &size);
