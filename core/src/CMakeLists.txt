@@ -61,6 +61,7 @@ list(APPEND SRC_FILES
   "chr/gl/shaders/TextureLambertShader.cpp"
   "chr/gl/shaders/TextureAlphaShader.cpp"
   "chr/gl/shaders/TextureShader.cpp"
+  "chr/gl/shaders/TextureRectangleShader.cpp"
   "chr/path/ASPC.cpp"
   "chr/path/Path.cpp"
   "chr/path/Shape.cpp"

@@ -135,6 +135,7 @@ if (PLATFORM MATCHES osx)
     "-framework IOKit"
     "-framework CoreVideo"
     "-framework AudioToolbox"
+    "$ENV{CROSS_PATH}/tree/syphon/Syphon.framework"
   )
 
 elseif (PLATFORM MATCHES mxe)
