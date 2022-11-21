@@ -30,18 +30,19 @@ namespace chr
       {
         if (server)
         {
-          binded = [(SyphonServer*)server bindToDrawFrameOfSize:NSMakeSize(size.x, size.y)];
+          this->size = size;
+          bound = [(SyphonServer*)server bindToDrawFrameOfSize:NSMakeSize(size.x, size.y)];
         }
 
-        return binded;
+        return bound;
       }
 
       void Server::unbind()
       {
-        if (binded)
+        if (bound)
         {
           [(SyphonServer*)server unbindAndPublish];
-          binded = false;
+          bound = false;
         }
       }
 
@@ -57,6 +58,36 @@ namespace chr
         }
 
         return texture;
+      }
+
+      void Server::draw()
+      {
+        if (server && !bound)
+        {
+          glDisable(GL_DEPTH_TEST);
+          glDepthMask(GL_FALSE);
+
+          batch
+            .setShader(shader)
+            .setShaderColor(1, 1, 1, 1)
+            .setTexture(getTexture());
+
+          State()
+            .setShaderMatrix(glm::ortho(0.0f, size.x, 0.0f, size.y))
+            .apply();
+
+          batch.clear();
+
+          batch
+            .addVertex(0, 0, 0, 0, 0)
+            .addVertex(0, size.y, 0, 0, size.y)
+            .addVertex(size.x, size.y, 0, size.x, size.y)
+            .addVertex(size.x, 0, 0, size.x, 0);
+
+          batch.addIndices(0, 1, 2, 2, 3, 0);
+
+          batch.flush();
+        }
       }
     }
   }

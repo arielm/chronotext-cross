@@ -1,6 +1,7 @@
 #pragma once
 
-#include "chr/gl/Texture.h"
+#include "chr/gl/Batch.h"
+#include "chr/gl/shaders/TextureRectangleShader.h"
 
 namespace chr
 {
@@ -18,10 +19,15 @@ namespace chr
         void unbind();
 
         Texture getTexture();
+        void draw();
 
       protected:
         void *server = nullptr;
-        bool binded = false;
+        bool bound = false;
+
+        glm::vec2 size;
+        IndexedVertexBatch<XYZ.UV> batch;
+        shaders::TextureRectangleShader shader;
       };
     }
   }
