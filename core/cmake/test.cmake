@@ -268,6 +268,10 @@ elseif (PLATFORM MATCHES osx)
       ${SRC_FILES}
     )
 
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+      BUILD_RPATH ""
+    )
+
   else()
     message(FATAL_ERROR "UNSUPPORTED RUN-MODE!")
   endif()
