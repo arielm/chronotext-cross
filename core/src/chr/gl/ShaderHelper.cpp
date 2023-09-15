@@ -69,7 +69,7 @@ namespace chr
               GLint maxLength = 0;
               glGetShaderiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
               string buf(maxLength, 0);
-              glGetShaderInfoLog(programId, maxLength, &maxLength, &buf[0]);
+              glGetShaderInfoLog(programId, maxLength, &maxLength, &buf[0]); // XXX: glGetProgramInfoLog
 
               LOGE << "ERROR: FAILED TO LINK SHADER PROGRAM" << endl;
               LOGE << buf << endl;
