@@ -15,6 +15,7 @@ namespace chr
         MODE_LOOP,
         MODE_TANGENT,
         MODE_MODULO,
+        MODE_PALINDROME
       };
 
       struct Point

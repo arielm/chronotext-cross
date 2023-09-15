@@ -169,6 +169,18 @@ namespace chr
         {
           offset = math::boundf(offset, length);
         }
+        else if (mode == MODE_PALINDROME)
+        {
+            int n = offset / length;
+            if (n % 2 != 0)
+            {
+                offset = length - math::boundf(offset, length);
+            }
+            else
+            {
+                offset = math::boundf(offset, length);
+            }
+        }
         else if (offset <= 0)
         {
           if (mode == MODE_BOUNDED)
@@ -208,6 +220,18 @@ namespace chr
           if (mode == MODE_MODULO)
           {
             offset = math::boundf(offset, length);
+          }
+          else if (mode == MODE_PALINDROME)
+          {
+              int n = offset / length;
+              if (n % 2 != 0)
+              {
+                  offset = length - math::boundf(offset, length);
+              }
+              else
+              {
+                  offset = math::boundf(offset, length);
+              }
           }
 
           if (mode == MODE_LOOP)
@@ -291,6 +315,18 @@ namespace chr
         if ((mode == MODE_LOOP) || (mode == MODE_MODULO))
         {
           offset = math::boundf(offset, length);
+        }
+        else if (mode == MODE_PALINDROME)
+        {
+            int n = offset / length;
+            if (n % 2 != 0)
+            {
+                offset = length - math::boundf(offset, length);
+            }
+            else
+            {
+                offset = math::boundf(offset, length);
+            }
         }
         else if (offset <= 0)
         {

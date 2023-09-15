@@ -50,7 +50,7 @@ void Sketch::setup()
   // ---
 
   path2
-    .setMode(FollowablePath2D::MODE_MODULO)
+    .setMode(FollowablePath2D::MODE_PALINDROME)
     .begin()
     .add(200, 300)
     .add(350, 325)
