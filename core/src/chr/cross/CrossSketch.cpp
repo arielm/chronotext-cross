@@ -108,8 +108,9 @@ namespace chr
 
     void CrossSketch::performGrabScreen(const fs::path &filePath)
     {
-      int w = windowInfo.width;
-      int h = windowInfo.height;
+      float contentScale = getDisplayInfo().contentScale;
+      int w = contentScale * windowInfo.width;
+      int h = contentScale * windowInfo.height;
 
       uint8_t *pixels = new uint8_t[w * h * 3];
       glPixelStorei(GL_PACK_ALIGNMENT, 1);
