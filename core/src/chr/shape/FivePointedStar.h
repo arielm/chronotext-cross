@@ -31,7 +31,7 @@ namespace chr
         float innerRadius = outerRadius * innerRadiusRatio;
 
         std::vector<glm::vec2> output;
-        output.reserve(10);
+        output.reserve(11);
 
         for (int i = 0; i < 5; i++)
         {
@@ -45,6 +45,7 @@ namespace chr
           output.emplace_back(+sinf(outerAngle) * outerRadius, -cosf(outerAngle) * outerRadius);
           output.emplace_back(+sinf(innerAngle) * innerRadius, -cosf(innerAngle) * innerRadius);
         }
+        output.push_back(output.front());
 
         return output;
       }

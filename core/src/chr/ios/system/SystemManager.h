@@ -25,6 +25,7 @@ namespace chr
       bool isPodTouch();
       bool isIPhone();
       bool isIPhoneMax();
+      bool isIPhoneMini();
       bool isIPad();
       bool isIPadMini();
       bool isSimulator();

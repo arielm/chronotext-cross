@@ -22,11 +22,12 @@ namespace chr
         float h = sqrtf(3) * a / 2; // ALTITUDE FROM ANY SIDE
 
         std::vector<glm::vec2> output;
-        output.reserve(3);
+        output.reserve(4);
 
         output.emplace_back(x, y - h * 2 / 3);
         output.emplace_back(x - a / 2, y + h / 3);
         output.emplace_back(x + a / 2, y + h / 3);
+        output.push_back(output.front());
 
         return output;
       }

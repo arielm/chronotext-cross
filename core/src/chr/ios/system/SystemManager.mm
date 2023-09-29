@@ -48,6 +48,7 @@ namespace chr
       info.isPodTouch = isPodTouch();
       info.isIPhone = isIPhone();
       info.isIPhoneMax = isIPhoneMax();
+      info.isIPhoneMini = isIPhoneMini();
       info.isIPad = isIPad();
       info.isIPadMini = isIPadMini();
       info.emulated = isSimulator();
@@ -135,6 +136,23 @@ namespace chr
       {
         case Info::GENERATION_IPHONE_XS_MAX:
         case Info::GENERATION_IPHONE_11_PRO_MAX:
+        case Info::GENERATION_IPHONE_12_PRO_MAX:
+        case Info::GENERATION_IPHONE_13_PRO_MAX:
+        case Info::GENERATION_IPHONE_14_PRO_MAX:
+        case Info::GENERATION_IPHONE_15_PRO_MAX:
+          return true;
+          
+        default:
+          return false;
+      }
+    }
+
+    bool Manager::isIPhoneMini()
+    {
+      switch (info.generation)
+      {
+        case Info::GENERATION_IPHONE_12_MINI:
+        case Info::GENERATION_IPHONE_13_MINI:
           return true;
           
         default:
@@ -197,7 +215,18 @@ namespace chr
 
         machineGenerations["iPad7,11"] = Info::GENERATION_IPAD_7;
         machineGenerations["iPad7,12"] = Info::GENERATION_IPAD_7;
-        
+
+        machineGenerations["iPad11,6"] = Info::GENERATION_IPAD_8;
+        machineGenerations["iPad11,7"] = Info::GENERATION_IPAD_8;
+
+        machineGenerations["iPad12,1"] = Info::GENERATION_IPAD_9;
+        machineGenerations["iPad12,2"] = Info::GENERATION_IPAD_9;
+
+        machineGenerations["iPad13,18"] = Info::GENERATION_IPAD_10;
+        machineGenerations["iPad13,19"] = Info::GENERATION_IPAD_10;
+
+        // ---
+
         machineGenerations["iPad4,1"] = Info::GENERATION_IPAD_AIR;
         machineGenerations["iPad4,2"] = Info::GENERATION_IPAD_AIR;
         machineGenerations["iPad4,3"] = Info::GENERATION_IPAD_AIR;
@@ -207,7 +236,13 @@ namespace chr
 
         machineGenerations["iPad11,3"] = Info::GENERATION_IPAD_AIR_3;
         machineGenerations["iPad11,4"] = Info::GENERATION_IPAD_AIR_3;
-        
+
+        machineGenerations["iPad13,1"] = Info::GENERATION_IPAD_AIR_4;
+        machineGenerations["iPad13,2"] = Info::GENERATION_IPAD_AIR_4;
+
+        machineGenerations["iPad13,16"] = Info::GENERATION_IPAD_AIR_5;
+        machineGenerations["iPad13,17"] = Info::GENERATION_IPAD_AIR_5;
+
         // ---
 
         machineGenerations["iPad6,7"] = Info::GENERATION_IPAD_PRO_12_9;
@@ -232,6 +267,22 @@ namespace chr
         machineGenerations["iPad8,7"] = Info::GENERATION_IPAD_PRO_12_9_3;
         machineGenerations["iPad8,8"] = Info::GENERATION_IPAD_PRO_12_9_3;
 
+        machineGenerations["iPad8,9"] = Info::GENERATION_IPAD_PRO_11_4;
+        machineGenerations["iPad8,10"] = Info::GENERATION_IPAD_PRO_11_4;
+
+        machineGenerations["iPad8,11"] = Info::GENERATION_IPAD_PRO_12_9_4;
+        machineGenerations["iPad8,12"] = Info::GENERATION_IPAD_PRO_12_9_4;
+
+        machineGenerations["iPad13,4"] = Info::GENERATION_IPAD_PRO_11_5;
+        machineGenerations["iPad13,5"] = Info::GENERATION_IPAD_PRO_11_5;
+        machineGenerations["iPad13,6"] = Info::GENERATION_IPAD_PRO_11_5;
+        machineGenerations["iPad13,7"] = Info::GENERATION_IPAD_PRO_11_5;
+
+        machineGenerations["iPad13,8"] = Info::GENERATION_IPAD_PRO_12_9_5;
+        machineGenerations["iPad13,9"] = Info::GENERATION_IPAD_PRO_12_9_5;
+        machineGenerations["iPad13,10"] = Info::GENERATION_IPAD_PRO_12_9_5;
+        machineGenerations["iPad13,11"] = Info::GENERATION_IPAD_PRO_12_9_5;
+
         // ---
         
         machineGenerations["iPad2,5"] = Info::GENERATION_IPAD_MINI_1G;
@@ -251,6 +302,9 @@ namespace chr
         
         machineGenerations["iPad11,1"] = Info::GENERATION_IPAD_MINI_5;
         machineGenerations["iPad11,2"] = Info::GENERATION_IPAD_MINI_5;
+
+        machineGenerations["iPad14,1"] = Info::GENERATION_IPAD_MINI_6;
+        machineGenerations["iPad14,2"] = Info::GENERATION_IPAD_MINI_6;
 
         // ---
         
@@ -295,6 +349,30 @@ namespace chr
         machineGenerations["iPhone12,1"] = Info::GENERATION_IPHONE_11;
         machineGenerations["iPhone12,3"] = Info::GENERATION_IPHONE_11_PRO;
         machineGenerations["iPhone12,5"] = Info::GENERATION_IPHONE_11_PRO_MAX;
+
+        machineGenerations["iPhone12,8"] = Info::GENERATION_IPHONE_SE_2;
+
+        machineGenerations["iPhone13,1"] = Info::GENERATION_IPHONE_12_MINI;
+        machineGenerations["iPhone13,2"] = Info::GENERATION_IPHONE_12;
+        machineGenerations["iPhone13,3"] = Info::GENERATION_IPHONE_12_PRO;
+        machineGenerations["iPhone13,4"] = Info::GENERATION_IPHONE_12_PRO_MAX;
+
+        machineGenerations["iPhone14,4"] = Info::GENERATION_IPHONE_13_MINI;
+        machineGenerations["iPhone14,5"] = Info::GENERATION_IPHONE_13;
+        machineGenerations["iPhone14,2"] = Info::GENERATION_IPHONE_13_PRO;
+        machineGenerations["iPhone14,3"] = Info::GENERATION_IPHONE_13_PRO_MAX;
+
+        machineGenerations["iPhone14,6"] = Info::GENERATION_IPHONE_SE_3;
+
+        machineGenerations["iPhone14,7"] = Info::GENERATION_IPHONE_14;
+        machineGenerations["iPhone14,8"] = Info::GENERATION_IPHONE_14_PLUS;
+        machineGenerations["iPhone15,2"] = Info::GENERATION_IPHONE_14_PRO;
+        machineGenerations["iPhone15,3"] = Info::GENERATION_IPHONE_14_PRO_MAX;
+
+        machineGenerations["iPhone15,4"] = Info::GENERATION_IPHONE_15;
+        machineGenerations["iPhone15,5"] = Info::GENERATION_IPHONE_15_PLUS;
+        machineGenerations["iPhone16,1"] = Info::GENERATION_IPHONE_15_PRO;
+        machineGenerations["iPhone16,2"] = Info::GENERATION_IPHONE_15_PRO_MAX;
         
         // ---
         
@@ -314,9 +392,14 @@ namespace chr
         generationNames[Info::GENERATION_IPAD_5] = "iPad 5";
         generationNames[Info::GENERATION_IPAD_6] = "iPad 6";
         generationNames[Info::GENERATION_IPAD_7] = "iPad 7";
+        generationNames[Info::GENERATION_IPAD_8] = "iPad 8";
+        generationNames[Info::GENERATION_IPAD_9] = "iPad 9";
+        generationNames[Info::GENERATION_IPAD_10] = "iPad 10";
         generationNames[Info::GENERATION_IPAD_AIR] = "iPad Air";
         generationNames[Info::GENERATION_IPAD_AIR_2] = "iPad Air 2";
         generationNames[Info::GENERATION_IPAD_AIR_3] = "iPad Air 3";
+        generationNames[Info::GENERATION_IPAD_AIR_4] = "iPad Air 4";
+        generationNames[Info::GENERATION_IPAD_AIR_5] = "iPad Air 5";
 
         generationNames[Info::GENERATION_IPAD_PRO_12_9] = "iPad Pro 12.9-inch";
         generationNames[Info::GENERATION_IPAD_PRO_9_7] = "iPad Pro 9.7-inch";
@@ -324,12 +407,17 @@ namespace chr
         generationNames[Info::GENERATION_IPAD_PRO_10_5] = "iPad Pro 10.5-inch";
         generationNames[Info::GENERATION_IPAD_PRO_11] = "iPad Pro 11-inch";
         generationNames[Info::GENERATION_IPAD_PRO_12_9_3] = "iPad Pro 12.9-inch 3";
+        generationNames[Info::GENERATION_IPAD_PRO_11_5] = "iPad Pro 11-inch 5";
+        generationNames[Info::GENERATION_IPAD_PRO_12_9_5] = "iPad Pro 12.9-inch 5";
+        generationNames[Info::GENERATION_IPAD_PRO_11_6] = "iPad Pro 11-inch 6";
+        generationNames[Info::GENERATION_IPAD_PRO_12_9_6] = "iPad Pro 12.9-inch 5";
         
         generationNames[Info::GENERATION_IPAD_MINI_1G] = "iPad mini 1G";
         generationNames[Info::GENERATION_IPAD_MINI_2] = "iPad mini 2";
         generationNames[Info::GENERATION_IPAD_MINI_3] = "iPad mini 3";
         generationNames[Info::GENERATION_IPAD_MINI_4] = "iPad mini 4";
         generationNames[Info::GENERATION_IPAD_MINI_5] = "iPad mini 5";
+        generationNames[Info::GENERATION_IPAD_MINI_6] = "iPad mini 6";
         
         generationNames[Info::GENERATION_IPHONE_3GS] = "iPhone 3GS";
         generationNames[Info::GENERATION_IPHONE_4] = "iPhone 4";
@@ -351,8 +439,26 @@ namespace chr
         generationNames[Info::GENERATION_IPHONE_XS] = "iPhone XS";
         generationNames[Info::GENERATION_IPHONE_XS_MAX] = "iPhone XS Max";
         generationNames[Info::GENERATION_IPHONE_11] = "iPhone 11";
-        generationNames[Info::GENERATION_IPHONE_11_PRO] = "iPhone Pro";
-        generationNames[Info::GENERATION_IPHONE_11_PRO_MAX] = "iPhone Pro Max";
+        generationNames[Info::GENERATION_IPHONE_11_PRO] = "iPhone 11 Pro";
+        generationNames[Info::GENERATION_IPHONE_11_PRO_MAX] = "iPhone 11 Pro Max";
+        generationNames[Info::GENERATION_IPHONE_SE_2] = "iPhone SE 2";
+        generationNames[Info::GENERATION_IPHONE_12] = "iPhone 12";
+        generationNames[Info::GENERATION_IPHONE_12_PRO] = "iPhone 12 Pro";
+        generationNames[Info::GENERATION_IPHONE_12_PRO_MAX] = "iPhone 12 Pro Max";
+        generationNames[Info::GENERATION_IPHONE_12_MINI] = "iPhone 12 Mini";
+        generationNames[Info::GENERATION_IPHONE_13] = "iPhone 13";
+        generationNames[Info::GENERATION_IPHONE_13_PRO] = "iPhone 13 Pro";
+        generationNames[Info::GENERATION_IPHONE_13_PRO_MAX] = "iPhone 13 Pro Max";
+        generationNames[Info::GENERATION_IPHONE_13_MINI] = "iPhone 13 Mini";
+        generationNames[Info::GENERATION_IPHONE_SE_3] = "iPhone SE 3";
+        generationNames[Info::GENERATION_IPHONE_14] = "iPhone 14";
+        generationNames[Info::GENERATION_IPHONE_14_PRO] = "iPhone 14 Pro";
+        generationNames[Info::GENERATION_IPHONE_14_PRO_MAX] = "iPhone 14 Pro Max";
+        generationNames[Info::GENERATION_IPHONE_14_PLUS] = "iPhone 14 Plus";
+        generationNames[Info::GENERATION_IPHONE_15] = "iPhone 15";
+        generationNames[Info::GENERATION_IPHONE_15_PRO] = "iPhone 15 Pro";
+        generationNames[Info::GENERATION_IPHONE_15_PRO_MAX] = "iPhone 15 Pro Max";
+        generationNames[Info::GENERATION_IPHONE_15_PLUS] = "iPhone 15 Plus";
         
         generationNames[Info::GENERATION_IPOD_TOUCH_3G] = "iPod touch 3G";
         generationNames[Info::GENERATION_IPOD_TOUCH_4G] = "iPod touch 4G";

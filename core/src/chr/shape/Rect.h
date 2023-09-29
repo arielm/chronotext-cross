@@ -31,12 +31,13 @@ namespace chr
         float h2 = height * 0.5f;
 
         std::vector<glm::vec2> output;
-        output.reserve(4);
+        output.reserve(5);
 
         output.emplace_back(x - w2, y - h2);
         output.emplace_back(x - w2, y + h2);
         output.emplace_back(x + w2, y + h2);
         output.emplace_back(x + w2, y - h2);
+        output.push_back(output.front());
 
         return output;
       }

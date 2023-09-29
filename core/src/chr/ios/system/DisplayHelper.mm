@@ -92,7 +92,7 @@ namespace chr
         }
         else if (magSize == 375 * 667)
         {
-          diagonal = 4.7f; // IPHONE 6, IPHONE 6S, IPHONE 7, IPHONE 8
+          diagonal = 4.7f; // IPHONE 6, IPHONE 6S, IPHONE 7, IPHONE 8, IPHONE SE 2, IPHONE SE 3
         }
         else if (magSize == 414 * 736)
         {
@@ -100,7 +100,14 @@ namespace chr
         }
         else if (magSize == 375 * 812)
         {
-          diagonal = 5.8f; // IPHONE X, IPHONE XS, IPHONE 11 PRO
+          if (getSystemInfo().isIPhoneMini)
+          {
+              diagonal = 5.4f; // IPHONE 12 MINI, IPHONE 13 MINI
+          }
+          else
+          {
+            diagonal = 5.8f; // IPHONE X, IPHONE XS, IPHONE 11 PRO  
+          }
         }
         else if (magSize == 414 * 896)
         {
@@ -113,6 +120,22 @@ namespace chr
             diagonal = 6.1f; // IPHONE XR, IPHONE 11
           }
         }
+        else if (magSize == 390 * 844)
+        {
+          diagonal = 6.1f; // IPHONE 12, IPHONE 12 PRO, IPHONE 13, IPHONE 13 PRO, IPHONE 14
+        }
+        else if (magSize == 393 * 852)
+        {
+          diagonal = 6.1f; // IPHONE 14 PRO, IPHONE 15, IPHONE 15 PRO
+        }
+        else if (magSize == 428 * 926)
+        {
+          diagonal = 6.7f; // IPHONE 12 PRO MAX, IPHONE 13 PRO MAX
+        }
+        else if (magSize == 430 * 932)
+        {
+          diagonal = 6.7f; // IPHONE 14 PRO MAX, IPHONE 15 PLUS, IPHONE 15 PRO MAX
+        }
         else if (magSize == 1024 * 768)
         {
           if (getSystemInfo().isIPadMini)
@@ -124,9 +147,13 @@ namespace chr
             diagonal = 9.7f; // IPAD...
           }
         }
+        else if (magSize == 1133 * 744)
+        {
+          diagonal = 8.3f; // IPAD MINI 6
+        }
         else if (magSize == 1080 * 810)
         {
-          diagonal = 10.2f; // IPAD 7
+          diagonal = 10.2f; // IPAD 7, IPAD 8, IPAD 9
         }
         else if (magSize == 1112 * 834)
         {
@@ -139,6 +166,10 @@ namespace chr
         else if (magSize == 1366 * 1024)
         {
           diagonal = 12.9f; // IPAD PRO 12.9"
+        }
+        else if (magSize == 1180 * 820)
+        {
+          diagonal = 10.9f; // IPAD AIR 4, IPAD AIR 5, IPAD 10
         }
 
         intern::displayInfo = DisplayInfo::createWithDiagonal(baseSize.x, baseSize.y, diagonal, contentScale);

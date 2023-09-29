@@ -27,9 +27,14 @@ namespace chr
         GENERATION_IPAD_5,
         GENERATION_IPAD_6,
         GENERATION_IPAD_7,
+        GENERATION_IPAD_8,
+        GENERATION_IPAD_9,
+        GENERATION_IPAD_10,
         GENERATION_IPAD_AIR,
         GENERATION_IPAD_AIR_2,
         GENERATION_IPAD_AIR_3,
+        GENERATION_IPAD_AIR_4,
+        GENERATION_IPAD_AIR_5,
 
         GENERATION_IPAD_PRO_12_9,
         GENERATION_IPAD_PRO_9_7,
@@ -37,12 +42,19 @@ namespace chr
         GENERATION_IPAD_PRO_10_5,
         GENERATION_IPAD_PRO_11,
         GENERATION_IPAD_PRO_12_9_3,
+        GENERATION_IPAD_PRO_11_4,
+        GENERATION_IPAD_PRO_12_9_4,
+        GENERATION_IPAD_PRO_11_5,
+        GENERATION_IPAD_PRO_12_9_5,
+        GENERATION_IPAD_PRO_11_6,
+        GENERATION_IPAD_PRO_12_9_6,
         
         GENERATION_IPAD_MINI_1G,
         GENERATION_IPAD_MINI_2,
         GENERATION_IPAD_MINI_3,
         GENERATION_IPAD_MINI_4,
         GENERATION_IPAD_MINI_5,
+        GENERATION_IPAD_MINI_6,
         
         GENERATION_IPHONE_3GS,
         GENERATION_IPHONE_4,
@@ -66,6 +78,24 @@ namespace chr
         GENERATION_IPHONE_11,
         GENERATION_IPHONE_11_PRO,
         GENERATION_IPHONE_11_PRO_MAX,
+        GENERATION_IPHONE_SE_2,
+        GENERATION_IPHONE_12,
+        GENERATION_IPHONE_12_PRO,
+        GENERATION_IPHONE_12_PRO_MAX,
+        GENERATION_IPHONE_12_MINI,
+        GENERATION_IPHONE_13,
+        GENERATION_IPHONE_13_PRO,
+        GENERATION_IPHONE_13_PRO_MAX,
+        GENERATION_IPHONE_13_MINI,
+        GENERATION_IPHONE_SE_3,
+        GENERATION_IPHONE_14,
+        GENERATION_IPHONE_14_PRO,
+        GENERATION_IPHONE_14_PRO_MAX,
+        GENERATION_IPHONE_14_PLUS,
+        GENERATION_IPHONE_15,
+        GENERATION_IPHONE_15_PRO,
+        GENERATION_IPHONE_15_PRO_MAX,
+        GENERATION_IPHONE_15_PLUS,
         
         GENERATION_IPOD_TOUCH_3G,
         GENERATION_IPOD_TOUCH_4G,
@@ -81,6 +111,7 @@ namespace chr
       bool isPodTouch = false;
       bool isIPhone = false;
       bool isIPhoneMax = false;
+      bool isIPhoneMini = false;
       bool isIPad = false;
       bool isIPadMini = false;
       bool isSimulator = false;
