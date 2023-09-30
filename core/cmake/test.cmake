@@ -268,8 +268,10 @@ elseif (PLATFORM MATCHES osx)
       ${SRC_FILES}
     )
 
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-      BUILD_RPATH ""
+    add_custom_command(TARGET ${PROJECT_NAME}
+      POST_BUILD COMMAND 
+      install_name_tool -change @loader_path/../Frameworks/Syphon.framework/Versions/A/Syphon "$ENV{CROSS_PATH}/tree/syphon/Syphon.framework/Versions/A/Syphon"
+      ${PROJECT_NAME}
     )
 
   else()
