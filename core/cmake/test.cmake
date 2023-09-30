@@ -269,8 +269,12 @@ elseif (PLATFORM MATCHES osx)
     )
 
     add_custom_command(TARGET ${PROJECT_NAME}
+      COMMAND ${CMAKE_COMMAND} -E create_symlink "$ENV{CROSS_PATH}/tree/syphon/Syphon.framework" "${CMAKE_CURRENT_BINARY_DIR}/Syphon.framework"
+    )
+
+    add_custom_command(TARGET ${PROJECT_NAME}
       POST_BUILD COMMAND 
-      install_name_tool -change @loader_path/../Frameworks/Syphon.framework/Versions/A/Syphon "$ENV{CROSS_PATH}/tree/syphon/Syphon.framework/Versions/A/Syphon"
+      install_name_tool -change @loader_path/../Frameworks/Syphon.framework/Versions/A/Syphon @loader_path/Syphon.framework/Versions/A/Syphon
       ${PROJECT_NAME}
     )
 
