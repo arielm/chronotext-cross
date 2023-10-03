@@ -2,7 +2,7 @@
 
 PLATFORM="android"
 
-TREE_DIR="../../tree/libpng"
+TREE_DIR="../../tree/libpng16"
 SRC_DIR="$TREE_DIR/src"
 BUILD_DIR="build/$PLATFORM"
 INSTALL_DIR="tmp/$PLATFORM"
@@ -17,13 +17,14 @@ fi
 
 # ---
 
-TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/android.cmake"
+TOOLCHAIN_FILE="$NDK_PATH/build/cmake/android.toolchain.cmake"
 
 cmake -H"$SRC_DIR" -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
-  -DPNG_SHARED=OFF -DPNG_TESTS=OFF
+  -DPNG_SHARED=OFF -DPNG_TESTS=OFF \
+  -DANDROID_ABI=arm64-v8a
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"

@@ -1,20 +1,20 @@
 import os ;
 
-local NDK_PATH = [ os.environ NDK_PATH ] ;
-local GCC_VERSION = [ os.environ GCC_VERSION ] ;
-local ANDROID_API = [ os.environ ANDROID_API ] ;
+local TOOLCHAINS = [ os.environ TOOLCHAINS ] ;
 
-using gcc : android
+using clang : armeabi_v7a
 :
-arm-linux-androideabi-g++ --sysroot="$(NDK_PATH)/platforms/$(ANDROID_API)/arch-arm"
+$(TOOLCHAINS)/android-toolchain-arm/bin/arm-linux-androideabi-clang++
 :
-<compileflags>-I"$(NDK_PATH)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/include"
-<compileflags>-I"$(NDK_PATH)/sources/cxx-stl/gnu-libstdc++/$(GCC_VERSION)/libs/armeabi/include"
+<archiver>$(TOOLCHAINS)/android-toolchain-arm/bin/llvm-ar
+<ranlib>$(TOOLCHAINS)/android-toolchain-arm/bin/llvm-ranlib
+<root>$(TOOLCHAINS)/android-toolchain-arm/sysroot
 
 <compileflags>-fvisibility=hidden
 <compileflags>-fvisibility-inlines-hidden
 <compileflags>-fexceptions
 <compileflags>-frtti
+<compileflags>-fPIC
 
 <compileflags>-march=armv7-a
 <compileflags>-mfpu=vfpv3-d16

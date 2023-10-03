@@ -9,14 +9,15 @@ INSTALL_PATH="$(pwd)/$INSTALL_DIR"
 
 # ---
 
-TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/android.cmake"
+TOOLCHAIN_FILE="$NDK_PATH/build/cmake/android.toolchain.cmake"
 
 cmake . -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja -DCMAKE_MAKE_PROGRAM=/usr/local/bin/ninja \
   -DCMAKE_BUILD_TYPE=Release \
   -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH" \
   -DPLATFORM="$PLATFORM" \
-  -DCMAKE_ANDROID_ARCH_ABI="armeabi-v7a"
+  -DANDROID_ABI="armeabi-v7a" \
+  -DCMAKE_CXX_FLAGS="-std=c++14"
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"

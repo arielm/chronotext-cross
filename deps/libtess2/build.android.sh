@@ -17,12 +17,13 @@ fi
 
 # ---
 
-TOOLCHAIN_FILE="$CROSS_PATH/core/cmake/toolchains/android.cmake"
+TOOLCHAIN_FILE="$NDK_PATH/build/cmake/android.toolchain.cmake"
 
 cmake -H"$SRC_DIR" -B"$BUILD_DIR" \
   -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_FILE" -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
-  -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib"
+  -DLIBRARY_OUTPUT_PATH="$INSTALL_PATH/lib" \
+  -DANDROID_ABI=arm64-v8a
 
 if [ $? != 0 ]; then
   echo "CONFIGURATION FAILED!"

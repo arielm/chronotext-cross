@@ -1,7 +1,5 @@
 #!/bin/sh
 
-GCC_VERSION=4.9
-ANDROID_API=android-21
 ANDROID_ABI=armeabi-v7a
 
 PLATFORM="android"
@@ -22,6 +20,8 @@ if [ -z "$NDK_PATH" ]; then
   echo "NDK_PATH MUST BE DEFINED!"
   exit -1  
 fi
+
+TOOLCHAINS="$(pwd)/toolchains"
 
 # ---
 
@@ -51,20 +51,13 @@ cat "$JAM_CONFIG_PATH" >> project-config.jam
 rm -rf "$INSTALL_PATH"
 
 HOST_NCORES=$(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 1)
-HOST_OS=$(uname -s | tr "[:upper:]" "[:lower:]")
-HOST_ARCH=$(uname -m)
 
-TOOLCHAIN_PATH="$NDK_PATH/toolchains/arm-linux-androideabi-$GCC_VERSION/prebuilt/$HOST_OS-$HOST_ARCH"
-
-export PATH="$TOOLCHAIN_PATH/bin:$PATH"
-export NDK_PATH
-export GCC_VERSION
-export ANDROID_API
+export TOOLCHAINS
 export NO_BZIP2=1
 
 ./b2 -q -j$HOST_NCORES       \
   target-os=android          \
-  toolset=gcc-android        \
+  toolset=clang-armeabi_v7a  \
   link=static                \
   variant=release            \
   $LIBRARIES                 \
