@@ -26,7 +26,11 @@ namespace chr
         glfwWindowHint(GLFW_SAMPLES, initInfo.windowInfo.aaSamples);
         glfwWindowHint(GLFW_DEPTH_BITS, initInfo.windowInfo.depthBits);
         glfwWindowHint(GLFW_STENCIL_BITS, 8); // XXX
-        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
+        #if defined(CHR_PLATFORM_OSX)
+          glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
+        #endif
 
         #if defined(CHR_PLATFORM_RPI) || defined(CHR_PLATFORM_RPI64)
           glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
