@@ -2,7 +2,7 @@
 
 PLATFORM="osx"
 
-TREE_DIR="../../tree/libpng"
+TREE_DIR="../../tree/libpng16"
 SRC_DIR="$TREE_DIR/src"
 BUILD_DIR="build/$PLATFORM"
 INSTALL_DIR="tmp/$PLATFORM"
