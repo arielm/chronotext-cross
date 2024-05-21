@@ -49,6 +49,7 @@ namespace chr
       FILE *fd = nullptr;
 
       ImageBuffer image;
+      image::PngDataHandle handle;
 
       if (source.isResource())
       {
@@ -65,7 +66,7 @@ namespace chr
 
               if (info_ptr)
               {
-                image::PngDataHandle handle(memoryBuffer->data(), memoryBuffer->size());
+                handle = image::PngDataHandle(memoryBuffer->data(), memoryBuffer->size());
                 png_set_read_fn(png_ptr, &handle, image::readPngDataCallback);
 
                 if (!setjmp(png_jmpbuf(png_ptr)))

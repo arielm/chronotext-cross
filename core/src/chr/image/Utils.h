@@ -16,6 +16,9 @@ namespace chr
     png_size_t size = 0;
     png_size_t offset = 0;
 
+    PngDataHandle()
+    {}
+
     PngDataHandle(const void *data, size_t size)
     :
     data(reinterpret_cast<const png_byte*>(data)),
